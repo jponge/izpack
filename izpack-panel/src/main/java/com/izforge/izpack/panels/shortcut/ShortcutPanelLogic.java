@@ -38,6 +38,7 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.panels.IShortcutPanelLogic;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
@@ -591,8 +592,9 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
         // save to the file
         // ----------------------------------------------------
         FileWriter output = null;
-        StringBuffer buffer = new StringBuffer();
-        String header = installData.getLangpack().getString("ShortcutPanel.textFile.header");
+        StringBuilder buffer = new StringBuilder();
+        Messages messages = installData.getMessages();
+        String header = messages.get("ShortcutPanel.textFile.header");
 
         String newline = System.getProperty("line.separator", "\n");
 
@@ -637,74 +639,62 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
         for (ShortcutData data : shortcuts)
         {
-            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.name"));
+            buffer.append(messages.get("ShortcutPanel.textFile.name"));
             buffer.append(data.name);
             buffer.append(newline);
 
-            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.location"));
+            buffer.append(messages.get("ShortcutPanel.textFile.location"));
 
             switch (data.type)
             {
                 case Shortcut.DESKTOP:
                 {
-                    buffer
-                            .append(installData.getLangpack().getString(
-                                    "ShortcutPanel.location.desktop"));
-
+                    buffer.append(messages.get("ShortcutPanel.location.desktop"));
                     break;
                 }
 
                 case Shortcut.APPLICATIONS:
                 {
-                    buffer.append(installData.getLangpack().getString(
-                            "ShortcutPanel.location.applications"));
-
+                    buffer.append(messages.get("ShortcutPanel.location.applications"));
                     break;
                 }
 
                 case Shortcut.START_MENU:
                 {
-                    buffer.append(installData.getLangpack().getString(
-                            "ShortcutPanel.location.startMenu"));
-
+                    buffer.append(messages.get("ShortcutPanel.location.startMenu"));
                     break;
                 }
 
                 case Shortcut.START_UP:
                 {
-                    buffer
-                            .append(installData.getLangpack().getString(
-                                    "ShortcutPanel.location.startup"));
-
+                    buffer.append(messages.get("ShortcutPanel.location.startup"));
                     break;
                 }
             }
 
             buffer.append(newline);
 
-            buffer
-                    .append(installData.getLangpack().getString(
-                            "ShortcutPanel.textFile.description"));
+            buffer.append(messages.get("ShortcutPanel.textFile.description"));
             buffer.append(data.description);
             buffer.append(newline);
 
-            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.target"));
+            buffer.append(messages.get("ShortcutPanel.textFile.target"));
             buffer.append(data.target);
             buffer.append(newline);
 
-            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.command"));
+            buffer.append(messages.get("ShortcutPanel.textFile.command"));
             buffer.append(data.commandLine);
             buffer.append(newline);
 
-            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.iconName"));
+            buffer.append(messages.get("ShortcutPanel.textFile.iconName"));
             buffer.append(data.iconFile);
             buffer.append(newline);
 
-            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.iconIndex"));
+            buffer.append(messages.get("ShortcutPanel.textFile.iconIndex"));
             buffer.append(data.iconIndex);
             buffer.append(newline);
 
-            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.work"));
+            buffer.append(messages.get("ShortcutPanel.textFile.work"));
             buffer.append(data.workingDirectory);
             buffer.append(newline);
 

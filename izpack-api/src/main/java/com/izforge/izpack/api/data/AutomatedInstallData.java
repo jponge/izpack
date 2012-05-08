@@ -28,6 +28,7 @@ import java.util.Map;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.event.InstallerListener;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.rules.RulesEngine;
 
 /**
@@ -64,9 +65,9 @@ public abstract class AutomatedInstallData
     private Locale locale;
 
     /**
-     * The language pack.
+     * The messages.
      */
-    private LocaleDatabase langpack;
+    private Messages messages;
 
     /**
      * The inforamtions.
@@ -342,7 +343,7 @@ public abstract class AutomatedInstallData
         // We load the langpack
         setLocaleISO3(locale);
         setVariable(ScriptParserConstant.ISO3_LANG, getLocaleISO3());
-        this.langpack = localeDatabase;
+        this.messages = localeDatabase;
     }
 
     public RulesEngine getRules()
@@ -376,14 +377,24 @@ public abstract class AutomatedInstallData
         this.locale = locale;
     }
 
+    /**
+     * Returns the localised messages.
+     *
+     * @return the localised messages
+     */
+    public Messages getMessages()
+    {
+        return messages;
+    }
+
     public LocaleDatabase getLangpack()
     {
-        return langpack;
+        return (LocaleDatabase) messages;
     }
 
     public void setLangpack(LocaleDatabase langpack)
     {
-        this.langpack = langpack;
+        this.messages = langpack;
     }
 
     public Info getInfo()

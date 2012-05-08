@@ -228,7 +228,7 @@ public class Debugger
         varchangepanel.add(label);
         final JTextField varvalue = new JTextField();
         varchangepanel.add(varvalue);
-        JButton changevarbtn = ButtonFactory.createButton(idata.getLangpack().getString("debug.changevariable"),
+        JButton changevarbtn = ButtonFactory.createButton(idata.getMessages().get("debug.changevariable"),
                                                           icons.get("debug.changevariable"), idata.buttonsHColor);
         changevarbtn.addActionListener(new ActionListener()
         {

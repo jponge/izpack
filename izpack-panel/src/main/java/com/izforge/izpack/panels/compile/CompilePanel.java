@@ -160,16 +160,12 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         JPanel subpanel = new JPanel();
         JLabel compilerLabel = new JLabel();
         compilerComboBox = new JComboBox();
-        this.browseButton = ButtonFactory.createButton(installData.getLangpack()
-                                                               .getString("CompilePanel.browse"),
-                                                       installData.buttonsHColor);
+        this.browseButton = ButtonFactory.createButton(getString("CompilePanel.browse"), installData.buttonsHColor);
         JLabel argumentsLabel = new JLabel();
         this.argumentsComboBox = new JComboBox();
-        this.startButton = ButtonFactory.createButton(installData.getLangpack()
-                                                              .getString("CompilePanel.start"),
-                                                      installData.buttonsHColor);
-        this.tipLabel = LabelFactory.create(installData.getLangpack().getString("CompilePanel.tip"),
-                                            parent.getIcons().get("tip"), SwingConstants.TRAILING);
+        this.startButton = ButtonFactory.createButton(getString("CompilePanel.start"), installData.buttonsHColor);
+        this.tipLabel = LabelFactory.create(getString("CompilePanel.tip"), parent.getIcons().get("tip"),
+                                            SwingConstants.TRAILING);
         this.opLabel = new JLabel();
         packProgressBar = new JProgressBar();
         this.overallLabel = new JLabel();
@@ -181,7 +177,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         font = font.deriveFont(Font.BOLD, font.getSize() * 2.0f);
         heading.setFont(font);
         heading.setHorizontalAlignment(SwingConstants.CENTER);
-        heading.setText(installData.getLangpack().getString("CompilePanel.heading"));
+        heading.setText(getString("CompilePanel.heading"));
         heading.setVerticalAlignment(SwingConstants.TOP);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = 0;
@@ -205,7 +201,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
         compilerLabel.setHorizontalAlignment(SwingConstants.LEFT);
         compilerLabel.setLabelFor(compilerComboBox);
-        compilerLabel.setText(installData.getLangpack().getString("CompilePanel.choose_compiler"));
+        compilerLabel.setText(getString("CompilePanel.choose_compiler"));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = row;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -234,7 +230,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
         argumentsLabel.setHorizontalAlignment(SwingConstants.LEFT);
         argumentsLabel.setLabelFor(argumentsComboBox);
-        argumentsLabel.setText(installData.getLangpack().getString("CompilePanel.additional_arguments"));
+        argumentsLabel.setText(getString("CompilePanel.additional_arguments"));
         // argumentsLabel.setToolTipText("");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = row;
@@ -274,7 +270,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         subpanel.add(opLabel, gridBagConstraints);
 
         packProgressBar.setValue(0);
-        packProgressBar.setString(installData.getLangpack().getString("CompilePanel.progress.initial"));
+        packProgressBar.setString(getString("CompilePanel.progress.initial"));
         packProgressBar.setStringPainted(true);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = row++;
@@ -283,7 +279,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         gridBagConstraints.anchor = GridBagConstraints.SOUTH;
         subpanel.add(packProgressBar, gridBagConstraints);
 
-        overallLabel.setText(installData.getLangpack().getString("CompilePanel.progress.overall"));
+        overallLabel.setText(getString("CompilePanel.progress.overall"));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridy = row++;
         gridBagConstraints.gridwidth = 2;
@@ -300,7 +296,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         gridBagConstraints.anchor = GridBagConstraints.SOUTH;
         subpanel.add(overallProgressBar, gridBagConstraints);
 
-        startButton.setText(installData.getLangpack().getString("CompilePanel.start"));
+        startButton.setText(getString("CompilePanel.start"));
         startButton.addActionListener(this);
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -342,8 +338,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
             JFileChooser chooser = new JFileChooser();
             chooser.setCurrentDirectory(new File((String) this.compilerComboBox.getSelectedItem())
                                                 .getParentFile());
-            int result = chooser.showDialog(this.parent, this.installData.getLangpack()
-                    .getString("CompilePanel.browse.approve"));
+            int result = chooser.showDialog(this.parent, getString("CompilePanel.browse.approve"));
             if (result == JFileChooser.APPROVE_OPTION)
             {
                 File file_chosen = chooser.getSelectedFile();
@@ -446,7 +441,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         {
             parent.lockPrevButton();
 
-            packProgressBar.setString(installData.getLangpack().getString("CompilePanel.progress.finished"));
+            packProgressBar.setString(getString("CompilePanel.progress.finished"));
             packProgressBar.setEnabled(false);
             packProgressBar.setValue(packProgressBar.getMaximum());
 
@@ -620,14 +615,9 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
             JScrollPane stdErrScrollPane = new JScrollPane();
             stdErrText = new JTextArea();
             JPanel buttonsPanel = new JPanel();
-            reconfigButton = ButtonFactory.createButton(installData.getLangpack()
-                                                                .getString("CompilePanel.error.reconfigure"),
-                                                        this.buttonHColor);
-            ignoreButton = ButtonFactory.createButton(installData.getLangpack()
-                                                              .getString("CompilePanel.error.ignore"),
-                                                      this.buttonHColor);
-            abortButton = ButtonFactory.createButton(installData.getLangpack()
-                                                             .getString("CompilePanel.error.abort"), this.buttonHColor);
+            reconfigButton = ButtonFactory.createButton(getString("CompilePanel.error.reconfigure"), this.buttonHColor);
+            ignoreButton = ButtonFactory.createButton(getString("CompilePanel.error.ignore"), this.buttonHColor);
+            abortButton = ButtonFactory.createButton(getString("CompilePanel.error.abort"), this.buttonHColor);
 
             addWindowListener(new java.awt.event.WindowAdapter()
             {
@@ -652,7 +642,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
             seeBelowText.setEditable(false);
             seeBelowText.setLineWrap(true);
             seeBelowText.setWrapStyleWord(true);
-            seeBelowText.setText(installData.getLangpack().getString("CompilePanel.error.seebelow"));
+            seeBelowText.setText(getString("CompilePanel.error.seebelow"));
             errorMessagePane.add(seeBelowText);
 
             getContentPane().add(errorMessagePane, java.awt.BorderLayout.NORTH);

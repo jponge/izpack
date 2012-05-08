@@ -136,9 +136,9 @@ public class UninstallerFrame extends JFrame
         // Initializations
         icons = new IconsDatabase();
         loadIcons();
-        UIManager.put("OptionPane.yesButtonText", langpack.getString("installer.yes"));
-        UIManager.put("OptionPane.noButtonText", langpack.getString("installer.no"));
-        UIManager.put("OptionPane.cancelButtonText", langpack.getString("installer.cancel"));
+        UIManager.put("OptionPane.yesButtonText", langpack.get("installer.yes"));
+        UIManager.put("OptionPane.noButtonText", langpack.get("installer.no"));
+        UIManager.put("OptionPane.cancelButtonText", langpack.get("installer.cancel"));
 
         // Sets the frame icon
         setIconImage(icons.get("JFrameIcon").getImage());
@@ -197,7 +197,7 @@ public class UninstallerFrame extends JFrame
 
         // We put our components
 
-        JLabel warningLabel = new JLabel(langpack.getString("uninstaller.warning"), icons
+        JLabel warningLabel = new JLabel(langpack.get("uninstaller.warning"), icons
                 .get("warning"), JLabel.TRAILING);
         buildConstraints(gbConstraints, 0, 0, 2, 1, 1.0, 0.0);
         gbConstraints.anchor = GridBagConstraints.WEST;
@@ -205,7 +205,7 @@ public class UninstallerFrame extends JFrame
         layout.addLayoutComponent(warningLabel, gbConstraints);
         contentPane.add(warningLabel);
 
-        targetDestroyCheckbox = new JCheckBox(langpack.getString("uninstaller.destroytarget")
+        targetDestroyCheckbox = new JCheckBox(langpack.get("uninstaller.destroytarget")
                                                       + log.getInstallPath(), forceOptionState);
         buildConstraints(gbConstraints, 0, 1, 2, 1, 1.0, 0.0);
         layout.addLayoutComponent(targetDestroyCheckbox, gbConstraints);
@@ -217,12 +217,12 @@ public class UninstallerFrame extends JFrame
 
         progressBar = new JProgressBar();
         progressBar.setStringPainted(true);
-        progressBar.setString(langpack.getString("InstallPanel.begin"));
+        progressBar.setString(langpack.get("InstallPanel.begin"));
         buildConstraints(gbConstraints, 0, 2, 2, 1, 1.0, 0.0);
         layout.addLayoutComponent(progressBar, gbConstraints);
         contentPane.add(progressBar);
 
-        destroyButton = ButtonFactory.createButton(langpack.getString("uninstaller.uninstall"),
+        destroyButton = ButtonFactory.createButton(langpack.get("uninstaller.uninstall"),
                                                    icons.get("delete"), buttonsHColor);
         destroyButton.addActionListener(handler);
         buildConstraints(gbConstraints, 0, 3, 1, 1, 0.5, 0.0);
@@ -231,7 +231,7 @@ public class UninstallerFrame extends JFrame
         layout.addLayoutComponent(destroyButton, gbConstraints);
         contentPane.add(destroyButton);
 
-        quitButton = ButtonFactory.createButton(langpack.getString("installer.quit"), icons
+        quitButton = ButtonFactory.createButton(langpack.get("installer.quit"), icons
                 .get("stop"), buttonsHColor);
         quitButton.addActionListener(handler);
         buildConstraints(gbConstraints, 1, 3, 1, 1, 0.5, 0.0);

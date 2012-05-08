@@ -103,8 +103,7 @@ public class HTMLInfoPanel extends IzPanel
 
         if (showInfoLabelFlag)
         {  //flag is set; add label above content
-            add(LabelFactory.create(installData.getLangpack().getString("InfoPanel.info"), parent.getIcons()
-                    .get("edit"), LEADING), NEXT_LINE);
+            add(LabelFactory.create(getString("InfoPanel.info"), parent.getIcons().get("edit"), LEADING), NEXT_LINE);
         }
         try
         {

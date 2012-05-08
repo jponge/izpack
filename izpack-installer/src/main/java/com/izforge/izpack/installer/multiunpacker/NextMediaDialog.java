@@ -39,7 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.gui.LabelFactory;
@@ -71,7 +71,7 @@ public class NextMediaDialog extends JDialog implements ActionListener
     protected String nextmedianame;
     protected String nextmediapath;
     protected String nextmediainput;
-    protected LocaleDatabase langpack;
+    private final Messages messages;
     protected IconsDatabase icons;
 
     protected Frame owner;
@@ -90,14 +90,14 @@ public class NextMediaDialog extends JDialog implements ActionListener
      */
     public NextMediaDialog(Frame owner, InstallerFrame main, String nextmedia) throws HeadlessException
     {
-        this(owner, main.getLangpack(), main.getIcons(), nextmedia);
+        this(owner, main.getMessages(), main.getIcons(), nextmedia);
     }
 
-    public NextMediaDialog(Frame owner, LocaleDatabase languagepack, IconsDatabase icons, String nextmedia)
+    public NextMediaDialog(Frame owner, Messages messages, IconsDatabase icons, String nextmedia)
     {
-        super(owner, languagepack.getString(NEXTMEDIA_TITLE_ID), true);
+        super(owner, messages.get(NEXTMEDIA_TITLE_ID), true);
         this.owner = owner;
-        this.langpack = languagepack;
+        this.messages = messages;
         this.icons = icons;
         this.nextmediapath = nextmedia;
         File nextmediafile = new File(this.nextmediapath);
@@ -107,28 +107,28 @@ public class NextMediaDialog extends JDialog implements ActionListener
 
     public NextMediaDialog(Frame owner, AutomatedInstallData idata, String nextmedia)
     {
-        this(owner, idata.getLangpack(), null, nextmedia);
+        this(owner, idata.getMessages(), null, nextmedia);
     }
 
     private void initUI()
     {
         if (this.icons != null)
         {
-            this.msg = LabelFactory.create(this.langpack.getString(NEXTMEDIA_MSG_ID), this.icons.get("warning"),
+            this.msg = LabelFactory.create(messages.get(NEXTMEDIA_MSG_ID), this.icons.get("warning"),
                                            JLabel.LEFT);
-            this.browsebtn = ButtonFactory.createButton(this.langpack.getString(BROWSEBTN_ID), this.icons.get("open"),
+            this.browsebtn = ButtonFactory.createButton(messages.get(BROWSEBTN_ID), this.icons.get("open"),
                                                         new Color(230, 230, 230));
-            this.okbtn = ButtonFactory.createButton(this.langpack.getString(OKBTN_ID), this.icons.get("ok"),
+            this.okbtn = ButtonFactory.createButton(messages.get(OKBTN_ID), this.icons.get("ok"),
                                                     new Color(230, 230, 230));
-            this.cancelbtn = ButtonFactory.createButton(this.langpack.getString(CANCELBTN_ID), this.icons.get("cancel"),
+            this.cancelbtn = ButtonFactory.createButton(messages.get(CANCELBTN_ID), this.icons.get("cancel"),
                                                         new Color(230, 230, 230));
         }
         else
         {
-            this.msg = new JLabel(this.langpack.getString(NEXTMEDIA_MSG_ID), JLabel.LEFT);
-            this.browsebtn = new JButton(this.langpack.getString(BROWSEBTN_ID));
-            this.okbtn = new JButton(this.langpack.getString(OKBTN_ID));
-            this.cancelbtn = new JButton(this.langpack.getString(CANCELBTN_ID));
+            this.msg = new JLabel(messages.get(NEXTMEDIA_MSG_ID), JLabel.LEFT);
+            this.browsebtn = new JButton(messages.get(BROWSEBTN_ID));
+            this.okbtn = new JButton(messages.get(OKBTN_ID));
+            this.cancelbtn = new JButton(messages.get(CANCELBTN_ID));
         }
         this.path = new JTextField(this.nextmediapath);
         this.path.setColumns(40);
@@ -195,8 +195,8 @@ public class NextMediaDialog extends JDialog implements ActionListener
             {
                 fileChooser = new JFileChooser();
             }
-            fileChooser.setFileFilter(new NextMediaFileFilter(this.nextmedianame, this.langpack));
-            fileChooser.setDialogTitle(this.langpack.getString("nextmedia.choosertitle"));
+            fileChooser.setFileFilter(new NextMediaFileFilter(this.nextmedianame, this.messages));
+            fileChooser.setDialogTitle(messages.get("nextmedia.choosertitle"));
             fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
@@ -213,8 +213,8 @@ public class NextMediaDialog extends JDialog implements ActionListener
         }
         else if (e.getSource() == this.cancelbtn)
         {
-            int option = JOptionPane.showConfirmDialog(this, this.langpack.getString("installer.quit.message"),
-                                                       this.langpack.getString("installer.quit.title"),
+            int option = JOptionPane.showConfirmDialog(this, messages.get("installer.quit.message"),
+                                                       messages.get("installer.quit.title"),
                                                        JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION)
             {

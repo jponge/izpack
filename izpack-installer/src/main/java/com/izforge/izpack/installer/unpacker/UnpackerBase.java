@@ -43,7 +43,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.OverrideType;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
@@ -53,6 +52,7 @@ import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.ExecutableFile;
@@ -820,17 +820,13 @@ public abstract class UnpackerBase implements IUnpacker
             // hide the pack name if pack is hidden
             result = "";
         }
-        else if (pack.getLangPackId() != null)
+        else if (pack.getLangPackId() != null && installData.getMessages() != null)
         {
             // the pack has an id - if there is a language pack entry for it, use it instead
-            LocaleDatabase langPack = getInstallData().getLangpack();
-            if (langPack != null)
+            String id = installData.getMessages().get(pack.getLangPackId());
+            if (!pack.getLangPackId().equals(id))
             {
-                String name = langPack.getString(pack.getLangPackId());
-                if (name != null && !"".equals(name))
-                {
-                    result = name;
-                }
+                result = id;
             }
         }
         return result;
@@ -1288,11 +1284,10 @@ public abstract class UnpackerBase implements IUnpacker
                     def_choice = AbstractUIHandler.ANSWER_YES;
                 }
 
+                Messages messages = installData.getMessages();
                 int answer = handler.askQuestion(
-                        installData.getLangpack().getString("InstallPanel.overwrite.title")
-                                + " - " + file.getName(),
-                        installData.getLangpack().getString("InstallPanel.overwrite.question")
-                                + file.getAbsolutePath(),
+                        messages.get("InstallPanel.overwrite.title") + " - " + file.getName(),
+                        messages.get("InstallPanel.overwrite.question") + file.getAbsolutePath(),
                         AbstractUIHandler.CHOICES_YES_NO, def_choice);
 
                 result = (answer == AbstractUIHandler.ANSWER_YES);

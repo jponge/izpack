@@ -44,10 +44,10 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.binding.OsModel;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.FileExecutor;
@@ -228,8 +228,7 @@ public class CompileWorker implements Runnable
                 List<String> args = new ArrayList<String>();
                 args.add("nothing to do");
 
-                this.result = new CompileResult(this.idata.getLangpack()
-                                                        .getString("CompilePanel.worker.nofiles"), args, "", "");
+                this.result = new CompileResult(idata.getMessages().get("CompilePanel.worker.nofiles"), args, "", "");
             }
             else
             {
@@ -634,7 +633,7 @@ public class CompileWorker implements Runnable
 
         private List<String> classpath;
 
-        private LocaleDatabase langpack;
+        private Messages messages;
 
         private AutomatedInstallData idata;
 
@@ -655,7 +654,7 @@ public class CompileWorker implements Runnable
         {
             this.listener = listener;
             this.idata = idata;
-            this.langpack = idata.getLangpack();
+            this.messages = idata.getMessages();
             this.name = name;
             this.files = files;
             this.classpath = classpath;
@@ -786,10 +785,8 @@ public class CompileWorker implements Runnable
 
                     if (retval != 0)
                     {
-                        CompileResult result = new CompileResult(this.langpack
-                                                                         .getString("CompilePanel.error"), args,
-                                                                 output[0],
-                                                                 output[1]);
+                        CompileResult result = new CompileResult(messages.get("CompilePanel.error"), args,
+                                                                 output[0], output[1]);
                         this.listener.handleCompileError(result);
                         if (!result.isContinue())
                         {
@@ -813,9 +810,7 @@ public class CompileWorker implements Runnable
 
                             if (!class_file.exists())
                             {
-                                CompileResult result = new CompileResult(this.langpack
-                                                                                 .getString(
-                                                                                         "CompilePanel.error.noclassfile")
+                                CompileResult result = new CompileResult(messages.get("CompilePanel.error.noclassfile")
                                                                                  + java_file.getAbsolutePath(), args,
                                                                          output[0],
                                                                          output[1]);
@@ -857,8 +852,7 @@ public class CompileWorker implements Runnable
 
                 if (retval != 0)
                 {
-                    CompileResult result = new CompileResult(this.langpack
-                                                                     .getString("CompilePanel.error"), args, output[0],
+                    CompileResult result = new CompileResult(messages.get("CompilePanel.error"), args, output[0],
                                                              output[1]);
                     this.listener.handleCompileError(result);
                     if (!result.isContinue())
@@ -883,9 +877,7 @@ public class CompileWorker implements Runnable
 
                         if (!class_file.exists())
                         {
-                            CompileResult result = new CompileResult(this.langpack
-                                                                             .getString(
-                                                                                     "CompilePanel.error.noclassfile")
+                            CompileResult result = new CompileResult(messages.get("CompilePanel.error.noclassfile")
                                                                              + java_file.getAbsolutePath(), args,
                                                                      output[0],
                                                                      output[1]);
@@ -1086,8 +1078,7 @@ public class CompileWorker implements Runnable
 
                 if (retval != 0)
                 {
-                    CompileResult result = new CompileResult(this.langpack
-                                                                     .getString("CompilePanel.error.compilernotfound"),
+                    CompileResult result = new CompileResult(messages.get("CompilePanel.error.compilernotfound"),
                                                              args, output[0],
                                                              output[1]);
                     this.listener.handleCompileError(result);
@@ -1134,10 +1125,8 @@ public class CompileWorker implements Runnable
 
             if (retval != 0)
             {
-                CompileResult result = new CompileResult(this.langpack
-                                                                 .getString("CompilePanel.error.invalidarguments"),
-                                                         args, output[0],
-                                                         output[1]);
+                CompileResult result = new CompileResult(messages.get("CompilePanel.error.invalidarguments"),
+                                                         args, output[0], output[1]);
                 this.listener.handleCompileError(result);
                 if (!result.isContinue())
                 {

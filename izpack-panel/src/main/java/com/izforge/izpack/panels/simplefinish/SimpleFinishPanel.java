@@ -88,7 +88,7 @@ public class SimpleFinishPanel extends IzPanel
     {
         parent.lockNextButton();
         parent.lockPrevButton();
-        parent.setQuitButtonText(installData.getLangpack().getString("FinishPanel.done"));
+        parent.setQuitButtonText(getString("FinishPanel.done"));
         parent.setQuitButtonIcon("done");
         if (this.installData.isInstallSuccess())
         {
@@ -96,7 +96,7 @@ public class SimpleFinishPanel extends IzPanel
             // We set the information
             add(LabelFactory.create(parent.getIcons().get("check")));
             add(IzPanelLayout.createVerticalStrut(5));
-            JLabel jLabel = LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
+            JLabel jLabel = LabelFactory.create(getString("FinishPanel.success"),
                                                 parent.getIcons().get("preferences"), LEADING);
             jLabel.setName(GuiId.SIMPLE_FINISH_LABEL.id);
             add(jLabel, NEXT_LINE);
@@ -106,10 +106,8 @@ public class SimpleFinishPanel extends IzPanel
                 // We prepare a message for the uninstaller feature
                 String path = translatePath(installData.getInfo().getUninstallerPath());
 
-                JLabel uninstallJLabel = LabelFactory.create(installData.getLangpack()
-                                                                     .getString("FinishPanel.uninst.info"),
-                                                             parent.getIcons()
-                                                                     .get("preferences"), LEADING);
+                JLabel uninstallJLabel = LabelFactory.create(getString("FinishPanel.uninst.info"),
+                                                             parent.getIcons().get("preferences"), LEADING);
                 uninstallJLabel.setName(GuiId.SIMPLE_FINISH_UNINSTALL_LABEL.id);
                 add(uninstallJLabel, NEXT_LINE);
                 add(LabelFactory.create(path, parent.getIcons().get("empty"),
@@ -118,7 +116,7 @@ public class SimpleFinishPanel extends IzPanel
         }
         else
         {
-            add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.fail"),
+            add(LabelFactory.create(getString("FinishPanel.fail"),
                                     parent.getIcons().get("stop"), LEADING));
         }
         getLayoutHelper().completeLayout(); // Call, or call not?

@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.core.io.VolumeLocator;
 
 
@@ -45,11 +46,12 @@ public class MultiVolumeUnpackerAutomationHelper implements VolumeLocator
     @Override
     public File getVolume(String path, boolean corrupt) throws IOException
     {
+        Messages messages = installData.getMessages();
         if (corrupt)
         {
-            System.err.println(" [ " + installData.getLangpack().getString("nextmedia.corruptmedia.title") + " ] ");
-            System.err.println(installData.getLangpack().getString("nextmedia.corruptmedia"));
-            System.err.println(installData.getLangpack().getString("nextmedia.corruptmedia"));
+            System.err.println(" [ " + messages.get("nextmedia.corruptmedia.title") + " ] ");
+            System.err.println(messages.get("nextmedia.corruptmedia"));
+            System.err.println(messages.get("nextmedia.corruptmedia"));
         }
         logger.fine("Enter next media: " + path);
 
@@ -57,8 +59,8 @@ public class MultiVolumeUnpackerAutomationHelper implements VolumeLocator
 
         while (!volume.exists() || corrupt)
         {
-            System.out.println(" [ " + installData.getLangpack().getString("nextmedia.title") + " ] ");
-            System.out.println(installData.getLangpack().getString("nextmedia.msg"));
+            System.out.println(" [ " + messages.get("nextmedia.title") + " ] ");
+            System.out.println(messages.get("nextmedia.msg"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
             String nextmediainput = null;

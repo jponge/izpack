@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.core.io.VolumeLocator;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.gui.IzPanel;
@@ -61,9 +62,9 @@ public class MultiVolumeUnpackerHelper implements VolumeLocator
             {
                 parent = ((IzPanel) this.handler).getInstallerFrame();
             }
-            JOptionPane.showMessageDialog(parent, installData.getLangpack()
-                    .getString("nextmedia.corruptmedia"), installData.getLangpack()
-                    .getString("nextmedia.corruptmedia.title"), JOptionPane.ERROR_MESSAGE);
+            Messages messages = installData.getMessages();
+            JOptionPane.showMessageDialog(parent, messages.get("nextmedia.corruptmedia"),
+                                          messages.get("nextmedia.corruptmedia.title"), JOptionPane.ERROR_MESSAGE);
         }
         logger.fine("Enter next media: " + path);
 

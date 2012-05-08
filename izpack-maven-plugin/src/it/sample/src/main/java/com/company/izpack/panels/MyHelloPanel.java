@@ -75,9 +75,10 @@ public class MyHelloPanel extends IzPanel
         // This have to be the first line during layout if IzPanelLayout will be used.
         super(parent, idata, layout);
         // We create and put the labels
+        Messages messages = installData.getMessages();
         String str;
-        str = installData.getLangpack().getString("HelloPanel.welcome1") + idata.getInfo().getAppName() + " "
-                + idata.getInfo().getAppVersion() + installData.getLangpack().getString("HelloPanel.welcome2");
+        str = messages.get("HelloPanel.welcome1") + idata.getInfo().getAppName() + " "
+                + idata.getInfo().getAppVersion() + messages.get("HelloPanel.welcome2");
         JLabel welcomeLabel = LabelFactory.create(str, parent.getIcons().get("host"), LEADING);
         // IzPanelLayout is a constraint orientated layout manager. But if no constraint is
         // given, a default will be used. It starts in the first line.
@@ -95,9 +96,8 @@ public class MyHelloPanel extends IzPanel
         int size = authors.size();
         if (size > 0)
         {
-            str = installData.getLangpack().getString("HelloPanel.authors");
-            JLabel appAuthorsLabel = LabelFactory.create(str, parent.getIcons()
-                    .get("information"), LEADING);
+            str = messages.get("HelloPanel.authors");
+            JLabel appAuthorsLabel = LabelFactory.create(str, parent.getIcons().get("information"), LEADING);
             // If nothing will be sad to the IzPanelLayout the position of an add will be
             // determined in the default constraint. For labels it is CURRENT_ROW, NEXT_COLUMN.
             // But at this point we would place the label in the next row. It is possible
@@ -124,9 +124,8 @@ public class MyHelloPanel extends IzPanel
 
         if (idata.getInfo().getAppURL() != null)
         {
-            str = installData.getLangpack().getString("HelloPanel.url") + idata.getInfo().getAppURL();
-            JLabel appURLLabel = LabelFactory.create(str, parent.getIcons().get("bookmark"),
-                    LEADING);
+            str = messages.get("HelloPanel.url") + idata.getInfo().getAppURL();
+            JLabel appURLLabel = LabelFactory.create(str, parent.getIcons().get("bookmark"), LEADING);
             add(appURLLabel, LayoutConstants.NEXT_LINE);
         }
         // At end of layouting we should call the completeLayout method also they do nothing.

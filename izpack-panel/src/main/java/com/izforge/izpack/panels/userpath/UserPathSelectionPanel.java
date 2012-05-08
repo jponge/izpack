@@ -125,10 +125,10 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
         add(IzPanelLayout.createHorizontalFiller(3));
         // No explicit constraints for the button (else implicit) because
         // defaults are OK.
-        String buttonText = parent.getInstallerFrame().getLangpack().getString(targetPanel + ".browse");
+        String buttonText = parent.getInstallerFrame().getMessages().get(targetPanel + ".browse");
         if (buttonText == null)
         {
-            buttonText = parent.getInstallerFrame().getLangpack().getString(defaultPanelName + ".browse");
+            buttonText = parent.getInstallerFrame().getMessages().get(defaultPanelName + ".browse");
         }
         browseButton = ButtonFactory.createButton(buttonText, parent.getInstallerFrame().getIcons().get("open"),
                                                   installData.buttonsHColor);

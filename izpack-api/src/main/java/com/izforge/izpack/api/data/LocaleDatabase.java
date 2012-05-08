@@ -19,17 +19,18 @@
 
 package com.izforge.izpack.api.data;
 
+import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.XMLException;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.exception.IzPackException;
-
-import java.io.InputStream;
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import com.izforge.izpack.api.resource.Messages;
 
 /**
  * Represents a database of a locale.
@@ -37,13 +38,8 @@ import java.util.TreeMap;
  * @author Julien Ponge
  * @author J. Chris Folsom <jchrisfolsom@gmail.com>
  */
-public class LocaleDatabase extends TreeMap<String, String>
+public class LocaleDatabase extends TreeMap<String, String> implements Messages
 {
-
-    /*
-     * Static cache of locale databases mapped by their iso name.
-     */
-    private static Map<String, LocaleDatabase> cachedLocales = new HashMap<String, LocaleDatabase>();
 
     /**
      * The directory where language packs are kept inside the installer jar file.
@@ -61,6 +57,11 @@ public class LocaleDatabase extends TreeMap<String, String>
     private static final char TEMP_QUOTING_CHARACTER = '\uffff';
 
     static final long serialVersionUID = 4941525634108401848L;
+
+    /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(LocaleDatabase.class.getName());
 
     /**
      * The constructor.
@@ -111,11 +112,67 @@ public class LocaleDatabase extends TreeMap<String, String>
     }
 
     /**
+     * Returns the message with the specified identifier.
+     *
+     * @param id the message identifier
+     * @return the corresponding message, or {@code id} if the message does not exist
+     */
+    @Override
+    public String get(Object id)
+    {
+        String result = super.get(id);
+        return result != null ? result : id.toString();
+    }
+
+    /**
+     * Formats the message with the specified identifier, replacing placeholders with the supplied arguments.
+     * <p/>
+     * This uses {@link java.text.MessageFormat} to format the message.
+     *
+     * @param id   the message identifier
+     * @param args message arguments to replace placeholders in the message with
+     * @return the corresponding message, or {@code id} if the message does not exist
+     */
+    @Override
+    public String get(String id, Object... args)
+    {
+        String result;
+        String pattern = super.get(id);
+        if (pattern != null)
+        {
+            try
+            {
+                // replace all ' characters because MessageFormat.format() doesn't substitute quoted place holders '{0}'
+                // TODO - fix quotes in langpacks to MessageFormat format
+                pattern = pattern.replace('\'', TEMP_QUOTING_CHARACTER);
+
+                pattern = MessageFormat.format(pattern, args);
+                result = MessageFormat.format(pattern, args);
+
+                // replace all ' characters back
+                result = result.replace(TEMP_QUOTING_CHARACTER, '\'');
+            }
+            catch (IllegalArgumentException exception)
+            {
+                result = id;
+                logger.log(Level.WARNING, "Failed to format pattern=" + pattern + ", for key=" + id, exception);
+            }
+        }
+        else
+        {
+            result = id;
+        }
+        return result;
+    }
+
+    /**
      * Convenience method to retrieve an element.
      *
      * @param key The key of the element to retrieve.
      * @return The element value or the key if not found.
+     * @deprecated use {@link #get(String, Object...)}
      */
+    @Deprecated
     public String getString(String key)
     {
         String val = get(key);
@@ -160,11 +217,11 @@ public class LocaleDatabase extends TreeMap<String, String>
                 {
                     curArg = curArg.substring(1);
                 }
-                variables[i] = getString(curArg);
+                variables[i] = get(curArg);
             }
         }
 
-        String message = getString(key);
+        String message = get(key);
 
         // replace all ' characters because MessageFormat.format()
         // don't substitute quoted place holders '{0}'

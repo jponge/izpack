@@ -214,9 +214,8 @@ abstract class ConsoleAction
                 DataValidator.Status validationResult = validator.validateData(installData);
                 if (validationResult != DataValidator.Status.OK)
                 {
-                    String errorMessage = installData.getLangpack().getString("data.validation.error.title")
-                            + ": " + installData.getVariables().replace(
-                            installData.getLangpack().getString(validator.getErrorMessageId()));
+                    String errorMessage = format("data.validation.error.title")
+                            + ": " + installData.getVariables().replace(format(validator.getErrorMessageId()));
 
                     // if defaultAnswer is true, result is ok
                     if (validationResult == DataValidator.Status.WARNING && validator.getDefaultAnswer())
@@ -265,6 +264,18 @@ abstract class ConsoleAction
     protected AutomatedInstallData getInstallData()
     {
         return installData;
+    }
+
+    /**
+     * Helper to format a localised message.
+     *
+     * @param key  the messages key
+     * @param args the format arguments
+     * @return the formatted message. If no message for the specified key exists, then {@code key} is returned unchanged
+     */
+    protected String format(String key, Object... args)
+    {
+        return installData.getMessages().get(key, args);
     }
 
 }

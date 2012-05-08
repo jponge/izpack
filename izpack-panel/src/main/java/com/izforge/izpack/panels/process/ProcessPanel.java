@@ -119,7 +119,7 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
         font = font.deriveFont(Font.BOLD, font.getSize() * 2.0f);
         heading.setFont(font);
         heading.setHorizontalAlignment(SwingConstants.CENTER);
-        heading.setText(installData.getLangpack().getString("ProcessPanel.heading"));
+        heading.setText(getString("ProcessPanel.heading"));
         heading.setVerticalAlignment(SwingConstants.TOP);
         BorderLayout layout = new BorderLayout();
         layout.setHgap(2);

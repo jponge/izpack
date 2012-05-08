@@ -99,7 +99,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
     {
         super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
         _targetPanel = targetPanel;
-        _variableName = installData.getLangpack().getString(targetPanel + ".variableName");
+        _variableName = getString(targetPanel + ".variableName");
         // Set default values
         loadMessages();
         String introText = getI18nStringForClass("extendedIntro", _thisPanel);
@@ -152,8 +152,8 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
 
     private void loadMessages()
     {
-        _error = installData.getLangpack().getString("installer.error");
-        _warn = installData.getLangpack().getString("installer.warning");
+        _error = getString("installer.error");
+        _warn = getString("installer.warning");
         _reqMsg = getMessage("required");
         _emptyTargetMsg = getMessage("empty_target");
         _warnMsg = getMessage("exists_warn");

@@ -44,6 +44,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
@@ -138,12 +139,11 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
-        browseBtn = ButtonFactory.createButton(data.getLangpack().getString("UserInputPanel.button.browse"),
-                                               data.buttonsHColor);
+        Messages messages = data.getMessages();
+        browseBtn = ButtonFactory.createButton(messages.get("UserInputPanel.button.browse"), data.buttonsHColor);
         browseBtn.addActionListener(this);
 
-        deleteBtn = ButtonFactory.createButton(data.getLangpack().getString("UserInputPanel.button.delete"),
-                                               data.buttonsHColor);
+        deleteBtn = ButtonFactory.createButton(messages.get("UserInputPanel.button.delete"), data.buttonsHColor);
         deleteBtn.addActionListener(this);
 
         JScrollPane scroller = new JScrollPane(fileList);
@@ -224,8 +224,8 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
     private void showMessage(String messageType)
     {
         JOptionPane.showMessageDialog(parentFrame,
-                                      parentFrame.getLangpack().getString("UserInputPanel." + messageType + ".message"),
-                                      parentFrame.getLangpack().getString("UserInputPanel." + messageType + ".caption"),
+                                      parentFrame.getMessages().get("UserInputPanel." + messageType + ".message"),
+                                      parentFrame.getMessages().get("UserInputPanel." + messageType + ".caption"),
                                       JOptionPane.WARNING_MESSAGE);
     }
 
@@ -257,7 +257,7 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
                 if (!success)
                 {
                     JOptionPane.showMessageDialog(parentFrame, processingClient.getValidationMessage(),
-                                                  parentFrame.getLangpack().getString("UserInputPanel.error.caption"),
+                                                  parentFrame.getMessages().get("UserInputPanel.error.caption"),
                                                   JOptionPane.WARNING_MESSAGE);
                 }
                 result = success;

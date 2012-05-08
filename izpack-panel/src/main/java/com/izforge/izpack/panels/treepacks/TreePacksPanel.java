@@ -251,7 +251,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
                     new File(this.installData.getInstallPath())).getAbsolutePath());
             if (freeBytes < 0)
             {
-                msg = installData.getLangpack().getString("PacksPanel.notAscertainable");
+                msg = getString("PacksPanel.notAscertainable");
             }
             else
             {
@@ -278,9 +278,8 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         refreshPacksToInstall();
         if (IoHelper.supported("getFreeSpace") && freeBytes >= 0 && freeBytes <= bytes)
         {
-            JOptionPane.showMessageDialog(this, installData.getLangpack()
-                    .getString("PacksPanel.notEnoughSpace"), installData.getLangpack()
-                    .getString("installer.error"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, getString("PacksPanel.notEnoughSpace"), getString("installer.error"),
+                                          JOptionPane.ERROR_MESSAGE);
             return (false);
         }
         return (true);
@@ -312,7 +311,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         String key = pack.getLangPackId();
         if (langpack != null && pack.getLangPackId() != null && !"".equals(pack.getLangPackId()))
         {
-            packName = langpack.getString(key);
+            packName = langpack.get(key);
         }
         if ("".equals(packName) || key == null || key.equals(packName))
         {
@@ -346,7 +345,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     protected JLabel createLabel(String msgId, String iconId, GridBagLayout layout,
                                  GridBagConstraints constraints)
     {
-        JLabel label = LabelFactory.create(installData.getLangpack().getString(msgId), parent.getIcons()
+        JLabel label = LabelFactory.create(getString(msgId), parent.getIcons()
                 .get(iconId), TRAILING);
         if (layout != null && constraints != null)
         {
@@ -374,7 +373,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         JLabel label = new JLabel();
         panel.setAlignmentX(LEFT_ALIGNMENT);
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-        panel.add(LabelFactory.create(installData.getLangpack().getString(msgId)));
+        panel.add(LabelFactory.create(getString(msgId)));
         panel.add(Box.createHorizontalGlue());
         panel.add(label);
         if (layout != null && constraints != null)
@@ -425,7 +424,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         area.setOpaque(false);
         area.setLineWrap(true);
         area.setWrapStyleWord(true);
-        area.setBorder(BorderFactory.createTitledBorder(installData.getLangpack().getString(msgId)));
+        area.setBorder(BorderFactory.createTitledBorder(getString(msgId)));
         area.setFont(getControlTextFont());
 
         if (layout != null && constraints != null)
@@ -664,7 +663,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             String key = pack.getLangPackId() + ".description";
             if (langpack != null && pack.getLangPackId() != null && !"".equals(pack.getLangPackId()))
             {
-                desc = langpack.getString(key);
+                desc = langpack.get(key);
             }
             if ("".equals(desc) || key.equals(desc))
             {
@@ -689,8 +688,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             String list = "";
             if (dep != null)
             {
-                list += (langpack == null) ? "Dependencies: " : langpack
-                        .getString("PacksPanel.dependencies");
+                list += (langpack == null) ? "Dependencies: " : langpack.get("PacksPanel.dependencies");
             }
             for (int j = 0; dep != null && j < dep.size(); j++)
             {
@@ -703,8 +701,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             }
 
             // add the list of the packs to be excluded
-            String excludeslist = (langpack == null) ? "Excludes: " : langpack
-                    .getString("PacksPanel.excludes");
+            String excludeslist = (langpack == null) ? "Excludes: " : langpack.get("PacksPanel.excludes");
             int numexcludes = 0;
             int i = getRowIndex(pack);
             if (pack.getExcludeGroup() != null)

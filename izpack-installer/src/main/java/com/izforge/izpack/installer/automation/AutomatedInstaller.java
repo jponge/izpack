@@ -47,6 +47,7 @@ import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.DataValidator.Status;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.InstallerBase;
@@ -397,7 +398,7 @@ public class AutomatedInstaller extends InstallerBase
 
         // Evaluate all global dynamic conditions
         List<DynamicInstallerRequirementValidator> dynConds = installData.getDynamicinstallerrequirements();
-        LocaleDatabase langpack = installData.getLangpack();
+        Messages messages = installData.getMessages();
         if (dynConds != null)
         {
             for (DynamicInstallerRequirementValidator validator : dynConds)
@@ -405,9 +406,9 @@ public class AutomatedInstaller extends InstallerBase
                 Status validationResult = validator.validateData(installData);
                 if (validationResult != DataValidator.Status.OK)
                 {
-                    String message = langpack.getString(validator.getErrorMessageId());
-                    String errorMessage = langpack.getString("data.validation.error.title")
-                            + ": " + this.variables.replace(message);
+                    String message = messages.get(validator.getErrorMessageId());
+                    String errorMessage = messages.get("data.validation.error.title")
+                            + ": " + variables.replace(message);
 
                     // if defaultAnswer is true, result is ok
                     if (validationResult == Status.WARNING && validator.getDefaultAnswer())
@@ -432,8 +433,8 @@ public class AutomatedInstaller extends InstallerBase
             Status validationResult = validator.validateData(installData);
             if (validationResult != DataValidator.Status.OK)
             {
-                String errorMessage = langpack.getString("data.validation.error.title")
-                        + ": " + this.variables.replace(langpack.getString(validator.getErrorMessageId()));
+                String errorMessage = messages.get("data.validation.error.title")
+                        + ": " + variables.replace(messages.get(validator.getErrorMessageId()));
                 // if defaultAnswer is true, result is ok
                 // if defaultAnswer is true, result is ok
                 if (validationResult == Status.WARNING && validator.getDefaultAnswer())

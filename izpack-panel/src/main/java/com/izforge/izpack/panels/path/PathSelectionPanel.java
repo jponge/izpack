@@ -125,8 +125,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
         add(IzPanelLayout.createHorizontalFiller(3));
         // No explicit constraints for the button (else implicit) because
         // defaults are OK.
-        browseButton = ButtonFactory.createButton(parent.getInstallerFrame().getLangpack()
-                                                          .getString("TargetPanel.browse"),
+        browseButton = ButtonFactory.createButton(parent.getInstallerFrame().getMessages().get("TargetPanel.browse"),
                                                   parent.getInstallerFrame().getIcons()
                                                           .get("open"), installData.buttonsHColor);
         browseButton.setName(GuiId.BUTTON_BROWSE.id);

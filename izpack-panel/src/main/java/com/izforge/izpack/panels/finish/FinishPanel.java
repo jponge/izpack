@@ -102,7 +102,7 @@ public class FinishPanel extends IzPanel implements ActionListener
     {
         parent.lockNextButton();
         parent.lockPrevButton();
-        parent.setQuitButtonText(installData.getLangpack().getString("FinishPanel.done"));
+        parent.setQuitButtonText(getString("FinishPanel.done"));
         parent.setQuitButtonIcon("done");
         Insets inset = new Insets(10, 20, 2, 2);
         GridBagConstraints constraints = new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.LINE_START,
@@ -110,8 +110,8 @@ public class FinishPanel extends IzPanel implements ActionListener
         if (this.installData.isInstallSuccess())
         {
             // We set the information
-            JLabel jLabel = LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
-                                                parent.getIcons().get("preferences"), LEADING);
+            JLabel jLabel = LabelFactory.create(getString("FinishPanel.success"), parent.getIcons().get("preferences"),
+                                                LEADING);
             jLabel.setName(GuiId.FINISH_PANEL_LABEL.id);
             add(jLabel, constraints);
             constraints.gridy++;
@@ -120,8 +120,7 @@ public class FinishPanel extends IzPanel implements ActionListener
                 // We prepare a message for the uninstaller feature
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
 
-                add(LabelFactory.create(installData.getLangpack()
-                                                .getString("FinishPanel.uninst.info"), parent.getIcons()
+                add(LabelFactory.create(getString("FinishPanel.uninst.info"), parent.getIcons()
                         .get("preferences"), LEADING), constraints);
                 constraints.gridy++;
                 add(LabelFactory.create(path, parent.getIcons().get("empty"),
@@ -129,18 +128,18 @@ public class FinishPanel extends IzPanel implements ActionListener
                 constraints.gridy++;
             }
             // We add the autoButton
-            autoButton = ButtonFactory.createButton(installData.getLangpack().getString("FinishPanel.auto"),
+            autoButton = ButtonFactory.createButton(getString("FinishPanel.auto"),
                                                     parent.getIcons().get("edit"), this.installData.buttonsHColor);
             autoButton.setName(GuiId.FINISH_PANEL_AUTO_BUTTON.id);
-            autoButton.setToolTipText(installData.getLangpack().getString("FinishPanel.auto.tip"));
+            autoButton.setToolTipText(getString("FinishPanel.auto.tip"));
             autoButton.addActionListener(this);
             add(autoButton, constraints);
             constraints.gridy++;
         }
         else
         {
-            add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.fail"),
-                                    parent.getIcons().get("stop"), LEADING), constraints);
+            add(LabelFactory.create(getString("FinishPanel.fail"), parent.getIcons().get("stop"), LEADING),
+                constraints);
         }
         getLayoutHelper().completeLayout(); // Call, or call not?
         log.informUser();
@@ -180,8 +179,8 @@ public class FinishPanel extends IzPanel implements ActionListener
         catch (Exception err)
         {
             err.printStackTrace();
-            JOptionPane.showMessageDialog(this, err.toString(), installData.getLangpack()
-                    .getString("installer.error"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, err.toString(), getString("installer.error"),
+                                          JOptionPane.ERROR_MESSAGE);
         }
     }
 

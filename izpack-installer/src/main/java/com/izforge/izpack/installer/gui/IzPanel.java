@@ -304,14 +304,14 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     }
 
     /**
-     * Gets a language Resource String from the parent, which holds these global resource.
+     * Helper to return a language resource string.
      *
-     * @param key The Search key
-     * @return The Languageresource or the key if not found.
+     * @param key the search key
+     * @return the corresponding string, or {@code key} if the string is not found
      */
     public String getString(String key)
     {
-        return installData.getLangpack().getString(key);
+        return installData.getMessages().get(key);
     }
 
     /**
@@ -444,9 +444,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     public boolean emitNotificationFeedback(String message)
     {
-        return (JOptionPane.showConfirmDialog(this, message, this.installData.getLangpack()
-                .getString("installer.Message"), JOptionPane.WARNING_MESSAGE,
-                                              JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION);
+        return JOptionPane.showConfirmDialog(this, message, getString("installer.Message"), JOptionPane.WARNING_MESSAGE,
+                                             JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION;
     }
 
     /**
@@ -567,11 +566,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         {
             buffer.append(".");
             buffer.append(panelId);
-            retval = installData.getLangpack().getString(buffer.toString());
+            retval = getString(buffer.toString());
         }
         if (retval == null || retval.startsWith(fullkey))
         {
-            retval = installData.getLangpack().getString(fullkey);
+            retval = getString(fullkey);
         }
         if (retval == null || retval.startsWith(fullkey))
         {
@@ -581,7 +580,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             }
             buffer.delete(0, buffer.length());
             buffer.append(alternateClass).append(".").append(subkey);
-            retval = installData.getLangpack().getString(buffer.toString());
+            retval = getString(buffer.toString());
         }
         if (retval != null && retval.indexOf('$') > -1)
         {
@@ -685,7 +684,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     public JLabel createLabel(String textId, String iconId, int pos, boolean isFullLine)
     {
         ImageIcon imageIcon = (iconId != null) ? parent.getIcons().get(iconId) : null;
-        JLabel label = LabelFactory.create(installData.getLangpack().getString(textId), imageIcon, pos, isFullLine);
+        JLabel label = LabelFactory.create(getString(textId), imageIcon, pos, isFullLine);
         if (label != null)
         {
             label.setFont(getControlTextFont());
@@ -704,7 +703,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public MultiLineLabel createMultiLineLabelLang(String textId)
     {
-        return (createMultiLineLabel(installData.getLangpack().getString(textId)));
+        return createMultiLineLabel(getString(textId));
     }
 
     /**
@@ -715,7 +714,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public MultiLineLabel createMultiLineLabel(String text)
     {
-        return (createMultiLineLabel(text, null, SwingConstants.LEFT));
+        return createMultiLineLabel(text, null, SwingConstants.LEFT);
     }
 
     /**
@@ -1103,8 +1102,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                     && state == DataValidator.Status.WARNING)
             {
 
-                String warningMessage = variables.replace(
-                        installData.getLangpack().getString(validationService.getWarningMessageId()));
+                String warningMessage = variables.replace(getString(validationService.getWarningMessageId()));
                 if (this.emitWarning(getString("data.validation.warning.title"), warningMessage))
                 {
                     returnValue = true;
@@ -1113,8 +1111,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             }
             else
             {
-                String errorMessage = variables.replace(
-                        installData.getLangpack().getString(validationService.getErrorMessageId()));
+                String errorMessage = variables.replace(getString(validationService.getErrorMessageId()));
                 emitError(getString("data.validation.error.title"), errorMessage);
 
             }

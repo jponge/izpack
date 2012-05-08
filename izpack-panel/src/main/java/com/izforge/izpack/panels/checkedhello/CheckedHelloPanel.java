@@ -96,10 +96,9 @@ public class CheckedHelloPanel extends HelloPanel
         {
             path = "<not found>";
         }
-        String noLuck = installData.getLangpack().getString("CheckedHelloPanel.productAlreadyExist0")
-                + path + " . "
-                + installData.getLangpack().getString("CheckedHelloPanel.productAlreadyExist1");
-        return (askQuestion(installData.getLangpack().getString("installer.error"), noLuck,
+        String noLuck = getString("CheckedHelloPanel.productAlreadyExist0") + path + " . "
+                + getString("CheckedHelloPanel.prouctAlreadyExist1");
+        return (askQuestion(getString("installer.error"), noLuck,
                             AbstractUIHandler.CHOICES_YES_NO) == AbstractUIHandler.ANSWER_YES);
     }
 
@@ -160,7 +159,7 @@ public class CheckedHelloPanel extends HelloPanel
     private void setUniqueUninstallKey() throws NativeLibException
     {
         String newUninstallName = registryHelper.updateUninstallName();
-        emitNotification(installData.getLangpack().getString("CheckedHelloPanel.infoOverUninstallKey")
+        emitNotification(getString("CheckedHelloPanel.infoOverUninstallKey")
                                  + newUninstallName);
     }
 }

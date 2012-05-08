@@ -76,6 +76,7 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
@@ -116,9 +117,9 @@ public class InstallerFrame extends JFrame implements InstallerView
     private static final String HEADING_ICON_RESOURCE = "Heading.image";
 
     /**
-     * The language pack.
+     * The localised messages.
      */
-    private LocaleDatabase langpack;
+    private Messages messages;
 
     /**
      * The installation data.
@@ -278,7 +279,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         this.housekeeper = housekeeper;
         this.log = log;
 
-        this.setLangpack(installData.getLangpack());
+        this.messages = installData.getMessages();
         this.setIcons(icons);
 
         // Sets the window events handler
@@ -350,22 +351,13 @@ public class InstallerFrame extends JFrame implements InstallerView
 
         JPanel navPanel = new JPanel();
         navPanel.setLayout(new BoxLayout(navPanel, BoxLayout.X_AXIS));
-        navPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(8, 8,
-                                                                                              8, 8),
-                                                              BorderFactory.createTitledBorder(new EtchedLineBorder(),
-                                                                                               getLangpack()
-                                                                                                       .getString(
-                                                                                                               "installer.madewith")
-                                                                                                       + " ",
-                                                                                               TitledBorder.DEFAULT_JUSTIFICATION,
-                                                                                               TitledBorder.DEFAULT_POSITION,
-                                                                                               new Font(
-                                                                                                       "Dialog",
-                                                                                                       Font.PLAIN,
-                                                                                                       10))));
+        TitledBorder border = BorderFactory.createTitledBorder(
+                new EtchedLineBorder(), messages.get("installer.madewith") + " ",
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Dialog", Font.PLAIN, 10));
+        navPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8), border));
 
         // Add help Button to the navigation panel
-        this.helpButton = ButtonFactory.createButton(getLangpack().getString("installer.help"), getIcons()
+        this.helpButton = ButtonFactory.createButton(messages.get("installer.help"), getIcons()
                 .get("help"), installdata.buttonsHColor);
         navPanel.add(this.helpButton);
         this.helpButton.setName(BUTTON_HELP.id);
@@ -373,7 +365,7 @@ public class InstallerFrame extends JFrame implements InstallerView
 
         navPanel.add(Box.createHorizontalGlue());
 
-        prevButton = ButtonFactory.createButton(getLangpack().getString("installer.prev"), getIcons()
+        prevButton = ButtonFactory.createButton(messages.get("installer.prev"), getIcons()
                 .get("stepback"), installdata.buttonsHColor);
         navPanel.add(prevButton);
         prevButton.addActionListener(navHandler);
@@ -382,7 +374,7 @@ public class InstallerFrame extends JFrame implements InstallerView
 
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
-        nextButton = ButtonFactory.createButton(getLangpack().getString("installer.next"), getIcons()
+        nextButton = ButtonFactory.createButton(messages.get("installer.next"), getIcons()
                 .get("stepforward"), installdata.buttonsHColor);
         navPanel.add(nextButton);
         nextButton.setName(BUTTON_NEXT.id);
@@ -390,7 +382,7 @@ public class InstallerFrame extends JFrame implements InstallerView
 
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
-        quitButton = ButtonFactory.createButton(getLangpack().getString("installer.quit"), getIcons()
+        quitButton = ButtonFactory.createButton(messages.get("installer.quit"), getIcons()
                 .get("stop"), installdata.buttonsHColor);
         navPanel.add(quitButton);
         quitButton.setName(BUTTON_QUIT.id);
@@ -884,7 +876,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         String text1 = text;
         if (text1 == null)
         {
-            text1 = getLangpack().getString("installer.quit");
+            text1 = messages.get("installer.quit");
         }
         quitButton.setText(text1);
     }
@@ -1229,14 +1221,37 @@ public class InstallerFrame extends JFrame implements InstallerView
         izPanel.showHelp();
     }
 
-    public LocaleDatabase getLangpack()
+    /**
+     * Returns the locale-specific messages.
+     *
+     * @return the messages
+     */
+    public Messages getMessages()
     {
-        return langpack;
+        return messages;
     }
 
+    /**
+     * Returns the locale-specific messages.
+     *
+     * @return the messages
+     * @deprecated use {@link #getMessages()}
+     */
+    @Deprecated
+    public LocaleDatabase getLangpack()
+    {
+        return (LocaleDatabase) messages;
+    }
+
+    /**
+     * Sets the locale specific messages.
+     *
+     * @param langpack the language pack
+     * @deprecated no replacement
+     */
+    @Deprecated
     public void setLangpack(LocaleDatabase langpack)
     {
-        this.langpack = langpack;
     }
 
     public IconsDatabase getIcons()
@@ -1728,8 +1743,8 @@ public class InstallerFrame extends JFrame implements InstallerView
             int visPanelsCount = panelManager.getCountVisiblePanel();
             String message = String.format(
                     "%s %d %s %d",
-                    getLangpack().getString("installer.step"), curPanelNo + 1,
-                    getLangpack().getString("installer.of"), visPanelsCount + 1
+                    messages.get("installer.step"), curPanelNo + 1,
+                    messages.get("installer.of"), visPanelsCount + 1
             );
             if (headingCounterComponent instanceof JProgressBar)
             {
@@ -1820,8 +1835,8 @@ public class InstallerFrame extends JFrame implements InstallerView
             result = uninstallDataWriter.write();
             if (!result)
             {
-                String title = getLangpack().getString("installer.error");
-                String message = getLangpack().getString("installer.uninstall.writefailed");
+                String title = messages.get("installer.error");
+                String message = messages.get("installer.uninstall.writefailed");
                 JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -1847,8 +1862,8 @@ public class InstallerFrame extends JFrame implements InstallerView
                     reboot = true;
                     break;
                 case Info.REBOOT_ACTION_ASK:
-                    message = variables.replace(getLangpack().getString("installer.reboot.ask.message"));
-                    title = variables.replace(getLangpack().getString("installer.reboot.ask.title"));
+                    message = variables.replace(messages.get("installer.reboot.ask.message"));
+                    title = variables.replace(messages.get("installer.reboot.ask.title"));
                     int res = JOptionPane
                             .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
                     if (res == JOptionPane.YES_OPTION)
@@ -1857,8 +1872,8 @@ public class InstallerFrame extends JFrame implements InstallerView
                     }
                     break;
                 case Info.REBOOT_ACTION_NOTICE:
-                    message = variables.replace(getLangpack().getString("installer.reboot.notice.message"));
-                    title = variables.replace(getLangpack().getString("installer.reboot.notice.title"));
+                    message = variables.replace(messages.get("installer.reboot.notice.message"));
+                    title = variables.replace(messages.get("installer.reboot.notice.title"));
                     JOptionPane.showConfirmDialog(this, message, title, JOptionPane.OK_OPTION);
                     break;
             }
@@ -1885,17 +1900,17 @@ public class InstallerFrame extends JFrame implements InstallerView
         // Use a alternate message and title if defined.
         final String mkey = "installer.quit.reversemessage";
         final String tkey = "installer.quit.reversetitle";
-        String message = getLangpack().getString(mkey);
-        String title = getLangpack().getString(tkey);
+        String message = messages.get(mkey);
+        String title = messages.get(tkey);
         // message equal to key -> no alternate message defined.
         if (message.contains(mkey))
         {
-            message = getLangpack().getString("installer.quit.message");
+            message = messages.get("installer.quit.message");
         }
         // title equal to key -> no alternate title defined.
         if (title.contains(tkey))
         {
-            title = getLangpack().getString("installer.quit.title");
+            title = messages.get("installer.quit.title");
         }
         // Now replace variables in message or title.
         message = variables.replace(message);
