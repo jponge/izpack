@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.merge.Mergeable;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.merge.resolve.PathResolver;
@@ -42,11 +41,6 @@ public class UninstallDataWriter
      * Install data.
      */
     private AutomatedInstallData installData;
-
-    /**
-     * The variable substituter.
-     */
-    private VariableSubstitutor substituter;
 
     /**
      * The path resolver.
@@ -81,16 +75,14 @@ public class UninstallDataWriter
     /**
      * Constructs an <tt>UninstallDataWriter</tt>.
      *
-     * @param substituter   the variable substituter
      * @param uninstallData the uninstall data
      * @param installData   the install data
      * @param pathResolver  the path resolver
      * @param rules         the rules engine
      */
-    public UninstallDataWriter(VariableSubstitutor substituter, UninstallData uninstallData,
-                               AutomatedInstallData installData, PathResolver pathResolver, RulesEngine rules)
+    public UninstallDataWriter(UninstallData uninstallData, AutomatedInstallData installData, PathResolver pathResolver,
+                               RulesEngine rules)
     {
-        this.substituter = substituter;
         this.uninstallData = uninstallData;
         this.installData = installData;
         this.pathResolver = pathResolver;
@@ -165,7 +157,7 @@ public class UninstallDataWriter
             {
                 logfile = installData.getInfo().getUninstallerPath() + "/install.log";
             }
-            logfile = IoHelper.translatePath(logfile, substituter);
+            logfile = IoHelper.translatePath(logfile, installData.getVariables());
             File outFile = new File(logfile);
             if (!outFile.getParentFile().exists())
             {
@@ -493,7 +485,7 @@ public class UninstallDataWriter
     private void createOutputJar() throws IOException
     {
         // Create the uninstaller directory
-        String dirPath = IoHelper.translatePath(installData.getInfo().getUninstallerPath(), substituter);
+        String dirPath = IoHelper.translatePath(installData.getInfo().getUninstallerPath(), installData.getVariables());
         String jarPath = dirPath + File.separator + installData.getInfo().getUninstallerName();
         File dir = new File(dirPath);
         if (!dir.exists() && !dir.mkdirs())

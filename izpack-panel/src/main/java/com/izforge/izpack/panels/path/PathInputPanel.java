@@ -36,7 +36,6 @@ import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -168,8 +167,8 @@ public class PathInputPanel extends IzPanel implements ActionListener
                     pathSelectionPanel.getPath() + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
             if (!installationinformation.exists())
             {
-                emitError(installData.getLangpack().getString("installer.error"),
-                          installData.getLangpack().getString("PathInputPanel.required.forModificationInstallation"));
+                emitError(getString("installer.error"),
+                          getString("PathInputPanel.required.forModificationInstallation"));
 
                 return false;
             }
@@ -180,11 +179,10 @@ public class PathInputPanel extends IzPanel implements ActionListener
         {
             if (isMustExist())
             {
-                emitError(installData.getLangpack().getString("installer.error"), installData.getLangpack()
-                        .getString("PathInputPanel.required"));
+                emitError(getString("installer.error"), getString("PathInputPanel.required"));
                 return false;
             }
-            ok = emitWarning(installData.getLangpack().getString("installer.warning"), emptyTargetMsg);
+            ok = emitWarning(getString("installer.warning"), emptyTargetMsg);
         }
         if (!ok)
         {
@@ -206,14 +204,12 @@ public class PathInputPanel extends IzPanel implements ActionListener
         {
             if (!path.exists())
             {
-                emitError(installData.getLangpack().getString("installer.error"), installData.getLangpack()
-                        .getString(getI18nStringForClass("required", "PathInputPanel")));
+                emitError(getString("installer.error"), getString(getI18nStringForClass("required", "PathInputPanel")));
                 return false;
             }
             if (!pathIsValid())
             {
-                emitError(installData.getLangpack().getString("installer.error"), installData.getLangpack()
-                        .getString(getI18nStringForClass("notValid", "PathInputPanel")));
+                emitError(getString("installer.error"), getString(getI18nStringForClass("notValid", "PathInputPanel")));
                 return false;
             }
         }
@@ -222,7 +218,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
             // We assume, that we would install something into this dir
             if (!isWriteable())
             {
-                emitError(installData.getLangpack().getString("installer.error"), getI18nStringForClass(
+                emitError(getString("installer.error"), getI18nStringForClass(
                         "notwritable", "TargetPanel"));
                 return false;
             }
@@ -230,7 +226,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
             // that it will be created
             if (path.exists())
             {
-                int res = askQuestion(installData.getLangpack().getString("installer.warning"), warnMsg,
+                int res = askQuestion(getString("installer.warning"), warnMsg,
                                       AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_YES);
                 ok = res == AbstractUIHandler.ANSWER_YES;
             }
@@ -317,7 +313,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
     public void loadDefaultInstallDir()
     {
         defaultInstallDir = loadDefaultInstallDir(
-                resourceManager, variableSubstitutor, installData);
+                resourceManager, installData);
     }
 
     /**
@@ -336,12 +332,10 @@ public class PathInputPanel extends IzPanel implements ActionListener
      * filename, which is set in the install.xml file at compile time.
      *
      * @param resourceManager
-     * @param variableSubstitutor
      * @param installData
      * @return the default installation directory for the current installation
      */
     public static String loadDefaultInstallDir(ResourceManager resourceManager,
-                                               VariableSubstitutor variableSubstitutor,
                                                AutomatedInstallData installData)
     {
         String defaultInstallDir = getDefaultInstallDir();
@@ -429,7 +423,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 }
                 defaultInstallDir = line;
 
-                defaultInstallDir = variableSubstitutor.substitute(defaultInstallDir);
+                defaultInstallDir = installData.getVariables().replace(defaultInstallDir);
             }
             else
             {

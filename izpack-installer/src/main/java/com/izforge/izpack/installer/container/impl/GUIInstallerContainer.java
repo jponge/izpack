@@ -13,7 +13,7 @@ import org.picocontainer.injectors.ProviderAdapter;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ContainerException;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.gui.GUIPrompt;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.container.provider.GUIInstallDataProvider;
@@ -84,12 +84,9 @@ public class GUIInstallerContainer extends InstallerContainer
     {
         super.resolveComponents(pico);
         AutomatedInstallData installdata = pico.getComponent(AutomatedInstallData.class);
-        VariableSubstitutor substitutor = pico.getComponent(VariableSubstitutor.class);
         pico
-                // Configuration of title parameter in InstallerFrame
-                .addConfig("title", getTitle(installdata, substitutor))
-                        // Configuration of frame parameter in languageDialog
-                .addConfig("frame", initFrame());
+                .addConfig("title", getTitle(installdata)) // Configuration of title parameter in InstallerFrame
+                .addConfig("frame", initFrame());          // Configuration of frame parameter in languageDialog
     }
 
     private JFrame initFrame()
@@ -108,28 +105,22 @@ public class GUIInstallerContainer extends InstallerContainer
         return frame;
     }
 
-    private String getTitle(AutomatedInstallData automatedInstallData, VariableSubstitutor vs)
+    private String getTitle(AutomatedInstallData automatedInstallData)
     {
         // Use a alternate message if defined.
         final String key = "installer.reversetitle";
-        String message = automatedInstallData.getLangpack().getString(key);
+        Messages messages = automatedInstallData.getMessages();
+        String message = messages.get(key);
         // message equal to key -> no message defined.
-        if (message.contains(key))
+        if (message.equals(key))
         {
-            return automatedInstallData.getLangpack().getString("installer.title")
-                    + automatedInstallData.getInfo().getAppName();
+            message = messages.get("installer.title") + " " + automatedInstallData.getInfo().getAppName();
         }
         else
-        { // Attention! The alternate message has to contain the whole message including
+        {
+            // Attention! The alternate message has to contain the whole message including
             // $APP_NAME and may be $APP_VER.
-            try
-            {
-                return vs.substitute(message);
-            }
-            catch (Exception e)
-            {
-                // ignore
-            }
+            message = automatedInstallData.getVariables().replace(message);
         }
         return message;
     }

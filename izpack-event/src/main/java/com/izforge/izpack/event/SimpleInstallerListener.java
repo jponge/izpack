@@ -21,17 +21,17 @@
 
 package com.izforge.izpack.event;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.util.helper.SpecHelper;
-
-import java.io.File;
-import java.util.ArrayList;
 
 /**
  * <p>
@@ -55,9 +55,9 @@ public class SimpleInstallerListener implements InstallerListener
     protected static final String LANG_FILE_NAME = "CustomActionsLang.xml";
 
     /**
-     * The packs locale database.
+     * The messages.
      */
-    protected LocaleDatabase langpack = null;
+    private Messages messages;
 
     protected static boolean doInformProgressBar = false;
 
@@ -162,18 +162,9 @@ public class SimpleInstallerListener implements InstallerListener
         {
             installdata = idata;
         }
-        if (installdata != null && langpack == null)
+        if (messages == null)
         {
-            // Load langpack.
-            try
-            {
-                String resource = LANG_FILE_NAME + "_" + installdata.getLocaleISO3();
-                langpack = new LocaleDatabase(resources.getInputStream(resource));
-            }
-            catch (Throwable exception)
-            {
-            }
-
+            messages = idata.getMessages();
         }
     }
 
@@ -326,16 +317,7 @@ public class SimpleInstallerListener implements InstallerListener
      */
     protected String getMsg(String id)
     {
-        String retval = id;
-        if (langpack != null)
-        {
-            retval = langpack.getString(id);
-        }
-        if (retval.equals(id) && getInstalldata() != null)
-        {
-            retval = getInstalldata().getLangpack().getString(id);
-        }
-        return (retval);
+        return (messages != null) ? messages.get(id) : id;
     }
 
     /**

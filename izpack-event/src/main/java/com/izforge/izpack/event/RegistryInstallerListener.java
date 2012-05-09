@@ -186,16 +186,9 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             {
                 afterPacks();
             }
-            catch (Exception e)
+            catch (NativeLibException e)
             {
-                if (e instanceof NativeLibException)
-                {
-                    throw new WrappedNativeLibException(e);
-                }
-                else
-                {
-                    throw e;
-                }
+                throw new WrappedNativeLibException(e, installData.getMessages());
             }
         }
     }

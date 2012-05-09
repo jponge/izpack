@@ -73,23 +73,20 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
     {
         // We put our components
 
-        add(LabelFactory.create(installData.getLangpack().getString("InstallationTypePanel.info"),
-                                parent.getIcons().get("history"), LEADING), NEXT_LINE);
+        add(LabelFactory.create(getString("InstallationTypePanel.info"), parent.getIcons().get("history"), LEADING),
+            NEXT_LINE);
 
 
         ButtonGroup group = new ButtonGroup();
 
-        boolean modifyinstallation = Boolean.valueOf(
-                this.installData.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
+        boolean modifyinstallation = Boolean.valueOf(installData.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
 
-        normalinstall = new JRadioButton(installData.getLangpack().getString("InstallationTypePanel.normal"),
-                                         !modifyinstallation);
+        normalinstall = new JRadioButton(getString("InstallationTypePanel.normal"), !modifyinstallation);
         normalinstall.addActionListener(this);
         group.add(normalinstall);
         add(normalinstall, NEXT_LINE);
 
-        modifyinstall = new JRadioButton(installData.getLangpack().getString("InstallationTypePanel.modify"),
-                                         modifyinstallation);
+        modifyinstall = new JRadioButton(getString("InstallationTypePanel.modify"), modifyinstallation);
         modifyinstall.addActionListener(this);
         group.add(modifyinstall);
         add(modifyinstall, NEXT_LINE);

@@ -21,16 +21,15 @@
 
 package com.izforge.izpack.panels.target;
 
+import java.io.PrintWriter;
+import java.util.Properties;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.panels.path.PathInputPanel;
 import com.izforge.izpack.util.Console;
-
-import java.io.PrintWriter;
-import java.util.Properties;
 
 /**
  * The Target panel console helper class.
@@ -46,20 +45,13 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
     private final ResourceManager resources;
 
     /**
-     * The variable substituter.
-     */
-    private VariableSubstitutor variableSubstitutor;
-
-    /**
      * Constructs a <tt>TargetPanelConsoleHelper</tt>.
      *
-     * @param resources           the resource manager
-     * @param variableSubstitutor the variable substituter
+     * @param resources the resource manager
      */
-    public TargetPanelConsoleHelper(ResourceManager resources, VariableSubstitutor variableSubstitutor)
+    public TargetPanelConsoleHelper(ResourceManager resources)
     {
         this.resources = resources;
-        this.variableSubstitutor = variableSubstitutor;
     }
 
     public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
@@ -78,14 +70,7 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
         }
         else
         {
-            try
-            {
-                strTargetPath = variableSubstitutor.substitute(strTargetPath);
-            }
-            catch (Exception e)
-            {
-                // ignore
-            }
+            strTargetPath = installData.getVariables().replace(strTargetPath);
             installData.setInstallPath(strTargetPath);
             return true;
         }
@@ -101,7 +86,7 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
     @Override
     public boolean runConsole(AutomatedInstallData installData, Console console)
     {
-        String strDefaultPath = PathInputPanel.loadDefaultInstallDir(resources, variableSubstitutor, installData);
+        String strDefaultPath = PathInputPanel.loadDefaultInstallDir(resources, installData);
 
         String strTargetPath = console.prompt("Select target path [" + strDefaultPath + "] ", null);
         if (strTargetPath != null)
@@ -111,14 +96,7 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
             {
                 strTargetPath = strDefaultPath;
             }
-            try
-            {
-                strTargetPath = variableSubstitutor.substitute(strTargetPath);
-            }
-            catch (Exception e)
-            {
-                // ignore
-            }
+            strTargetPath = installData.getVariables().replace(strTargetPath);
 
             installData.setInstallPath(strTargetPath);
             return promptEndPanel(installData, console);

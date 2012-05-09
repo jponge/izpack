@@ -21,15 +21,15 @@
 
 package com.izforge.izpack.panels.hello;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.Info;
-import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.util.Console;
-import com.izforge.izpack.installer.console.PanelConsole;
-import com.izforge.izpack.installer.console.PanelConsoleHelper;
-
 import java.util.ArrayList;
 import java.util.Properties;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.resource.Messages;
+import com.izforge.izpack.installer.console.PanelConsole;
+import com.izforge.izpack.installer.console.PanelConsoleHelper;
+import com.izforge.izpack.util.Console;
 
 /**
  * Hello Panel console helper
@@ -66,15 +66,15 @@ public class HelloPanelConsoleHelper extends PanelConsoleHelper implements Panel
      */
     protected void display(AutomatedInstallData installData, Console console)
     {
-        LocaleDatabase langPack = installData.getLangpack();
+        Messages messages = installData.getMessages();
         Info info = installData.getInfo();
-        String welcomeText = langPack.getString("HelloPanel.welcome1") + info.getAppName() + " "
-                + info.getAppVersion() + langPack.getString("HelloPanel.welcome2");
+        String welcomeText = messages.get("HelloPanel.welcome1") + info.getAppName() + " "
+                + info.getAppVersion() + messages.get("HelloPanel.welcome2");
         console.println(welcomeText);
         ArrayList<Info.Author> authors = info.getAuthors();
         if (!authors.isEmpty())
         {
-            console.println(langPack.getString("HelloPanel.authors"));
+            console.println(messages.get("HelloPanel.authors"));
 
             for (Info.Author author : authors)
             {
@@ -86,7 +86,7 @@ public class HelloPanelConsoleHelper extends PanelConsoleHelper implements Panel
 
         if (info.getAppURL() != null)
         {
-            String urlText = langPack.getString("HelloPanel.url") + info.getAppURL();
+            String urlText = messages.get("HelloPanel.url") + info.getAppURL();
             console.println(urlText);
         }
     }

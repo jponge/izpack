@@ -19,17 +19,16 @@
 
 package com.izforge.izpack.api.data;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.event.InstallerListener;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.rules.RulesEngine;
 
 /**
@@ -38,7 +37,7 @@ import com.izforge.izpack.api.rules.RulesEngine;
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public abstract class AutomatedInstallData implements Serializable
+public abstract class AutomatedInstallData
 {
 
     // --- Static members -------------------------------------------------
@@ -66,9 +65,9 @@ public abstract class AutomatedInstallData implements Serializable
     private Locale locale;
 
     /**
-     * The language pack.
+     * The messages.
      */
-    private LocaleDatabase langpack;
+    private Messages messages;
 
     /**
      * The inforamtions.
@@ -131,9 +130,9 @@ public abstract class AutomatedInstallData implements Serializable
     private Map<String, List> customData;
 
     /**
-     * Maps the variable names to their values
+     * The variables.
      */
-    private Properties variables;
+    private final Variables variables;
 
     /**
      * Dynamic variables
@@ -188,48 +187,44 @@ public abstract class AutomatedInstallData implements Serializable
      *
      * @param variables the variables
      */
-    public AutomatedInstallData(Properties variables)
+    public AutomatedInstallData(Variables variables)
     {
+        this.variables = variables;
         setAvailablePacks(new ArrayList<Pack>());
         setSelectedPacks(new ArrayList<Pack>());
         panels = new ArrayList();
         setPanelsOrder(new ArrayList<Panel>());
         setXmlData(new XMLElementImpl("AutomatedInstallation"));
-        setVariables(variables);
         setAttributes(new HashMap<String, Object>());
         setCustomData(new HashMap<String, List>());
     }
 
     /**
-     * Returns the map of variable values. Modifying this will directly affect the current value of
-     * variables.
+     * Returns the variables.
      *
-     * @return the map of variable values
+     * @return the variables
      */
-    public Properties getVariables()
+    public Variables getVariables()
     {
         return variables;
     }
 
     /**
      * Sets a variable to the specified value. This is short hand for
-     * <code>getVariables().setProperty(var, val)</code>.
+     * {@code getVariables().set(name, value)}.
      *
-     * @param var the name of the variable
-     * @param val the new value of the variable
+     * @param name  the name of the variable
+     * @param value the new value of the variable
      * @see #getVariable
      */
-    public void setVariable(String var, String val)
+    public void setVariable(String name, String value)
     {
-        if (val != null)
-        {
-            getVariables().setProperty(var, val);
-        }
+        variables.set(name, value);
     }
 
     /**
      * Returns the current value of the specified variable. This is short hand for
-     * <code>getVariables().getProperty(var)</code>.
+     * {@code getVariables().get(name)}.
      *
      * @param var the name of the variable
      * @return the value of the variable or null if not set
@@ -237,7 +232,15 @@ public abstract class AutomatedInstallData implements Serializable
      */
     public String getVariable(String var)
     {
-        return getVariables().getProperty(var);
+        return variables.get(var);
+    }
+
+    /**
+     * Refreshes dynamic variables. This is short hand for {@code getVariables().refresh()}.
+     */
+    public void refreshVariables()
+    {
+        variables.refresh();
     }
 
     /**
@@ -332,16 +335,15 @@ public abstract class AutomatedInstallData implements Serializable
      *
      * @param locale         Locale to set
      * @param localeDatabase database containing the desired locale
-     * @throws Exception for any error
      */
-    public void setAndProcessLocal(String locale, LocaleDatabase localeDatabase) throws Exception
+    public void setAndProcessLocal(String locale, LocaleDatabase localeDatabase)
     {
         // We add an xml data information
         getXmlData().setAttribute("langpack", locale);
         // We load the langpack
         setLocaleISO3(locale);
         setVariable(ScriptParserConstant.ISO3_LANG, getLocaleISO3());
-        this.langpack = localeDatabase;
+        this.messages = localeDatabase;
     }
 
     public RulesEngine getRules()
@@ -375,14 +377,24 @@ public abstract class AutomatedInstallData implements Serializable
         this.locale = locale;
     }
 
+    /**
+     * Returns the localised messages.
+     *
+     * @return the localised messages
+     */
+    public Messages getMessages()
+    {
+        return messages;
+    }
+
     public LocaleDatabase getLangpack()
     {
-        return langpack;
+        return (LocaleDatabase) messages;
     }
 
     public void setLangpack(LocaleDatabase langpack)
     {
-        this.langpack = langpack;
+        this.messages = langpack;
     }
 
     public Info getInfo()
@@ -500,9 +512,9 @@ public abstract class AutomatedInstallData implements Serializable
         this.customData = customData;
     }
 
-    public void setVariables(Properties variables)
+    @Deprecated
+    public void setVariables(Variables variables)
     {
-        this.variables = variables;
     }
 
     public Map<String, Object> getAttributes()
@@ -515,11 +527,13 @@ public abstract class AutomatedInstallData implements Serializable
         this.attributes = attributes;
     }
 
+    @Deprecated
     public Map<String, List<DynamicVariable>> getDynamicvariables()
     {
         return this.dynamicvariables;
     }
 
+    @Deprecated
     public void setDynamicvariables(Map<String, List<DynamicVariable>> dynamicvariables)
     {
         this.dynamicvariables = dynamicvariables;

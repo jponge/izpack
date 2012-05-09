@@ -18,23 +18,28 @@
 
 package com.izforge.izpack.installer.multiunpacker;
 
-import com.izforge.izpack.api.data.LocaleDatabase;
+import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
-import java.io.File;
+
+import com.izforge.izpack.api.resource.Messages;
 
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
 public class NextMediaFileFilter extends FileFilter
 {
-    protected String volumename;
-    protected LocaleDatabase langpack;
+    private final String volumename;
 
-    public NextMediaFileFilter(String volumename, LocaleDatabase langpack)
+    /**
+     * The localised messages.
+     */
+    private final Messages messages;
+
+    public NextMediaFileFilter(String volumename, Messages messages)
     {
         this.volumename = volumename;
-        this.langpack = langpack;
+        this.messages = messages;
     }
 
     /* (non-Javadoc)
@@ -57,7 +62,7 @@ public class NextMediaFileFilter extends FileFilter
 
     public String getDescription()
     {
-        return this.langpack.getString("nextmedia.filedesc");
+        return messages.get("nextmedia.filedesc");
     }
 
 }

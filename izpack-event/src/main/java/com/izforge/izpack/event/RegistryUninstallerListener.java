@@ -21,15 +21,16 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.api.exception.NativeLibException;
-import com.izforge.izpack.api.exception.WrappedNativeLibException;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.core.os.RegistryDefaultHandler;
-import com.izforge.izpack.core.os.RegistryHandler;
-
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.List;
+
+import com.izforge.izpack.api.exception.NativeLibException;
+import com.izforge.izpack.api.exception.WrappedNativeLibException;
+import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Messages;
+import com.izforge.izpack.core.os.RegistryDefaultHandler;
+import com.izforge.izpack.core.os.RegistryHandler;
 
 /**
  * Uninstaller custom action for handling registry entries. The needed configuration data are
@@ -43,14 +44,21 @@ public class RegistryUninstallerListener extends NativeUninstallerListener
     private final RegistryDefaultHandler handler;
 
     /**
+     * The localised messages.
+     */
+    private final Messages messages;
+
+    /**
      * Constructs a <tt>RegistryUninstallerListener</tt>.
      *
-     * @param handler the handler
+     * @param handler  the handler
+     * @param messages the messages
      */
-    public RegistryUninstallerListener(RegistryDefaultHandler handler)
+    public RegistryUninstallerListener(RegistryDefaultHandler handler, Messages messages)
     {
         super();
         this.handler = handler;
+        this.messages = messages;
     }
 
     /*
@@ -87,19 +95,10 @@ public class RegistryUninstallerListener extends NativeUninstallerListener
             registryHandler.setLoggingInfo(allActions);
             registryHandler.rewind();
         }
-        catch (Exception e)
+        catch (NativeLibException e)
         {
-            if (e instanceof NativeLibException)
-            {
-                throw new WrappedNativeLibException(e);
-            }
-            else
-            {
-                throw e;
-            }
+            throw new WrappedNativeLibException(e, messages);
         }
     }
-
-
 
 }

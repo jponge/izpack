@@ -14,9 +14,7 @@ import org.junit.runner.RunWith;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
-import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.unpacker.Unpacker;
 import com.izforge.izpack.test.Container;
@@ -49,27 +47,20 @@ public class ExecutableFileTest extends AbstractDestroyerTest
      */
     private final UninstallDataWriter uninstallDataWriter;
 
-    /**
-     * Variable substituter.
-     */
-    private final VariableSubstitutor substituter;
-
 
     /**
      * Constructs an <tt>UninstallerListenerTest</tt>.
      *
      * @param unpacker            the unpacker
      * @param uninstallDataWriter the uninstall jar writer
-     * @param substituter         the variable substituter
      * @param installData         the install data
      */
     public ExecutableFileTest(Unpacker unpacker, UninstallDataWriter uninstallDataWriter,
-                              VariableSubstitutor substituter, AutomatedInstallData installData)
+                              AutomatedInstallData installData)
     {
         super(installData);
         this.unpacker = unpacker;
         this.uninstallDataWriter = uninstallDataWriter;
-        this.substituter = substituter;
     }
 
     /**
@@ -88,7 +79,7 @@ public class ExecutableFileTest extends AbstractDestroyerTest
     public void testExecutables() throws Exception
     {
         // make sure variables are resolved.
-        InstallerBase.refreshDynamicVariables(getInstallData(), substituter);
+        getInstallData().refreshVariables();
 
         // nothing should have executed yet
         checkNotExists("postinstall.log");

@@ -120,8 +120,8 @@ public class JDKPathPanel extends PathInputPanel
                     retval = true;
                     break;
                 case BAD_REG_PATH:
-                    if (askQuestion(installData.getLangpack().getString("installer.warning"),
-                                    installData.getLangpack().getString("JDKPathPanel.nonValidPathInReg"),
+                    if (askQuestion(getString("installer.warning"),
+                                    getString("JDKPathPanel.nonValidPathInReg"),
                                     AbstractUIHandler.CHOICES_YES_NO,
                                     AbstractUIHandler.ANSWER_NO) == AbstractUIHandler.ANSWER_YES)
                     {
@@ -135,9 +135,9 @@ public class JDKPathPanel extends PathInputPanel
                     String min = getMinVersion();
                     String max = getMaxVersion();
                     StringBuilder message = new StringBuilder();
-                    message.append(installData.getLangpack().getString("JDKPathPanel.badVersion1")).append(
+                    message.append(getString("JDKPathPanel.badVersion1")).append(
                             getDetectedVersion()).append(
-                            installData.getLangpack().getString("JDKPathPanel.badVersion2"));
+                            getString("JDKPathPanel.badVersion2"));
                     if (min != null && max != null)
                     {
                         message.append(min).append(" - ").append(max);
@@ -151,8 +151,8 @@ public class JDKPathPanel extends PathInputPanel
                         message.append(" <= ").append(max);
                     }
 
-                    message.append(installData.getLangpack().getString("JDKPathPanel.badVersion3"));
-                    if (askQuestion(installData.getLangpack().getString("installer.warning"), message.toString(),
+                    message.append(getString("JDKPathPanel.badVersion3"));
+                    if (askQuestion(getString("installer.warning"), message.toString(),
                                     AbstractUIHandler.CHOICES_YES_NO,
                                     AbstractUIHandler.ANSWER_NO) == AbstractUIHandler.ANSWER_YES)
                     {

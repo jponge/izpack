@@ -3,7 +3,6 @@ package com.izforge.izpack.installer.console;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.util.Console;
 
@@ -26,17 +25,15 @@ public abstract class AbstractInstallAction extends ConsoleAction
      *
      * @param factory       the panel console factory
      * @param installData   the installation data
-     * @param substituter   the variable substituter
      * @param objectFactory the factory for {@link com.izforge.izpack.api.installer.DataValidator}
      *                      instances
      * @param rules         the rules engine
      * @param writer        the uninstallation data writer
      */
     public AbstractInstallAction(PanelConsoleFactory factory, AutomatedInstallData installData,
-                                 VariableSubstitutor substituter, ObjectFactory objectFactory, RulesEngine rules,
-                                 UninstallDataWriter writer)
+                                 ObjectFactory objectFactory, RulesEngine rules, UninstallDataWriter writer)
     {
-        super(factory, installData, substituter, objectFactory, rules);
+        super(factory, installData, objectFactory, rules);
         this.writer = writer;
     }
 

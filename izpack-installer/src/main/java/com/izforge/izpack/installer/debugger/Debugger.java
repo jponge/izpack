@@ -21,15 +21,8 @@
 
 package com.izforge.izpack.installer.debugger;
 
-import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.IconsDatabase;
-import com.izforge.izpack.installer.data.GUIInstallData;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -39,6 +32,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
+
+import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.rules.Condition;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.IconsDatabase;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 /**
  * Class for debugging variables and conditions.
@@ -68,7 +81,7 @@ public class Debugger
     {
         idata = installdata;
         this.rules = rules;
-        lasttimevariables = (Properties) idata.getVariables().clone();
+        lasttimevariables = (Properties) idata.getVariables().getProperties().clone();
         this.icons = icons;
         this.variableshistory = new HashMap<String, VariableHistory>();
         this.conditionhistory = new HashMap<String, ConditionHistory>();
@@ -103,13 +116,14 @@ public class Debugger
     private void debugVariables(Panel nextpanelmetadata, Panel lastpanelmetadata)
     {
         getChangedVariables(nextpanelmetadata, lastpanelmetadata);
-        lasttimevariables = (Properties) idata.getVariables().clone();
+        lasttimevariables = (Properties) idata.getVariables().getProperties().clone();
     }
 
     private void debugConditions(Panel nextpanelmetadata, com.izforge.izpack.api.data.Panel lastpanelmetadata)
     {
         conditionhistoryrenderer.clearState();
-        updateChangedConditions("changed after panel switch from " + lastpanelmetadata.getPanelid() + " to " + nextpanelmetadata.getPanelid());
+        updateChangedConditions(
+                "changed after panel switch from " + lastpanelmetadata.getPanelid() + " to " + nextpanelmetadata.getPanelid());
     }
 
     private void updateChangedConditions(String comment)
@@ -136,7 +150,7 @@ public class Debugger
 
     private Properties getChangedVariables(Panel nextpanelmetadata, Panel lastpanelmetadata)
     {
-        Properties currentvariables = (Properties) idata.getVariables().clone();
+        Properties currentvariables = (Properties) idata.getVariables().getProperties().clone();
         Properties changedvariables = new Properties();
 
         variablesrenderer.clearState();
@@ -162,7 +176,8 @@ public class Debugger
                 if (!currentvalue.equals(oldvalue))
                 {
                     VariableHistory variableHistory = variableshistory.get(key);
-                    variableHistory.addValue(currentvalue, "changed value after panel " + lastpanelmetadata.getPanelid());
+                    variableHistory.addValue(currentvalue,
+                                             "changed value after panel " + lastpanelmetadata.getPanelid());
                     changes = true;
                     changedvariables.put(key, currentvalue);
                 }
@@ -177,7 +192,7 @@ public class Debugger
 
     private void modifyVariableManually(String varnametxt, String varvaluetxt)
     {
-        lasttimevariables = (Properties) idata.getVariables().clone();
+        lasttimevariables = (Properties) idata.getVariables().getProperties().clone();
         VariableHistory variableHistory = variableshistory.get(varnametxt);
         if (variableHistory != null)
         {
@@ -213,7 +228,8 @@ public class Debugger
         varchangepanel.add(label);
         final JTextField varvalue = new JTextField();
         varchangepanel.add(varvalue);
-        JButton changevarbtn = ButtonFactory.createButton(idata.getLangpack().getString("debug.changevariable"), icons.get("debug.changevariable"), idata.buttonsHColor);
+        JButton changevarbtn = ButtonFactory.createButton(idata.getMessages().get("debug.changevariable"),
+                                                          icons.get("debug.changevariable"), idata.buttonsHColor);
         changevarbtn.addActionListener(new ActionListener()
         {
 

@@ -42,6 +42,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackColor;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
@@ -82,7 +83,7 @@ public class PacksModel extends AbstractTableModel
     private RulesEngine rules;
 
     // reference to the current variables, needed for condition validation
-    private Properties variables;
+    private Variables variables;
 
     private GUIInstallData idata;
 
@@ -160,15 +161,15 @@ public class PacksModel extends AbstractTableModel
 
         this.packsToInstall = idata.getSelectedPacks();
         this.panel = panel;
-        this.variables = idata.getVariables();
-        this.variables.setProperty(INITAL_PACKSELECTION, Boolean.toString(true));
+        variables = idata.getVariables();
+        variables.set(INITAL_PACKSELECTION, Boolean.toString(true));
         langpack = panel.getLangpack();
         checkValues = new int[packs.size()];
         reverseDeps();
         initvalues();
         this.updateConditions(true);
         refreshPacksToInstall();
-        this.variables.setProperty(INITAL_PACKSELECTION, Boolean.toString(false));
+        variables.set(INITAL_PACKSELECTION, Boolean.toString(false));
     }
 
     public Pack getPackAtRow(int row)

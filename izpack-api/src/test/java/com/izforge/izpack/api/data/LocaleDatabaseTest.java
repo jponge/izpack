@@ -19,37 +19,55 @@
 
 package com.izforge.izpack.api.data;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
-public class LocaleDatabaseTest extends TestCase
+import org.junit.Before;
+import org.junit.Test;
+
+public class LocaleDatabaseTest
 {
 
-    LocaleDatabase _db = null;
+    private LocaleDatabase db;
 
-    @Override
+    @Before
     public void setUp() throws Exception
     {
-        _db = new LocaleDatabase(LocaleDatabaseTest.class
-                .getResourceAsStream("testing-langpack.xml"));
+        db = new LocaleDatabase(LocaleDatabaseTest.class.getResourceAsStream("testing-langpack.xml"));
 
     }
 
+    @Test
+    public void testGet()
+    {
+        assertEquals("String Text", db.get("string"));
+        assertEquals("none", db.get("none"));
+    }
+
+    @Test
+    public void testGetWithArgs()
+    {
+        assertEquals("Argument1: one, Argument2: two", db.get("string.with.arguments", "one", "two"));
+        assertEquals("Argument1: 'one', Argument2: 'two'", db.get("string.with.quoted.arguments", "one", "two"));
+    }
+
+    @Test
     public void testGetString() throws Exception
     {
-
-        assertEquals("String Text", _db.getString("string"));
-        assertEquals("none", _db.getString("none"));
+        assertEquals("String Text", db.getString("string"));
+        assertEquals("none", db.getString("none"));
     }
 
+    @Test
     public void testNpeHandling()
     {
-        assertEquals("Argument1: one, Argument2: N/A", _db.getString(
+        assertEquals("Argument1: one, Argument2: N/A", db.getString(
                 "string.with.arguments", new String[]{"one", null}));
     }
 
+    @Test
     public void testQuotedPlaceholder()
     {
-        assertEquals("Argument1: 'one', Argument2: 'N/A'", _db.getString(
+        assertEquals("Argument1: 'one', Argument2: 'N/A'", db.getString(
                 "string.with.quoted.arguments", new String[]{"one", null}));
     }
 

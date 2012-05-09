@@ -111,7 +111,7 @@ public class DirInputField extends FileInputField
         // We assume, that we would install something into this dir
         if (!isWriteable(path))
         {
-            parent.emitError(parentFrame.getLangpack().getString("installer.error"), parent
+            parent.emitError(parentFrame.getMessages().get("installer.error"), parent
                     .getI18nStringForClass("notwritable", "TargetPanel"));
             return false;
         }

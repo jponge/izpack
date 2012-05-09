@@ -22,8 +22,11 @@
 package com.izforge.izpack.core.substitutor;
 
 
+import java.util.Properties;
+
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+
 import junit.framework.TestCase;
 
 
@@ -40,7 +43,7 @@ public class SubstitutorTest extends TestCase
     private final String cyrillicString = "Закончить";
     private final String japanesString = "ƒCƒ“ƒXƒg[ƒ‹‚Ì’†Ž~";
 
-    protected VariableSubstitutor subst = new VariableSubstitutorImpl(null);
+    protected VariableSubstitutor subst = new VariableSubstitutorImpl((Properties) null);
 
     /**
      * Constructor for the test.

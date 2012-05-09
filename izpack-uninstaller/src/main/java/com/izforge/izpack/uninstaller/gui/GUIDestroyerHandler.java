@@ -54,7 +54,7 @@ public class GUIDestroyerHandler implements AbstractUIProgressHandler
         {
             public void run()
             {
-                uninstallerFrame.progressBar.setString(messages.getString("InstallPanel.finished"));
+                uninstallerFrame.progressBar.setString(messages.get("InstallPanel.finished"));
                 uninstallerFrame.targetDestroyCheckbox.setEnabled(false);
                 uninstallerFrame.destroyButton.setEnabled(false);
                 uninstallerFrame.releaseGUI();

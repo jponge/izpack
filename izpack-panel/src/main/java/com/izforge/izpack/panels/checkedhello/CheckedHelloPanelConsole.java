@@ -1,19 +1,20 @@
 package com.izforge.izpack.panels.checkedhello;
 
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.exception.NativeLibException;
-import com.izforge.izpack.api.handler.Prompt;
-import com.izforge.izpack.core.os.RegistryDefaultHandler;
-import com.izforge.izpack.panels.hello.HelloPanelConsoleHelper;
-import com.izforge.izpack.util.Console;
+import static com.izforge.izpack.api.handler.Prompt.Option.YES;
+import static com.izforge.izpack.api.handler.Prompt.Options.YES_NO;
+import static com.izforge.izpack.api.handler.Prompt.Type.ERROR;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.izforge.izpack.api.handler.Prompt.Option.YES;
-import static com.izforge.izpack.api.handler.Prompt.Options.YES_NO;
-import static com.izforge.izpack.api.handler.Prompt.Type.ERROR;
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.exception.NativeLibException;
+import com.izforge.izpack.api.handler.Prompt;
+import com.izforge.izpack.api.resource.Messages;
+import com.izforge.izpack.core.os.RegistryDefaultHandler;
+import com.izforge.izpack.panels.hello.HelloPanelConsoleHelper;
+import com.izforge.izpack.util.Console;
 
 /**
  * Console implementation of the {@link CheckedHelloPanel}.
@@ -112,8 +113,9 @@ public class CheckedHelloPanelConsole extends HelloPanelConsoleHelper
             {
                 path = "<not found>";
             }
-            String message = installData.getLangpack().getString("CheckedHelloPanel.productAlreadyExist0") + path + "\n"
-                    + installData.getLangpack().getString("CheckedHelloPanel.productAlreadyExist1");
+            Messages messages = installData.getMessages();
+            String message = messages.get("CheckedHelloPanel.productAlreadyExist0") + path + "\n"
+                    + messages.get("CheckedHelloPanel.productAlreadyExist1");
             result = prompt.confirm(ERROR, message, YES_NO) == YES;
         }
         catch (NativeLibException exception)

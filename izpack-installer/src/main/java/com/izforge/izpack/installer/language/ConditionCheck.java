@@ -22,7 +22,7 @@ import com.izforge.izpack.util.FileUtil;
  * Checker for java version, JDK and running install
  *
  * @deprecated This doesn't support console installations. For a replacement, see
- * {@link com.izforge.izpack.installer.requirement.RequirementsChecker}
+ *             {@link com.izforge.izpack.installer.requirement.RequirementsChecker}
  */
 @Deprecated
 public class ConditionCheck
@@ -67,10 +67,14 @@ public class ConditionCheck
             logger.fine("Lock File Exists, asking user for permission to proceed.");
             StringBuilder msg = new StringBuilder();
             msg.append("<html>");
-            msg.append("The " + appName + " installer you are attempting to run seems to have a copy already running.<br><br>");
-            msg.append("This could be from a previous failed installation attempt or you may have accidentally launched <br>");
-            msg.append("the installer twice. <b>The recommended action is to select 'Exit'</b> and wait for the other copy of <br>");
-            msg.append("the installer to start. If you are sure there is no other copy of the installer running, click <br>");
+            msg.append(
+                    "The " + appName + " installer you are attempting to run seems to have a copy already running.<br><br>");
+            msg.append(
+                    "This could be from a previous failed installation attempt or you may have accidentally launched <br>");
+            msg.append(
+                    "the installer twice. <b>The recommended action is to select 'Exit'</b> and wait for the other copy of <br>");
+            msg.append(
+                    "the installer to start. If you are sure there is no other copy of the installer running, click <br>");
             msg.append("the 'Continue' button to allow this installer to run. <br><br>");
             msg.append("Are you sure you want to continue with this installation?");
             msg.append("</html>");
@@ -78,8 +82,9 @@ public class ConditionCheck
             label.setFont(new Font("Sans Serif", Font.PLAIN, 12));
             Object[] optionValues = {"Continue", "Exit"};
             int selectedOption = JOptionPane.showOptionDialog(null, label, "Warning",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, optionValues,
-                    optionValues[1]);
+                                                              JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
+                                                              null, optionValues,
+                                                              optionValues[1]);
             logger.fine("Selected option: " + selectedOption);
             if (selectedOption == 0)
             {
@@ -165,7 +170,8 @@ public class ConditionCheck
                     "\n",
                     "Do you still want to proceed with the installation process?"
             };
-            int status = JOptionPane.showConfirmDialog(null, message, "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            int status = JOptionPane.showConfirmDialog(null, message, "Warning", JOptionPane.YES_NO_OPTION,
+                                                       JOptionPane.WARNING_MESSAGE);
             if (status == JOptionPane.NO_OPTION)
             {
                 System.exit(1);
@@ -198,7 +204,7 @@ public class ConditionCheck
                 String message = installerrequirement.getMessage();
                 if ((message != null) && (message.length() > 0))
                 {
-                    String localizedMessage = installdata.getLangpack().getString(message);
+                    String localizedMessage = installdata.getMessages().get(message);
                     display.showMissingRequirementMessage(localizedMessage);
                 }
                 result = false;

@@ -22,9 +22,6 @@
 
 package com.izforge.izpack.compiler.compressor;
 
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-
-
 /**
  * IzPack will be able to support different compression methods for the
  * packs included in the installation jar file.
@@ -45,15 +42,11 @@ public abstract class PackCompressorBase implements PackCompressor
 
     private int level = -1;
 
-    protected VariableSubstitutor variableSubstitutor;
-
     /**
-     * @param variableSubstitutor
      */
-    public PackCompressorBase(VariableSubstitutor variableSubstitutor)
+    public PackCompressorBase()
     {
         super();
-        this.variableSubstitutor = variableSubstitutor;
     }
 
     /* (non-Javadoc)

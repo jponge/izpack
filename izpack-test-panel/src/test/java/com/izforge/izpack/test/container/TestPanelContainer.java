@@ -11,13 +11,13 @@ import org.picocontainer.injectors.ProviderAdapter;
 import org.picocontainer.parameters.ComponentParameter;
 
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.ContainerException;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.PlatformProvider;
+import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.rules.ConditionContainer;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.base.InstallDataConfiguratorWithRules;
@@ -62,7 +62,7 @@ public class TestPanelContainer extends AbstractContainer
     {
         Properties properties = System.getProperties();
         addComponent(properties, properties);
-        addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
+        addComponent(Variables.class, DefaultVariables.class);
         addComponent(ResourceManager.class);
         addComponent(InstallerController.class);
         addComponent(UninstallData.class);

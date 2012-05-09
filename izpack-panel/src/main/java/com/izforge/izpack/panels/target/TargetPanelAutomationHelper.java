@@ -24,7 +24,6 @@ package com.izforge.izpack.panels.target;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 
 /**
@@ -35,11 +34,8 @@ import com.izforge.izpack.installer.automation.PanelAutomation;
  */
 public class TargetPanelAutomationHelper implements PanelAutomation
 {
-    private VariableSubstitutor variableSubstitutor;
-
-    public TargetPanelAutomationHelper(VariableSubstitutor variableSubstitutor)
+    public TargetPanelAutomationHelper()
     {
-        this.variableSubstitutor = variableSubstitutor;
     }
 
     /**
@@ -78,15 +74,7 @@ public class TargetPanelAutomationHelper implements PanelAutomation
 
         // Allow for variable substitution of the installpath value
         String path = ipath.getContent();
-        try
-        {
-            path = variableSubstitutor.substitute(path);
-        }
-        catch (Exception e)
-        {
-            // ignore
-        }
-
+        path = idata.getVariables().replace(path);
         idata.setInstallPath(path);
     }
 }

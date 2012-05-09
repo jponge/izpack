@@ -6,6 +6,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.installer.RequirementChecker;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 
@@ -57,6 +58,7 @@ public class InstallerRequirementChecker implements RequirementChecker
     public boolean check()
     {
         boolean fail = false;
+        Messages messages = installData.getMessages();
 
         for (InstallerRequirement requirement : installData.getInstallerrequirements())
         {
@@ -72,9 +74,9 @@ public class InstallerRequirementChecker implements RequirementChecker
             {
                 fail = true;
                 String message = requirement.getMessage();
-                if ((message != null) && (message.length() > 0))
+                if (message != null)
                 {
-                    String localizedMessage = installData.getLangpack().getString(message);
+                    String localizedMessage = messages.get(message);
                     prompt.message(Prompt.Type.ERROR, localizedMessage);
                 }
                 break;

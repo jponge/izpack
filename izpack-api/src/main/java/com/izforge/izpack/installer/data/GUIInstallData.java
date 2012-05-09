@@ -21,11 +21,12 @@ package com.izforge.izpack.installer.data;
 
 import java.awt.Color;
 import java.io.Serializable;
-import java.util.Properties;
 
 import javax.swing.UIManager;
 
 import com.izforge.izpack.api.data.GUIPrefs;
+import com.izforge.izpack.api.data.Variables;
+import com.izforge.izpack.api.resource.Messages;
 
 /**
  * Encloses information about the install process.
@@ -48,16 +49,16 @@ public class GUIInstallData extends InstallData implements Serializable
      */
     public Color buttonsHColor = new Color(230, 230, 230);
 
-    public GUIInstallData(Properties variables)
+    public GUIInstallData(Variables variables)
     {
         super(variables);
     }
 
     public void configureGuiButtons()
     {
-        UIManager.put("OptionPane.yesButtonText", getLangpack().getString("installer.yes"));
-        UIManager.put("OptionPane.noButtonText", getLangpack().getString("installer.no"));
-        UIManager.put("OptionPane.cancelButtonText", getLangpack()
-                .getString("installer.cancel"));
+        Messages messages = getMessages();
+        UIManager.put("OptionPane.yesButtonText", messages.get("installer.yes"));
+        UIManager.put("OptionPane.noButtonText", messages.get("installer.no"));
+        UIManager.put("OptionPane.cancelButtonText", messages.get("installer.cancel"));
     }
 }

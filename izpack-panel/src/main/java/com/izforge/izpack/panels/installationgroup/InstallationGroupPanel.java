@@ -300,7 +300,7 @@ public class InstallationGroupPanel extends IzPanel
         descriptionField.setText("<b>Install group description text</b>");
         descriptionField.setContentType("text/html");
         descriptionField.setBorder(
-                new TitledBorder(this.installData.getLangpack().getString("PacksPanel.description")));
+                new TitledBorder(getString("PacksPanel.description")));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -452,19 +452,16 @@ public class InstallationGroupPanel extends IzPanel
     {
         String description = null;
         String key = "InstallationGroupPanel.description." + group;
-        if (this.installData.getLangpack() != null)
+        String htmlKey = key + ".html";
+        String html = getString(htmlKey);
+        // This will equal the key if there is no entry
+        if (htmlKey.equalsIgnoreCase(html))
         {
-            String htmlKey = key + ".html";
-            String html = this.installData.getLangpack().getString(htmlKey);
-            // This will equal the key if there is no entry
-            if (htmlKey.equalsIgnoreCase(html))
-            {
-                description = this.installData.getLangpack().getString(key);
-            }
-            else
-            {
-                description = html;
-            }
+            description = getString(key);
+        }
+        else
+        {
+            description = html;
         }
         if (description == null || key.equalsIgnoreCase(description))
         {
@@ -529,19 +526,16 @@ public class InstallationGroupPanel extends IzPanel
     {
         String gname = null;
         String key = "InstallationGroupPanel.group." + group;
-        if (this.installData.getLangpack() != null)
+        String htmlKey = key + ".html";
+        String html = getString(htmlKey);
+        // This will equal the key if there is no entry
+        if (htmlKey.equalsIgnoreCase(html))
         {
-            String htmlKey = key + ".html";
-            String html = this.installData.getLangpack().getString(htmlKey);
-            // This will equal the key if there is no entry
-            if (htmlKey.equalsIgnoreCase(html))
-            {
-                gname = this.installData.getLangpack().getString(key);
-            }
-            else
-            {
-                gname = html;
-            }
+            gname = getString(key);
+        }
+        else
+        {
+            gname = html;
         }
         if (gname == null || key.equalsIgnoreCase(gname))
         {
@@ -565,9 +559,9 @@ public class InstallationGroupPanel extends IzPanel
 
     protected TableModel getModel(Map<String, GroupData> groupData)
     {
-        String c1 = installData.getLangpack().getString("InstallationGroupPanel.colNameSelected");
+        String c1 = getString("InstallationGroupPanel.colNameSelected");
         //String c2 = installData.getLangpack().getString("InstallationGroupPanel.colNameInstallType");
-        String c3 = installData.getLangpack().getString("InstallationGroupPanel.colNameSize");
+        String c3 = getString("InstallationGroupPanel.colNameSize");
         String[] columns = {c1, c3};
         DefaultTableModel model = new DefaultTableModel(columns, 0)
         {

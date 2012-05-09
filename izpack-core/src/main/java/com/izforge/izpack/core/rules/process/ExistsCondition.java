@@ -30,9 +30,8 @@ import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.rules.Condition;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorBase;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 
 /**
  * This condition checks if a certain variable has a value. If it is not
@@ -49,8 +48,14 @@ public class ExistsCondition extends Condition
     private ContentType contentType;
     private String content;
 
-    public ExistsCondition() {}
-    public ExistsCondition(ContentType contentType) { this.contentType = contentType; }
+    public ExistsCondition()
+    {
+    }
+
+    public ExistsCondition(ContentType contentType)
+    {
+        this.contentType = contentType;
+    }
 
     @Override
     public boolean isTrue()
@@ -72,8 +77,8 @@ public class ExistsCondition extends Condition
             case FILE:
                 if (this.content != null)
                 {
-                    VariableSubstitutorBase subst = new VariableSubstitutorImpl(this.getInstallData().getVariables());
-                    File file = new File(subst.substitute(this.content));
+                    Variables variables = getInstallData().getVariables();
+                    File file = new File(variables.replace(this.content));
                     if (file.exists())
                     {
                         result = true;
@@ -82,7 +87,7 @@ public class ExistsCondition extends Condition
                 break;
 
             default:
-                logger.warning("Illegal content type '"+contentType.getAttribute()+"' of ExistsCondition");
+                logger.warning("Illegal content type '" + contentType.getAttribute() + "' of ExistsCondition");
                 break;
         }
         return result;
@@ -97,7 +102,8 @@ public class ExistsCondition extends Condition
             {
                 throw new Exception("Condition \"" + getId() + "\" needs exactly one nested element");
             }
-            else {
+            else
+            {
                 IXMLElement child = xmlcondition.getChildAtIndex(0);
                 this.contentType = ContentType.getFromAttribute(child.getName());
                 if (this.contentType != null)
@@ -106,7 +112,8 @@ public class ExistsCondition extends Condition
                 }
                 else
                 {
-                    throw new Exception("Unknown nested element '"+child.getName()+"' to condition \"" + getId() + "\"");
+                    throw new Exception(
+                            "Unknown nested element '" + child.getName() + "' to condition \"" + getId() + "\"");
                 }
                 if (this.content == null || this.content.length() == 0)
                 {

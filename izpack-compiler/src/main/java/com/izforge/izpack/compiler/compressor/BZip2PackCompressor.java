@@ -22,7 +22,6 @@
 
 package com.izforge.izpack.compiler.compressor;
 
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.merge.MergeManager;
 
 
@@ -43,9 +42,8 @@ public class BZip2PackCompressor extends PackCompressorBase
     /**
      *
      */
-    public BZip2PackCompressor(VariableSubstitutor variableSubstitutor, MergeManager mergeManager)
+    public BZip2PackCompressor(MergeManager mergeManager)
     {
-        super(variableSubstitutor);
         mergeManager.addResourceToMerge("org/apache/tools/bzip2");
         formatNames = THIS_FORMAT_NAMES;
         decoderMapper = THIS_DECODER_MAPPER;

@@ -90,9 +90,8 @@ public class HelloPanel extends IzPanel
         // This have to be the first line during layout if IzPanelLayout will be used.
         super(panel, parent, installData, layout, resourceManager);
         // We create and put the labels
-        String welcomeText = installData.getLangpack().getString(
-                "HelloPanel.welcome1") + installData.getInfo().getAppName() + " "
-                + installData.getInfo().getAppVersion() + installData.getLangpack().getString("HelloPanel.welcome2");
+        String welcomeText = getString("HelloPanel.welcome1") + installData.getInfo().getAppName() + " "
+                + installData.getInfo().getAppVersion() + getString("HelloPanel.welcome2");
         JLabel welcomeLabel = LabelFactory.create(welcomeText, parent.getIcons().get("host"), LEADING);
         welcomeLabel.setName(GuiId.HELLO_PANEL_LABEL.id);
         // IzPanelLayout is a constraint orientated layout manager. But if no constraint is
@@ -111,7 +110,7 @@ public class HelloPanel extends IzPanel
 
         if (!authors.isEmpty())
         {
-            String authorText = installData.getLangpack().getString("HelloPanel.authors");
+            String authorText = getString("HelloPanel.authors");
             JLabel appAuthorsLabel = LabelFactory.create(authorText, parent.getIcons()
                     .get("information"), LEADING);
             // If nothing will be sad to the IzPanelLayout the position of an add will be
@@ -139,9 +138,8 @@ public class HelloPanel extends IzPanel
 
         if (installData.getInfo().getAppURL() != null)
         {
-            String urlText = installData.getLangpack().getString("HelloPanel.url") + installData.getInfo().getAppURL();
-            JLabel appURLLabel = LabelFactory.create(urlText, parent.getIcons().get("bookmark"),
-                                                     LEADING);
+            String urlText = getString("HelloPanel.url") + installData.getInfo().getAppURL();
+            JLabel appURLLabel = LabelFactory.create(urlText, parent.getIcons().get("bookmark"), LEADING);
             add(appURLLabel, LayoutConstants.NEXT_LINE);
         }
         // At end of layouting we should call the completeLayout method also they do nothing.

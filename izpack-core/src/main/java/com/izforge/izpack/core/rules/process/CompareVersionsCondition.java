@@ -24,10 +24,9 @@ package com.izforge.izpack.core.rules.process;
 import java.util.Comparator;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.rules.CompareCondition;
 import com.izforge.izpack.api.rules.ComparisonOperator;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorBase;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 
 public class CompareVersionsCondition extends CompareCondition
 {
@@ -40,9 +39,9 @@ public class CompareVersionsCondition extends CompareCondition
         AutomatedInstallData installData = getInstallData();
         if (installData != null && operand1 != null && operand2 != null)
         {
-            VariableSubstitutorBase subst = new VariableSubstitutorImpl(installData.getVariables());
-            String arg1 = subst.substitute(operand1);
-            String arg2 = subst.substitute(operand2);
+            Variables variables = installData.getVariables();
+            String arg1 = variables.replace(operand1);
+            String arg2 = variables.replace(operand2);
             if (operator == null)
             {
                 operator = ComparisonOperator.EQUAL;
@@ -51,26 +50,26 @@ public class CompareVersionsCondition extends CompareCondition
 
             switch (operator)
             {
-            case EQUAL:
-                result = (res == 0);
-                break;
-            case NOTEQUAL:
-                result = (res != 0);
-                break;
-            case GREATER:
-                result = (res > 0);
-                break;
-            case GREATEREQUAL:
-                result = (res >= 0);
-                break;
-            case LESS:
-                result = (res < 0);
-                break;
-            case LESSEQUAL:
-                result = (res <= 0);
-                break;
-            default:
-                break;
+                case EQUAL:
+                    result = (res == 0);
+                    break;
+                case NOTEQUAL:
+                    result = (res != 0);
+                    break;
+                case GREATER:
+                    result = (res > 0);
+                    break;
+                case GREATEREQUAL:
+                    result = (res >= 0);
+                    break;
+                case LESS:
+                    result = (res < 0);
+                    break;
+                case LESSEQUAL:
+                    result = (res <= 0);
+                    break;
+                default:
+                    break;
             }
         }
         return result;
@@ -78,49 +77,67 @@ public class CompareVersionsCondition extends CompareCondition
 
     private static class VersionStringComparator implements Comparator<String>
     {
-        public int compare(String s1, String s2){
-            if( s1 == null && s2 == null )
+        public int compare(String s1, String s2)
+        {
+            if (s1 == null && s2 == null)
+            {
                 return 0;
-            else if( s1 == null )
+            }
+            else if (s1 == null)
+            {
                 return -1;
-            else if( s2 == null )
+            }
+            else if (s2 == null)
+            {
                 return 1;
+            }
 
             String[]
-                arr1 = s1.split("[^a-zA-Z0-9_]+"),
-                arr2 = s2.split("[^a-zA-Z0-9_]+")
-            ;
+                    arr1 = s1.split("[^a-zA-Z0-9_]+"),
+                    arr2 = s2.split("[^a-zA-Z0-9_]+");
 
             int i1, i2, i3;
 
-            for(int ii = 0, max = Math.min(arr1.length, arr2.length); ii <= max; ii++){
-                if( ii == arr1.length )
+            for (int ii = 0, max = Math.min(arr1.length, arr2.length); ii <= max; ii++)
+            {
+                if (ii == arr1.length)
+                {
                     return ii == arr2.length ? 0 : -1;
-                else if( ii == arr2.length )
+                }
+                else if (ii == arr2.length)
+                {
                     return 1;
+                }
 
-                try{
+                try
+                {
                     i1 = Integer.parseInt(arr1[ii]);
                 }
-                catch (Exception x){
+                catch (Exception x)
+                {
                     i1 = Integer.MAX_VALUE;
                 }
 
-                try{
+                try
+                {
                     i2 = Integer.parseInt(arr2[ii]);
                 }
-                catch (Exception x){
+                catch (Exception x)
+                {
                     i2 = Integer.MAX_VALUE;
                 }
 
-                if( i1 != i2 ){
+                if (i1 != i2)
+                {
                     return i1 - i2;
                 }
 
                 i3 = arr1[ii].compareTo(arr2[ii]);
 
-                if( i3 != 0 )
+                if (i3 != 0)
+                {
                     return i3;
+                }
             }
 
             return 0;

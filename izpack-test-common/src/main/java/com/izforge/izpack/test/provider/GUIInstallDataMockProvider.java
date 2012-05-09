@@ -1,13 +1,12 @@
 package com.izforge.izpack.test.provider;
 
+import org.picocontainer.injectors.Provider;
+
 import com.izforge.izpack.api.data.GUIPrefs;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.installer.data.GUIInstallData;
-
-import org.picocontainer.injectors.Provider;
-
-import java.util.Properties;
 
 /**
  * Mock provider for guiInstallData
@@ -15,7 +14,7 @@ import java.util.Properties;
 public class GUIInstallDataMockProvider implements Provider
 {
 
-    public GUIInstallData provide(Properties variables) throws Exception
+    public GUIInstallData provide(Variables variables) throws Exception
     {
         final GUIInstallData guiInstallData = new GUIInstallData(variables);
         GUIPrefs guiPrefs = new GUIPrefs();
@@ -27,7 +26,8 @@ public class GUIInstallDataMockProvider implements Provider
         guiInstallData.setInfo(info);
 
         LocaleDatabase localDataBase = new LocaleDatabase(
-                ClassLoader.getSystemClassLoader().getResource("com/izforge/izpack/bin/langpacks/installer/eng.xml").openStream());
+                ClassLoader.getSystemClassLoader().getResource(
+                        "com/izforge/izpack/bin/langpacks/installer/eng.xml").openStream());
         guiInstallData.setAndProcessLocal("eng", localDataBase);
 
         return guiInstallData;

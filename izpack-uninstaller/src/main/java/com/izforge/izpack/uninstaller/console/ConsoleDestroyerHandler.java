@@ -156,7 +156,7 @@ public class ConsoleDestroyerHandler implements AbstractUIProgressHandler
      */
     public void stopAction()
     {
-        out(messages.getString("InstallPanel.finished"));
+        out(messages.get("InstallPanel.finished"));
     }
 
     /**

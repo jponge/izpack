@@ -21,12 +21,12 @@
 
 package com.izforge.izpack.core.variable;
 
+import java.io.Serializable;
+
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
-
-import java.io.Serializable;
 
 
 public class ExecValue extends ValueImpl implements Serializable
@@ -109,7 +109,7 @@ public class ExecValue extends ValueImpl implements Serializable
     {
         String _dir_ = null, _cmd_[] = new String[cmd.length];
 
-        for ( VariableSubstitutor substitutor : substitutors )
+        for (VariableSubstitutor substitutor : substitutors)
         {
             _dir_ = substitutor.substitute(dir, null);
         }
@@ -117,8 +117,10 @@ public class ExecValue extends ValueImpl implements Serializable
         for (int i = 0; i < cmd.length; i++)
         {
             String _cmdarg_ = cmd[i];
-            for ( VariableSubstitutor substitutor : substitutors )
+            for (VariableSubstitutor substitutor : substitutors)
+            {
                 _cmdarg_ = substitutor.substitute(_cmdarg_, null);
+            }
             _cmd_[i] = _cmdarg_;
         }
         String[] execOut = new String[2];

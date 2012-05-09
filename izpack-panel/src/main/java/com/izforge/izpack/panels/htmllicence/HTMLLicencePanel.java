@@ -83,8 +83,7 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
 
         // We put our components
 
-        add(LabelFactory.create(installData.getLangpack().getString("LicencePanel.info"),
-                                parent.getIcons().get("history"), LEADING), NEXT_LINE);
+        add(LabelFactory.create(getString("LicencePanel.info"), parent.getIcons().get("history"), LEADING), NEXT_LINE);
         try
         {
             textArea = new JEditorPane();
@@ -102,13 +101,13 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
 
         ButtonGroup group = new ButtonGroup();
 
-        yesRadio = new JRadioButton(installData.getLangpack().getString("LicencePanel.agree"), false);
+        yesRadio = new JRadioButton(getString("LicencePanel.agree"), false);
         yesRadio.setName(GuiId.LICENCE_YES_RADIO.id);
         group.add(yesRadio);
         add(yesRadio, NEXT_LINE);
         yesRadio.addActionListener(this);
 
-        noRadio = new JRadioButton(installData.getLangpack().getString("LicencePanel.notagree"), true);
+        noRadio = new JRadioButton(getString("LicencePanel.notagree"), true);
         noRadio.setName(GuiId.LICENCE_NO_RADIO.id);
         group.add(noRadio);
         add(noRadio, NEXT_LINE);

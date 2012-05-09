@@ -21,14 +21,15 @@
 
 package com.izforge.izpack.gui;
 
-import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.data.ResourceManager;
-
-import javax.swing.filechooser.FileFilter;
 import java.io.File;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.filechooser.FileFilter;
+
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.ResourceManager;
 
 /**
  * Allows a file if it is a directory or if it ends with .xml. The description
@@ -106,7 +107,7 @@ public class AutomatedInstallScriptFilter extends FileFilter
             InputStream in = resources.getInputStream("langpacks/" + locale + ".xml");
             LocaleDatabase langpack = new LocaleDatabase(in);
 
-            description = langpack.getString(DESCRIPTION_LOCALE_DATABASE_KEY);
+            description = langpack.get(DESCRIPTION_LOCALE_DATABASE_KEY);
 
         }
         catch (Exception e)

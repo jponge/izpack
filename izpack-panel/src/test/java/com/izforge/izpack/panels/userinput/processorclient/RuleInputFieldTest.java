@@ -3,11 +3,11 @@ package com.izforge.izpack.panels.userinput.processorclient;
 import static org.junit.Assert.assertEquals;
 
 import java.awt.Toolkit;
-import java.util.Properties;
 
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
 
@@ -32,7 +32,7 @@ public class RuleInputFieldTest
         String processor = null;
         Toolkit toolkit = Mockito.mock(Toolkit.class);
 
-        GUIInstallData installData = new GUIInstallData(new Properties());
+        GUIInstallData installData = new GUIInstallData(new DefaultVariables());
 
         RuleInputField field = new RuleInputField(layout, set, separator, validator, processor,
                                                   RuleInputField.DISPLAY_FORMAT, toolkit, installData);

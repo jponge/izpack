@@ -266,7 +266,7 @@ public class PanelActionTest
         String prefix = panelId + "." + stage.toString().toLowerCase() + ".config.";
         if (properties.length == 0)
         {
-            Set<Object> keys = installData.getVariables().keySet();
+            Set<Object> keys = installData.getVariables().getProperties().keySet();
             for (Object key : keys)
             {
                 assertFalse(key.toString().startsWith(prefix));

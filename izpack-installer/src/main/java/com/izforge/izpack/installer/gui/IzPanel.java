@@ -47,12 +47,11 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.DataValidator.Status;
 import com.izforge.izpack.api.installer.ISummarisable;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
@@ -131,7 +130,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * The resource manager.
      */
     protected final ResourceManager resourceManager;
-    protected final VariableSubstitutor variableSubstitutor;
 
     /**
      * The panel meta-data.
@@ -180,7 +178,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         this.parent = parent;
         this.installData = installData;
         this.resourceManager = resourceManager;
-        variableSubstitutor = new VariableSubstitutorImpl(this.installData.getVariables());
         initLayoutHelper();
         if (layoutManager != null)
         {
@@ -307,14 +304,14 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     }
 
     /**
-     * Gets a language Resource String from the parent, which holds these global resource.
+     * Helper to return a language resource string.
      *
-     * @param key The Search key
-     * @return The Languageresource or the key if not found.
+     * @param key the search key
+     * @return the corresponding string, or {@code key} if the string is not found
      */
     public String getString(String key)
     {
-        return installData.getLangpack().getString(key);
+        return installData.getMessages().get(key);
     }
 
     /**
@@ -447,9 +444,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     public boolean emitNotificationFeedback(String message)
     {
-        return (JOptionPane.showConfirmDialog(this, message, this.installData.getLangpack()
-                .getString("installer.Message"), JOptionPane.WARNING_MESSAGE,
-                                              JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION);
+        return JOptionPane.showConfirmDialog(this, message, getString("installer.Message"), JOptionPane.WARNING_MESSAGE,
+                                             JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION;
     }
 
     /**
@@ -570,11 +566,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         {
             buffer.append(".");
             buffer.append(panelId);
-            retval = installData.getLangpack().getString(buffer.toString());
+            retval = getString(buffer.toString());
         }
         if (retval == null || retval.startsWith(fullkey))
         {
-            retval = installData.getLangpack().getString(fullkey);
+            retval = getString(fullkey);
         }
         if (retval == null || retval.startsWith(fullkey))
         {
@@ -584,18 +580,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             }
             buffer.delete(0, buffer.length());
             buffer.append(alternateClass).append(".").append(subkey);
-            retval = installData.getLangpack().getString(buffer.toString());
+            retval = getString(buffer.toString());
         }
         if (retval != null && retval.indexOf('$') > -1)
         {
-            try
-            {
-                retval = variableSubstitutor.substitute(retval);
-            }
-            catch (Exception e)
-            {
-                // ignore
-            }
+            retval = installData.getVariables().replace(retval);
         }
         return (retval);
     }
@@ -695,7 +684,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     public JLabel createLabel(String textId, String iconId, int pos, boolean isFullLine)
     {
         ImageIcon imageIcon = (iconId != null) ? parent.getIcons().get(iconId) : null;
-        JLabel label = LabelFactory.create(installData.getLangpack().getString(textId), imageIcon, pos, isFullLine);
+        JLabel label = LabelFactory.create(getString(textId), imageIcon, pos, isFullLine);
         if (label != null)
         {
             label.setFont(getControlTextFont());
@@ -714,7 +703,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public MultiLineLabel createMultiLineLabelLang(String textId)
     {
-        return (createMultiLineLabel(installData.getLangpack().getString(textId)));
+        return createMultiLineLabel(getString(textId));
     }
 
     /**
@@ -725,7 +714,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public MultiLineLabel createMultiLineLabel(String text)
     {
-        return (createMultiLineLabel(text, null, SwingConstants.LEFT));
+        return createMultiLineLabel(text, null, SwingConstants.LEFT);
     }
 
     /**
@@ -1106,23 +1095,14 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         else
         {
             logger.fine("Validation did not pass");
+            Variables variables = installData.getVariables();
+
             // try to parse the text, and substitute any variable it finds
             if (this.validationService.getWarningMessageId() != null
                     && state == DataValidator.Status.WARNING)
             {
 
-                String warningMessage;
-                try
-                {
-                    warningMessage = variableSubstitutor.substitute(installData.getLangpack()
-                                                                            .getString(
-                                                                                    this.validationService.getWarningMessageId()));
-                }
-                catch (Exception e)
-                {
-                    warningMessage = installData.getLangpack().getString(
-                            this.validationService.getWarningMessageId());
-                }
+                String warningMessage = variables.replace(getString(validationService.getWarningMessageId()));
                 if (this.emitWarning(getString("data.validation.warning.title"), warningMessage))
                 {
                     returnValue = true;
@@ -1131,19 +1111,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             }
             else
             {
-                String errorMessage;
-                try
-                {
-                    errorMessage = variableSubstitutor.substitute(installData.getLangpack()
-                                                                          .getString(
-                                                                                  this.validationService.getErrorMessageId()));
-                }
-                catch (Exception e)
-                {
-                    errorMessage = installData.getLangpack().getString(
-                            this.validationService.getErrorMessageId());
-                }
-                this.emitError(getString("data.validation.error.title"), errorMessage);
+                String errorMessage = variables.replace(getString(validationService.getErrorMessageId()));
+                emitError(getString("data.validation.error.title"), errorMessage);
 
             }
         }
@@ -1155,15 +1124,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     protected String parseText(String string_to_parse)
     {
-        try
-        {
-            // Parses the info text
-            string_to_parse = variableSubstitutor.substitute(string_to_parse);
-        }
-        catch (Exception err)
-        {
-            err.printStackTrace();
-        }
+        string_to_parse = installData.getVariables().replace(string_to_parse);
         return string_to_parse;
     }
 

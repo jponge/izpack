@@ -21,57 +21,32 @@
 
 package com.izforge.izpack.api.exception;
 
-import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.resource.Messages;
 
 /**
  * This class allows it to define error messages for <code>NativeLibException</code> s in the
- * IzPack locale files. The getMessage methode searches in the current langpack for entries which
- * are corresponding to that one which are received from native part. If the langpack do not contain
- * the entry, the resource boundle is used.
+ * IzPack locale files.
  *
  * @author Klaus Bartz
  */
 public class WrappedNativeLibException extends Exception
 {
 
-    private static final long serialVersionUID = 3257562893309720112L;
+    /**
+     * The messages.
+     */
+    private final Messages messages;
 
     /**
-     * The packs locale database.
+     * Constructs a {@code WrappedNativeLibException}.
+     *
+     * @param cause    the cause of the exceptions
+     * @param messages messages to localise the exception
      */
-    protected static LocaleDatabase langpack = null;
-
-    /**
-     * Default constructor.
-     */
-    public WrappedNativeLibException()
-    {
-        super();
-    }
-
-    /**
-     * @param message
-     */
-    public WrappedNativeLibException(String message)
-    {
-        super(message);
-    }
-
-    /**
-     * @param cause
-     */
-    public WrappedNativeLibException(Throwable cause)
+    public WrappedNativeLibException(Throwable cause, Messages messages)
     {
         super(cause);
-    }
-
-    /**
-     * @param message
-     * @param cause
-     */
-    public WrappedNativeLibException(String message, Throwable cause)
-    {
-        super(message, cause);
+        this.messages = messages;
     }
 
     /*
@@ -79,90 +54,48 @@ public class WrappedNativeLibException extends Exception
      * 
      * @see java.lang.Throwable#getMessage()
      */
-
     public String getMessage()
     {
-        StringBuffer retval = new StringBuffer();
-        boolean next = false;
-        boolean ok = false;
         if (getCause() instanceof NativeLibException)
         {
+            StringBuilder result = new StringBuilder();
             NativeLibException nle = (NativeLibException) getCause();
-            if (langpack != null)
+            if (nle.getLibMessage() != null)
             {
-                while (true)
-                {
-                    if (nle.getLibMessage() != null)
-                    {
-                        String val = langpack.get("NativeLibException."
-                                + nle.getLibMessage());
-                        if (val == null)
-                        {
-                            break;
-                        }
-                        retval.append(val);
-                        next = true;
-                    }
-                    else if (nle.getLibErr() != 0)
-                    {
-                        String val = langpack.get("NativeLibException.libErrNumber."
-                                + Integer.toString(nle.getLibErr()));
-                        if (val == null)
-                        {
-                            break;
-                        }
-                        if (next)
-                        {
-                            retval.append("\n");
-                        }
-                        next = true;
-                        retval.append(val);
-                    }
-                    if (nle.getOsErr() != 0)
-                    {
-                        String val = langpack
-                                .get("NativeLibException.libInternal.OsErrNumPraefix")
-                                + Integer.toString(nle.getOsErr());
-                        if (val == null)
-                        {
-                            break;
-                        }
-                        if (next)
-                        {
-                            retval.append("\n");
-                        }
-                        next = true;
-                        retval.append(val);
-                    }
-                    if (nle.getOsMessage() != null)
-                    {
-                        String val = langpack
-                                .get("NativeLibException.libInternal.OsErrStringPraefix")
-                                + nle.getOsMessage();
-                        if (val == null)
-                        {
-                            break;
-                        }
-                        if (next)
-                        {
-                            retval.append("\n");
-                        }
-                        next = true;
-                        retval.append(val);
-                    }
-                    ok = true;
-                    break;
-                }
+                String val = messages.get("NativeLibException." + nle.getLibMessage());
+                result.append(val);
             }
-            if (ok && retval.length() > 0)
+            else if (nle.getLibErr() != 0)
             {
-                return (nle.reviseMsgWithArgs(retval.toString()));
+                String val = messages.get("NativeLibException.libErrNumber." + nle.getLibErr());
+                result.append(val);
+            }
+            if (nle.getOsErr() != 0)
+            {
+                String val = messages.get("NativeLibException.libInternal.OsErrNumPraefix") + nle.getOsErr();
+                if (result.length() != 0)
+                {
+                    result.append("\n");
+                }
+                result.append(val);
+            }
+            if (nle.getOsMessage() != null)
+            {
+                String val = messages.get("NativeLibException.libInternal.OsErrStringPraefix") + nle.getOsMessage();
+                if (result.length() != 0)
+                {
+                    result.append("\n");
+                }
+                result.append(val);
+            }
+            if (result.length() > 0)
+            {
+                return (nle.reviseMsgWithArgs(result.toString()));
             }
             else
             {
                 return (nle.getMessage());
             }
-
         }
         else
         {
@@ -170,23 +103,4 @@ public class WrappedNativeLibException extends Exception
         }
     }
 
-    /**
-     * Returns the langpack.
-     *
-     * @return Returns the langpack.
-     */
-    public static LocaleDatabase getLangpack()
-    {
-        return langpack;
-    }
-
-    /**
-     * Sets the langpack to the given locale database.
-     *
-     * @param langpack the langpack to set.
-     */
-    public static void setLangpack(LocaleDatabase langpack)
-    {
-        WrappedNativeLibException.langpack = langpack;
-    }
 }

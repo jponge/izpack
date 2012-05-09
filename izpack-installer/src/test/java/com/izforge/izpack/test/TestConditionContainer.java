@@ -10,6 +10,7 @@ import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.core.rules.ConditionContainer;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
@@ -50,6 +51,7 @@ public class TestConditionContainer extends AbstractContainer
         addComponent(MutablePicoContainer.class, container);
         addComponent(MergeableResolver.class);
         addComponent(Properties.class);
+        addComponent(DefaultVariables.class);
         addComponent(ConditionContainer.class);
         addComponent(AbstractContainer.class, this);
     }

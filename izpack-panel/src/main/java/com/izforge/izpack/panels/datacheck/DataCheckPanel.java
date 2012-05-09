@@ -144,7 +144,7 @@ public class DataCheckPanel extends IzPanel
         System.out.println("------------------------Data Check Panel Instance " +
                                    instanceNumber + "------------------------");
         System.out.println("GUIInstallData Variables:");
-        Properties varList = installDataGUI.getVariables();
+        Properties varList = installDataGUI.getVariables().getProperties();
         String[] alphaName = new String[varList.size()];
         Enumeration<String> varNames = (Enumeration<String>) varList.propertyNames();
         while (varNames.hasMoreElements())

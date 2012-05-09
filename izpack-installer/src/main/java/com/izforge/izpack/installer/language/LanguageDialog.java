@@ -1,6 +1,13 @@
 package com.izforge.izpack.installer.language;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -11,13 +18,21 @@ import java.util.Locale;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.GrayFilter;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
+import javax.swing.SwingConstants;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
-import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
 
@@ -67,7 +82,6 @@ public class LanguageDialog extends JDialog implements ActionListener
     private JFrame frame;
     private RequirementsChecker requirements;
     private ResourceManager resourceManager;
-
 
     /**
      * The constructor.
@@ -519,8 +533,8 @@ public class LanguageDialog extends JDialog implements ActionListener
 
         // Get dynamic variables immediately for being able to use them as
         // variable condition in installerrequirements
-        InstallerBase.refreshDynamicVariables(installdata,
-                new VariableSubstitutorImpl(installdata.getVariables()));
+
+        installdata.refreshVariables();
 
         // check installer conditions
         if (!requirements.check())

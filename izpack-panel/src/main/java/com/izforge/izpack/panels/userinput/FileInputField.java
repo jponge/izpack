@@ -111,8 +111,7 @@ public class FileInputField extends JPanel implements ActionListener
         fileButtonConstraint.anchor = GridBagConstraints.WEST;
 
         // TODO: use separate key for button text
-        browseBtn = ButtonFactory.createButton(installDataGUI.getLangpack()
-                                                       .getString("UserInputPanel.search.browse"),
+        browseBtn = ButtonFactory.createButton(installDataGUI.getMessages().get("UserInputPanel.search.browse"),
                                                installDataGUI.buttonsHColor);
         browseBtn.addActionListener(this);
         this.add(filetxt, fileTextConstraint);
@@ -183,9 +182,9 @@ public class FileInputField extends JPanel implements ActionListener
 
     protected void showMessage(String messageType)
     {
-        JOptionPane.showMessageDialog(parentFrame, parentFrame.getLangpack().getString("UserInputPanel." + messageType
-                                                                                               + ".message"),
-                                      parentFrame.getLangpack().getString("UserInputPanel." + messageType + ".caption"),
+        JOptionPane.showMessageDialog(parentFrame, parentFrame.getMessages().get("UserInputPanel." + messageType
+                                                                                         + ".message"),
+                                      parentFrame.getMessages().get("UserInputPanel." + messageType + ".caption"),
                                       JOptionPane.WARNING_MESSAGE);
     }
 
@@ -227,7 +226,7 @@ public class FileInputField extends JPanel implements ActionListener
                 {
                     JOptionPane
                             .showMessageDialog(parentFrame, processingClient.getValidationMessage(),
-                                               parentFrame.getLangpack().getString("UserInputPanel.error.caption"),
+                                               parentFrame.getMessages().get("UserInputPanel.error.caption"),
                                                JOptionPane.WARNING_MESSAGE);
                 }
                 result = success;

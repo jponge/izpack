@@ -1,27 +1,28 @@
 package com.izforge.izpack.installer.requirement;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.tools.ant.filters.StringInputStream;
+import org.junit.Test;
+
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.core.rules.logic.NotCondition;
 import com.izforge.izpack.core.rules.process.JavaCondition;
 import com.izforge.izpack.installer.console.ConsolePrompt;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.test.util.TestConsole;
-import org.apache.tools.ant.filters.StringInputStream;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests the {@link InstallerRequirementChecker} class.
@@ -43,12 +44,14 @@ public class InstallerRequirementCheckerTest
     /**
      * Constructs a <tt>InstallerRequirementCheckerTest</tt>.
      */
-    public InstallerRequirementCheckerTest() {
-        Properties variables = new Properties();
+    public InstallerRequirementCheckerTest()
+    {
+        DefaultVariables variables = new DefaultVariables();
         installData = new InstallData(variables);
         installData.setInstallerrequirements(new ArrayList<InstallerRequirement>());
         installData.setLangpack(new LocaleDatabase(new StringInputStream("<langpack/>")));
         rules = new RulesEngineImpl(installData, null);
+        variables.setRules(rules);
 
         Map<String, Condition> conditionsmap = new HashMap<String, Condition>();
         Condition alwaysFalse = new JavaCondition();
@@ -64,7 +67,8 @@ public class InstallerRequirementCheckerTest
      * Tests the {@link InstallerRequirementChecker}.
      */
     @Test
-    public void testInstallerRequirementChecker() {
+    public void testInstallerRequirementChecker()
+    {
         Prompt prompt = new ConsolePrompt(new TestConsole());
         InstallerRequirementChecker checker = new InstallerRequirementChecker(installData, rules, prompt);
 

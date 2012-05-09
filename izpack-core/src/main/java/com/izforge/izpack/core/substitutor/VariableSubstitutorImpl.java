@@ -21,11 +21,12 @@
 
 package com.izforge.izpack.core.substitutor;
 
-import com.izforge.izpack.api.data.Value;
-import com.izforge.izpack.core.variable.PlainValue;
-
 import java.io.Serializable;
 import java.util.Properties;
+
+import com.izforge.izpack.api.data.Value;
+import com.izforge.izpack.api.data.Variables;
+import com.izforge.izpack.core.variable.PlainValue;
 
 public class VariableSubstitutorImpl extends VariableSubstitutorBase implements Serializable
 {
@@ -35,6 +36,16 @@ public class VariableSubstitutorImpl extends VariableSubstitutorBase implements 
      * The variable value mappings
      */
     protected transient Properties variables;
+
+    /**
+     * Constructs a substituter with the specified variables.
+     *
+     * @param variables the variables
+     */
+    public VariableSubstitutorImpl(Variables variables)
+    {
+        this(variables.getProperties());
+    }
 
     /**
      * Constructs a new substitutor using the specified variable value mappings. The environment

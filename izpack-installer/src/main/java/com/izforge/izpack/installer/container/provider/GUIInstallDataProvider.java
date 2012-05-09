@@ -1,26 +1,29 @@
 package com.izforge.izpack.installer.container.provider;
 
+import java.awt.Color;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.LookAndFeel;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.MetalTheme;
+
 import com.izforge.izpack.api.data.GUIPrefs;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsVersion;
-
-import javax.swing.*;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.MetalTheme;
-import java.awt.*;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.logging.Logger;
 
 /**
  * Provide installData for GUI :
@@ -69,23 +72,19 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
     }
 
 
-    public GUIInstallData provide(ResourceManager resourceManager, VariableSubstitutor variableSubstitutor,
-                                  Properties variables, Housekeeper housekeeper)
+    public GUIInstallData provide(ResourceManager resourceManager, DefaultVariables variables, Housekeeper housekeeper)
             throws Exception
     {
-        this.resourceManager = resourceManager;
-        this.variableSubstitutor = variableSubstitutor;
-        this.housekeeper = housekeeper;
         final GUIInstallData guiInstallData = new GUIInstallData(variables);
         // Loads the installation data
-        loadInstallData(guiInstallData);
-        loadGUIInstallData(guiInstallData);
-        loadInstallerRequirements(guiInstallData);
-        loadDynamicVariables(guiInstallData);
-        loadDynamicConditions(guiInstallData);
-        loadDefaultLocale(guiInstallData);
+        loadInstallData(guiInstallData, resourceManager, housekeeper);
+        loadGUIInstallData(guiInstallData, resourceManager);
+        loadInstallerRequirements(guiInstallData, resourceManager);
+        loadDynamicVariables(variables, guiInstallData, resourceManager);
+        loadDynamicConditions(guiInstallData, resourceManager);
+        loadDefaultLocale(guiInstallData, resourceManager);
         // Load custom langpack if exist.
-        addCustomLangpack(guiInstallData);
+        addCustomLangpack(guiInstallData, resourceManager);
         loadLookAndFeel(guiInstallData);
         if (UIManager.getColor("Button.background") != null)
         {
@@ -327,15 +326,12 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
     /**
      * Load GUI preference information.
      *
-     * @param installdata
+     * @param installData the installation data
      * @throws Exception
      */
-    private void loadGUIInstallData(GUIInstallData installdata) throws Exception
+    private void loadGUIInstallData(GUIInstallData installData, ResourceManager resources) throws Exception
     {
-        InputStream in = resourceManager.getInputStream("GUIPrefs");
-        ObjectInputStream objIn = new ObjectInputStream(in);
-        installdata.guiPrefs = (GUIPrefs) objIn.readObject();
-        objIn.close();
+        installData.guiPrefs = (GUIPrefs) readObject("GUIPrefs", resources);
     }
 
 

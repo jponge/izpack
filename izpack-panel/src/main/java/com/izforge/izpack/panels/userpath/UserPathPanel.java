@@ -21,13 +21,13 @@
 
 package com.izforge.izpack.panels.userpath;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
@@ -104,17 +104,10 @@ public class UserPathPanel extends UserPathInputPanel
             return;
         }
         super.panelActivate();
+        Variables variables = installData.getVariables();
         // Set the default or old value to the path selection panel.
-        String expandedPath = installData.getVariable(pathVariableName);
-        try
-        {
-            expandedPath = variableSubstitutor.substitute(expandedPath);
-        }
-        catch (Exception e)
-        {
-            logger.log(Level.WARNING, e.toString(), e);
-            // ignore
-        }
+        String expandedPath = variables.get(pathVariableName);
+        expandedPath = variables.replace(expandedPath);
         _pathSelectionPanel.setPath(expandedPath);
     }
 
@@ -145,7 +138,7 @@ public class UserPathPanel extends UserPathInputPanel
     {
         if (!(skip))
         {
-            new UserPathPanelAutomationHelper(variableSubstitutor).makeXMLData(installData, panelRoot);
+            new UserPathPanelAutomationHelper().makeXMLData(installData, panelRoot);
         }
     }
 

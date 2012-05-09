@@ -21,10 +21,7 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.exception.WrappedNativeLibException;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 
 /**
  * This class implements some methods which are needed by installer custom actions with native
@@ -48,31 +45,12 @@ public class NativeInstallerListener extends SimpleInstallerListener
     /**
      * Constructs a <tt>NativeInstallerListener</tt>.
      *
-     * @param resources the resource manager
+     * @param resources     the resource manager
      * @param useSpecHelper if <tt>true</tt> a specification helper will be created
      */
     public NativeInstallerListener(ResourceManager resources, boolean useSpecHelper)
     {
         super(resources, useSpecHelper);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.izforge.izpack.compiler.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
-     * int, com.izforge.izpack.api.handler.AbstractUIProgressHandler)
-     */
-
-    public void beforePacks(AutomatedInstallData idata, Integer npacks,
-                            AbstractUIProgressHandler handler) throws Exception
-    {
-        super.beforePacks(idata, npacks, handler);
-
-        if (idata.getLangpack()!= null)
-        { // Initialize WrappedNativeLibException with the langpack for error messages.
-            WrappedNativeLibException.setLangpack(idata.getLangpack());
-        }
-
     }
 
 }

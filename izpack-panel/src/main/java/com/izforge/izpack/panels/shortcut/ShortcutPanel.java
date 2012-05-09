@@ -194,8 +194,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         setLayout(super.getLayout());
         try
         {
-            shortcutPanelLogic = new ShortcutPanelLogic(installData, resourceManager, uninstallData,
-                                                        variableSubstitutor, housekeeper, factory);
+            shortcutPanelLogic = new ShortcutPanelLogic(installData, resourceManager, uninstallData, housekeeper,
+                                                        factory);
             shortcutLogicInitialized = true;
         }
         catch (Exception exception)
@@ -476,17 +476,15 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         constraints.insets = new Insets(10, 10, 0, 0);
 
         // Add a CheckBox which enables the user to entirely supress shortcut creation.
-        String menuKind = installData.getLangpack().getString(
-                "ShortcutPanel.regular.StartMenu:Start-Menu");
+        String menuKind = getString("ShortcutPanel.regular.StartMenu:Start-Menu");
 
         if (OsVersion.IS_UNIX && UnixHelper.kdeIsInstalled())
         {
-            menuKind = installData.getLangpack()
-                    .getString("ShortcutPanel.regular.StartMenu:K-Menu");
+            menuKind = getString("ShortcutPanel.regular.StartMenu:K-Menu");
         }
 
-        createShortcuts = new JCheckBox(StringTool.replace(installData.getLangpack().getString(
-                "ShortcutPanel.regular.create"), "StartMenu", menuKind), true);
+        createShortcuts = new JCheckBox(StringTool.replace(getString("ShortcutPanel.regular.create"),
+                                                           "StartMenu", menuKind), true);
         createShortcuts.setName(GuiId.SHORTCUT_CREATE_CHECK_BOX.id);
         createShortcuts.addActionListener(this);
         constraints.gridx = col;
@@ -525,8 +523,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 initialAllowedFlag = true;
             }
 
-            allowDesktopShortcut = new JCheckBox(installData.getLangpack().getString(
-                    "ShortcutPanel.regular.desktop"), initialAllowedFlag);
+            allowDesktopShortcut = new JCheckBox(getString("ShortcutPanel.regular.desktop"), initialAllowedFlag);
             constraints.gridx = col;
             constraints.gridy = line + 2;
             constraints.gridwidth = 1;
@@ -539,8 +536,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             add(allowDesktopShortcut);
         }
 
-        listLabel = LabelFactory.create(installData.getLangpack().getString(
-                "ShortcutPanel.regular.list"), SwingConstants.LEADING);
+        listLabel = LabelFactory.create(getString("ShortcutPanel.regular.list"), SwingConstants.LEADING);
         if (OsVersion.IS_WINDOWS)
         {
             constraints.gridx = col;
@@ -612,13 +608,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
             JPanel usersPanel = new JPanel(new GridLayout(2, 1));
             ButtonGroup usersGroup = new ButtonGroup();
-            currentUser = new JRadioButton(installData.getLangpack().getString(
-                    "ShortcutPanel.regular.currentUser"), !rUserFlag);
+            currentUser = new JRadioButton(getString("ShortcutPanel.regular.currentUser"), !rUserFlag);
             currentUser.addActionListener(this);
             usersGroup.add(currentUser);
             usersPanel.add(currentUser);
-            allUsers = new JRadioButton(installData.getLangpack().getString(
-                    "ShortcutPanel.regular.allUsers"), rUserFlag);
+            allUsers = new JRadioButton(getString("ShortcutPanel.regular.allUsers"), rUserFlag);
 
             logger.fine("allUsers.setEnabled(), am I root?: " + isRootUser);
 
@@ -628,8 +622,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             usersGroup.add(allUsers);
             usersPanel.add(allUsers);
 
-            TitledBorder border = new TitledBorder(new EmptyBorder(2, 2, 2, 2), installData
-                    .getLangpack().getString("ShortcutPanel.regular.userIntro"));
+            TitledBorder border = new TitledBorder(new EmptyBorder(2, 2, 2, 2),
+                                                   getString("ShortcutPanel.regular.userIntro"));
             usersPanel.setBorder(border);
             if (OsVersion.IS_WINDOWS)
             {
@@ -678,8 +672,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // reset button that allows the user to revert to the
         // original suggestion for the program group
         // ----------------------------------------------------
-        defaultButton = ButtonFactory.createButton(installData.getLangpack().getString(
-                "ShortcutPanel.regular.default"), this.installData.buttonsHColor);
+        defaultButton = ButtonFactory.createButton(getString("ShortcutPanel.regular.default"),
+                                                   installData.buttonsHColor);
         defaultButton.addActionListener(this);
 
         constraints.gridx = col + 1;
@@ -761,8 +755,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // about the fact that we can not create shortcuts on
         // this particular target OS.
         // ----------------------------------------------------
-        MultiLineLabel apologyLabel = new MultiLineLabel(installData.getLangpack().getString(
-                "ShortcutPanel.alternate.apology"), 0, 0);
+        MultiLineLabel apologyLabel = new MultiLineLabel(getString("ShortcutPanel.alternate.apology"), 0, 0);
 
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -779,8 +772,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // label that explains the significance ot the list box
         // ----------------------------------------------------
-        MultiLineLabel listLabel = new MultiLineLabel(installData.getLangpack().getString(
-                "ShortcutPanel.alternate.targetsLabel"), 0, 0);
+        MultiLineLabel listLabel = new MultiLineLabel(getString("ShortcutPanel.alternate.targetsLabel"), 0, 0);
 
         constraints.gridx = 0;
         constraints.gridy = 1;
@@ -813,8 +805,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // static text that explains about the text file
         // ----------------------------------------------------
-        MultiLineLabel fileExplanation = new MultiLineLabel(installData.getLangpack().getString(
-                "ShortcutPanel.alternate.textFileExplanation"), 0, 0);
+        MultiLineLabel fileExplanation = new MultiLineLabel(getString("ShortcutPanel.alternate.textFileExplanation"),
+                                                            0, 0);
 
         constraints.gridx = 0;
         constraints.gridy = 3;
@@ -827,8 +819,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // button to save the text file
         // ----------------------------------------------------
-        saveButton = ButtonFactory.createButton(installData.getLangpack().getString(
-                "ShortcutPanel.alternate.saveButton"), this.installData.buttonsHColor);
+        saveButton = ButtonFactory.createButton(getString("ShortcutPanel.alternate.saveButton"),
+                                                installData.buttonsHColor);
         saveButton.addActionListener(this);
 
         constraints.gridx = 0;
