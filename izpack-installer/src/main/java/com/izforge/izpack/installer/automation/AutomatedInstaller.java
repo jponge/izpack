@@ -192,8 +192,7 @@ public class AutomatedInstaller extends InstallerBase
             for (Panel p : this.installData.getPanelsOrder())
             {
                 RulesEngine rules = this.installData.getRules();
-                if (p.hasCondition()
-                        && !rules.isConditionTrue(p.getCondition(), this.installData))
+                if (!rules.canShowPanel(p.getPanelid(), this.installData.getVariables()))
                 {
                     logger.fine("Condition for panel " + p.getPanelid() + "is not fulfilled, skipping panel!");
                     if (this.panelInstanceCount.containsKey(p.className))
