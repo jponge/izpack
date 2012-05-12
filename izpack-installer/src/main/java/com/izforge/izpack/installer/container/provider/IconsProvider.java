@@ -12,7 +12,7 @@ import org.picocontainer.injectors.Provider;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 
@@ -28,11 +28,11 @@ public class IconsProvider implements Provider
      */
     private static final String CUSTOM_ICONS_RESOURCEFILE = "customicons.xml";
 
-    public IconsDatabase provide(ResourceManager resourceManager) throws Exception
+    public IconsDatabase provide(Resources resources) throws Exception
     {
         IconsDatabase icons = new IconsDatabase();
         loadIcons(icons);
-        loadCustomIcons(icons, resourceManager);
+        loadCustomIcons(icons, resources);
         return icons;
     }
 
@@ -54,15 +54,17 @@ public class IconsProvider implements Provider
     /**
      * Loads custom icons into the installer.
      *
+     * @param icons     the icons database
+     * @param resources used to load the icons
      * @throws Exception
      */
-    private void loadCustomIcons(IconsDatabase icons, ResourceManager resourceManager) throws Exception
+    private void loadCustomIcons(IconsDatabase icons, Resources resources) throws Exception
     {
         // We try to load and add a custom langpack.
         InputStream inXML = null;
         try
         {
-            inXML = resourceManager.getInputStream(CUSTOM_ICONS_RESOURCEFILE);
+            inXML = resources.getInputStream(CUSTOM_ICONS_RESOURCEFILE);
         }
         catch (Throwable exception)
         {

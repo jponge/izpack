@@ -27,10 +27,10 @@ import java.util.ArrayList;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Messages;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.util.helper.SpecHelper;
 
 /**
@@ -66,9 +66,9 @@ public class SimpleInstallerListener implements InstallerListener
     private SpecHelper specHelper = null;
 
     /**
-     * The resource manager.
+     * The resources.
      */
-    private final ResourceManager resources;
+    private final Resources resources;
 
 
     /**
@@ -76,7 +76,7 @@ public class SimpleInstallerListener implements InstallerListener
      *
      * @param resources the resource manager
      */
-    public SimpleInstallerListener(ResourceManager resources)
+    public SimpleInstallerListener(Resources resources)
     {
         this(resources, false);
     }
@@ -84,10 +84,10 @@ public class SimpleInstallerListener implements InstallerListener
     /**
      * Constructs a <tt>SimpleInstallerListener</tt>.
      *
-     * @param resources     the resource manager
+     * @param resources     the resources
      * @param useSpecHelper if <tt>true</tt> a specification helper will be created
      */
-    public SimpleInstallerListener(ResourceManager resources, boolean useSpecHelper)
+    public SimpleInstallerListener(Resources resources, boolean useSpecHelper)
     {
         super();
         if (useSpecHelper)
@@ -321,11 +321,11 @@ public class SimpleInstallerListener implements InstallerListener
     }
 
     /**
-     * Returns the resource manager.
+     * Returns the resources.
      *
-     * @return the resource manager
+     * @return the resources
      */
-    protected ResourceManager getResources()
+    protected Resources getResources()
     {
         return resources;
     }

@@ -35,7 +35,7 @@ import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.console.PanelConsole;
@@ -140,16 +140,16 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     public List<Input> listInputs;
 
     /**
-     * The resource manager.
+     * The resources.
      */
-    private final ResourceManager resources;
+    private final Resources resources;
 
     /**
      * Constructs an <tt>UserInputPanelConsoleHelper</tt>.
      *
-     * @param resources the resource manager
+     * @param resources the resources
      */
-    public UserInputPanelConsoleHelper(ResourceManager resources)
+    public UserInputPanelConsoleHelper(Resources resources)
     {
         instanceNumber = instanceCount++;
         listInputs = new ArrayList<Input>();

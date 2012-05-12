@@ -46,13 +46,13 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.OverrideType;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Messages;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.ExecutableFile;
@@ -95,9 +95,9 @@ public abstract class UnpackerBase implements IUnpacker
     private final UninstallData uninstallData;
 
     /**
-     * The resource manager.
+     * The resources.
      */
-    private final ResourceManager resourceManager;
+    private final Resources resources;
 
     /**
      * The rules engine.
@@ -186,7 +186,7 @@ public abstract class UnpackerBase implements IUnpacker
      * Constructs an <tt>UnpackerBase</tt>.
      *
      * @param installData         the installation data
-     * @param resourceManager     the resource manager
+     * @param resources           the resources
      * @param rules               the rules engine
      * @param variableSubstitutor the variable substituter
      * @param uninstallData       the uninstallation data
@@ -195,12 +195,12 @@ public abstract class UnpackerBase implements IUnpacker
      * @param housekeeper         the housekeeper
      * @param listeners           the listeners
      */
-    public UnpackerBase(AutomatedInstallData installData, ResourceManager resourceManager, RulesEngine rules,
+    public UnpackerBase(AutomatedInstallData installData, Resources resources, RulesEngine rules,
                         VariableSubstitutor variableSubstitutor, UninstallData uninstallData, Platform platform,
                         Librarian librarian, Housekeeper housekeeper, InstallerListeners listeners)
     {
         this.installData = installData;
-        this.resourceManager = resourceManager;
+        this.resources = resources;
         this.rules = rules;
         this.variableSubstitutor = variableSubstitutor;
         this.uninstallData = uninstallData;
@@ -629,8 +629,8 @@ public abstract class UnpackerBase implements IUnpacker
         }
         else if (file.isPack200Jar())
         {
-            unpacker = new Pack200FileUnpacker(cancellable, handler, resourceManager, getPack200Unpacker(),
-                                               queue, platform, librarian);
+            unpacker = new Pack200FileUnpacker(cancellable, handler, resources, getPack200Unpacker(), queue, platform,
+                                               librarian);
         }
         else
         {
@@ -730,9 +730,9 @@ public abstract class UnpackerBase implements IUnpacker
      *
      * @return the resource manager
      */
-    protected ResourceManager getResourceManager()
+    protected Resources getResources()
     {
-        return resourceManager;
+        return resources;
     }
 
     /**
@@ -851,7 +851,7 @@ public abstract class UnpackerBase implements IUnpacker
         if (webDirURL == null)
         {
             // local
-            in = resourceManager.getInputStream("packs/pack" + name);
+            in = resources.getInputStream("packs/pack" + name);
         }
         else
         {

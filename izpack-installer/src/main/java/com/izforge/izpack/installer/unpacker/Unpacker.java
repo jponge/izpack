@@ -23,7 +23,7 @@
 package com.izforge.izpack.installer.unpacker;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.data.UninstallData;
@@ -46,7 +46,7 @@ public class Unpacker extends UnpackerBase
      * Constructs an <tt>Unpacker</tt>.
      *
      * @param installData         the installation data
-     * @param resourceManager     the resource manager
+     * @param resources           the resources
      * @param rules               the rules engine
      * @param variableSubstitutor the variable substituter
      * @param uninstallData       the uninstallation data
@@ -55,11 +55,11 @@ public class Unpacker extends UnpackerBase
      * @param housekeeper         the housekeeper
      * @param listeners           the listeners
      */
-    public Unpacker(AutomatedInstallData installData, ResourceManager resourceManager, RulesEngine rules,
+    public Unpacker(AutomatedInstallData installData, Resources resources, RulesEngine rules,
                     VariableSubstitutor variableSubstitutor, UninstallData uninstallData, Platform platform,
                     Librarian librarian, Housekeeper housekeeper, InstallerListeners listeners)
     {
-        super(installData, resourceManager, rules, variableSubstitutor, uninstallData, platform, librarian,
+        super(installData, resources, rules, variableSubstitutor, uninstallData, platform, librarian,
               housekeeper, listeners);
     }
 

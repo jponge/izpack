@@ -22,7 +22,7 @@ import java.util.zip.ZipEntry;
 
 import org.mockito.Mockito;
 
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.Platforms;
 
@@ -61,7 +61,7 @@ public class Pack200FileUnpackerTest extends AbstractFileUnpackerTest
     @Override
     protected FileUnpacker createUnpacker(File sourceDir) throws IOException
     {
-        ResourceManager resources = Mockito.mock(ResourceManager.class);
+        Resources resources = Mockito.mock(Resources.class);
         JarInputStream stream = new JarInputStream(new FileInputStream(new File(sourceDir, "installer.jar")));
         JarEntry entry;
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();

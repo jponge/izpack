@@ -6,11 +6,11 @@ import java.io.ObjectInputStream;
 import java.util.List;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.factory.ObjectFactory;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.event.InstallerListeners;
@@ -26,9 +26,9 @@ import com.izforge.izpack.util.file.FileUtils;
 public class CustomDataLoader
 {
     /**
-     * The resource manager.
+     * The resources.
      */
-    private ResourceManager resourceManager;
+    private final Resources resources;
 
     /**
      * The object factory.
@@ -52,18 +52,18 @@ public class CustomDataLoader
 
 
     /**
-     * Constructs an <tt>EventFiller</tt>.
+     * Constructs a {@code CustomDataLoader}.
      *
-     * @param resourceManager the resource manager
-     * @param factory         the factory for listeners
-     * @param installData     the installation data
-     * @param uninstallData   the uninstallation data
-     * @param listeners       the installer listeners
+     * @param resources     the resource manager
+     * @param factory       the factory for listeners
+     * @param installData   the installation data
+     * @param uninstallData the uninstallation data
+     * @param listeners     the installer listeners
      */
-    public CustomDataLoader(ResourceManager resourceManager, ObjectFactory factory, AutomatedInstallData installData,
+    public CustomDataLoader(Resources resources, ObjectFactory factory, AutomatedInstallData installData,
                             UninstallData uninstallData, InstallerListeners listeners)
     {
-        this.resourceManager = resourceManager;
+        this.resources = resources;
         this.factory = factory;
         this.installData = installData;
         this.uninstallData = uninstallData;
@@ -158,7 +158,7 @@ public class CustomDataLoader
         ObjectInputStream objIn = null;
         try
         {
-            InputStream inputStream = resourceManager.getInputStream(path);
+            InputStream inputStream = resources.getInputStream(path);
             objIn = new ObjectInputStream(inputStream);
             model = objIn.readObject();
         }

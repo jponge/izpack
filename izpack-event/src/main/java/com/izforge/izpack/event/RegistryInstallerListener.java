@@ -33,11 +33,11 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.exception.WrappedNativeLibException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
@@ -144,13 +144,13 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
      * @param installData   the installation data
      * @param uninstallData the uninstallation data
      * @param rules         the rules
-     * @param resources     the resource manager
+     * @param resources     the resources
      * @param housekeeper   the housekeeper
      * @param handler       the registry handler reference
      */
     public RegistryInstallerListener(IUnpacker unpacker, VariableSubstitutor substituter,
                                      AutomatedInstallData installData, UninstallData uninstallData,
-                                     ResourceManager resources, RulesEngine rules, Housekeeper housekeeper,
+                                     Resources resources, RulesEngine rules, Housekeeper housekeeper,
                                      RegistryDefaultHandler handler)
     {
         super(resources, true);

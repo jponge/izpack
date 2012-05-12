@@ -45,9 +45,9 @@ import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.resource.Messages;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.util.FileExecutor;
@@ -105,7 +105,7 @@ public class CompileWorker implements Runnable
 
     private CompileResult result = null;
 
-    private final ResourceManager resources;
+    private final Resources resources;
 
     /**
      * The constructor.
@@ -113,11 +113,11 @@ public class CompileWorker implements Runnable
      * @param installData         the installation data
      * @param handler             the handler to notify of progress
      * @param variableSubstitutor the variable substituter
-     * @param resources           the resource manager
+     * @param resources           the resources
      * @throws IOException for any I/O error
      */
     public CompileWorker(AutomatedInstallData installData, CompileHandler handler,
-                         VariableSubstitutor variableSubstitutor, ResourceManager resources) throws IOException
+                         VariableSubstitutor variableSubstitutor, Resources resources) throws IOException
     {
         this.idata = installData;
         this.handler = handler;

@@ -1,4 +1,4 @@
-package com.izforge.izpack.uninstaller.resource;
+package com.izforge.izpack.api.resource;
 
 import java.io.InputStream;
 
@@ -14,7 +14,7 @@ public interface Resources
 {
 
     /**
-     * Returns the stream to a resources.
+     * Returns the stream to a resource.
      *
      * @param name the resource name
      * @return a stream to the resource

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.util.file.FileUtils;
 
 

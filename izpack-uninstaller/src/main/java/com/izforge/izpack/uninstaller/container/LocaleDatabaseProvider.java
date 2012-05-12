@@ -6,7 +6,7 @@ import org.picocontainer.injectors.Provider;
 
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
-import com.izforge.izpack.uninstaller.resource.Resources;
+import com.izforge.izpack.api.resource.Resources;
 
 
 /**

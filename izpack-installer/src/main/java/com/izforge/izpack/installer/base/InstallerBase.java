@@ -39,7 +39,10 @@ public abstract class InstallerBase
 
     private static final Logger logger = Logger.getLogger(InstallerBase.class.getName());
 
-    protected ResourceManager resourceManager;
+    /**
+     * The resources.
+     */
+    private final ResourceManager resourceManager;
 
     /**
      * Abstract constructor which need resource manager
@@ -63,6 +66,16 @@ public abstract class InstallerBase
         installdata.refreshVariables();
         logger.fine("Finished refreshing dynamic variables");
 
+    }
+
+    /**
+     * Returns the resource manager.
+     *
+     * @return the resource manager
+     */
+    protected ResourceManager getResourceManager()
+    {
+        return resourceManager;
     }
 
 }

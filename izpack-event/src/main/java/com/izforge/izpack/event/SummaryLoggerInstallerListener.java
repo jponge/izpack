@@ -25,8 +25,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.helper.SummaryProcessor;
 
@@ -42,9 +42,9 @@ public class SummaryLoggerInstallerListener extends SimpleInstallerListener
     /**
      * Constructs a <tt>SummaryLoggerInstallerListener</tt>.
      *
-     * @param resources the resource manager
+     * @param resources the resources
      */
-    public SummaryLoggerInstallerListener(ResourceManager resources)
+    public SummaryLoggerInstallerListener(Resources resources)
     {
         super(resources, false);
     }

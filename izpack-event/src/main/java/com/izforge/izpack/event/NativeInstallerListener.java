@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 
 /**
  * This class implements some methods which are needed by installer custom actions with native
@@ -35,9 +35,9 @@ public class NativeInstallerListener extends SimpleInstallerListener
     /**
      * Constructs a <tt>NativeInstallerListener</tt>.
      *
-     * @param resources the resource manager
+     * @param resources the resources
      */
-    public NativeInstallerListener(ResourceManager resources)
+    public NativeInstallerListener(Resources resources)
     {
         super(resources);
     }
@@ -45,10 +45,10 @@ public class NativeInstallerListener extends SimpleInstallerListener
     /**
      * Constructs a <tt>NativeInstallerListener</tt>.
      *
-     * @param resources     the resource manager
+     * @param resources     the resources
      * @param useSpecHelper if <tt>true</tt> a specification helper will be created
      */
-    public NativeInstallerListener(ResourceManager resources, boolean useSpecHelper)
+    public NativeInstallerListener(Resources resources, boolean useSpecHelper)
     {
         super(resources, useSpecHelper);
     }

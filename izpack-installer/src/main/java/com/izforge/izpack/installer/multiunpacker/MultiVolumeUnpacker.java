@@ -30,10 +30,10 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.io.FileSpanningInputStream;
@@ -85,7 +85,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
      * Constructs an <tt>MultiVolumeUnpacker</tt>.
      *
      * @param installData         the installation data
-     * @param resourceManager     the resource manager
+     * @param resources           the resources
      * @param rules               the rules engine
      * @param variableSubstitutor the variable substituter
      * @param uninstallData       the uninstallation data
@@ -94,12 +94,12 @@ public class MultiVolumeUnpacker extends UnpackerBase
      * @param housekeeper         the housekeeper
      * @param listeners           the listeners
      */
-    public MultiVolumeUnpacker(AutomatedInstallData installData, ResourceManager resourceManager, RulesEngine rules,
+    public MultiVolumeUnpacker(AutomatedInstallData installData, Resources resources, RulesEngine rules,
                                VariableSubstitutor variableSubstitutor, UninstallData uninstallData,
                                Platform platform, Librarian librarian, Housekeeper housekeeper,
                                InstallerListeners listeners)
     {
-        super(installData, resourceManager, rules, variableSubstitutor, uninstallData, platform, librarian,
+        super(installData, resources, rules, variableSubstitutor, uninstallData, platform, librarian,
               housekeeper, listeners);
     }
 
@@ -141,7 +141,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
         try
         {
             // get volume metadata
-            in = getResourceManager().getInputStream(VOLUMES_INFO);
+            in = getResources().getInputStream(VOLUMES_INFO);
             objectIn = new ObjectInputStream(in);
             int volumeCount = objectIn.readInt();
             String volumeName = objectIn.readUTF();

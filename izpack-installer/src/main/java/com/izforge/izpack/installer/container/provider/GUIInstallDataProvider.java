@@ -18,6 +18,7 @@ import javax.swing.plaf.metal.MetalTheme;
 
 import com.izforge.izpack.api.data.GUIPrefs;
 import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
@@ -329,7 +330,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
      * @param installData the installation data
      * @throws Exception
      */
-    private void loadGUIInstallData(GUIInstallData installData, ResourceManager resources) throws Exception
+    private void loadGUIInstallData(GUIInstallData installData, Resources resources) throws Exception
     {
         installData.guiPrefs = (GUIPrefs) readObject("GUIPrefs", resources);
     }

@@ -37,9 +37,9 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.data.UninstallData;
@@ -81,10 +81,10 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * Constructs an <tt>AntActionInstallerListener</tt>.
      *
      * @param variableSubstitutor the variable substituter
-     * @param resources           the resource manager
+     * @param resources           the resources
      * @param uninstallData       the uninstallation data
      */
-    public AntActionInstallerListener(VariableSubstitutor variableSubstitutor, ResourceManager resources,
+    public AntActionInstallerListener(VariableSubstitutor variableSubstitutor, Resources resources,
                                       UninstallData uninstallData)
     {
         super(resources, true);

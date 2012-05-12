@@ -9,9 +9,9 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Pack200;
 
 import com.izforge.izpack.api.data.PackFile;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.file.FileUtils;
@@ -26,9 +26,9 @@ import com.izforge.izpack.util.os.FileQueue;
 class Pack200FileUnpacker extends FileUnpacker
 {
     /**
-     * The resource manager.
+     * The resources.
      */
-    private final ResourceManager resources;
+    private final Resources resources;
 
     /**
      * The unpacker.
@@ -47,7 +47,7 @@ class Pack200FileUnpacker extends FileUnpacker
      * @param librarian   the librarian
      */
     public Pack200FileUnpacker(Cancellable cancellable, AbstractUIProgressHandler handler,
-                               ResourceManager resources, Pack200.Unpacker unpacker, FileQueue queue,
+                               Resources resources, Pack200.Unpacker unpacker, FileQueue queue,
                                Platform platform, Librarian librarian)
     {
         super(cancellable, handler, queue, platform, librarian);

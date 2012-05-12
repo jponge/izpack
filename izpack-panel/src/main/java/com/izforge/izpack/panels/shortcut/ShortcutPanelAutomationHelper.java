@@ -24,7 +24,7 @@ package com.izforge.izpack.panels.shortcut;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.automation.PanelAutomationHelper;
 import com.izforge.izpack.installer.data.UninstallData;
@@ -45,19 +45,19 @@ public class ShortcutPanelAutomationHelper extends PanelAutomationHelper impleme
     /**
      * Constructs a <tt>ShortcutPanel</tt>.
      *
-     * @param installData     the installation data
-     * @param resourceManager the resources
-     * @param uninstallData   the uninstallation data
-     * @param housekeeper     the house keeper
-     * @param factory         the factory for platform-specific implementations
+     * @param installData   the installation data
+     * @param resources     the resources
+     * @param uninstallData the uninstallation data
+     * @param housekeeper   the house keeper
+     * @param factory       the factory for platform-specific implementations
      */
-    public ShortcutPanelAutomationHelper(AutomatedInstallData installData, ResourceManager resourceManager,
+    public ShortcutPanelAutomationHelper(AutomatedInstallData installData, Resources resources,
                                          UninstallData uninstallData, Housekeeper housekeeper, TargetFactory factory)
     {
         super(housekeeper);
         try
         {
-            shortcutPanelLogic = new ShortcutPanelLogic(installData, resourceManager, uninstallData,
+            shortcutPanelLogic = new ShortcutPanelLogic(installData, resources, uninstallData,
                                                         housekeeper, factory);
         }
         catch (Exception e)

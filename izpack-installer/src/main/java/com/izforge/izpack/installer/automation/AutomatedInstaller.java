@@ -149,14 +149,12 @@ public class AutomatedInstaller extends InstallerBase
 
         // Loads the langpack
         installData.setLocaleISO3(installData.getXmlData().getAttribute("langpack", "eng"));
-        InputStream in = resourceManager.getLangPack(installData.getLocaleISO3());
+        InputStream in = getResourceManager().getLangPack(installData.getLocaleISO3());
         installData.setLangpack(new LocaleDatabase(in));
         installData.setVariable(ScriptParserConstant.ISO3_LANG, installData.getLocaleISO3());
         installData.setMediaPath(mediaPath);
 
-        // create the resource manager singleton
-        resourceManager.setLocale(installData.getLocaleISO3());
-//        ResourceManager.create(this.installData);
+        getResourceManager().setLocale(installData.getLocaleISO3());
     }
 
     /**

@@ -3,6 +3,7 @@ package com.izforge.izpack.uninstaller.resource;
 import java.io.InputStream;
 
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
+import com.izforge.izpack.api.resource.Resources;
 
 
 /**

@@ -25,7 +25,7 @@ import java.io.PrintWriter;
 import java.util.Properties;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.panels.path.PathInputPanel;
@@ -42,14 +42,14 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
     /**
      * The resource manager.
      */
-    private final ResourceManager resources;
+    private final Resources resources;
 
     /**
      * Constructs a <tt>TargetPanelConsoleHelper</tt>.
      *
-     * @param resources the resource manager
+     * @param resources the resources
      */
-    public TargetPanelConsoleHelper(ResourceManager resources)
+    public TargetPanelConsoleHelper(Resources resources)
     {
         this.resources = resources;
     }

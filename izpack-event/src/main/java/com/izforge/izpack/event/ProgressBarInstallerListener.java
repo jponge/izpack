@@ -24,8 +24,8 @@ package com.izforge.izpack.event;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 
 /**
@@ -45,9 +45,9 @@ public class ProgressBarInstallerListener extends SimpleInstallerListener
     /**
      * Constructs a <tt>ProgressBarInstallerListener</tt>.
      *
-     * @param resources the resource manager
+     * @param resources the resources
      */
-    public ProgressBarInstallerListener(ResourceManager resources)
+    public ProgressBarInstallerListener(Resources resources)
     {
         super(resources, false);
     }
@@ -73,7 +73,7 @@ public class ProgressBarInstallerListener extends SimpleInstallerListener
                 return;
             }
             ((ExtendedUIProgressHandler) handler).restartAction("Configure", progress, tip,
-                    getProgressBarCallerCount());
+                                                                getProgressBarCallerCount());
 
             // TODO - this is extremely smelly
             SimpleInstallerListener.doInformProgressBar = true;

@@ -29,6 +29,8 @@ import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.api.data.Variables;
+import com.izforge.izpack.api.exception.ResourceNotFoundException;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
@@ -65,7 +67,7 @@ public abstract class AbstractInstallDataProvider implements Provider
      * @throws ClassNotFoundException if a serialized object's class cannot be found
      */
     @SuppressWarnings("unchecked")
-    protected void loadInstallData(AutomatedInstallData installData, ResourceManager resources, Housekeeper housekeeper)
+    protected void loadInstallData(AutomatedInstallData installData, Resources resources, Housekeeper housekeeper)
             throws IOException, ClassNotFoundException
     {
         // We load the Info data
@@ -203,7 +205,7 @@ public abstract class AbstractInstallDataProvider implements Provider
      *
      * @param installData the install data to be used
      */
-    protected void addCustomLangpack(AutomatedInstallData installData, ResourceManager resources)
+    protected void addCustomLangpack(AutomatedInstallData installData, Resources resources)
     {
         // We try to load and add a custom langpack.
         try
@@ -218,7 +220,7 @@ public abstract class AbstractInstallDataProvider implements Provider
     }
 
 
-    private String getDir(ResourceManager resources)
+    private String getDir(Resources resources)
     {
         // We determine the operating system and the initial installation path
         String dir;
@@ -249,9 +251,10 @@ public abstract class AbstractInstallDataProvider implements Provider
      * Windows has a Setting for this in the environment and in the registry.
      * Just try to use the setting in the environment. If it fails for whatever reason, we take the former solution (buildWindowsDefaultPathFromProps).
      *
+     * @param resources the resources
      * @return The Windows default installation path for applications.
      */
-    private String buildWindowsDefaultPath(ResourceManager resources)
+    private String buildWindowsDefaultPath(Resources resources)
     {
         try
         {
@@ -279,7 +282,7 @@ public abstract class AbstractInstallDataProvider implements Provider
      *
      * @return the program files path
      */
-    private String buildWindowsDefaultPathFromProps(ResourceManager resources)
+    private String buildWindowsDefaultPathFromProps(Resources resources)
     {
         StringBuilder result = new StringBuilder("");
         try
@@ -339,8 +342,7 @@ public abstract class AbstractInstallDataProvider implements Provider
      * @param installData the installation data
      */
     @SuppressWarnings("unchecked")
-    protected void loadDynamicVariables(Variables variables, AutomatedInstallData installData,
-                                        ResourceManager resources)
+    protected void loadDynamicVariables(Variables variables, AutomatedInstallData installData, Resources resources)
     {
         try
         {
@@ -370,7 +372,7 @@ public abstract class AbstractInstallDataProvider implements Provider
      * @param resources   the resources
      */
     @SuppressWarnings("unchecked")
-    protected void loadDynamicConditions(AutomatedInstallData installData, ResourceManager resources)
+    protected void loadDynamicConditions(AutomatedInstallData installData, Resources resources)
     {
         try
         {
@@ -390,11 +392,12 @@ public abstract class AbstractInstallDataProvider implements Provider
      * Load installer conditions.
      *
      * @param installData the installation data
-     * @throws IOException            for any I/O error
-     * @throws ClassNotFoundException if a serialized object's class cannot be found
+     * @throws IOException               for any I/O error
+     * @throws ClassNotFoundException    if a serialized object's class cannot be found
+     * @throws ResourceNotFoundException if the resource cannot be found
      */
     @SuppressWarnings("unchecked")
-    protected void loadInstallerRequirements(AutomatedInstallData installData, ResourceManager resources)
+    protected void loadInstallerRequirements(AutomatedInstallData installData, Resources resources)
             throws IOException, ClassNotFoundException
     {
         List<InstallerRequirement> requirements = (List<InstallerRequirement>) readObject("installerrequirements",
@@ -426,10 +429,11 @@ public abstract class AbstractInstallDataProvider implements Provider
      * @param resourceId the resource identifier
      * @param resources  the resources
      * @return the corresponding object
-     * @throws IOException            for any I/O error
-     * @throws ClassNotFoundException if a serialized object's class cannot be found
+     * @throws IOException               for any I/O error
+     * @throws ClassNotFoundException    if a serialized object's class cannot be found
+     * @throws ResourceNotFoundException if the resource cannot be located
      */
-    protected Object readObject(String resourceId, ResourceManager resources) throws IOException, ClassNotFoundException
+    protected Object readObject(String resourceId, Resources resources) throws IOException, ClassNotFoundException
     {
         InputStream inputStream = resources.getInputStream(resourceId);
         ObjectInputStream objIn = new ObjectInputStream(inputStream);

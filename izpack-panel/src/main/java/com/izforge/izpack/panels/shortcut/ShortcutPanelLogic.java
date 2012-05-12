@@ -34,11 +34,11 @@ import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.panels.IShortcutPanelLogic;
 import com.izforge.izpack.api.resource.Messages;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.substitutor.SubstitutionType;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
@@ -267,7 +267,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
     private AutomatedInstallData installData;
 
-    private ResourceManager resourceManager;
+    private Resources resources;
 
     private UninstallData uninstallData;
 
@@ -280,19 +280,19 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
     /**
      * Constructs a <tt>ShortcutPanelLogic</tt>.
      *
-     * @param installData     the installation data
-     * @param resourceManager the resources
-     * @param uninstallData   the uninstallation data
-     * @param housekeeper     the house keeper
-     * @param factory         the factory for platform-specific implementations
+     * @param installData   the installation data
+     * @param resources     the resources
+     * @param uninstallData the uninstallation data
+     * @param housekeeper   the house keeper
+     * @param factory       the factory for platform-specific implementations
      * @throws Exception for any error
      */
-    public ShortcutPanelLogic(AutomatedInstallData installData, ResourceManager resourceManager,
-                              UninstallData uninstallData, Housekeeper housekeeper, TargetFactory factory)
+    public ShortcutPanelLogic(AutomatedInstallData installData, Resources resources, UninstallData uninstallData,
+                              Housekeeper housekeeper, TargetFactory factory)
             throws Exception
     {
         this.installData = installData;
-        this.resourceManager = resourceManager;
+        this.resources = resources;
         this.uninstallData = uninstallData;
         shortcut = factory.makeObject(Shortcut.class);
         shortcut.initialize(Shortcut.APPLICATIONS, "-");
@@ -1275,12 +1275,11 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
         try
         {
-            input = resourceManager.getInputStream(TargetFactory.getCurrentOSPrefix()
-                                                           + SPEC_FILE_NAME);
+            input = resources.getInputStream(TargetFactory.getCurrentOSPrefix() + SPEC_FILE_NAME);
         }
         catch (ResourceNotFoundException rnfE)
         {
-            input = resourceManager.getInputStream(SPEC_FILE_NAME);
+            input = resources.getInputStream(SPEC_FILE_NAME);
         }
         if (input == null)
         {

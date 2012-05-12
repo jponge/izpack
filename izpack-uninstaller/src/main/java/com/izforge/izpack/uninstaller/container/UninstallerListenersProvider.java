@@ -11,8 +11,8 @@ import org.picocontainer.injectors.Provider;
 import com.izforge.izpack.api.event.UninstallerListener;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.factory.ObjectFactory;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.uninstaller.event.UninstallerListeners;
-import com.izforge.izpack.uninstaller.resource.Resources;
 
 
 /**

@@ -22,17 +22,18 @@
 
 package com.izforge.izpack.panels.compile;
 
+import java.io.IOException;
+import java.io.PrintStream;
+
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.automation.PanelAutomationHelper;
 import com.izforge.izpack.util.Housekeeper;
-
-import java.io.IOException;
-import java.io.PrintStream;
 
 /**
  * Functions to support automated usage of the CompilePanel
@@ -60,7 +61,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * The resource manager.
      */
-    private final ResourceManager resources;
+    private final Resources resources;
 
     /**
      * Constructs a <tt>CompilePanelAutomationHelper</tt>.

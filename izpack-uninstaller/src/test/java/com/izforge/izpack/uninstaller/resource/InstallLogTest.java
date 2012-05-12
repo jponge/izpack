@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.izforge.izpack.api.resource.Resources;
+
 /**
  * Tests the {@link InstallLog} class.
  *

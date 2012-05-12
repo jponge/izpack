@@ -33,9 +33,9 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
@@ -55,16 +55,16 @@ public class BSFInstallerListener extends SimpleInstallerListener
     private AutomatedInstallData installdata = null;
     private VariableSubstitutor variableSubstitutor;
     private UninstallData uninstallData;
-    private final ResourceManager resources;
+    private final Resources resources;
 
     /**
      * Constructs a <tt>BSFFInstallerListener</tt>.
      *
      * @param variableSubstitutor the variable substituter
-     * @param resources           the resource manager
+     * @param resources           the resources
      * @param uninstallData       the uninstallation data
      */
-    public BSFInstallerListener(VariableSubstitutor variableSubstitutor, ResourceManager resources,
+    public BSFInstallerListener(VariableSubstitutor variableSubstitutor, Resources resources,
                                 UninstallData uninstallData)
     {
         super(resources, true);

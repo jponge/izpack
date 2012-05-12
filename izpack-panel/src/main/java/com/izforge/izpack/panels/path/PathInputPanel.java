@@ -36,6 +36,7 @@ import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -331,12 +332,11 @@ public class PathInputPanel extends IzPanel implements ActionListener
      * As with all IzPack resources, each of the above ids should be associated with a separate
      * filename, which is set in the install.xml file at compile time.
      *
-     * @param resourceManager
-     * @param installData
+     * @param resources   the resources
+     * @param installData the installation data
      * @return the default installation directory for the current installation
      */
-    public static String loadDefaultInstallDir(ResourceManager resourceManager,
-                                               AutomatedInstallData installData)
+    public static String loadDefaultInstallDir(Resources resources, AutomatedInstallData installData)
     {
         String defaultInstallDir = getDefaultInstallDir();
         if (defaultInstallDir != null)
@@ -354,7 +354,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
             // files
             try
             {
-                in = resourceManager.getInputStream("TargetPanel.dir.".concat(os));
+                in = resources.getInputStream("TargetPanel.dir.".concat(os));
             }
             catch (ResourceNotFoundException rnfe)
             {
@@ -365,7 +365,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 {
                     try
                     {
-                        in = resourceManager.getInputStream("TargetPanel.dir.windows");
+                        in = resources.getInputStream("TargetPanel.dir.windows");
                     }
                     catch (ResourceNotFoundException rnfe)
                     {
@@ -375,7 +375,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 {
                     try
                     {
-                        in = resourceManager.getInputStream("TargetPanel.dir.macosx");
+                        in = resources.getInputStream("TargetPanel.dir.macosx");
                     }
                     catch (ResourceNotFoundException rnfe)
                     {
@@ -385,7 +385,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 {
                     try
                     {
-                        in = resourceManager.getInputStream("TargetPanel.dir.unix");
+                        in = resources.getInputStream("TargetPanel.dir.unix");
                     }
                     catch (ResourceNotFoundException eee)
                     {
@@ -399,7 +399,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
             {
                 try
                 {
-                    in = resourceManager.getInputStream("TargetPanel.dir");
+                    in = resources.getInputStream("TargetPanel.dir");
                 }
                 catch (ResourceNotFoundException ignored)
                 {

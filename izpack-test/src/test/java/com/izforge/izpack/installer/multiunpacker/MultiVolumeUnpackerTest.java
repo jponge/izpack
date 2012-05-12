@@ -27,6 +27,7 @@ import com.izforge.izpack.api.data.OverrideType;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.compiler.compressor.DefaultPackCompressor;
@@ -114,7 +115,7 @@ public class MultiVolumeUnpackerTest
         assertTrue(installerJar.exists());
 
         // verify the installer volumes have been created
-        ResourceManager resources = createResourceManager(installerJar);
+        Resources resources = createResources(installerJar);
         checkVolumes(packageDir, resources, firstVolumeSize, maxVolumeSize);
 
         // verify the loose pack files are present
@@ -185,7 +186,7 @@ public class MultiVolumeUnpackerTest
      * @param maxVolumeSize      the maximum volume size for subsequent volumes
      * @throws IOException for any I/O error
      */
-    private void checkVolumes(File dir, ResourceManager resources, long maxFirstVolumeSize, long maxVolumeSize)
+    private void checkVolumes(File dir, Resources resources, long maxFirstVolumeSize, long maxVolumeSize)
             throws IOException
     {
         // get the volume information
@@ -220,7 +221,7 @@ public class MultiVolumeUnpackerTest
      * @param installData the installation data
      * @return a new unpacker
      */
-    private MultiVolumeUnpacker createUnpacker(ResourceManager resources, AutomatedInstallData installData)
+    private MultiVolumeUnpacker createUnpacker(Resources resources, AutomatedInstallData installData)
     {
         VariableSubstitutor replacer = new VariableSubstitutorImpl(installData.getVariables());
         Housekeeper housekeeper = Mockito.mock(Housekeeper.class);
@@ -244,7 +245,7 @@ public class MultiVolumeUnpackerTest
      * @throws IOException            for any I/O error
      * @throws ClassNotFoundException
      */
-    private AutomatedInstallData createInstallData(File mediaDir, File installDir, ResourceManager resources)
+    private AutomatedInstallData createInstallData(File mediaDir, File installDir, Resources resources)
             throws IOException, ClassNotFoundException
     {
         AutomatedInstallData installData = new InstallData(new DefaultVariables());
@@ -258,13 +259,13 @@ public class MultiVolumeUnpackerTest
     }
 
     /**
-     * Creates a new {@link ResourceManager} that reads resources from the supplied jar.
+     * Creates a new {@link Resources} that reads resources from the supplied jar.
      *
      * @param installerJar the installer jar.
      * @return a new resource manager
      * @throws IOException for any I/O error
      */
-    private ResourceManager createResourceManager(File installerJar) throws IOException
+    private Resources createResources(File installerJar) throws IOException
     {
         final URLClassLoader loader = new URLClassLoader(new URL[]{installerJar.toURI().toURL()},
                                                          getClass().getClassLoader());
@@ -320,7 +321,7 @@ public class MultiVolumeUnpackerTest
      * @throws IOException            for any I/O error
      * @throws ClassNotFoundException if the class of a serialized object cannot be found
      */
-    private List<Pack> getPacks(ResourceManager resources) throws IOException, ClassNotFoundException
+    private List<Pack> getPacks(Resources resources) throws IOException, ClassNotFoundException
     {
         // We read the packs data
         InputStream in = resources.getInputStream("packs.info");

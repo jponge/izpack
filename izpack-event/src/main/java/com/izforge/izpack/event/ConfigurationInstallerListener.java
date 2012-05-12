@@ -36,9 +36,9 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.Pack;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.data.DynamicVariableImpl;
@@ -87,9 +87,9 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
     /**
      * Constructs a <tt>ConfigurationInstallerListener</tt>.
      *
-     * @param resources the resource manager
+     * @param resources the resources
      */
-    public ConfigurationInstallerListener(ResourceManager resources)
+    public ConfigurationInstallerListener(Resources resources)
     {
         super(resources, true);
         actions = new HashMap<String, HashMap<Object, ArrayList<ConfigurationAction>>>();

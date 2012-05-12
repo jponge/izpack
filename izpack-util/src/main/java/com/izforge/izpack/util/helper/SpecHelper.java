@@ -21,19 +21,19 @@
 
 package com.izforge.izpack.util.helper;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.IXMLParser;
-import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.IXMLParser;
+import com.izforge.izpack.api.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.resource.Resources;
+import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 /**
  * This class contains some helper methods to simplify handling of xml specification files.
@@ -53,9 +53,9 @@ public class SpecHelper
     private boolean _haveSpec;
 
     /**
-     * The resource manager.
+     * The resources.
      */
-    private final ResourceManager resources;
+    private final Resources resources;
 
     private static final String PACK_KEY = "pack";
 
@@ -64,9 +64,9 @@ public class SpecHelper
     /**
      * Constructs a <tt>SpecHelper</tt>.
      *
-     * @param resources the resource manager
+     * @param resources the resources
      */
-    public SpecHelper(ResourceManager resources)
+    public SpecHelper(Resources resources)
     {
         super();
         this.resources = resources;

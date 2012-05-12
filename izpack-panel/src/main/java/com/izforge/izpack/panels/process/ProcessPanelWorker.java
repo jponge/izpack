@@ -24,11 +24,11 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -73,9 +73,9 @@ public class ProcessPanelWorker implements Runnable
     private RulesEngine rules;
 
     /**
-     * The resource manager.
+     * The resources.
      */
-    private final ResourceManager resources;
+    private final Resources resources;
 
     /**
      * Constructs a <tt>ProcessPanelWorker</tt>.
@@ -83,11 +83,11 @@ public class ProcessPanelWorker implements Runnable
      * @param installData         the installation data
      * @param variableSubstitutor the variable substituter
      * @param rules               the rules engine
-     * @param resources           the resource manager
+     * @param resources           the resources
      * @throws IOException for any I/O error
      */
     public ProcessPanelWorker(AutomatedInstallData installData, VariableSubstitutor variableSubstitutor,
-                              RulesEngine rules, ResourceManager resources)
+                              RulesEngine rules, Resources resources)
             throws IOException
     {
         this.idata = installData;

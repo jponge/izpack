@@ -10,7 +10,7 @@ import org.picocontainer.injectors.Provider;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.data.DefaultVariables;
@@ -38,14 +38,14 @@ public class RulesProvider implements Provider
      * @param installData        the installation data
      * @param variables          the variables
      * @param conditionContainer the condition container
-     * @param resourceManager    the resource manager
+     * @param resources          the resources
      * @return a new rules engine
      */
     public RulesEngine provide(AutomatedInstallData installData, DefaultVariables variables,
-                               ConditionContainer conditionContainer, ResourceManager resourceManager)
+                               ConditionContainer conditionContainer, Resources resources)
     {
         RulesEngine result = new RulesEngineImpl(installData, conditionContainer);
-        Map<String, Condition> conditions = readConditions(resourceManager);
+        Map<String, Condition> conditions = readConditions(resources);
         if (conditions != null && !conditions.isEmpty())
         {
             result.readConditionMap(conditions);
@@ -68,16 +68,16 @@ public class RulesProvider implements Provider
      * <p/>
      * This looks for a serialized resource named <em>"rules"</em>.
      *
-     * @param resourceManager the resource manager
+     * @param resources the resources
      * @return the conditions, keyed on id, or <tt>null</tt> if the resource doesn't exist or cannot be read
      */
     @SuppressWarnings("unchecked")
-    private Map<String, Condition> readConditions(ResourceManager resourceManager)
+    private Map<String, Condition> readConditions(Resources resources)
     {
         Map<String, Condition> rules = null;
         try
         {
-            InputStream in = resourceManager.getInputStream("rules");
+            InputStream in = resources.getInputStream("rules");
             if (in != null)
             {
                 ObjectInputStream objIn = new ObjectInputStream(in);
