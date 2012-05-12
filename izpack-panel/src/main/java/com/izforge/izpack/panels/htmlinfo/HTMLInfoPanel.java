@@ -159,7 +159,7 @@ public class HTMLInfoPanel extends IzPanel
             try
             {
                 String panelSpecificResName = panelResourcePrefixStr + '.' + this.getMetadata().getPanelid();
-                String panelspecificResContent = resourceManager.getTextResource(panelSpecificResName);
+                String panelspecificResContent = resourceManager.getString(panelSpecificResName, null);
                 if (panelspecificResContent != null)
                 {
                     panelResourceNameStr = panelSpecificResName;

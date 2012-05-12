@@ -114,7 +114,7 @@ public class XInfoPanel extends IzPanel
         try
         {
             // We read it
-            info = resourceManager.getTextResource("XInfoPanel.info");
+            info = resourceManager.getString("XInfoPanel.info", null);
         }
         catch (Exception err)
         {

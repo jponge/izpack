@@ -51,16 +51,6 @@
 
 package com.izforge.izpack.util.os;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.api.exception.ResourceNotFoundException;
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.StringTool;
-import com.izforge.izpack.util.unix.ShellScript;
-import com.izforge.izpack.util.unix.UnixHelper;
-import com.izforge.izpack.util.unix.UnixUser;
-import com.izforge.izpack.util.unix.UnixUsers;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -75,6 +65,17 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.exception.ResourceNotFoundException;
+import com.izforge.izpack.api.resource.Resources;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.StringTool;
+import com.izforge.izpack.util.unix.ShellScript;
+import com.izforge.izpack.util.unix.UnixHelper;
+import com.izforge.izpack.util.unix.UnixUser;
+import com.izforge.izpack.util.unix.UnixUsers;
 
 /**
  * This is the Implementation of the RFC-Based Desktop-Link. Used in KDE and GNOME.
@@ -211,7 +212,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     /**
      * The resource manager.
      */
-    private final ResourceManager resources;
+    private final Resources resources;
 
     /**
      * The installation data.
@@ -424,12 +425,12 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         if (userType == Shortcut.ALL_USERS)
         {
             return new File(File.separator + "usr" + File.separator + "share" + File.separator
-                    + "applications");
+                                    + "applications");
         }
         else
         {
             return new File(System.getProperty("user.home") + File.separator + ".local"
-                    + File.separator + "share" + File.separator + "applications");
+                                    + File.separator + "share" + File.separator + "applications");
         }
 
     }
@@ -499,7 +500,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                 else
                 {
                     File relativePath = new File(installData.getInstallPath() + FS
-                            + ApplicationShortcutPath);
+                                                         + ApplicationShortcutPath);
                     relativePath.mkdirs();
                     shortCutLocation = new File(relativePath.toString());
                 }
@@ -511,7 +512,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
             // write the App ShortCut
             File writtenDesktopFile = writeAppShortcutWithOutSpace(shortCutLocation.toString(),
-                    this.itsName, shortCutDef);
+                                                                   this.itsName, shortCutDef);
             uninstaller.addFile(writtenDesktopFile.toString(), true);
 
             // Now install my Own with xdg-if available // Note the The reverse Uninstall-Task is on
@@ -536,7 +537,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                 do
                 {
                     myDesktopFile = new File(myHome + FS + "Desktop" + writtenDesktopFile.getName()
-                            + "-" + System.currentTimeMillis() + DESKTOP_EXT);
+                                                     + "-" + System.currentTimeMillis() + DESKTOP_EXT);
                 }
                 while (myDesktopFile.exists());
 
@@ -593,16 +594,16 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                     catch (Exception e)
                     {
                         logger.log(Level.WARNING,
-                                "Could not copy " + theIcon + " to " + commonIcon + "( "
-                                        + e.getMessage() + " )",
-                                e);
+                                   "Could not copy " + theIcon + " to " + commonIcon + "( "
+                                           + e.getMessage() + " )",
+                                   e);
                     }
 
                     // write *.desktop
 
                     this.itsFileName = target;
                     File writtenFile = writeAppShortcut("/usr/share/applications/", this.itsName,
-                            shortCutDef);
+                                                        shortCutDef);
                     setWrittenFileName(writtenFile.getName());
                     uninstaller.addFile(writtenFile.toString(), true);
 
@@ -642,9 +643,9 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                 catch (Exception e)
                 {
                     logger.log(Level.WARNING,
-                            "Could not copy " + theIcon + " to " + commonIcon + "( "
-                                    + e.getMessage() + " )",
-                            e);
+                               "Could not copy " + theIcon + " to " + commonIcon + "( "
+                                       + e.getMessage() + " )",
+                               e);
                 }
 
                 // write *.desktop in the local folder
@@ -675,16 +676,12 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         ShellScript myXdgDesktopIconScript = new ShellScript(null);
         String lines = "";
 
-        resources.setDefaultOrResourceBasePath("");
-
-        lines = resources.getTextResource("/com/izforge/izpack/util/unix/xdgdesktopiconscript.sh");
-
-        resources.setDefaultOrResourceBasePath(null);
+        lines = resources.getString("/com/izforge/izpack/util/unix/xdgdesktopiconscript.sh", null);
 
         myXdgDesktopIconScript.append(lines);
 
         myXdgDesktopIconCmd = new String(shortCutLocation + FS
-                + "IzPackLocaleEnabledXdgDesktopIconScript.sh");
+                                                 + "IzPackLocaleEnabledXdgDesktopIconScript.sh");
         myXdgDesktopIconScript.write(myXdgDesktopIconCmd);
         FileExecutor.getExecOutput(new String[]{UnixHelper.getCustomCommand("chmod"), "+x", myXdgDesktopIconCmd}, true);
     }
@@ -769,7 +766,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
         // Create a tempFileName of this ShortCut
         File tempFile = File.createTempFile(this.getClass().getName(), Long.toString(System
-                .currentTimeMillis())
+                                                                                             .currentTimeMillis())
                 + ".tmp");
 
         copyTo(writtenDesktopFile, tempFile);
@@ -849,8 +846,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
             catch (Exception e)
             {
                 logger.log(Level.INFO,
-                        "Could not copy as root: " + e.getMessage(),
-                        e);
+                           "Could not copy as root: " + e.getMessage(),
+                           e);
 
                 /* ignore */
                 // most distros does not allow root to access any user
@@ -1007,9 +1004,9 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         do
         {
             shortcutFile = new File(targetPath
-                    + (replaceSpacesWithMinus == true ? StringTool
+                                            + (replaceSpacesWithMinus == true ? StringTool
                     .replaceSpacesWithMinus(shortcutName) : shortcutName) + "-"
-                    + System.currentTimeMillis() + DESKTOP_EXT);
+                                            + System.currentTimeMillis() + DESKTOP_EXT);
         }
         while (shortcutFile.exists());
 

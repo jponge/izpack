@@ -83,7 +83,7 @@ public class InfoPanel extends IzPanel
         try
         {
             String resNamePrifix = "InfoPanel.info";
-            info = resourceManager.getTextResource(resNamePrifix, "UTF-8");
+            info = resourceManager.getString(resNamePrifix);
         }
         catch (Exception err)
         {

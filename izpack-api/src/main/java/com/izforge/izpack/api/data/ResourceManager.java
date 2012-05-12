@@ -284,21 +284,32 @@ public class ResourceManager implements Resources
     }
 
     /**
-     * Returns a text resource from the jar file. The resource is loaded by
-     * ResourceManager#getResource and then converted into text.
+     * Returns a UTF-8 encoded resource as a string.
      *
-     * @param resource - a text resource to load
-     * @param encoding - the encoding, which should be used to read the resource
-     * @return a String contains the text of the resource
-     * @throws com.izforge.izpack.api.exception.ResourceNotFoundException
-     *                     if the resource can not be
-     *                     found
-     * @throws IOException if the resource can not be loaded
+     * @param name the resource name
+     * @return the resource as a string
+     * @throws ResourceNotFoundException if the resource cannot be found
+     * @throws IOException               if the resource cannot be read
      */
-    // Maybe we can add a text parser for this method
-    public String getTextResource(String resource, String encoding) throws IOException
+    @Override
+    public String getString(String name) throws IOException
     {
-        InputStream in = getInputStream(resource);
+        return getString(name, "UTF-8");
+    }
+
+    /**
+     * Returns a resource as a string.
+     *
+     * @param name     the resource name
+     * @param encoding the resource encoding. May be {@code null}
+     * @return the resource as a string
+     * @throws ResourceNotFoundException if the resource cannot be found
+     * @throws IOException               if the resource cannot be read
+     */
+    @Override
+    public String getString(String name, String encoding) throws IOException
+    {
+        InputStream in = getInputStream(name);
 
         ByteArrayOutputStream infoData = new ByteArrayOutputStream();
         byte[] buffer = new byte[5120];
@@ -323,11 +334,31 @@ public class ResourceManager implements Resources
      * ResourceManager#getResource and then converted into text.
      *
      * @param resource - a text resource to load
+     * @param encoding - the encoding, which should be used to read the resource
+     * @return a String contains the text of the resource
+     * @throws com.izforge.izpack.api.exception.ResourceNotFoundException
+     *                     if the resource can not be
+     *                     found
+     * @throws IOException if the resource can not be loaded
+     * @deprecated use {@link #getString(String, String)}
+     */
+    @Deprecated
+    public String getTextResource(String resource, String encoding) throws IOException
+    {
+        return getString(resource, encoding);
+    }
+
+    /**
+     * Returns a text resource from the jar file. The resource is loaded by
+     * ResourceManager#getResource and then converted into text.
+     *
+     * @param resource - a text resource to load
      * @return a String contains the text of the resource
      * @throws ResourceNotFoundException if the resource can not be found
      * @throws IOException               if the resource can not be loaded
+     * @deprecated use {@link #getString(String)}
      */
-    // Maybe we can add a text parser for this method
+    @Deprecated
     public String getTextResource(String resource) throws IOException
     {
         return this.getTextResource(resource, null);

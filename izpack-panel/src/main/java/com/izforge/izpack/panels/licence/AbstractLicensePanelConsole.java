@@ -44,13 +44,11 @@ public abstract class AbstractLicensePanelConsole extends AbstractTextPanelConso
         String result = null;
         try
         {
-            result = resources.getTextResource(resourceName);
+            result = resources.getString(resourceName, null);
         }
         catch (IOException e)
         {
-            logger.log(Level.WARNING,
-                    "Could not load the licence text for resource: " + resourceName,
-                    e);
+            logger.log(Level.WARNING, "Could not load the licence text for resource: " + resourceName, e);
         }
         return result;
     }

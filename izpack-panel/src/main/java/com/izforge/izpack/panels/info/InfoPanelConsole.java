@@ -37,7 +37,7 @@ public class InfoPanelConsole extends AbstractTextPanelConsole
         String result;
         try
         {
-            result = resources.getTextResource("InfoPanel.info", "UTF-8");
+            result = resources.getString("InfoPanel.info");
         }
         catch (Exception exception)
         {
