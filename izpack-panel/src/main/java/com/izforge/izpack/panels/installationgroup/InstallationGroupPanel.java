@@ -58,8 +58,8 @@ import javax.swing.table.TableModel;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.gui.IzPanel;
@@ -100,15 +100,14 @@ public class InstallationGroupPanel extends IzPanel
     /**
      * The constructor.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
+     * @param panel       the panel meta-data
+     * @param parent      the parent window
+     * @param installData the installation data
+     * @param resources   the resources
      */
-    public InstallationGroupPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                                  ResourceManager resourceManager)
+    public InstallationGroupPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources)
     {
-        super(panel, parent, installData, resourceManager);
+        super(panel, parent, installData, resources);
         buildLayout();
     }
 

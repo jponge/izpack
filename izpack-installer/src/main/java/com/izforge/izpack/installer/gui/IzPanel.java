@@ -46,12 +46,12 @@ import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.DataValidator.Status;
 import com.izforge.izpack.api.installer.ISummarisable;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
@@ -127,9 +127,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     public final static String DELIMITER = ".";
 
     /**
-     * The resource manager.
+     * The resources.
      */
-    protected final ResourceManager resourceManager;
+    private final Resources resources;
 
     /**
      * The panel meta-data.
@@ -147,14 +147,14 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Constructs an <tt>IzPanel</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent IzPack installer frame
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
+     * @param panel       the panel meta-data
+     * @param parent      the parent IzPack installer frame
+     * @param installData the installation data
+     * @param resources   the resources
      */
-    public IzPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager)
+    public IzPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources)
     {
-        this(panel, parent, installData, (LayoutManager2) null, resourceManager);
+        this(panel, parent, installData, (LayoutManager2) null, resources);
     }
 
     /**
@@ -164,20 +164,20 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * New panels should be use IzPanelLayout. If layoutManager is
      * null, no layout manager will be created or initialized.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent IzPack installer frame
-     * @param installData     the installation data
-     * @param layoutManager   layout manager to be used with this IzPanel
-     * @param resourceManager the resource manager
+     * @param panel         the panel meta-data
+     * @param parent        the parent IzPack installer frame
+     * @param installData   the installation data
+     * @param layoutManager layout manager to be used with this IzPanel
+     * @param resources     the resources
      */
     public IzPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, LayoutManager2 layoutManager,
-                   ResourceManager resourceManager)
+                   Resources resources)
     {
         super();
         this.metadata = panel;
         this.parent = parent;
         this.installData = installData;
-        this.resourceManager = resourceManager;
+        this.resources = resources;
         initLayoutHelper();
         if (layoutManager != null)
         {
@@ -188,32 +188,31 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Constructs an <tt>IzPanel</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent IzPack installer frame
-     * @param iconName        the Headline icon name
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
+     * @param panel       the panel meta-data
+     * @param parent      the parent IzPack installer frame
+     * @param iconName    the Headline icon name
+     * @param installData the installation data
+     * @param resources   the resources
      */
-    public IzPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, String iconName,
-                   ResourceManager resourceManager)
+    public IzPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, String iconName, Resources resources)
     {
-        this(panel, parent, installData, iconName, -1, resourceManager);
+        this(panel, parent, installData, iconName, -1, resources);
     }
 
     /**
      * Constructs an <tt>IzPanel</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent IzPack installer frame
-     * @param installData     the installation data
-     * @param iconName        the Headline icon name
-     * @param instance        an instance counter
-     * @param resourceManager the resource manager
+     * @param panel       the panel meta-data
+     * @param parent      the parent IzPack installer frame
+     * @param installData the installation data
+     * @param iconName    the Headline icon name
+     * @param instance    an instance counter
+     * @param resources   the resources
      */
     public IzPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, String iconName, int instance,
-                   ResourceManager resourceManager)
+                   Resources resources)
     {
-        this(panel, parent, installData, resourceManager);
+        this(panel, parent, installData, resources);
         buildHeadline(iconName, instance);
     }
 
@@ -1147,7 +1146,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         // System.out.println("Help function called, helpName: " + helpName);
         if (helpUrl != null)
         {
-            URL resourceUrl = resourceManager.getLocalizedURL(helpUrl);
+            URL resourceUrl = resources.getURL(helpUrl);
             getHelpWindow().showHelp(getString("installer.help"), resourceUrl);
         }
     }
@@ -1238,5 +1237,15 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                 "class=" + getClass().getSimpleName() +
                 ", hidden=" + hidden +
                 '}';
+    }
+
+    /**
+     * Returns the resources.
+     *
+     * @return the resources
+     */
+    protected Resources getResources()
+    {
+        return resources;
     }
 }

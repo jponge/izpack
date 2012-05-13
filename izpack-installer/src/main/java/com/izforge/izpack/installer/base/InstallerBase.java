@@ -47,7 +47,7 @@ public abstract class InstallerBase
     /**
      * Abstract constructor which need resource manager
      *
-     * @param resourceManager the resource manager
+     * @param resourceManager the resources
      */
     protected InstallerBase(ResourceManager resourceManager)
     {
@@ -69,9 +69,9 @@ public abstract class InstallerBase
     }
 
     /**
-     * Returns the resource manager.
+     * Returns the resources.
      *
-     * @return the resource manager
+     * @return the resources
      */
     protected ResourceManager getResourceManager()
     {

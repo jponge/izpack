@@ -40,8 +40,8 @@ import javax.swing.event.ListSelectionEvent;
 
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.factory.ObjectFactory;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
@@ -81,17 +81,17 @@ public class ImgPacksPanel extends PacksPanelBase
     /**
      * Constructs a <tt>ImgPacksPanel</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          fhe parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param factory         the factory for creating {@link PackValidator} instances
-     * @param rules           the rules engine
+     * @param panel       the panel meta-data
+     * @param parent      fhe parent window
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param factory     the factory for creating {@link PackValidator} instances
+     * @param rules       the rules engine
      */
-    public ImgPacksPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                         ResourceManager resourceManager, ObjectFactory factory, RulesEngine rules)
+    public ImgPacksPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
+                         ObjectFactory factory, RulesEngine rules)
     {
-        super(panel, parent, installData, resourceManager, factory, rules);
+        super(panel, parent, installData, resources, factory, rules);
     }
 
     /*
@@ -194,14 +194,16 @@ public class ImgPacksPanel extends PacksPanelBase
     {
         int size = this.installData.getAvailablePacks().size();
         images = new HashMap<String, ImageIcon>(size);
+        Resources resources = getResources();
         for (Pack pack : this.installData.getAvailablePacks())
         {
-            if (pack.getImageId() != null)
+            String imageId = pack.getImageId();
+            if (imageId != null)
             {
                 try
                 {
-                    ImageIcon img = resourceManager.getImageIconResource(pack.getImageId());
-                    images.put(pack.getImageId(), img);
+                    ImageIcon img = resources.getImageIcon(imageId);
+                    images.put(imageId, img);
                 }
                 catch (Exception err)
                 {

@@ -726,9 +726,9 @@ public abstract class UnpackerBase implements IUnpacker
     }
 
     /**
-     * Returns the resource manager.
+     * Returns the resources.
      *
-     * @return the resource manager
+     * @return the resources
      */
     protected Resources getResources()
     {

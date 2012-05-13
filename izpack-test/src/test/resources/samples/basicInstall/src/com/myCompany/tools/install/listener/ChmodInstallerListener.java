@@ -21,15 +21,15 @@
 
 package com.myCompany.tools.install.listener;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.izforge.izpack.api.data.PackFile;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.event.SimpleInstallerListener;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * <p>InstallerListener for file and directory permissions
@@ -39,7 +39,8 @@ import java.io.IOException;
  */
 public class ChmodInstallerListener extends SimpleInstallerListener
 {
-    public ChmodInstallerListener(ResourceManager resources) {
+    public ChmodInstallerListener(Resources resources)
+    {
         super(resources);
     }
 
@@ -100,7 +101,7 @@ public class ChmodInstallerListener extends SimpleInstallerListener
             if ((dirVal & 0x000001C0) < 0x000001C0)
             {
                 throw new InstallerException("Bad owner permission for directory "
-                        + dirPath.getAbsolutePath() + "; at installation time the owner needs full rights");
+                                                     + dirPath.getAbsolutePath() + "; at installation time the owner needs full rights");
             }
             chmod(dirPath, dirVal);
         }

@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.resource.Resources;
@@ -80,16 +79,15 @@ public class PathInputPanel extends IzPanel implements ActionListener
     /**
      * Constructs a <tt>PathInputPanel</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param log             the log
+     * @param panel       the panel meta-data
+     * @param parent      the parent window
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param log         the log
      */
-    public PathInputPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                          ResourceManager resourceManager, Log log)
+    public PathInputPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources, Log log)
     {
-        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resources);
         // Set default values
         emptyTargetMsg = getI18nStringForClass("empty_target", "TargetPanel");
         warnMsg = getI18nStringForClass("warn", "TargetPanel");
@@ -313,8 +311,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
 
     public void loadDefaultInstallDir()
     {
-        defaultInstallDir = loadDefaultInstallDir(
-                resourceManager, installData);
+        defaultInstallDir = loadDefaultInstallDir(getResources(), installData);
     }
 
     /**

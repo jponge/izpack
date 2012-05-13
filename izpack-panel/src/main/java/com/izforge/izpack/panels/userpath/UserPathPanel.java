@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.Variables;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
@@ -53,16 +53,15 @@ public class UserPathPanel extends UserPathInputPanel
     /**
      * Constructs an <tt>UserPathPanel</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param log             the log
+     * @param panel       the panel meta-data
+     * @param parent      the parent window
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param log         the log
      */
-    public UserPathPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                         ResourceManager resourceManager, Log log)
+    public UserPathPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources, Log log)
     {
-        super(panel, parent, installData, UserPathPanel.class.getSimpleName(), resourceManager, log);
+        super(panel, parent, installData, UserPathPanel.class.getSimpleName(), resources, log);
         // load the default directory info (if present)
         if (getDefaultDir() != null)
         {

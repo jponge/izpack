@@ -21,19 +21,21 @@
 
 package com.izforge.izpack.api.data;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.apache.tools.ant.util.FileUtils;
+
 import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.exception.ResourceException;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.resource.Resources;
 
@@ -53,8 +55,6 @@ import com.izforge.izpack.api.resource.Resources;
  */
 public class ResourceManager implements Resources
 {
-    private final static Logger LOGGER = Logger.getLogger(ResourceManager.class.getName());
-
     /**
      * Contains the current language of the installer The locale is taken from
      * InstallData#installData#getAttribute("langpack") If there is no language set, the language is
@@ -137,9 +137,8 @@ public class ResourceManager implements Resources
      *
      * @param resource Resource to load language dependen
      * @return the language dependent path of the given resource
-     * @throws com.izforge.izpack.api.exception.ResourceNotFoundException
-     *          If the resource is not
-     *          found
+     * @throws ResourceNotFoundException If the resource is not
+     *                                   found
      */
     private String getLanguageResourceString(String resource)
     {
@@ -246,6 +245,18 @@ public class ResourceManager implements Resources
     }
 
     /**
+     * Returns the URL to a resource.
+     *
+     * @param name the resource name
+     * @return the URL to the resource
+     */
+    @Override
+    public URL getURL(String name)
+    {
+        return getLocalizedURL(name);
+    }
+
+    /**
      * Get Input stream with a default value
      *
      * @param resource     Path of resource
@@ -274,7 +285,7 @@ public class ResourceManager implements Resources
         return getResource(getLanguageResourceString(resource));
     }
 
-    private URL getURL(String resource)
+    private URL getResourceURL(String resource)
     {
         if (resource.charAt(0) == '/')
         {
@@ -289,44 +300,55 @@ public class ResourceManager implements Resources
      * @param name the resource name
      * @return the resource as a string
      * @throws ResourceNotFoundException if the resource cannot be found
-     * @throws IOException               if the resource cannot be read
+     * @throws ResourceException         if the resource cannot be retrieved
      */
     @Override
-    public String getString(String name) throws IOException
+    public String getString(String name)
     {
-        return getString(name, "UTF-8");
+        try
+        {
+            return readString(name, "UTF-8");
+        }
+        catch (IOException exception)
+        {
+            throw new ResourceException("Failed to read string resource: " + name, exception);
+        }
+    }
+
+    /**
+     * Returns a UTF-8 encoded resource as a string.
+     *
+     * @param name         the resource name
+     * @param defaultValue the default value, if the resource cannot be found or retrieved
+     * @return the resource as a string, or {@code defaultValue} if cannot be found or retrieved
+     */
+    @Override
+    public String getString(String name, String defaultValue)
+    {
+        return getString(name, "UTF-8", defaultValue);
     }
 
     /**
      * Returns a resource as a string.
      *
-     * @param name     the resource name
-     * @param encoding the resource encoding. May be {@code null}
-     * @return the resource as a string
-     * @throws ResourceNotFoundException if the resource cannot be found
-     * @throws IOException               if the resource cannot be read
+     * @param name         the resource name
+     * @param encoding     the resource encoding. May be {@code null}
+     * @param defaultValue the default value, if the resource cannot be found or retrieved
+     * @return the resource as a string, or {@code defaultValue} if cannot be found or retrieved
      */
     @Override
-    public String getString(String name, String encoding) throws IOException
+    public String getString(String name, String encoding, String defaultValue)
     {
-        InputStream in = getInputStream(name);
-
-        ByteArrayOutputStream infoData = new ByteArrayOutputStream();
-        byte[] buffer = new byte[5120];
-        int bytesInBuffer;
-        while ((bytesInBuffer = in.read(buffer)) != -1)
+        String result;
+        try
         {
-            infoData.write(buffer, 0, bytesInBuffer);
+            result = readString(name, encoding);
         }
-
-        if (encoding != null)
+        catch (Exception exception)
         {
-            return infoData.toString(encoding);
+            result = defaultValue;
         }
-        else
-        {
-            return infoData.toString();
-        }
+        return result;
     }
 
     /**
@@ -336,16 +358,15 @@ public class ResourceManager implements Resources
      * @param resource - a text resource to load
      * @param encoding - the encoding, which should be used to read the resource
      * @return a String contains the text of the resource
-     * @throws com.izforge.izpack.api.exception.ResourceNotFoundException
-     *                     if the resource can not be
-     *                     found
-     * @throws IOException if the resource can not be loaded
-     * @deprecated use {@link #getString(String, String)}
+     * @throws ResourceNotFoundException if the resource can not be
+     *                                   found
+     * @throws IOException               if the resource can not be loaded
+     * @deprecated use {@link com.izforge.izpack.api.resource.Resources#getString(String, String, String)}
      */
     @Deprecated
     public String getTextResource(String resource, String encoding) throws IOException
     {
-        return getString(resource, encoding);
+        return readString(resource, encoding);
     }
 
     /**
@@ -356,12 +377,40 @@ public class ResourceManager implements Resources
      * @return a String contains the text of the resource
      * @throws ResourceNotFoundException if the resource can not be found
      * @throws IOException               if the resource can not be loaded
-     * @deprecated use {@link #getString(String)}
+     * @deprecated use {@link com.izforge.izpack.api.resource.Resources#getString(String)}
      */
     @Deprecated
     public String getTextResource(String resource) throws IOException
     {
         return this.getTextResource(resource, null);
+    }
+
+    /**
+     * Returns an {@code ImageIcon} resource.
+     *
+     * @param name         the resource name
+     * @param alternatives alternative resource names, if {@code name} is not found
+     * @return the corresponding {@code ImageIcon}
+     * @throws ResourceNotFoundException if the resource cannot be found
+     */
+    @Override
+    public ImageIcon getImageIcon(String name, String... alternatives)
+    {
+        URL location = getResourceURL(name);
+        if (location != null)
+        {
+            return new ImageIcon(location);
+        }
+        for (String fallback : alternatives)
+        {
+            location = getResourceURL(fallback);
+            if (location != null)
+            {
+                return new ImageIcon(location);
+            }
+        }
+        throw new ResourceNotFoundException("Image icon resource not found in " + name + " or "
+                                                    + Arrays.toString(alternatives));
     }
 
     /**
@@ -371,24 +420,12 @@ public class ResourceManager implements Resources
      * @param fallback fallback resources
      * @return a ImageIcon loaded from the given Resource
      * @throws ResourceNotFoundException thrown when the resource can not be found
+     * @deprecated use {@link #getImageIcon(String, String...)}
      */
+    @Deprecated
     public ImageIcon getImageIconResource(String resource, String... fallback)
     {
-        URL location = this.getURL(resource);
-        if (location != null)
-        {
-            return new ImageIcon(location);
-        }
-        for (String fallbackResource : fallback)
-        {
-            location = this.getURL(fallbackResource);
-            if (location != null)
-            {
-                return new ImageIcon(location);
-            }
-        }
-        LOGGER.info("Image icon resource not found in " + resource + " and in fallbacks " + Arrays.toString(fallback));
-        return null;
+        return getImageIcon(resource, fallback);
     }
 
     /**
@@ -512,4 +549,32 @@ public class ResourceManager implements Resources
         }
         return basePath;
     }
+
+    /**
+     * Reads a string resource.
+     *
+     * @param name     the resource name
+     * @param encoding the resource encoding. May be {@code null}
+     * @return the resource as a string
+     * @throws ResourceNotFoundException if the resource cannot be found
+     * @throws IOException               for any I/O error
+     */
+    private String readString(String name, String encoding) throws IOException
+    {
+        String result;
+        InputStream in = getInputStream(name);
+        InputStreamReader reader = null;
+        try
+        {
+            reader = (encoding != null) ? new InputStreamReader(in, encoding) : new InputStreamReader(in);
+            result = FileUtils.readFully(reader);
+        }
+        finally
+        {
+            FileUtils.close(reader);
+            FileUtils.close(in);
+        }
+        return result;
+    }
+
 }

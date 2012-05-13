@@ -210,7 +210,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     private String myXdgDesktopIconCmd;
 
     /**
-     * The resource manager.
+     * The resources.
      */
     private final Resources resources;
 
@@ -227,7 +227,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     /**
      * Constructs a <tt>Unix_Shortcut</tt>.
      *
-     * @param resources   the resource manager
+     * @param resources   the resources
      * @param installData the installation data
      */
     public Unix_Shortcut(ResourceManager resources, AutomatedInstallData installData)

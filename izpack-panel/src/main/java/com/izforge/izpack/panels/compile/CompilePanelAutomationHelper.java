@@ -27,7 +27,6 @@ import java.io.PrintStream;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -59,7 +58,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
     private VariableSubstitutor variableSubstitutor;
 
     /**
-     * The resource manager.
+     * The resources.
      */
     private final Resources resources;
 
@@ -67,10 +66,10 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      * Constructs a <tt>CompilePanelAutomationHelper</tt>.
      *
      * @param variableSubstitutor the variable substituter
-     * @param resources           the resource manager
+     * @param resources           the resources
      * @param housekeeper         the house-keeper
      */
-    public CompilePanelAutomationHelper(VariableSubstitutor variableSubstitutor, ResourceManager resources,
+    public CompilePanelAutomationHelper(VariableSubstitutor variableSubstitutor, Resources resources,
                                         Housekeeper housekeeper)
     {
         super(housekeeper);

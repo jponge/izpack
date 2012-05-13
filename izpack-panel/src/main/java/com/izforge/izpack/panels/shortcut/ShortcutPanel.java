@@ -51,7 +51,7 @@ import javax.swing.event.ListSelectionListener;
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.MultiLineLabel;
@@ -168,19 +168,18 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /**
      * Constructs a <tt>ShortcutPanel</tt>.
      *
-     * @param panel           the panel
-     * @param parent          reference to the application frame
-     * @param installData     the installation data
-     * @param resourceManager the resources
-     * @param uninstallData   the uninstallation data
-     * @param housekeeper     the house keeper
-     * @param factory         the factory for platform-specific implementations
+     * @param panel         the panel
+     * @param parent        reference to the application frame
+     * @param installData   the installation data
+     * @param resources     the resources
+     * @param uninstallData the uninstallation data
+     * @param housekeeper   the house keeper
+     * @param factory       the factory for platform-specific implementations
      */
-    public ShortcutPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                         ResourceManager resourceManager, UninstallData uninstallData, Housekeeper housekeeper,
-                         TargetFactory factory)
+    public ShortcutPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
+                         UninstallData uninstallData, Housekeeper housekeeper, TargetFactory factory)
     {
-        super(panel, parent, installData, "link16x16", resourceManager);
+        super(panel, parent, installData, "link16x16", resources);
         layout = (GridBagLayout) super.getLayout();
         Object con = getLayoutHelper().getDefaultConstraints();
         if (con instanceof GridBagConstraints)
@@ -194,7 +193,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         setLayout(super.getLayout());
         try
         {
-            shortcutPanelLogic = new ShortcutPanelLogic(installData, resourceManager, uninstallData, housekeeper,
+            shortcutPanelLogic = new ShortcutPanelLogic(installData, resources, uninstallData, housekeeper,
                                                         factory);
             shortcutLogicInitialized = true;
         }

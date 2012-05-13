@@ -29,7 +29,7 @@ import javax.swing.JLabel;
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
@@ -54,16 +54,15 @@ public class HelloPanel extends IzPanel
     /**
      * Constructs an <tt>HelloPanel</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param log             the log
+     * @param panel       the panel meta-data
+     * @param parent      the parent window
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param log         the log
      */
-    public HelloPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
-                      Log log)
+    public HelloPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources, Log log)
     {
-        this(panel, parent, installData, new IzPanelLayout(log), resourceManager);
+        this(panel, parent, installData, new IzPanelLayout(log), resources);
     }
 
     /**
@@ -78,9 +77,8 @@ public class HelloPanel extends IzPanel
      * @param installData The installer internal installDataGUI.
      * @param layout      layout manager to be used with this IzPanel
      */
-
     public HelloPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, LayoutManager2 layout,
-                      ResourceManager resourceManager)
+                      Resources resources)
     {
         // Layout handling. This panel was changed from a mixed layout handling
         // with GridBagLayout and BoxLayout to IzPanelLayout. It can be used as an
@@ -88,7 +86,7 @@ public class HelloPanel extends IzPanel
         // which are excrescent for a "normal" panel.
         // Set a IzPanelLayout as layout for this panel.
         // This have to be the first line during layout if IzPanelLayout will be used.
-        super(panel, parent, installData, layout, resourceManager);
+        super(panel, parent, installData, layout, resources);
         // We create and put the labels
         String welcomeText = getString("HelloPanel.welcome1") + installData.getInfo().getAppName() + " "
                 + installData.getInfo().getAppVersion() + getString("HelloPanel.welcome2");

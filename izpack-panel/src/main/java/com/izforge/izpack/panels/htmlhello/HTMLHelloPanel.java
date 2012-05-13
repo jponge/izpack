@@ -20,7 +20,7 @@
 package com.izforge.izpack.panels.htmlhello;
 
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
@@ -37,16 +37,15 @@ public class HTMLHelloPanel extends HTMLInfoPanel
     /**
      * Constructs an <tt>HTMLHelloPanel</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param log             the log
+     * @param panel       the panel meta-data
+     * @param parent      the parent window
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param log         the log
      */
-    public HTMLHelloPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                          ResourceManager resourceManager, Log log)
+    public HTMLHelloPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources, Log log)
     {
-        super(panel, parent, installData, "HTMLHelloPanel", false, resourceManager, log);
+        super(panel, parent, installData, "HTMLHelloPanel", false, resources, log);
     }
 
     /**

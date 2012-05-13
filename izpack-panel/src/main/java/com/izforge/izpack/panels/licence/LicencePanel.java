@@ -31,7 +31,7 @@ import javax.swing.JTextArea;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.log.Log;
@@ -66,16 +66,15 @@ public class LicencePanel extends IzPanel implements ActionListener
     /**
      * Constructs a <tt>LicencePanel</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param log             the log
+     * @param panel       the panel meta-data
+     * @param parent      the parent window
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param log         the log
      */
-    public LicencePanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
-                        Log log)
+    public LicencePanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources, Log log)
     {
-        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resources);
         // We load the licence
         loadLicence();
 
@@ -116,16 +115,7 @@ public class LicencePanel extends IzPanel implements ActionListener
      */
     private void loadLicence()
     {
-        try
-        {
-            // We read it
-            String resNamePrifix = "LicencePanel.licence";
-            licence = resourceManager.getString(resNamePrifix, null);
-        }
-        catch (Exception err)
-        {
-            licence = "Error : could not load the licence text !";
-        }
+        licence = getResources().getString("LicencePanel.licence", null, "Error : could not load the licence text !");
     }
 
     /**

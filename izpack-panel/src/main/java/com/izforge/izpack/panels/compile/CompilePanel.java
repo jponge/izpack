@@ -47,7 +47,7 @@ import javax.swing.SwingConstants;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
@@ -141,16 +141,16 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
      * @param parent              the parent window
      * @param variableSubstitutor the variable substituter
      * @param installData         the installation data
-     * @param resourceManager     the resource manager
+     * @param resources           the resources
      * @param unpacker            the unpacker
      * @throws IOException for any I/O error
      */
-    public CompilePanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+    public CompilePanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
                         VariableSubstitutor variableSubstitutor, IUnpacker unpacker) throws IOException
     {
-        super(panel, parent, installData, resourceManager);
+        super(panel, parent, installData, resources);
         unpacker.setHandler(this);
-        this.worker = new CompileWorker(installData, this, variableSubstitutor, resourceManager);
+        this.worker = new CompileWorker(installData, this, variableSubstitutor, resources);
 
         GridBagConstraints gridBagConstraints;
 

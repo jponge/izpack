@@ -40,7 +40,7 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
 {
 
     /**
-     * The resource manager.
+     * The resources.
      */
     private final Resources resources;
 

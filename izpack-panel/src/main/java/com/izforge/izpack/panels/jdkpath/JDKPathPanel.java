@@ -30,9 +30,9 @@ import java.util.StringTokenizer;
 
 import com.coi.tools.os.win.MSWinConstants;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.gui.log.Log;
@@ -81,17 +81,17 @@ public class JDKPathPanel extends PathInputPanel
     /**
      * Constructs a <tt>JDKPathPanel</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param handler         the registry handler
-     * @param log             the log
+     * @param panel       the panel meta-data
+     * @param parent      the parent window
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param handler     the registry handler
+     * @param log         the log
      */
-    public JDKPathPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+    public JDKPathPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
                         RegistryDefaultHandler handler, Log log)
     {
-        super(panel, parent, installData, resourceManager, log);
+        super(panel, parent, installData, resources, log);
         this.handler = handler;
         setMustExist(true);
         if (!OsVersion.IS_OSX)

@@ -32,9 +32,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -87,17 +87,17 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
     /**
      * Constructs an <tt>UserPathInputPanel</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent window
-     * @param installData     the installation data
-     * @param targetPanel     the target panel
-     * @param resourceManager the resource manager
-     * @param log             the log
+     * @param panel       the panel meta-data
+     * @param parent      the parent window
+     * @param installData the installation data
+     * @param targetPanel the target panel
+     * @param resources   the resources
+     * @param log         the log
      */
     public UserPathInputPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, String targetPanel,
-                              ResourceManager resourceManager, Log log)
+                              Resources resources, Log log)
     {
-        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resources);
         _targetPanel = targetPanel;
         _variableName = getString(targetPanel + ".variableName");
         // Set default values
@@ -325,6 +325,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
         // Load only once ...
         if (!(_loadedDefaultDir))
         {
+            Resources resources = getResources();
             BufferedReader reader = null;
             try
             {
@@ -335,7 +336,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
                 os = os.toLowerCase(); // for consistency among targetPanel res files
                 try
                 {
-                    in = resourceManager.getInputStream(_targetPanel + ".dir.".concat(os));
+                    in = resources.getInputStream(_targetPanel + ".dir.".concat(os));
                 }
                 catch (ResourceNotFoundException rnfe)
                 {
@@ -346,7 +347,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
                     {
                         try
                         {
-                            in = resourceManager.getInputStream(_targetPanel + ".dir.windows");
+                            in = resources.getInputStream(_targetPanel + ".dir.windows");
                         }
                         catch (ResourceNotFoundException rnfe)
                         {
@@ -356,7 +357,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
                     {
                         try
                         {
-                            in = resourceManager.getInputStream(_targetPanel + ".dir.mac");
+                            in = resources.getInputStream(_targetPanel + ".dir.mac");
                         }
                         catch (ResourceNotFoundException rnfe)
                         {
@@ -366,7 +367,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
                     {
                         try
                         {
-                            in = resourceManager.getInputStream(_targetPanel + ".dir.unix");
+                            in = resources.getInputStream(_targetPanel + ".dir.unix");
                         }
                         catch (ResourceNotFoundException eee)
                         {
@@ -379,7 +380,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
                 {
                     try
                     {
-                        in = resourceManager.getInputStream(_targetPanel + ".dir");
+                        in = resources.getInputStream(_targetPanel + ".dir");
                     }
                     catch (ResourceNotFoundException eee)
                     {

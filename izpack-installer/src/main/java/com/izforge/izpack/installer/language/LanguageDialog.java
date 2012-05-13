@@ -295,7 +295,7 @@ public class LanguageDialog extends JDialog implements ActionListener
         ImageIcon img;
         try
         {
-            img = resourceManager.getImageIconResource("installer.langsel.img");
+            img = resourceManager.getImageIcon("installer.langsel.img");
         }
         catch (Exception err)
         {
@@ -459,7 +459,7 @@ public class LanguageDialog extends JDialog implements ActionListener
             if (!icons.containsKey(iso3))
             {
                 ImageIcon icon;
-                icon = resourceManager.getImageIconResource("flag." + iso3);
+                icon = resourceManager.getImageIcon("flag." + iso3);
                 icons.put(iso3, icon);
                 icon = new ImageIcon(GrayFilter.createDisabledImage(icon.getImage()));
                 grayIcons.put(iso3, icon);

@@ -1,11 +1,10 @@
 package com.izforge.izpack.panels.licence;
 
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.installer.console.AbstractTextPanelConsole;
 import com.izforge.izpack.util.Console;
 
@@ -21,14 +20,14 @@ public abstract class AbstractLicensePanelConsole extends AbstractTextPanelConso
     /**
      * The resources.
      */
-    private final ResourceManager resources;
+    private final Resources resources;
 
     /**
      * Constructs a <tt>AbstractLicensePanelConsole</tt>.
      *
      * @param resources the resources
      */
-    public AbstractLicensePanelConsole(ResourceManager resources)
+    public AbstractLicensePanelConsole(Resources resources)
     {
         this.resources = resources;
     }
@@ -41,14 +40,10 @@ public abstract class AbstractLicensePanelConsole extends AbstractTextPanelConso
      */
     protected String getText(String resourceName)
     {
-        String result = null;
-        try
+        String result = resources.getString(resourceName, null, null);
+        if (result == null)
         {
-            result = resources.getString(resourceName, null);
-        }
-        catch (IOException e)
-        {
-            logger.log(Level.WARNING, "Could not load the licence text for resource: " + resourceName, e);
+            logger.log(Level.WARNING, "No  licence text for resource: " + resourceName);
         }
         return result;
     }

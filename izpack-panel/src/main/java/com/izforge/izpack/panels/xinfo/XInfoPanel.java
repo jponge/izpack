@@ -31,7 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
@@ -64,14 +64,14 @@ public class XInfoPanel extends IzPanel
     /**
      * The constructor.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent IzPack installer frame
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
+     * @param panel       the panel meta-data
+     * @param parent      the parent IzPack installer frame
+     * @param installData the installation data
+     * @param resources   the resources
      */
-    public XInfoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager)
+    public XInfoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources)
     {
-        super(panel, parent, installData, resourceManager);
+        super(panel, parent, installData, resources);
 
         // We initialize our layout
         GridBagLayout layout = new GridBagLayout();
@@ -111,15 +111,7 @@ public class XInfoPanel extends IzPanel
      */
     private void loadInfo()
     {
-        try
-        {
-            // We read it
-            info = resourceManager.getString("XInfoPanel.info", null);
-        }
-        catch (Exception err)
-        {
-            info = "Error : could not load the info text !";
-        }
+        info = getResources().getString("XInfoPanel.info", null, "Error : could not load the info text !");
     }
 
     /**

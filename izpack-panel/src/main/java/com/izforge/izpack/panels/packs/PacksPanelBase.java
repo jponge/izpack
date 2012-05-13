@@ -63,8 +63,8 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.factory.ObjectFactory;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -171,24 +171,24 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     /**
      * Constructs a <tt>PacksPanelBase</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          fhe parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param factory         the factory for creating {@link PackValidator} instances
-     * @param rules           the rules engine
+     * @param panel       the panel meta-data
+     * @param parent      fhe parent window
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param factory     the factory for creating {@link PackValidator} instances
+     * @param rules       the rules engine
      */
     public PacksPanelBase(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                          ResourceManager resourceManager, ObjectFactory factory, RulesEngine rules)
+                          Resources resources, ObjectFactory factory, RulesEngine rules)
     {
-        super(panel, parent, installData, resourceManager);
+        super(panel, parent, installData, resources);
         this.rules = rules;
         this.factory = factory;
         // Load langpack.
         try
         {
             this.langpack = installData.getLangpack();
-            InputStream inputStream = this.resourceManager.getInputStream(LANG_FILE_NAME);
+            InputStream inputStream = getResources().getInputStream(LANG_FILE_NAME);
             this.langpack.add(inputStream);
             this.debugger = parent.getDebugger();
         }
@@ -657,7 +657,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     @Override
     public String getSummaryBody()
     {
-        StringBuffer retval = new StringBuffer(256);
+        StringBuilder retval = new StringBuilder(256);
         boolean first = true;
         for (Pack pack : this.installData.getSelectedPacks())
         {

@@ -108,7 +108,7 @@ public class ConsoleInstaller extends InstallerBase
      * @param factory             the factory to create panels with
      * @param installData         the installation date
      * @param rules               the rules engine
-     * @param resourceManager     the resource manager
+     * @param resourceManager     the resources
      * @param requirements        the installation requirements
      * @param uninstallDataWriter the uninstallation data writer
      * @param console             the console

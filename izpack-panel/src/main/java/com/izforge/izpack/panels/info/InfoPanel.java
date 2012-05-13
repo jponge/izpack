@@ -24,7 +24,7 @@ import javax.swing.JTextArea;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.log.Log;
@@ -50,16 +50,15 @@ public class InfoPanel extends IzPanel
     /**
      * Constructs an <tt>InfoPanel</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param log             the log
+     * @param panel       the panel meta-data
+     * @param parent      the parent window
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param log         the log
      */
-    public InfoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
-                     Log log)
+    public InfoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources, Log log)
     {
-        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resources);
         // We load the text.
         loadInfo();
         // The info label.
@@ -80,15 +79,8 @@ public class InfoPanel extends IzPanel
      */
     private void loadInfo()
     {
-        try
-        {
-            String resNamePrifix = "InfoPanel.info";
-            info = resourceManager.getString(resNamePrifix);
-        }
-        catch (Exception err)
-        {
-            info = "Error : could not load the info text !";
-        }
+        String defaultValue = "Error : could not load the info text !";
+        info = getResources().getString("InfoPanel.info", defaultValue);
     }
 
     /**

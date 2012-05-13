@@ -31,7 +31,7 @@ import javax.swing.text.Document;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.log.Log;
@@ -68,16 +68,15 @@ public class HTMLInfoPanel extends IzPanel
     /**
      * Constructs an <tt>HTMLInfoPanel</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param log             the log
+     * @param panel       the panel meta-data
+     * @param parent      the parent window
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param log         the log
      */
-    public HTMLInfoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                         ResourceManager resourceManager, Log log)
+    public HTMLInfoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources, Log log)
     {
-        this(panel, parent, installData, "HTMLInfoPanel", true, resourceManager, log);
+        this(panel, parent, installData, "HTMLInfoPanel", true, resources, log);
     }
 
     /**
@@ -88,13 +87,13 @@ public class HTMLInfoPanel extends IzPanel
      * @param installData       the installation data
      * @param resPrefixStr      prefix string for content resource name.
      * @param showInfoLabelFlag true to show "please read..." label above content
-     * @param resourceManager   the resource manager
+     * @param resources         the resources
      * @param log               the log
      */
     public HTMLInfoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                         String resPrefixStr, boolean showInfoLabelFlag, ResourceManager resourceManager, Log log)
+                         String resPrefixStr, boolean showInfoLabelFlag, Resources resources, Log log)
     {
-        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resources);
         //setup given resource prefix and name:
         panelResourcePrefixStr = resPrefixStr;
         panelResourceNameStr = resPrefixStr + ".info";
@@ -154,12 +153,13 @@ public class HTMLInfoPanel extends IzPanel
 
     private URL loadHTMLInfoContent()
     {
+        Resources resources = getResources();
         if (getMetadata() != null && getMetadata().getPanelid() != null)
         {
             try
             {
                 String panelSpecificResName = panelResourcePrefixStr + '.' + this.getMetadata().getPanelid();
-                String panelspecificResContent = resourceManager.getString(panelSpecificResName, null);
+                String panelspecificResContent = resources.getString(panelSpecificResName, null);
                 if (panelspecificResContent != null)
                 {
                     panelResourceNameStr = panelSpecificResName;
@@ -173,7 +173,7 @@ public class HTMLInfoPanel extends IzPanel
 
         try
         {
-            return resourceManager.getLocalizedURL(panelResourceNameStr);
+            return resources.getURL(panelResourceNameStr);
         }
         catch (Exception ex)
         {

@@ -41,8 +41,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.binding.OsModel;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.data.ParsableFile;
@@ -79,16 +79,16 @@ public class SudoPanel extends IzPanel implements ActionListener
     /**
      * The constructor.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent window.
-     * @param installData     the installation data
-     * @param resourceManager the resources
-     * @param replacer        the variable replacer
+     * @param panel       the panel meta-data
+     * @param parent      the parent window.
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param replacer    the variable replacer
      */
-    public SudoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+    public SudoPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
                      VariableSubstitutor replacer)
     {
-        super(panel, parent, installData, resourceManager);
+        super(panel, parent, installData, resources);
         this.replacer = replacer;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

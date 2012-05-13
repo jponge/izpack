@@ -25,7 +25,7 @@ public class TestConsoleInstaller extends ConsoleInstaller
      * @param factory         the object factory
      * @param installData     the installation date
      * @param rules           the rules engine
-     * @param resourceManager the resource manager
+     * @param resourceManager the resources
      * @param requirements    the installation requirements
      * @param writer          the uninstallation data writer
      * @param console         the console

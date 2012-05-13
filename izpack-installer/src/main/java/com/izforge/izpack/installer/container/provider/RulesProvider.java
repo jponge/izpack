@@ -64,7 +64,7 @@ public class RulesProvider implements Provider
     }
 
     /**
-     * Reads conditions using the resource manager.
+     * Reads conditions using the resources.
      * <p/>
      * This looks for a serialized resource named <em>"rules"</em>.
      *

@@ -21,34 +21,32 @@
 
 package com.izforge.izpack.api.exception;
 
+
 /**
- * Describes that a resource could not be found.
+ * Resource exception.
  *
- * @author Marcus Stursberg
+ * @author Tim Anderson
  */
-public class ResourceNotFoundException extends ResourceException
+public class ResourceException extends IzPackException
 {
 
-    private static final long serialVersionUID = 3258688827575906353L;
-
-
     /**
-     * Constructs a <tt>ResourceNotFoundException</tt>.
+     * Constructs a {@code ResourceException}.
      *
      * @param message the error message
      */
-    public ResourceNotFoundException(String message)
+    public ResourceException(String message)
     {
         super(message);
     }
 
     /**
-     * Constructs a <tt>ResourceNotFoundException</tt>.
+     * Constructs a {@code ResourceException}.
      *
      * @param message the error message
      * @param cause   the cause
      */
-    public ResourceNotFoundException(String message, Throwable cause)
+    public ResourceException(String message, Throwable cause)
     {
         super(message, cause);
     }

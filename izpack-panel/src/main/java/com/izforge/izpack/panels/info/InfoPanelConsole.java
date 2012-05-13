@@ -1,6 +1,6 @@
 package com.izforge.izpack.panels.info;
 
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.installer.console.AbstractTextPanelConsole;
 
 /**
@@ -14,14 +14,14 @@ public class InfoPanelConsole extends AbstractTextPanelConsole
     /**
      * The resources.
      */
-    private final ResourceManager resources;
+    private final Resources resources;
 
     /**
      * Constructs an <tt>InfoPanelConsole</tt>.
      *
      * @param resources the resources
      */
-    public InfoPanelConsole(ResourceManager resources)
+    public InfoPanelConsole(Resources resources)
     {
         this.resources = resources;
     }
@@ -34,15 +34,7 @@ public class InfoPanelConsole extends AbstractTextPanelConsole
     @Override
     protected String getText()
     {
-        String result;
-        try
-        {
-            result = resources.getString("InfoPanel.info");
-        }
-        catch (Exception exception)
-        {
-            result = "Error: could not load the info text!";
-        }
-        return result;
+        String defaultValue = "Error : could not load the info text !";
+        return resources.getString("InfoPanel.info", defaultValue);
     }
 }

@@ -25,7 +25,7 @@ import javax.swing.JLabel;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.log.Log;
@@ -59,14 +59,14 @@ public class SimpleFinishPanel extends IzPanel
      * @param panel               the panel meta-data
      * @param parent              the parent window
      * @param installData         the installation data
-     * @param resourceManager     the resource manager
+     * @param resources           the resources
      * @param uninstallDataWriter the uninstallation data writer
      * @param log                 the log
      */
-    public SimpleFinishPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                             ResourceManager resourceManager, UninstallDataWriter uninstallDataWriter, Log log)
+    public SimpleFinishPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
+                             UninstallDataWriter uninstallDataWriter, Log log)
     {
-        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resources);
         this.uninstallDataWriter = uninstallDataWriter;
         this.log = log;
     }

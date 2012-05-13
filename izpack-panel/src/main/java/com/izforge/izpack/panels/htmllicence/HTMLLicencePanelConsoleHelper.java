@@ -24,7 +24,7 @@ package com.izforge.izpack.panels.htmllicence;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.panels.licence.AbstractLicensePanelConsole;
 
 /**
@@ -39,7 +39,7 @@ public class HTMLLicencePanelConsoleHelper extends AbstractLicensePanelConsole
      *
      * @param resources the resources
      */
-    public HTMLLicencePanelConsoleHelper(ResourceManager resources)
+    public HTMLLicencePanelConsoleHelper(Resources resources)
     {
         super(resources);
     }

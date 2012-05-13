@@ -40,7 +40,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
@@ -68,15 +68,14 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener
     /**
      * The constructor.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
+     * @param panel       the panel meta-data
+     * @param parent      the parent
+     * @param installData the installation data
+     * @param resources   the resources
      */
-    public SelectPrinterPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                              ResourceManager resourceManager)
+    public SelectPrinterPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources)
     {
-        super(panel, parent, installData, resourceManager);
+        super(panel, parent, installData, resources);
 
         // The 'super' layout
         GridBagLayout superLayout = new GridBagLayout();

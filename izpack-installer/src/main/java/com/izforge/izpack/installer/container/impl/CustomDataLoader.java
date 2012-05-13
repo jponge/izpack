@@ -54,7 +54,7 @@ public class CustomDataLoader
     /**
      * Constructs a {@code CustomDataLoader}.
      *
-     * @param resources     the resource manager
+     * @param resources     the resources
      * @param factory       the factory for listeners
      * @param installData   the installation data
      * @param uninstallData the uninstallation data

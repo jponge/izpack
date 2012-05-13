@@ -74,7 +74,7 @@ public class SimpleInstallerListener implements InstallerListener
     /**
      * Constructs a <tt>SimpleInstallerListener</tt>.
      *
-     * @param resources the resource manager
+     * @param resources the resources
      */
     public SimpleInstallerListener(Resources resources)
     {

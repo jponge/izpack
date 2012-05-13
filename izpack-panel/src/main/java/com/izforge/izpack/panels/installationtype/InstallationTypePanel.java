@@ -30,7 +30,7 @@ import javax.swing.JRadioButton;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.log.Log;
@@ -56,16 +56,16 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
     /**
      * Constructs an <tt>InstallationTypePanel</tt>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param log             the log
+     * @param panel       the panel meta-data
+     * @param parent      the parent window
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param log         the log
      */
-    public InstallationTypePanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                                 ResourceManager resourceManager, Log log)
+    public InstallationTypePanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
+                                 Log log)
     {
-        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resources);
         buildGUI();
     }
 

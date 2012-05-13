@@ -33,7 +33,7 @@ import javax.swing.text.Document;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.log.Log;
@@ -68,16 +68,16 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
     /**
      * Constructs an <tt>HTMLLicencePanel</tt>.
      *
-     * @param panel           the panel
-     * @param parent          the parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param log             the log
+     * @param panel       the panel
+     * @param parent      the parent window
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param log         the log
      */
-    public HTMLLicencePanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                            ResourceManager resourceManager, Log log)
+    public HTMLLicencePanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
+                            Log log)
     {
-        super(panel, parent, installData, new IzPanelLayout(log), resourceManager);
+        super(panel, parent, installData, new IzPanelLayout(log), resources);
         // We load the licence
         loadLicence();
 
@@ -126,7 +126,7 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
         String resNamePrifix = "HTMLLicencePanel.licence";
         try
         {
-            return resourceManager.getLocalizedURL(resNamePrifix);
+            return getResources().getURL(resNamePrifix);
         }
         catch (Exception ex)
         {

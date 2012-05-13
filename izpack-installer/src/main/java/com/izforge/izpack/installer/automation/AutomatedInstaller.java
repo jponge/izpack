@@ -112,7 +112,7 @@ public class AutomatedInstaller extends InstallerBase
      * Constructs an <tt>AutomatedInstaller</tt>.
      *
      * @param installData         the installation data
-     * @param resourceManager     the resource manager
+     * @param resourceManager     the resources
      * @param requirements        the installation requirements checker
      * @param uninstallDataWriter the uninstallation data writer
      * @param variables           the variables

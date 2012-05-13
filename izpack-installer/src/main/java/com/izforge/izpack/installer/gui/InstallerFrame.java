@@ -213,7 +213,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     private PanelManager panelManager;
 
     /**
-     * The resource manager
+     * The resources.
      */
     private ResourceManager resourceManager;
 
@@ -253,7 +253,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      * @param icons               the icons database
      * @param panelManager        the panel manager
      * @param uninstallDataWriter the uninstallation data writer
-     * @param resourceManager     the resource manager
+     * @param resourceManager     the resources
      * @param uninstallData       the uninstallation data
      * @param unpacker            the unpacker
      * @param housekeeper         the house-keeper
@@ -307,11 +307,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     public void buildGUI()
     {
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        ImageIcon jframeIcon = resourceManager.getImageIconResource("JFrameIcon");
-        if (jframeIcon == null)
-        {
-            jframeIcon = getIcons().get("JFrameIcon");
-        }
+        ImageIcon jframeIcon = resourceManager.getImageIcon("JFrameIcon", "/com/izforge/izpack/img/JFrameIcon.png");
         setIconImage(jframeIcon.getImage());
         // Prepares the glass pane to block the gui interaction when needed
         JPanel glassPane = (JPanel) getGlassPane();
@@ -462,7 +458,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     {
         ImageIcon icon;
         String iconext = this.getIconResourceNameExtension();
-        icon = resourceManager.getImageIconResource(resPrefix, resPrefix + "." + panelid + iconext);
+        icon = resourceManager.getImageIcon(resPrefix, resPrefix + "." + panelid + iconext);
         return (icon);
     }
 

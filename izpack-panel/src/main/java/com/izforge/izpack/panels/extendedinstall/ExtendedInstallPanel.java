@@ -22,7 +22,7 @@
 package com.izforge.izpack.panels.extendedinstall;
 
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
@@ -45,17 +45,17 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
     /**
      * The constructor.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param unpacker        the unpacker
-     * @param log             the log
+     * @param panel       the panel meta-data
+     * @param parent      the parent window
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param unpacker    the unpacker
+     * @param log         the log
      */
-    public ExtendedInstallPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                                ResourceManager resourceManager, IUnpacker unpacker, Log log)
+    public ExtendedInstallPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
+                                IUnpacker unpacker, Log log)
     {
-        super(panel, parent, installData, resourceManager, unpacker, log);
+        super(panel, parent, installData, resources, unpacker, log);
     }
 
     /*

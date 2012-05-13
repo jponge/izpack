@@ -35,7 +35,7 @@ import javax.swing.JOptionPane;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.AutomatedInstallScriptFilter;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
@@ -73,14 +73,14 @@ public class FinishPanel extends IzPanel implements ActionListener
      * @param panel               the panel meta-data
      * @param parent              the parent window
      * @param installData         the installation data
-     * @param resourceManager     the resource manager
+     * @param resources           the resources
      * @param uninstallDataWriter the uninstallation data writer
      * @param log                 the log
      */
-    public FinishPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager,
+    public FinishPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
                        UninstallDataWriter uninstallDataWriter, Log log)
     {
-        super(panel, parent, installData, new GridBagLayout(), resourceManager);
+        super(panel, parent, installData, new GridBagLayout(), resources);
         this.uninstallDataWriter = uninstallDataWriter;
         this.log = log;
     }
@@ -157,7 +157,7 @@ public class FinishPanel extends IzPanel implements ActionListener
         fileChooser.setName(GuiId.FINISH_PANEL_FILE_CHOOSER.id);
         fileChooser.setCurrentDirectory(new File(this.installData.getInstallPath()));
         fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.addChoosableFileFilter(new AutomatedInstallScriptFilter(resourceManager));
+        fileChooser.addChoosableFileFilter(new AutomatedInstallScriptFilter(installData.getMessages()));
         // fileChooser.setCurrentDirectory(new File("."));
 
         // Shows it

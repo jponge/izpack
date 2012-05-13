@@ -22,14 +22,10 @@
 package com.izforge.izpack.gui;
 
 import java.io.File;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.filechooser.FileFilter;
 
-import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Messages;
 
 /**
  * Allows a file if it is a directory or if it ends with .xml. The description
@@ -48,7 +44,6 @@ import com.izforge.izpack.api.data.ResourceManager;
  */
 public class AutomatedInstallScriptFilter extends FileFilter
 {
-    private static final Logger logger = Logger.getLogger(AutomatedInstallScriptFilter.class.getName());
 
     /**
      * The default description for the file filter if it cannot be loaded from
@@ -63,18 +58,18 @@ public class AutomatedInstallScriptFilter extends FileFilter
     public static final String DESCRIPTION_LOCALE_DATABASE_KEY = "FinishPanel.auto.dialog.filterdesc";
 
     /**
-     * The resource manager.
+     * The locale specific messages.
      */
-    private final ResourceManager resources;
+    private final Messages messages;
 
     /**
      * Constructs a <tt>AutomatedInstallScriptFilter</tt>.
      *
-     * @param resources the resources
+     * @param messages the locale-specific messages
      */
-    public AutomatedInstallScriptFilter(ResourceManager resources)
+    public AutomatedInstallScriptFilter(Messages messages)
     {
-        this.resources = resources;
+        this.messages = messages;
     }
 
     /*
@@ -96,34 +91,7 @@ public class AutomatedInstallScriptFilter extends FileFilter
     @Override
     public String getDescription()
     {
-        // Load the lang pack using the current locale
-        String locale = resources.getLocale();
-
-        String description = null;
-
-        try
-        {
-            //All of this will be changed to a few lines of code after the locale database refactor.
-            InputStream in = resources.getInputStream("langpacks/" + locale + ".xml");
-            LocaleDatabase langpack = new LocaleDatabase(in);
-
-            description = langpack.get(DESCRIPTION_LOCALE_DATABASE_KEY);
-
-        }
-        catch (Exception e)
-        {
-            /*
-                * We'll just log the exception if something happens and provide the
-                * default value.
-                */
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
-
-        if (description == null)
-        {
-            description = DEFAULT_DESCRIPTION;
-        }
-
-        return description;
+        String result = messages.get(DESCRIPTION_LOCALE_DATABASE_KEY);
+        return (DESCRIPTION_LOCALE_DATABASE_KEY.equals(result)) ? DEFAULT_DESCRIPTION : result;
     }
 }

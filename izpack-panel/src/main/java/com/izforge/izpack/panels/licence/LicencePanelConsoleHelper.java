@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.panels.licence;
 
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 
 
 /**
@@ -34,7 +34,7 @@ public class LicencePanelConsoleHelper extends AbstractLicensePanelConsole
      *
      * @param resources the resources
      */
-    public LicencePanelConsoleHelper(ResourceManager resources)
+    public LicencePanelConsoleHelper(Resources resources)
     {
         super(resources);
     }

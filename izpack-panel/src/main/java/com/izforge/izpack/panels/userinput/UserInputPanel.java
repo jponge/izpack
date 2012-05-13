@@ -51,8 +51,8 @@ import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.rules.process.ExistsCondition;
 import com.izforge.izpack.core.rules.process.ExistsCondition.ContentType;
@@ -330,16 +330,16 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     /**
      * Constructs an <code>UserInputPanel</code>.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent IzPack installer frame
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param rules           the rules engine
+     * @param panel       the panel meta-data
+     * @param parent      the parent IzPack installer frame
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param rules       the rules engine
      */
-    public UserInputPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                          ResourceManager resourceManager, RulesEngine rules)
+    public UserInputPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
+                          RulesEngine rules)
     {
-        super(panel, parent, installData, resourceManager);
+        super(panel, parent, installData, resources);
         instanceNumber = instanceCount++;
         this.rules = rules;
     }
@@ -372,7 +372,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             this.langpack = (LocaleDatabase) installData.getLangpack().clone();
 
             String resource = LANG_FILE_NAME + "_" + this.installData.getLocaleISO3();
-            this.langpack.add(resourceManager.getInputStream(resource));
+            this.langpack.add(getResources().getInputStream(resource));
         }
         catch (ResourceNotFoundException e)
         {
@@ -1331,7 +1331,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
         try
         {
-            input = resourceManager.getInputStream(SPEC_FILE_NAME);
+            input = getResources().getInputStream(SPEC_FILE_NAME);
         }
         catch (Exception exception)
         {

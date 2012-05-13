@@ -39,7 +39,7 @@ import javax.swing.JScrollPane;
 
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.gui.IzPanel;
@@ -74,10 +74,9 @@ public class DataCheckPanel extends IzPanel
      * @param parent      the parent frame
      * @param installData the installation data
      */
-    public DataCheckPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                          ResourceManager resourceManager)
+    public DataCheckPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources)
     {
-        super(panel, parent, installData, resourceManager);
+        super(panel, parent, installData, resources);
 
         installDataGUI = installData;
         instanceNumber = instanceCount++;

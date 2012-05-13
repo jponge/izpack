@@ -34,7 +34,7 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -139,16 +139,16 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     /**
      * The constructor.
      *
-     * @param panel           the panel meta-data
-     * @param parent          the parent window
-     * @param installData     the installation data
-     * @param resourceManager the resource manager
-     * @param rules           the rules
+     * @param panel       the panel meta-data
+     * @param parent      the parent window
+     * @param installData the installation data
+     * @param resources   the resources
+     * @param rules       the rules
      */
-    public TreePacksPanel(Panel panel, InstallerFrame parent, GUIInstallData installData,
-                          ResourceManager resourceManager, RulesEngine rules)
+    public TreePacksPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
+                          RulesEngine rules)
     {
-        super(panel, parent, installData, resourceManager);
+        super(panel, parent, installData, resources);
         // Load langpack.
         try
         {
@@ -171,7 +171,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
 
             if (langPackStream == null)
             {
-                langPackStream = this.resourceManager.getInputStream(LANG_FILE_NAME);
+                langPackStream = getResources().getInputStream(LANG_FILE_NAME);
             }
 
             this.langpack.add(langPackStream);
