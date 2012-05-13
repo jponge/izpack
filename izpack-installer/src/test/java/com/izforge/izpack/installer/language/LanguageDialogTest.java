@@ -1,10 +1,7 @@
 package com.izforge.izpack.installer.language;
 
-import com.izforge.izpack.api.GuiId;
-import com.izforge.izpack.api.container.Container;
-import com.izforge.izpack.api.data.ResourceManager;
-import com.izforge.izpack.installer.container.TestLanguageContainer;
-import com.izforge.izpack.test.junit.PicoRunner;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.fest.swing.fixture.DialogFixture;
 import org.hamcrest.core.Is;
 import org.junit.After;
@@ -12,7 +9,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.container.Container;
+import com.izforge.izpack.core.resource.ResourceManager;
+import com.izforge.izpack.installer.container.TestLanguageContainer;
+import com.izforge.izpack.test.junit.PicoRunner;
 
 /**
  * Test for an installation using mock data
@@ -25,7 +26,8 @@ public class LanguageDialogTest
     private DialogFixture dialogFixture;
     private ResourceManager resourceManager;
 
-    public LanguageDialogTest(Container installerContainer, DialogFixture dialogFixture, ResourceManager resourceManager)
+    public LanguageDialogTest(Container installerContainer, DialogFixture dialogFixture,
+                              ResourceManager resourceManager)
     {
         this.installerContainer = installerContainer;
         this.dialogFixture = dialogFixture;

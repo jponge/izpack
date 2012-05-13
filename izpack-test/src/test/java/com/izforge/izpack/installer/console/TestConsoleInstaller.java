@@ -1,9 +1,9 @@
 package com.izforge.izpack.installer.console;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.test.util.TestConsole;

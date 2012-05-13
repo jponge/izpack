@@ -10,13 +10,13 @@ import org.picocontainer.PicoException;
 import org.picocontainer.injectors.ProviderAdapter;
 import org.picocontainer.parameters.ComponentParameter;
 
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.PlatformProvider;
 import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
+import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.core.rules.ConditionContainer;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;

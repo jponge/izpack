@@ -19,25 +19,19 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.api.data;
+package com.izforge.izpack.core.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
 import javax.swing.ImageIcon;
 
-import org.apache.tools.ant.util.FileUtils;
-
 import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.api.exception.ResourceException;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
-import com.izforge.izpack.api.resource.Resources;
 
 /**
  * With this ResourceManager you are able to get resources from the jar file.
@@ -53,7 +47,7 @@ import com.izforge.izpack.api.resource.Resources;
  *
  * @author Marcus Stursberg
  */
-public class ResourceManager implements Resources
+public class ResourceManager extends AbstractResources
 {
     /**
      * Contains the current language of the installer The locale is taken from
@@ -61,11 +55,6 @@ public class ResourceManager implements Resources
      * english.
      */
     private String locale = "";
-
-    /**
-     * The loader to use to load resources.
-     */
-    private final ClassLoader loader;
 
     /**
      * The base path where to find the resources: resourceBasePathDefaultConstant = "/res/"
@@ -102,8 +91,8 @@ public class ResourceManager implements Resources
      */
     public ResourceManager(Properties properties, ClassLoader loader)
     {
+        super(loader);
         this.locale = "eng";
-        this.loader = loader;
         final String systemPropertyBundleName = properties.getProperty("resource.bundle.system.property");
         if (systemPropertyBundleName != null)
         {
@@ -142,86 +131,18 @@ public class ResourceManager implements Resources
      */
     private String getLanguageResourceString(String resource)
     {
-        if (resource.charAt(0) == '/')
-        {
-            return getAbsoluteLanguageResourceString(resource);
-        }
-        else
-        {
-            return getAbsoluteLanguageResourceString(this.getResourceBasePath() + resource);
-        }
-
-        // String localeSuffix = "_" + this.locale;
-        // String resourcePath = getBundlePath() + resource + localeSuffix;
-        // if (resourceExists(resourcePath))
-        // {
-        // return resourcePath;
-        // }
-        //
-        // // if there's no language dependent resource found
-        // resourcePath = getBundlePath() + resource;
-        // if (resourceExists(resourcePath))
-        // {
-        // return resourcePath;
-        // }
-        //
-        // resourcePath = this.resourceBasePath + resource + localeSuffix;
-        // if (resourceExists(resourcePath))
-        // {
-        // return resourcePath;
-        // }
-        //
-        // // if there's no language dependent resource found
-        // resourcePath = this.resourceBasePath + resource;
-        // if (resourceExists(resourcePath))
-        // {
-        // return resourcePath;
-        // }
-        //
-        // throw new ResourceNotFoundException("Cannot find named Resource: '" + getBundlePath()
-        // + resource + "', '" + getBundlePath() + resource + localeSuffix + "'" + ", '"
-        // + this.resourceBasePath + resource + "' AND '" + this.resourceBasePath + resource
-        // + localeSuffix + "'");
-
-    }
-
-    /**
-     * Get stream on the given resource. First search if a localized resource exist then try to get
-     * the given resource.
-     *
-     * @param resource
-     * @return
-     * @throws ResourceNotFoundException
-     */
-    private String getAbsoluteLanguageResourceString(String resource)
-    {
-        InputStream in;
-
         String resourcePath = resource + "_" + this.locale;
-        in = getResourceAsStream(resourcePath);
-        if (in != null)
+        if (getResource(resourcePath) != null)
         {
             return resourcePath;
         }
-        else
+        else if (getResource(resource) != null)
         {
-            // if there's no language dependent resource found
-            in = getResourceAsStream(resource);
-            if (in != null)
-            {
-                return resource;
-            }
-            else
-            {
-                if (resource.charAt(0) == '/')
-                {
-                    return getAbsoluteLanguageResourceString(resource
-                                                                     .substring(1));
-                }
-                throw new ResourceNotFoundException("Cannot find named Resource: '" + resource
-                                                            + "' AND '" + resourcePath + "'");
-            }
+            return resource;
         }
+
+        throw new ResourceNotFoundException("Cannot find named Resource: '" + resource
+                                                    + "' AND '" + resourcePath + "'");
     }
 
     public boolean isResourceExist(String resource)
@@ -240,8 +161,8 @@ public class ResourceManager implements Resources
      */
     public InputStream getInputStream(String resource) throws ResourceNotFoundException
     {
-        String resourcepath = this.getLanguageResourceString(resource);
-        return getResourceAsStream(resourcepath);
+        resource = getLanguageResourceString(resource);
+        return super.getInputStream(resource);
     }
 
     /**
@@ -249,6 +170,7 @@ public class ResourceManager implements Resources
      *
      * @param name the resource name
      * @return the URL to the resource
+     * @throws ResourceNotFoundException if the resource cannot be found
      */
     @Override
     public URL getURL(String name)
@@ -270,7 +192,7 @@ public class ResourceManager implements Resources
         {
             return defaultValue;
         }
-        return getResourceAsStream(resourcepath);
+        return getInputStream(resourcepath);
     }
 
     /**
@@ -283,72 +205,6 @@ public class ResourceManager implements Resources
     public URL getLocalizedURL(String resource)
     {
         return getResource(getLanguageResourceString(resource));
-    }
-
-    private URL getResourceURL(String resource)
-    {
-        if (resource.charAt(0) == '/')
-        {
-            return getClass().getResource(resource);
-        }
-        return getClass().getResource(getResourceBasePath() + resource);
-    }
-
-    /**
-     * Returns a UTF-8 encoded resource as a string.
-     *
-     * @param name the resource name
-     * @return the resource as a string
-     * @throws ResourceNotFoundException if the resource cannot be found
-     * @throws ResourceException         if the resource cannot be retrieved
-     */
-    @Override
-    public String getString(String name)
-    {
-        try
-        {
-            return readString(name, "UTF-8");
-        }
-        catch (IOException exception)
-        {
-            throw new ResourceException("Failed to read string resource: " + name, exception);
-        }
-    }
-
-    /**
-     * Returns a UTF-8 encoded resource as a string.
-     *
-     * @param name         the resource name
-     * @param defaultValue the default value, if the resource cannot be found or retrieved
-     * @return the resource as a string, or {@code defaultValue} if cannot be found or retrieved
-     */
-    @Override
-    public String getString(String name, String defaultValue)
-    {
-        return getString(name, "UTF-8", defaultValue);
-    }
-
-    /**
-     * Returns a resource as a string.
-     *
-     * @param name         the resource name
-     * @param encoding     the resource encoding. May be {@code null}
-     * @param defaultValue the default value, if the resource cannot be found or retrieved
-     * @return the resource as a string, or {@code defaultValue} if cannot be found or retrieved
-     */
-    @Override
-    public String getString(String name, String encoding, String defaultValue)
-    {
-        String result;
-        try
-        {
-            result = readString(name, encoding);
-        }
-        catch (Exception exception)
-        {
-            result = defaultValue;
-        }
-        return result;
     }
 
     /**
@@ -383,34 +239,6 @@ public class ResourceManager implements Resources
     public String getTextResource(String resource) throws IOException
     {
         return this.getTextResource(resource, null);
-    }
-
-    /**
-     * Returns an {@code ImageIcon} resource.
-     *
-     * @param name         the resource name
-     * @param alternatives alternative resource names, if {@code name} is not found
-     * @return the corresponding {@code ImageIcon}
-     * @throws ResourceNotFoundException if the resource cannot be found
-     */
-    @Override
-    public ImageIcon getImageIcon(String name, String... alternatives)
-    {
-        URL location = getResourceURL(name);
-        if (location != null)
-        {
-            return new ImageIcon(location);
-        }
-        for (String fallback : alternatives)
-        {
-            location = getResourceURL(fallback);
-            if (location != null)
-            {
-                return new ImageIcon(location);
-            }
-        }
-        throw new ResourceNotFoundException("Image icon resource not found in " + name + " or "
-                                                    + Arrays.toString(alternatives));
     }
 
     /**
@@ -509,14 +337,18 @@ public class ResourceManager implements Resources
     }
 
     /**
-     * Returns a resource given its name.
+     * Resolves relative resource names.
+     * <p/>
+     * This implementation prefixes relative resource names with {@link #getResourceBasePath()}.
      *
      * @param name the resource name
-     * @return the resource, or <tt>null</tt> if it is not found
+     * @return the absolute resource name
      */
-    protected URL getResource(String name)
+    @Override
+    protected String resolveName(String name)
     {
-        return loader.getResource(name);
+        name = (name.charAt(0) == '/') ? name : getResourceBasePath() + name;
+        return super.resolveName(name);
     }
 
     /**
@@ -527,7 +359,7 @@ public class ResourceManager implements Resources
      */
     protected InputStream getResourceAsStream(String name)
     {
-        return loader.getResourceAsStream(name);
+        return getLoader().getResourceAsStream(name);
     }
 
     protected void setBundleName(String bundleName)
@@ -548,33 +380,6 @@ public class ResourceManager implements Resources
             basePath += this.bundleName + "/";
         }
         return basePath;
-    }
-
-    /**
-     * Reads a string resource.
-     *
-     * @param name     the resource name
-     * @param encoding the resource encoding. May be {@code null}
-     * @return the resource as a string
-     * @throws ResourceNotFoundException if the resource cannot be found
-     * @throws IOException               for any I/O error
-     */
-    private String readString(String name, String encoding) throws IOException
-    {
-        String result;
-        InputStream in = getInputStream(name);
-        InputStreamReader reader = null;
-        try
-        {
-            reader = (encoding != null) ? new InputStreamReader(in, encoding) : new InputStreamReader(in);
-            result = FileUtils.readFully(reader);
-        }
-        finally
-        {
-            FileUtils.close(reader);
-            FileUtils.close(in);
-        }
-        return result;
     }
 
 }

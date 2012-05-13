@@ -1,14 +1,15 @@
 package com.izforge.izpack.installer.requirement;
 
-import com.izforge.izpack.api.data.ResourceManager;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
+import com.izforge.izpack.core.resource.ResourceManager;
 
 /**
  * Tests the {@link LangPackChecker}.

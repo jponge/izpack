@@ -28,12 +28,12 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.injectors.ProviderAdapter;
 
 import com.izforge.izpack.api.container.Container;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.PlatformProvider;
 import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.os.RegistryHandler;
+import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.util.os.Shortcut;
 import com.izforge.izpack.util.os.Unix_Shortcut;

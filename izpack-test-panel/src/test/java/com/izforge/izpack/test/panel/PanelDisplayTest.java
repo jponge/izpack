@@ -18,8 +18,8 @@ import org.mockito.Mockito;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.binding.Help;
+import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.gui.InstallerController;

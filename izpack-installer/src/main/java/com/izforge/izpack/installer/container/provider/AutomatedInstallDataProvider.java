@@ -3,9 +3,9 @@ package com.izforge.izpack.installer.container.provider;
 import java.io.IOException;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.core.data.DefaultVariables;
+import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.util.Housekeeper;
 

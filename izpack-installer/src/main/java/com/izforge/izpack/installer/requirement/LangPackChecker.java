@@ -1,7 +1,7 @@
 package com.izforge.izpack.installer.requirement;
 
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.installer.RequirementChecker;
+import com.izforge.izpack.core.resource.ResourceManager;
 
 /**
  * Verifies that a language pack is available.

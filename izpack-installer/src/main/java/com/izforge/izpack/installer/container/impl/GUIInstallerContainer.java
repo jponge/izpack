@@ -11,9 +11,9 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.injectors.ProviderAdapter;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.api.resource.Messages;
+import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.gui.GUIPrompt;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.container.provider.GUIInstallDataProvider;

@@ -17,8 +17,8 @@ import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 
 import com.izforge.izpack.api.GuiId;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
+import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerController;

@@ -10,11 +10,11 @@ import javax.swing.JOptionPane;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.InstallerRequirement;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.FileUtil;
 

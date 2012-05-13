@@ -32,7 +32,7 @@ import javax.swing.SwingConstants;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.LocaleDatabase;
-import com.izforge.izpack.api.data.ResourceManager;
+import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
 

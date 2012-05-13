@@ -17,9 +17,9 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;
 
 import com.izforge.izpack.api.data.GUIPrefs;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.core.data.DefaultVariables;
+import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;

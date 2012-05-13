@@ -16,11 +16,11 @@ import org.picocontainer.injectors.ProviderAdapter;
 import org.picocontainer.parameters.ComponentParameter;
 
 import com.izforge.izpack.api.container.Container;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.data.DefaultVariables;
+import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.container.provider.IconsProvider;
 import com.izforge.izpack.installer.data.UninstallData;

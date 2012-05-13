@@ -9,7 +9,6 @@ import org.picocontainer.parameters.ComponentParameter;
 
 import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -18,6 +17,7 @@ import com.izforge.izpack.core.container.PlatformProvider;
 import com.izforge.izpack.core.data.DefaultVariables;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
+import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.core.rules.ConditionContainer;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.base.InstallDataConfiguratorWithRules;

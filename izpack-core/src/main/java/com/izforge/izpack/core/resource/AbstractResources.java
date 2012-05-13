@@ -57,6 +57,7 @@ public abstract class AbstractResources implements Resources
     @Override
     public InputStream getInputStream(String name)
     {
+        name = resolveName(name);
         InputStream result = loader.getResourceAsStream(name);
         if (result == null)
         {
@@ -75,7 +76,7 @@ public abstract class AbstractResources implements Resources
     @Override
     public URL getURL(String name)
     {
-        URL result = loader.getResource(name);
+        URL result = getResource(name);
         if (result == null)
         {
             throw new ResourceNotFoundException("Failed to locate resource: " + name);
@@ -151,27 +152,69 @@ public abstract class AbstractResources implements Resources
     @Override
     public ImageIcon getImageIcon(String name, String... alternatives)
     {
-        URL location = loader.getResource(name);
-        if (location != null)
+        URL result = getResource(name);
+        if (result == null)
         {
-            return new ImageIcon(location);
-        }
-        for (String fallback : alternatives)
-        {
-            location = loader.getResource(fallback);
-            if (location != null)
+            for (String fallback : alternatives)
             {
-                return new ImageIcon(location);
+                result = getResource(fallback);
+                if (result != null)
+                {
+                    break;
+                }
             }
         }
-        StringBuilder message = new StringBuilder("Image icon resource not found in ");
-        message.append(name);
-        if (alternatives.length != 0)
+        if (result == null)
         {
-            message.append(" or ");
-            message.append(Arrays.toString(alternatives));
+            StringBuilder message = new StringBuilder("Image icon resource not found in ");
+            message.append(name);
+            if (alternatives.length != 0)
+            {
+                message.append(" or ");
+                message.append(Arrays.toString(alternatives));
+            }
+            throw new ResourceNotFoundException(message.toString());
         }
-        throw new ResourceNotFoundException(message.toString());
+        return new ImageIcon(result);
+    }
+
+    /**
+     * Returns a resource URL.
+     *
+     * @param name the resource name
+     * @return the corresponding URL, or {@code null} if the resource cannot be found
+     */
+    protected URL getResource(String name)
+    {
+        name = resolveName(name);
+        return loader.getResource(name);
+    }
+
+    /**
+     * Resolves relative resource names.
+     * <p/>
+     * This implementation assumes that all names are absolute.
+     *
+     * @param name the resource name
+     * @return the absolute resource name, minus any leading '/'
+     */
+    protected String resolveName(String name)
+    {
+        if (name.charAt(0) == '/')
+        {
+            name = name.substring(1);
+        }
+        return name;
+    }
+
+    /**
+     * Returns the class loader.
+     *
+     * @return the class loader
+     */
+    protected ClassLoader getLoader()
+    {
+        return loader;
     }
 
     /**

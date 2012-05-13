@@ -24,8 +24,8 @@ package com.izforge.izpack.installer.base;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.ResourceManager;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.resource.ResourceManager;
 
 /**
  * Common utility functions for the GUI and text installers. (Do not import swing/awt classes to
