@@ -1,21 +1,16 @@
 package com.izforge.izpack.installer.container.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.util.List;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.event.InstallerListeners;
 import com.izforge.izpack.util.OsConstraintHelper;
-import com.izforge.izpack.util.file.FileUtils;
 
 /**
  * Reads the <em>customData</em> resource in order to populate the {@link InstallerListeners} and {@link UninstallData}.
@@ -87,7 +82,7 @@ public class CustomDataLoader
     @SuppressWarnings("unchecked")
     public void loadCustomData() throws InstallerException
     {
-        List<CustomData> customData = (List<CustomData>) readObject("customData");
+        List<CustomData> customData = (List<CustomData>) resources.getObject("customData");
         for (CustomData data : customData)
         {
             if (data.osConstraints == null || OsConstraintHelper.oneMatchesCurrentSystem(data.osConstraints))
@@ -145,35 +140,4 @@ public class CustomDataLoader
         listeners.add(listener);
     }
 
-    /**
-     * Reads an object given its resource path.
-     *
-     * @param path the object's resource path
-     * @return the object
-     * @throws IzPackException if the object cannot be read
-     */
-    private Object readObject(String path)
-    {
-        Object model;
-        ObjectInputStream objIn = null;
-        try
-        {
-            InputStream inputStream = resources.getInputStream(path);
-            objIn = new ObjectInputStream(inputStream);
-            model = objIn.readObject();
-        }
-        catch (ClassNotFoundException exception)
-        {
-            throw new IzPackException(exception);
-        }
-        catch (IOException exception)
-        {
-            throw new IzPackException(exception);
-        }
-        finally
-        {
-            FileUtils.close(objIn);
-        }
-        return model;
-    }
 }

@@ -65,6 +65,16 @@ public interface Resources
     String getString(String name, String encoding, String defaultValue);
 
     /**
+     * Returns an object resource.
+     *
+     * @param name the resource name
+     * @return the object resource
+     * @throws ResourceNotFoundException if the resource cannot be found
+     * @throws ResourceException         if the resource cannot be retrieved
+     */
+    Object getObject(String name);
+
+    /**
      * Returns an {@code ImageIcon} resource.
      *
      * @param name         the resource name

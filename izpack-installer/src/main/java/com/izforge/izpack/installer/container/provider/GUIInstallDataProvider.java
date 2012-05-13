@@ -332,7 +332,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
      */
     private void loadGUIInstallData(GUIInstallData installData, Resources resources) throws Exception
     {
-        installData.guiPrefs = (GUIPrefs) readObject("GUIPrefs", resources);
+        installData.guiPrefs = (GUIPrefs) resources.getObject("GUIPrefs");
     }
 
 

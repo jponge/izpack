@@ -3,16 +3,16 @@ package com.izforge.izpack.core.resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 
-import org.apache.tools.ant.util.FileUtils;
-
 import com.izforge.izpack.api.exception.ResourceException;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.resource.Resources;
+import com.izforge.izpack.util.file.FileUtils;
 
 
 /**
@@ -137,6 +137,37 @@ public abstract class AbstractResources implements Resources
         catch (Exception exception)
         {
             result = defaultValue;
+        }
+        return result;
+    }
+
+    /**
+     * Returns an object resource.
+     *
+     * @param name the resource name
+     * @return the object resource
+     * @throws ResourceNotFoundException if the resource cannot be found
+     * @throws ResourceException         if the resource cannot be retrieved
+     */
+    @Override
+    public Object getObject(String name)
+    {
+        Object result;
+        InputStream in = getInputStream(name);
+        ObjectInputStream objectIn = null;
+        try
+        {
+            objectIn = new ObjectInputStream(in);
+            result = objectIn.readObject();
+        }
+        catch (Exception exception)
+        {
+            throw new ResourceException("Failed to read resource: " + name, exception);
+        }
+        finally
+        {
+            FileUtils.close(objectIn);
+            FileUtils.close(in);
         }
         return result;
     }

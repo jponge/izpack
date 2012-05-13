@@ -2,8 +2,6 @@ package com.izforge.izpack.uninstaller.container;
 
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.util.List;
 
 import org.picocontainer.injectors.Provider;
@@ -38,13 +36,8 @@ public class UninstallerListenersProvider implements Provider
             throws IOException, ClassNotFoundException
     {
         UninstallerListeners result = new UninstallerListeners();
+        List<String> classNames = (List<String>) resources.getObject("uninstallerListeners");
 
-        InputStream in;
-        ObjectInputStream objIn;
-        in = resources.getInputStream("uninstallerListeners");
-        objIn = new ObjectInputStream(in);
-        List<String> classNames = (List<String>) objIn.readObject();
-        objIn.close();
         for (String className : classNames)
         {
             UninstallerListener listener = factory.create(className, UninstallerListener.class);

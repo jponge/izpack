@@ -23,14 +23,13 @@ package com.izforge.izpack.core.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.Properties;
 
 import javax.swing.ImageIcon;
 
-import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.exception.ResourceException;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 
 /**
@@ -298,8 +297,7 @@ public class ResourceManager extends AbstractResources
      */
     public InputStream getLangPack(String localeISO3)
     {
-        return ClassLoader.getSystemResourceAsStream(getResourceBasePath() + "/langpacks/"
-                                                             + localeISO3 + ".xml");
+        return getInputStream("langpacks/" + localeISO3 + ".xml");
     }
 
     /**
@@ -316,24 +314,13 @@ public class ResourceManager extends AbstractResources
      * Returns an ArrayList of the available langpacks ISO3 codes.
      *
      * @return The available langpacks list.
-     * @throws Exception Description of the Exception
+     * @throws ResourceNotFoundException if the langpacks resource cannot be found
+     * @throws ResourceException         if the langpacks resource cannot be retrieved
      */
+    @SuppressWarnings("unchecked")
     public List<String> getAvailableLangPacks()
     {
-        List<String> available;
-        try
-        {
-            // We read from the langpacks file in the jar
-            InputStream in = getInputStream("langpacks.info");
-            ObjectInputStream objIn = new ObjectInputStream(in);
-            available = (List<String>) objIn.readObject();
-            objIn.close();
-        }
-        catch (Exception e)
-        {
-            throw new IzPackException("Could not read the langpack", e);
-        }
-        return available;
+        return (List<String>) getObject("langpacks.info");
     }
 
     /**

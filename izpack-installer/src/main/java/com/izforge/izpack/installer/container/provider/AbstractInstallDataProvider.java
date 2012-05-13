@@ -28,6 +28,7 @@ import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.api.data.Variables;
+import com.izforge.izpack.api.exception.ResourceException;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.core.resource.ResourceManager;
@@ -65,13 +66,14 @@ public abstract class AbstractInstallDataProvider implements Provider
      * @param housekeeper the housekeeper for cleaning up temporary files
      * @throws IOException            for any I/O error
      * @throws ClassNotFoundException if a serialized object's class cannot be found
+     * @throws ResourceException      for any resource error
      */
     @SuppressWarnings("unchecked")
     protected void loadInstallData(AutomatedInstallData installData, Resources resources, Housekeeper housekeeper)
             throws IOException, ClassNotFoundException
     {
         // We load the Info data
-        Info info = (Info) readObject("info", resources);
+        Info info = (Info) resources.getObject("info");
 
         // We put the Info data as variables
         installData.setVariable(ScriptParserConstant.APP_NAME, info.getAppName());
@@ -104,7 +106,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         }
 
         // We read the panels order data
-        List<Panel> panelsOrder = (List<Panel>) readObject("panelsOrder", resources);
+        List<Panel> panelsOrder = (List<Panel>) resources.getObject("panelsOrder");
 
         // We read the packs data
         InputStream in = resources.getInputStream("packs.info");
@@ -163,7 +165,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         }
 
         // We load the variables
-        Properties properties = (Properties) readObject("vars", resources);
+        Properties properties = (Properties) resources.getObject("vars");
         if (properties != null)
         {
             Set<String> vars = properties.stringPropertyNames();
@@ -347,7 +349,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         try
         {
             Map<String, List<DynamicVariable>> map
-                    = (Map<String, List<DynamicVariable>>) readObject("dynvariables", resources);
+                    = (Map<String, List<DynamicVariable>>) resources.getObject("dynvariables");
             // Initialize to prepare variable substitution on several attributes
             for (List<DynamicVariable> dynamicVariables : map.values())
             {
@@ -376,11 +378,9 @@ public abstract class AbstractInstallDataProvider implements Provider
     {
         try
         {
-            InputStream in = resources.getInputStream("dynconditions");
-            ObjectInputStream objIn = new ObjectInputStream(in);
-            installData.setDynamicinstallerrequirements(
-                    (List<DynamicInstallerRequirementValidator>) objIn.readObject());
-            objIn.close();
+            List<DynamicInstallerRequirementValidator> conditions
+                    = (List<DynamicInstallerRequirementValidator>) resources.getObject("dynconditions");
+            installData.setDynamicinstallerrequirements(conditions);
         }
         catch (Exception e)
         {
@@ -400,8 +400,8 @@ public abstract class AbstractInstallDataProvider implements Provider
     protected void loadInstallerRequirements(AutomatedInstallData installData, Resources resources)
             throws IOException, ClassNotFoundException
     {
-        List<InstallerRequirement> requirements = (List<InstallerRequirement>) readObject("installerrequirements",
-                                                                                          resources);
+        List<InstallerRequirement> requirements =
+                (List<InstallerRequirement>) resources.getObject("installerrequirements");
         installData.setInstallerrequirements(requirements);
     }
 
@@ -423,22 +423,4 @@ public abstract class AbstractInstallDataProvider implements Provider
         in.close();
     }
 
-    /**
-     * Helper to read an object resource.
-     *
-     * @param resourceId the resource identifier
-     * @param resources  the resources
-     * @return the corresponding object
-     * @throws IOException               for any I/O error
-     * @throws ClassNotFoundException    if a serialized object's class cannot be found
-     * @throws ResourceNotFoundException if the resource cannot be located
-     */
-    protected Object readObject(String resourceId, Resources resources) throws IOException, ClassNotFoundException
-    {
-        InputStream inputStream = resources.getInputStream(resourceId);
-        ObjectInputStream objIn = new ObjectInputStream(inputStream);
-        Object model = objIn.readObject();
-        objIn.close();
-        return model;
-    }
 }

@@ -1,7 +1,6 @@
 package com.izforge.izpack.installer.container.provider;
 
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -77,13 +76,7 @@ public class RulesProvider implements Provider
         Map<String, Condition> rules = null;
         try
         {
-            InputStream in = resources.getInputStream("rules");
-            if (in != null)
-            {
-                ObjectInputStream objIn = new ObjectInputStream(in);
-                rules = (Map) objIn.readObject();
-                objIn.close();
-            }
+            rules = (Map<String, Condition>) resources.getObject("rules");
         }
         catch (Exception exception)
         {
