@@ -55,12 +55,7 @@ public abstract class AutomatedInstallData
     private RulesEngine rules;
 
     /**
-     * The language code.
-     */
-    private String localeISO3;
-
-    /**
-     * The used locale.
+     * The locale.
      */
     private Locale locale;
 
@@ -127,7 +122,7 @@ public abstract class AutomatedInstallData
     /**
      * Custom data.
      */
-    private Map<String, List> customData;
+    private Map<String, List> customData = new HashMap<String, List>();
 
     /**
      * The variables.
@@ -196,7 +191,6 @@ public abstract class AutomatedInstallData
         setPanelsOrder(new ArrayList<Panel>());
         setXmlData(new XMLElementImpl("AutomatedInstallation"));
         setAttributes(new HashMap<String, Object>());
-        setCustomData(new HashMap<String, List>());
     }
 
     /**
@@ -336,12 +330,12 @@ public abstract class AutomatedInstallData
      * @param locale         Locale to set
      * @param localeDatabase database containing the desired locale
      */
+    @Deprecated
     public void setAndProcessLocal(String locale, LocaleDatabase localeDatabase)
     {
         // We add an xml data information
         getXmlData().setAttribute("langpack", locale);
         // We load the langpack
-        setLocaleISO3(locale);
         setVariable(ScriptParserConstant.ISO3_LANG, getLocaleISO3());
         this.messages = localeDatabase;
     }
@@ -359,12 +353,12 @@ public abstract class AutomatedInstallData
 
     public String getLocaleISO3()
     {
-        return localeISO3;
+        return (locale != null) ? locale.getISO3Language() : null;
     }
 
+    @Deprecated
     public void setLocaleISO3(String localeISO3)
     {
-        this.localeISO3 = localeISO3;
     }
 
     public Locale getLocale()
@@ -375,6 +369,19 @@ public abstract class AutomatedInstallData
     public void setLocale(Locale locale)
     {
         this.locale = locale;
+        String code = locale.getISO3Language();
+        getXmlData().setAttribute("langpack", code);
+        setVariable(ScriptParserConstant.ISO3_LANG, code);
+    }
+
+    /**
+     * Sets the localised messages.
+     *
+     * @param messages the localised messages
+     */
+    public void setMessages(Messages messages)
+    {
+        this.messages = messages;
     }
 
     /**
@@ -387,11 +394,13 @@ public abstract class AutomatedInstallData
         return messages;
     }
 
+    @Deprecated
     public LocaleDatabase getLangpack()
     {
         return (LocaleDatabase) messages;
     }
 
+    @Deprecated
     public void setLangpack(LocaleDatabase langpack)
     {
         this.messages = langpack;
@@ -502,11 +511,13 @@ public abstract class AutomatedInstallData
         this.xmlData = xmlData;
     }
 
+    @Deprecated
     public Map<String, List> getCustomData()
     {
         return customData;
     }
 
+    @Deprecated
     public void setCustomData(Map<String, List> customData)
     {
         this.customData = customData;

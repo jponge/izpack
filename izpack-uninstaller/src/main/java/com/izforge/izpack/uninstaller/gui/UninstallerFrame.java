@@ -46,7 +46,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.UIManager;
 
-import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.uninstaller.Destroyer;
@@ -72,9 +72,9 @@ public class UninstallerFrame extends JFrame
     private IconsDatabase icons;
 
     /**
-     * The language pack.
+     * The locale-specific messages.
      */
-    private LocaleDatabase langpack;
+    private Messages messages;
 
     /**
      * The target destroy checkbox.
@@ -124,21 +124,21 @@ public class UninstallerFrame extends JFrame
      * @param housekeeper the housekeeper
      * @param messages    the locale-specific messages
      */
-    public UninstallerFrame(Destroyer destroyer, InstallLog log, Housekeeper housekeeper, LocaleDatabase messages)
+    public UninstallerFrame(Destroyer destroyer, InstallLog log, Housekeeper housekeeper, Messages messages)
             throws Exception
     {
         super("IzPack - Uninstaller");
         this.destroyer = destroyer;
         this.log = log;
         this.housekeeper = housekeeper;
-        langpack = messages;
+        this.messages = messages;
 
         // Initializations
         icons = new IconsDatabase();
         loadIcons();
-        UIManager.put("OptionPane.yesButtonText", langpack.get("installer.yes"));
-        UIManager.put("OptionPane.noButtonText", langpack.get("installer.no"));
-        UIManager.put("OptionPane.cancelButtonText", langpack.get("installer.cancel"));
+        UIManager.put("OptionPane.yesButtonText", this.messages.get("installer.yes"));
+        UIManager.put("OptionPane.noButtonText", this.messages.get("installer.no"));
+        UIManager.put("OptionPane.cancelButtonText", this.messages.get("installer.cancel"));
 
         // Sets the frame icon
         setIconImage(icons.get("JFrameIcon").getImage());
@@ -197,7 +197,7 @@ public class UninstallerFrame extends JFrame
 
         // We put our components
 
-        JLabel warningLabel = new JLabel(langpack.get("uninstaller.warning"), icons
+        JLabel warningLabel = new JLabel(messages.get("uninstaller.warning"), icons
                 .get("warning"), JLabel.TRAILING);
         buildConstraints(gbConstraints, 0, 0, 2, 1, 1.0, 0.0);
         gbConstraints.anchor = GridBagConstraints.WEST;
@@ -205,7 +205,7 @@ public class UninstallerFrame extends JFrame
         layout.addLayoutComponent(warningLabel, gbConstraints);
         contentPane.add(warningLabel);
 
-        targetDestroyCheckbox = new JCheckBox(langpack.get("uninstaller.destroytarget")
+        targetDestroyCheckbox = new JCheckBox(messages.get("uninstaller.destroytarget")
                                                       + log.getInstallPath(), forceOptionState);
         buildConstraints(gbConstraints, 0, 1, 2, 1, 1.0, 0.0);
         layout.addLayoutComponent(targetDestroyCheckbox, gbConstraints);
@@ -217,12 +217,12 @@ public class UninstallerFrame extends JFrame
 
         progressBar = new JProgressBar();
         progressBar.setStringPainted(true);
-        progressBar.setString(langpack.get("InstallPanel.begin"));
+        progressBar.setString(messages.get("InstallPanel.begin"));
         buildConstraints(gbConstraints, 0, 2, 2, 1, 1.0, 0.0);
         layout.addLayoutComponent(progressBar, gbConstraints);
         contentPane.add(progressBar);
 
-        destroyButton = ButtonFactory.createButton(langpack.get("uninstaller.uninstall"),
+        destroyButton = ButtonFactory.createButton(messages.get("uninstaller.uninstall"),
                                                    icons.get("delete"), buttonsHColor);
         destroyButton.addActionListener(handler);
         buildConstraints(gbConstraints, 0, 3, 1, 1, 0.5, 0.0);
@@ -231,7 +231,7 @@ public class UninstallerFrame extends JFrame
         layout.addLayoutComponent(destroyButton, gbConstraints);
         contentPane.add(destroyButton);
 
-        quitButton = ButtonFactory.createButton(langpack.get("installer.quit"), icons
+        quitButton = ButtonFactory.createButton(messages.get("installer.quit"), icons
                 .get("stop"), buttonsHColor);
         quitButton.addActionListener(handler);
         buildConstraints(gbConstraints, 1, 3, 1, 1, 0.5, 0.0);

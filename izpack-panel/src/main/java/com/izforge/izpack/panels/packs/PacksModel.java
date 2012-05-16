@@ -39,10 +39,10 @@ import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackColor;
 import com.izforge.izpack.api.data.Variables;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
@@ -68,7 +68,7 @@ public class PacksModel extends AbstractTableModel
 
     private PacksPanelInterface panel;
 
-    private LocaleDatabase langpack;
+    private Messages messages;
 
     // This is used to represent the status of the checkbox
     private int[] checkValues;
@@ -163,7 +163,7 @@ public class PacksModel extends AbstractTableModel
         this.panel = panel;
         variables = idata.getVariables();
         variables.set(INITAL_PACKSELECTION, Boolean.toString(true));
-        langpack = panel.getLangpack();
+        messages = panel.getMessages();
         checkValues = new int[packs.size()];
         reverseDeps();
         initvalues();
@@ -457,9 +457,9 @@ public class PacksModel extends AbstractTableModel
             case 1:
 
                 Object name = null;
-                if (langpack != null && pack.getLangPackId() != null && !pack.getLangPackId().equals(""))
+                if (messages != null && pack.getLangPackId() != null && !pack.getLangPackId().equals(""))
                 {
-                    name = langpack.get(pack.getLangPackId());
+                    name = messages.get(pack.getLangPackId());
                 }
                 if (name == null || "".equals(name))
                 {

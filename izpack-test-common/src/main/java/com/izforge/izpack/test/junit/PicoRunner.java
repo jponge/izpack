@@ -119,7 +119,6 @@ public class PicoRunner extends BlockJUnit4ClassRunner
     @Override
     protected Object createTest() throws Exception
     {
-        System.err.println("Creating test for " + getTestClass().getName());
         containerClass = getTestClass().getJavaClass().getAnnotation(com.izforge.izpack.test.Container.class).value();
         SwingUtilities.invokeAndWait(new Runnable()
         {

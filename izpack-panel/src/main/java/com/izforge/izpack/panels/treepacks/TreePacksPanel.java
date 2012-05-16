@@ -34,6 +34,8 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.resource.Locales;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.gui.LabelFactory;
@@ -46,6 +48,7 @@ import com.izforge.izpack.panels.imgpacks.ImgPacksPanelAutomationHelper;
 import com.izforge.izpack.panels.packs.PacksModel;
 import com.izforge.izpack.panels.packs.PacksPanelInterface;
 import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.file.FileUtils;
 
 /**
  * Created by IntelliJ IDEA.
@@ -117,9 +120,9 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     protected boolean dependenciesExist = false;
 
     /**
-     * The packs locale database.
+     * The packs messages.
      */
-    private LocaleDatabase langpack = null;
+    private Messages messages;
 
     /**
      * The name of the XML file that specifies the panel langpack
@@ -143,39 +146,43 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
      * @param parent      the parent window
      * @param installData the installation data
      * @param resources   the resources
+     * @param locales     the supported locales
      * @param rules       the rules
      */
     public TreePacksPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
-                          RulesEngine rules)
+                          Locales locales, RulesEngine rules)
     {
         super(panel, parent, installData, resources);
         // Load langpack.
         try
         {
-            this.langpack = installData.getLangpack();
-            InputStream langPackStream = null;
+            messages = installData.getMessages();
             String webdir = installData.getInfo().getWebDirURL();
+            boolean fallback = true;
             if (webdir != null)
             {
+                InputStream langPackStream = null;
                 try
                 {
                     java.net.URL url = new java.net.URL(
                             webdir + "/langpacks/" + LANG_FILE_NAME + installData.getLocaleISO3());
                     langPackStream = new WebAccessor(null).openInputStream(url);
+                    messages = new LocaleDatabase(langPackStream, messages, locales);
+                    fallback = false;
                 }
                 catch (Exception e)
                 {
                     // just ignore this. we use the fallback below
                 }
+                finally
+                {
+                    FileUtils.close(langPackStream);
+                }
             }
-
-            if (langPackStream == null)
+            if (fallback)
             {
-                langPackStream = getResources().getInputStream(LANG_FILE_NAME);
+                messages = messages.newMessages(LANG_FILE_NAME);
             }
-
-            this.langpack.add(langPackStream);
-            langPackStream.close();
         }
         catch (Throwable t)
         {
@@ -186,6 +193,12 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         computePacks(installData.getAvailablePacks());
 
         this.rules = rules;
+    }
+
+    @Override
+    public Messages getMessages()
+    {
+        return messages;
     }
 
     /**
@@ -217,7 +230,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
     @Override
     public LocaleDatabase getLangpack()
     {
-        return (langpack);
+        return (LocaleDatabase) messages;
     }
 
     @Override
@@ -309,9 +322,9 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         // Internationalization code
         String packName = pack.getName();
         String key = pack.getLangPackId();
-        if (langpack != null && pack.getLangPackId() != null && !"".equals(pack.getLangPackId()))
+        if (messages != null && pack.getLangPackId() != null && !"".equals(pack.getLangPackId()))
         {
-            packName = langpack.get(key);
+            packName = messages.get(key);
         }
         if ("".equals(packName) || key == null || key.equals(packName))
         {
@@ -661,9 +674,9 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             Pack pack = idToPack.get(id);
             String desc = "";
             String key = pack.getLangPackId() + ".description";
-            if (langpack != null && pack.getLangPackId() != null && !"".equals(pack.getLangPackId()))
+            if (messages != null && pack.getLangPackId() != null && !"".equals(pack.getLangPackId()))
             {
-                desc = langpack.get(key);
+                desc = messages.get(key);
             }
             if ("".equals(desc) || key.equals(desc))
             {
@@ -688,7 +701,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             String list = "";
             if (dep != null)
             {
-                list += (langpack == null) ? "Dependencies: " : langpack.get("PacksPanel.dependencies");
+                list += (messages == null) ? "Dependencies: " : messages.get("PacksPanel.dependencies");
             }
             for (int j = 0; dep != null && j < dep.size(); j++)
             {
@@ -701,7 +714,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             }
 
             // add the list of the packs to be excluded
-            String excludeslist = (langpack == null) ? "Excludes: " : langpack.get("PacksPanel.excludes");
+            String excludeslist = (messages == null) ? "Excludes: " : messages.get("PacksPanel.excludes");
             int numexcludes = 0;
             int i = getRowIndex(pack);
             if (pack.getExcludeGroup() != null)

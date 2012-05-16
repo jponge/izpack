@@ -17,9 +17,9 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;
 
 import com.izforge.izpack.api.data.GUIPrefs;
+import com.izforge.izpack.api.resource.Locales;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.core.data.DefaultVariables;
-import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -73,19 +73,20 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider
     }
 
 
-    public GUIInstallData provide(ResourceManager resourceManager, DefaultVariables variables, Housekeeper housekeeper)
+    public GUIInstallData provide(Resources resources, Locales locales, DefaultVariables variables,
+                                  Housekeeper housekeeper)
             throws Exception
     {
         final GUIInstallData guiInstallData = new GUIInstallData(variables);
         // Loads the installation data
-        loadInstallData(guiInstallData, resourceManager, housekeeper);
-        loadGUIInstallData(guiInstallData, resourceManager);
-        loadInstallerRequirements(guiInstallData, resourceManager);
-        loadDynamicVariables(variables, guiInstallData, resourceManager);
-        loadDynamicConditions(guiInstallData, resourceManager);
-        loadDefaultLocale(guiInstallData, resourceManager);
+        loadInstallData(guiInstallData, resources, housekeeper);
+        loadGUIInstallData(guiInstallData, resources);
+        loadInstallerRequirements(guiInstallData, resources);
+        loadDynamicVariables(variables, guiInstallData, resources);
+        loadDynamicConditions(guiInstallData, resources);
+        loadDefaultLocale(guiInstallData, locales);
         // Load custom langpack if exist.
-        addCustomLangpack(guiInstallData, resourceManager);
+        addCustomLangpack(guiInstallData, locales);
         loadLookAndFeel(guiInstallData);
         if (UIManager.getColor("Button.background") != null)
         {

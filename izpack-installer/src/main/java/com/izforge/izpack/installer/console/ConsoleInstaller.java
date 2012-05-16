@@ -24,7 +24,6 @@ package com.izforge.izpack.installer.console;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -32,13 +31,10 @@ import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info;
-import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
@@ -106,9 +102,8 @@ public class ConsoleInstaller extends InstallerBase
      * Constructs a <tt>ConsoleInstaller</tt>
      *
      * @param factory             the factory to create panels with
-     * @param installData         the installation date
+     * @param installData         the installation data
      * @param rules               the rules engine
-     * @param resourceManager     the resources
      * @param requirements        the installation requirements
      * @param uninstallDataWriter the uninstallation data writer
      * @param console             the console
@@ -116,24 +111,13 @@ public class ConsoleInstaller extends InstallerBase
      * @throws IzPackException for any IzPack error
      */
     public ConsoleInstaller(ObjectFactory factory, AutomatedInstallData installData, RulesEngine rules,
-                            ResourceManager resourceManager, RequirementsChecker requirements,
-                            UninstallDataWriter uninstallDataWriter, Console console, Housekeeper housekeeper)
+                            RequirementsChecker requirements, UninstallDataWriter uninstallDataWriter, Console console,
+                            Housekeeper housekeeper)
     {
-        super(resourceManager);
         this.factory = new PanelConsoleFactory(factory);
-        this.requirements = requirements;
         this.installData = installData;
         this.rules = rules;
-        // Fallback: choose the first listed language pack if not specified via commandline
-        if (installData.getLocaleISO3() == null)
-        {
-            installData.setLocaleISO3(resourceManager.getAvailableLangPacks().get(0));
-        }
-
-        InputStream in = resourceManager.getInputStream("langpacks/" + this.installData.getLocaleISO3() + ".xml");
-        installData.setLangpack(new LocaleDatabase(in));
-        installData.setVariable(ScriptParserConstant.ISO3_LANG, installData.getLocaleISO3());
-        resourceManager.setLocale(installData.getLocaleISO3());
+        this.requirements = requirements;
         this.objectFactory = factory;
         this.uninstallDataWriter = uninstallDataWriter;
         this.console = console;
@@ -214,11 +198,6 @@ public class ConsoleInstaller extends InstallerBase
                 }
             }
         }
-    }
-
-    public void setLangCode(String langCode)
-    {
-        installData.setLocaleISO3(langCode);
     }
 
     /**

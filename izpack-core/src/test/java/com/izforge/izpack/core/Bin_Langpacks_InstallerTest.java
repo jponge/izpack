@@ -19,7 +19,9 @@
 
 package com.izforge.izpack.core;
 
-import com.izforge.izpack.api.data.LocaleDatabase;
+import java.io.File;
+import java.io.FileInputStream;
+
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.experimental.theories.DataPoints;
@@ -27,9 +29,10 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.rules.ErrorCollector;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
-import java.io.File;
-import java.io.FileInputStream;
+import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.resource.Locales;
 
 /**
  * A JUnit TestCase to check completeness of the all the language packs
@@ -91,13 +94,14 @@ public class Bin_Langpacks_InstallerTest
     @Theory
     public void testLangs(String lang) throws Exception
     {
-        Bin_Langpacks_InstallerTest.reference = new LocaleDatabase(new FileInputStream(basePath + referencePack));
+        Bin_Langpacks_InstallerTest.reference = new LocaleDatabase(new FileInputStream(basePath + referencePack),
+                                                                   Mockito.mock(Locales.class));
         this.checkLangpack(lang);
     }
 
     private void checkLangpack(String langpack) throws Exception
     {
-        this.check = new LocaleDatabase(new FileInputStream(basePath + langpack));
+        this.check = new LocaleDatabase(new FileInputStream(basePath + langpack), Mockito.mock(Locales.class));
         // all keys in the English langpack should be present in the foreign langpack
         for (String id : reference.keySet())
         {

@@ -33,7 +33,6 @@ import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +63,7 @@ import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.factory.ObjectFactory;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.gui.LabelFactory;
@@ -150,9 +150,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     protected boolean dependenciesExist = false;
 
     /**
-     * The packs locale database.
+     * The packs messages.
      */
-    private LocaleDatabase langpack = null;
+    private Messages messages = null;
 
     /**
      * The name of the XML file that specifies the panel langpack
@@ -184,17 +184,16 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         super(panel, parent, installData, resources);
         this.rules = rules;
         this.factory = factory;
-        // Load langpack.
+        this.debugger = parent.getDebugger();
+
         try
         {
-            this.langpack = installData.getLangpack();
-            InputStream inputStream = getResources().getInputStream(LANG_FILE_NAME);
-            this.langpack.add(inputStream);
-            this.debugger = parent.getDebugger();
+            messages = installData.getMessages().newMessages(LANG_FILE_NAME);
         }
         catch (Throwable t)
         {
             logger.log(Level.WARNING, "Error loading language pack" + t.toString(), t);
+            messages = installData.getMessages();
         }
         // init the map
         computePacks(installData.getAvailablePacks());
@@ -224,10 +223,16 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      */
     abstract protected void createNormalLayout();
 
+    public Messages getMessages()
+    {
+        return messages;
+    }
+
+    @Deprecated
     @Override
     public LocaleDatabase getLangpack()
     {
-        return (langpack);
+        return (LocaleDatabase) messages;
     }
 
     @Override
@@ -332,9 +337,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             Pack pack = this.packsModel.getPackAtRow(selectedRow);
             String desc = "";
             String key = pack.getLangPackId() + ".description";
-            if (langpack != null && pack.getLangPackId() != null && !"".equals(pack.getLangPackId()))
+            if (messages != null && pack.getLangPackId() != null && !"".equals(pack.getLangPackId()))
             {
-                desc = langpack.get(key);
+                desc = messages.get(key);
             }
             if ("".equals(desc) || key.equals(desc))
             {
@@ -352,7 +357,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             String list = "";
             if (dep != null)
             {
-                list += (langpack == null) ? "Dependencies: " : langpack.get("PacksPanel.dependencies");
+                list += (messages == null) ? "Dependencies: " : messages.get("PacksPanel.dependencies");
             }
             for (int j = 0; dep != null && j < dep.size(); j++)
             {
@@ -365,7 +370,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             }
 
             // add the list of the packs to be excluded
-            String excludeslist = (langpack == null) ? "Excludes: " : langpack.get("PacksPanel.excludes");
+            String excludeslist = (messages == null) ? "Excludes: " : messages.get("PacksPanel.excludes");
             int numexcludes = 0;
             if (pack.getExcludeGroup() != null)
             {
@@ -415,9 +420,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         // Internationalization code
         String packName = pack.getName();
         String key = pack.getLangPackId();
-        if (langpack != null && pack.getLangPackId() != null && !"".equals(pack.getLangPackId()))
+        if (messages != null && pack.getLangPackId() != null && !"".equals(pack.getLangPackId()))
         {
-            packName = langpack.get(key);
+            packName = messages.get(key);
         }
         if ("".equals(packName) || key == null || key.equals(packName))
         {
@@ -672,7 +677,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         {
             Map<String, Pack> installedpacks = packsModel.getInstalledpacks();
             retval.append("<br><b>");
-            retval.append(langpack.get("PacksPanel.installedpacks.summarycaption"));
+            retval.append(messages.get("PacksPanel.installedpacks.summarycaption"));
             retval.append("</b>");
             retval.append("<br>");
             for (String key : installedpacks.keySet())

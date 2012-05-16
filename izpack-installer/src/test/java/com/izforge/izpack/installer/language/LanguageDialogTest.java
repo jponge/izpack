@@ -1,17 +1,18 @@
 package com.izforge.izpack.installer.language;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.fest.swing.fixture.DialogFixture;
 import org.hamcrest.core.Is;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.container.Container;
-import com.izforge.izpack.core.resource.ResourceManager;
+import com.izforge.izpack.api.resource.Locales;
 import com.izforge.izpack.installer.container.TestLanguageContainer;
 import com.izforge.izpack.test.junit.PicoRunner;
 
@@ -24,14 +25,13 @@ public class LanguageDialogTest
 {
     private Container installerContainer;
     private DialogFixture dialogFixture;
-    private ResourceManager resourceManager;
+    private Locales locales;
 
-    public LanguageDialogTest(Container installerContainer, DialogFixture dialogFixture,
-                              ResourceManager resourceManager)
+    public LanguageDialogTest(Container installerContainer, DialogFixture dialogFixture, Locales locales)
     {
         this.installerContainer = installerContainer;
         this.dialogFixture = dialogFixture;
-        this.resourceManager = resourceManager;
+        this.locales = locales;
     }
 
     @After
@@ -52,7 +52,8 @@ public class LanguageDialogTest
         assertThat(dialogFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents(), Is.is(new String[]{"eng", "fra"}));
         dialogFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).selectItem(1);
         dialogFixture.button(GuiId.BUTTON_LANG_OK.id).click();
-        Mockito.verify(resourceManager).setLocale("fra");
+        assertNotNull(locales.getLocale());
+        assertEquals("fra", locales.getLocale().getISO3Language());
     }
 
 

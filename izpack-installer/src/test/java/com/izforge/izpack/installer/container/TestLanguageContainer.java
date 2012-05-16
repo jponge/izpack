@@ -20,6 +20,7 @@ import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.data.DefaultVariables;
+import com.izforge.izpack.core.resource.DefaultLocales;
 import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.container.provider.IconsProvider;
@@ -60,6 +61,9 @@ public class TestLanguageContainer extends AbstractContainer
         container.addComponent(System.getProperties());
 
         ResourceManager resourceManager = Mockito.mock(ResourceManager.class);
+        Mockito.when(resourceManager.getObject("langpacks.info")).thenReturn(Arrays.asList("eng", "fra"));
+
+        DefaultLocales locales = new DefaultLocales(resourceManager);
         container.addComponent(Variables.class, DefaultVariables.class)
                 .addComponent(resourceManager)
                 .addComponent(Mockito.mock(RequirementsChecker.class))
@@ -68,6 +72,7 @@ public class TestLanguageContainer extends AbstractContainer
                 .addComponent(Mockito.mock(AutomatedInstaller.class))
                 .addComponent(Mockito.mock(PathResolver.class))
                 .addComponent(Mockito.mock(PanelManager.class))
+                .addComponent(locales)
                 .addComponent(DialogFixture.class, DialogFixture.class, new ComponentParameter(LanguageDialog.class))
                 .addComponent(Container.class, this)
                 .as(Characteristics.USE_NAMES).addComponent(LanguageDialog.class)
@@ -77,7 +82,6 @@ public class TestLanguageContainer extends AbstractContainer
                 .addAdapter(new ProviderAdapter(new GUIInstallDataMockProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()));
 
-        Mockito.when(resourceManager.getAvailableLangPacks()).thenReturn(Arrays.asList("eng", "fra"));
         ImageIcon engFlag = new ImageIcon(getClass().getResource("/com/izforge/izpack/bin/langpacks/flags/eng.gif"));
         ImageIcon frFlag = new ImageIcon(getClass().getResource("/com/izforge/izpack/bin/langpacks/flags/fra.gif"));
         Mockito.when(resourceManager.getImageIcon("flag.eng")).thenReturn(engFlag);

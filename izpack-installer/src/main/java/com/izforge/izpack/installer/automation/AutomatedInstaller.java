@@ -24,9 +24,9 @@ package com.izforge.izpack.installer.automation;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,18 +37,16 @@ import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.Info;
-import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.ScriptParserConstant;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.installer.DataValidator.Status;
+import com.izforge.izpack.api.resource.Locales;
 import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.console.ConsolePanelAutomationHelper;
@@ -99,6 +97,11 @@ public class AutomatedInstaller extends InstallerBase
     private Variables variables;
 
     /**
+     * The supported locales.
+     */
+    private final Locales locales;
+
+    /**
      * The factory for {@link DataValidator} and {@link PanelAction} instances.
      */
     private final ObjectFactory factory;
@@ -112,19 +115,19 @@ public class AutomatedInstaller extends InstallerBase
      * Constructs an <tt>AutomatedInstaller</tt>.
      *
      * @param installData         the installation data
-     * @param resourceManager     the resources
+     * @param locales             the supported locales
      * @param requirements        the installation requirements checker
      * @param uninstallDataWriter the uninstallation data writer
      * @param variables           the variables
      * @param factory             the factory for {@link DataValidator} and {@link PanelAction} instances
      * @param housekeeper         the house-keeper
      */
-    public AutomatedInstaller(AutomatedInstallData installData, ResourceManager resourceManager,
-                              RequirementsChecker requirements, UninstallDataWriter uninstallDataWriter,
-                              Variables variables, ObjectFactory factory, Housekeeper housekeeper)
+    public AutomatedInstaller(AutomatedInstallData installData, Locales locales, RequirementsChecker requirements,
+                              UninstallDataWriter uninstallDataWriter, Variables variables, ObjectFactory factory,
+                              Housekeeper housekeeper)
     {
-        super(resourceManager);
         this.installData = installData;
+        this.locales = locales;
         this.requirements = requirements;
         this.uninstallDataWriter = uninstallDataWriter;
 
@@ -148,13 +151,11 @@ public class AutomatedInstaller extends InstallerBase
         installData.setXmlData(getXMLData(input));
 
         // Loads the langpack
-        installData.setLocaleISO3(installData.getXmlData().getAttribute("langpack", "eng"));
-        InputStream in = getResourceManager().getLangPack(installData.getLocaleISO3());
-        installData.setLangpack(new LocaleDatabase(in));
-        installData.setVariable(ScriptParserConstant.ISO3_LANG, installData.getLocaleISO3());
+        String code = installData.getXmlData().getAttribute("langpack", "eng");
+        Locale locale = locales.getLocale(code);
+        installData.setLocale(locale);
+        installData.setMessages(locales.getMessages());
         installData.setMediaPath(mediaPath);
-
-        getResourceManager().setLocale(installData.getLocaleISO3());
     }
 
     /**

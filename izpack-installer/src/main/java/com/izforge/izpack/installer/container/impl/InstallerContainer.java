@@ -1,5 +1,6 @@
 package com.izforge.izpack.installer.container.impl;
 
+import java.util.Locale;
 import java.util.Properties;
 
 import org.picocontainer.MutablePicoContainer;
@@ -11,6 +12,8 @@ import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.resource.Locales;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.PlatformProvider;
@@ -21,6 +24,7 @@ import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.core.rules.ConditionContainer;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.base.InstallDataConfiguratorWithRules;
+import com.izforge.izpack.installer.container.provider.LocalesProvider;
 import com.izforge.izpack.installer.container.provider.RulesProvider;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
@@ -48,6 +52,26 @@ public abstract class InstallerContainer extends AbstractContainer
 {
 
     /**
+     * Sets the locale.
+     *
+     * @param code the locale ISO language code
+     * @throws IzPackException if the locale isn't supported
+     */
+    public void setLocale(String code)
+    {
+        Locales locales = getComponent(Locales.class);
+        Locale locale = locales.getLocale(code);
+        if (locale != null)
+        {
+            locales.setLocale(locale);
+        }
+        else
+        {
+            throw new IzPackException("Unsupported locale:" + code);
+        }
+    }
+
+    /**
      * Invoked by {@link #initialise} to fill the container.
      *
      * @param container the underlying container
@@ -72,6 +96,7 @@ public abstract class InstallerContainer extends AbstractContainer
     {
         pico.addAdapter(new ProviderAdapter(new RulesProvider()));
         pico.addAdapter(new ProviderAdapter(new PlatformProvider()));
+        pico.addAdapter(new ProviderAdapter(new LocalesProvider()));
 
         addComponent(InstallDataConfiguratorWithRules.class);
         addComponent(InstallerRequirementChecker.class);

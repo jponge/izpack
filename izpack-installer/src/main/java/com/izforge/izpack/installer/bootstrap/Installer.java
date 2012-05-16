@@ -247,8 +247,11 @@ public class Installer
     private void launchConsoleInstaller(int consoleAction, String path, String langCode, String mediaDir)
     {
         InstallerContainer container = new ConsoleInstallerContainer();
+        if (langCode != null)
+        {
+            container.setLocale(langCode);
+        }
         ConsoleInstaller consoleInstaller = container.getComponent(ConsoleInstaller.class);
-        consoleInstaller.setLangCode(langCode);
         consoleInstaller.setMediaPath(mediaDir);
         consoleInstaller.run(consoleAction, path);
     }

@@ -49,9 +49,9 @@ import javax.swing.text.JTextComponent;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.rules.process.ExistsCondition;
@@ -301,7 +301,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
      */
     private List<TextValuePair> entries = new ArrayList<TextValuePair>();
 
-    private LocaleDatabase langpack = null;
+    private Messages messages = null;
 
     // Used for dynamic controls to skip content validation unless the user
     // really clicks "Next"
@@ -367,12 +367,11 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // ----------------------------------------------------
         // get a locale database
         // ----------------------------------------------------
+        messages = installData.getMessages();
         try
         {
-            this.langpack = (LocaleDatabase) installData.getLangpack().clone();
-
             String resource = LANG_FILE_NAME + "_" + this.installData.getLocaleISO3();
-            this.langpack.add(getResources().getInputStream(resource));
+            messages = messages.newMessages(resource);
         }
         catch (ResourceNotFoundException e)
         {
@@ -393,8 +392,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
         catch (Throwable exception)
         {
-            // log the problem
-            exception.printStackTrace();
+            logger.log(Level.WARNING, exception.getMessage(), exception);
         }
 
         // ----------------------------------------------------
@@ -1449,9 +1447,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
         String key = element.getAttribute(ICON_KEY);
         String text = null;
-        if ((key != null) && (langpack != null))
+        if ((key != null) && (messages != null))
         {
-            text = langpack.get(key);
+            text = messages.get(key);
         }
 
         return (text);
@@ -3201,9 +3199,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         String key = element.getAttribute(KEY);
         String text = null;
 
-        if ((key != null) && (langpack != null))
+        if ((key != null) && (messages != null))
         {
-            text = langpack.get(key);
+            text = messages.get(key);
             if (text.equals(key))
             {
                 text = null;

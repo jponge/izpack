@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
-import com.izforge.izpack.core.resource.ResourceManager;
 
 /**
  * Common utility functions for the GUI and text installers. (Do not import swing/awt classes to
@@ -39,20 +38,6 @@ public abstract class InstallerBase
 
     private static final Logger logger = Logger.getLogger(InstallerBase.class.getName());
 
-    /**
-     * The resources.
-     */
-    private final ResourceManager resourceManager;
-
-    /**
-     * Abstract constructor which need resource manager
-     *
-     * @param resourceManager the resources
-     */
-    protected InstallerBase(ResourceManager resourceManager)
-    {
-        this.resourceManager = resourceManager;
-    }
 
     /**
      * Refreshes Dynamic Variables.
@@ -65,17 +50,6 @@ public abstract class InstallerBase
     {
         installdata.refreshVariables();
         logger.fine("Finished refreshing dynamic variables");
-
-    }
-
-    /**
-     * Returns the resources.
-     *
-     * @return the resources
-     */
-    protected ResourceManager getResourceManager()
-    {
-        return resourceManager;
     }
 
 }

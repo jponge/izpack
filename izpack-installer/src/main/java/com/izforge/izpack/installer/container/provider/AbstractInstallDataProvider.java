@@ -22,7 +22,6 @@ import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.Info.TempDir;
 import com.izforge.izpack.api.data.InstallerRequirement;
-import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.ScriptParserConstant;
@@ -30,8 +29,8 @@ import com.izforge.izpack.api.data.Value;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.ResourceException;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
+import com.izforge.izpack.api.resource.Locales;
 import com.izforge.izpack.api.resource.Resources;
-import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraintHelper;
@@ -202,17 +201,16 @@ public abstract class AbstractInstallDataProvider implements Provider
     }
 
     /**
-     * Add the contents of a custom langpack (if exist) to the previos loaded comman langpack. If
-     * not exist, trace an info and do nothing more.
+     * Add the contents of a custom langpack to the default langpack, if it exists.
      *
      * @param installData the install data to be used
      */
-    protected void addCustomLangpack(AutomatedInstallData installData, Resources resources)
+    protected void addCustomLangpack(AutomatedInstallData installData, Locales locales)
     {
         // We try to load and add a custom langpack.
         try
         {
-            installData.getLangpack().add(resources.getInputStream(LANG_FILE_NAME));
+            installData.getMessages().add(locales.getMessages(LANG_FILE_NAME));
             logger.fine("Found custom langpack for " + installData.getLocaleISO3());
         }
         catch (Throwable exception)
@@ -408,19 +406,19 @@ public abstract class AbstractInstallDataProvider implements Provider
     /**
      * Load a default locale in the installData
      *
-     * @param automatedInstallData The installData to fill
+     * @param installData the installation data
+     * @param locales     the supported locales
      * @throws IOException for any I/O error
      */
-    protected void loadDefaultLocale(AutomatedInstallData automatedInstallData, ResourceManager resources)
+    protected void loadDefaultLocale(AutomatedInstallData installData, Locales locales)
             throws IOException
     {
-        // Loads the suitable langpack
-        List<String> availableLangPacks = resources.getAvailableLangPacks();
-        String selectedPack = availableLangPacks.get(0);
-        InputStream in = resources.getInputStream("langpacks/" + selectedPack + ".xml");
-        automatedInstallData.setAndProcessLocal(selectedPack, new LocaleDatabase(in));
-        resources.setLocale(selectedPack);
-        in.close();
+        Locale locale = locales.getLocale();
+        if (locale != null)
+        {
+            installData.setLocale(locale);
+            installData.setMessages(locales.getMessages());
+        }
     }
 
 }

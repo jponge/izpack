@@ -14,6 +14,7 @@ import com.izforge.izpack.core.container.AbstractContainer;
 import com.izforge.izpack.core.container.PlatformProvider;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
+import com.izforge.izpack.core.resource.DefaultLocales;
 import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.uninstaller.Destroyer;
 import com.izforge.izpack.uninstaller.gui.UninstallerFrame;
@@ -58,6 +59,7 @@ public abstract class UninstallerContainer extends AbstractContainer
         addComponent(Container.class, this);
         addComponent(Properties.class);
         addComponent(ResourceManager.class);
+        addComponent(DefaultLocales.class);
         addComponent(Platforms.class);
         addComponent(ObjectFactory.class, DefaultObjectFactory.class);
         addComponent(InstallLog.class);
@@ -67,6 +69,6 @@ public abstract class UninstallerContainer extends AbstractContainer
 
         container.addAdapter(new ProviderAdapter(new PlatformProvider()));
         container.addAdapter(new ProviderAdapter(new UninstallerListenersProvider()));
-        container.addAdapter(new ProviderAdapter(new LocaleDatabaseProvider()));
+        container.addAdapter(new ProviderAdapter(new MessagesProvider()));
     }
 }

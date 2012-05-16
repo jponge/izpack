@@ -3,9 +3,9 @@ package com.izforge.izpack.uninstaller.gui;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Messages;
 
 /**
  * The destroyer handler.
@@ -18,9 +18,9 @@ public class GUIDestroyerHandler implements AbstractUIProgressHandler
 
     private UninstallerFrame uninstallerFrame;
 
-    private final LocaleDatabase messages;
+    private final Messages messages;
 
-    public GUIDestroyerHandler(UninstallerFrame uninstallerFrame, LocaleDatabase messages)
+    public GUIDestroyerHandler(UninstallerFrame uninstallerFrame, Messages messages)
     {
         this.uninstallerFrame = uninstallerFrame;
         this.messages = messages;

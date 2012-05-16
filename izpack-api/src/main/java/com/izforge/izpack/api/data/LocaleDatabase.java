@@ -21,6 +21,8 @@ package com.izforge.izpack.api.data;
 
 import java.io.InputStream;
 import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +31,8 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.XMLException;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.exception.ResourceException;
+import com.izforge.izpack.api.resource.Locales;
 import com.izforge.izpack.api.resource.Messages;
 
 /**
@@ -44,11 +47,13 @@ public class LocaleDatabase extends TreeMap<String, String> implements Messages
     /**
      * The directory where language packs are kept inside the installer jar file.
      */
+    @Deprecated
     public static final String LOCALE_DATABASE_DIRECTORY = "/langpacks/";
 
     /**
      * The suffix for language pack definitions (.xml).
      */
+    @Deprecated
     public static final String LOCALE_DATABASE_DEF_SUFFIX = ".xml";
 
     /*
@@ -56,7 +61,15 @@ public class LocaleDatabase extends TreeMap<String, String> implements Messages
      */
     private static final char TEMP_QUOTING_CHARACTER = '\uffff';
 
-    static final long serialVersionUID = 4941525634108401848L;
+    /**
+     * The parent messages. May be {@code null}.
+     */
+    private final Messages parent;
+
+    /**
+     * The locales.
+     */
+    private final Locales locales;
 
     /**
      * The logger.
@@ -64,15 +77,44 @@ public class LocaleDatabase extends TreeMap<String, String> implements Messages
     private static final Logger logger = Logger.getLogger(LocaleDatabase.class.getName());
 
     /**
-     * The constructor.
+     * Constructs a {@code LocaleDatabase}.
      *
-     * @param in An InputStream to read the translation from.
-     * @throws XMLException if the stream cannot be parsed
+     * @param in      the stream to read the translation from
+     * @param locales the supported locales
+     * @throws ResourceException if the stream is not an IzPack langpack file
      */
-    public LocaleDatabase(InputStream in)
+    public LocaleDatabase(InputStream in, Locales locales)
     {
-        super();
-        add(in);
+        this(in, null, locales);
+    }
+
+    /**
+     * Constructs a {@code LocaleDatabase}.
+     *
+     * @param parent  the parent messages. May be {@code null}
+     * @param locales the supported locales
+     */
+    public LocaleDatabase(Messages parent, Locales locales)
+    {
+        this(null, parent, locales);
+    }
+
+    /**
+     * Constructs a {@code LocaleDatabase}.
+     *
+     * @param in      the stream to read the translation from. May be {@code null}
+     * @param parent  the parent messages. May be {@code null}
+     * @param locales the supported locales
+     * @throws ResourceException if the stream is not an IzPack langpack file
+     */
+    public LocaleDatabase(InputStream in, Messages parent, Locales locales)
+    {
+        this.parent = parent;
+        this.locales = locales;
+        if (in != null)
+        {
+            add(in);
+        }
     }
 
     /**
@@ -80,20 +122,26 @@ public class LocaleDatabase extends TreeMap<String, String> implements Messages
      * pairs as declared by the DTD langpack.dtd.
      *
      * @param in an InputStream to read the translation from.
-     * @throws IzPackException if the stream is not an IzPack langpack file
-     * @throws XMLException    if the stream cannot be parsed
+     * @throws ResourceException if the stream is not an IzPack langpack file or cannot be read
      */
     public void add(InputStream in)
     {
-        // Initialises the parser
-        IXMLParser parser = new XMLParser();
-        // We get the data
-        IXMLElement data = parser.parse(in);
+        IXMLElement data;
+
+        try
+        {
+            IXMLParser parser = new XMLParser();
+            data = parser.parse(in);
+        }
+        catch (XMLException exception)
+        {
+            throw new ResourceException("Failed to read langpack stream", exception);
+        }
 
         // We check the data
         if (!"langpack".equalsIgnoreCase(data.getName()))
         {
-            throw new IzPackException("this is not an IzPack XML langpack file");
+            throw new ResourceException("Invalid IzPack XML langpack file");
         }
 
         // We fill the Hashtable
@@ -158,10 +206,54 @@ public class LocaleDatabase extends TreeMap<String, String> implements Messages
                 logger.log(Level.WARNING, "Failed to format pattern=" + pattern + ", for key=" + id, exception);
             }
         }
+        else if (parent != null)
+        {
+            result = parent.get(id, args);
+        }
         else
         {
             result = id;
         }
+        return result;
+    }
+
+    /**
+     * Adds messages.
+     * <p/>
+     * This merges the supplied messages with the current messages. If an existing message exists with the same
+     * identifier as that supplied, it will be replaced.
+     *
+     * @param messages the messages to add
+     */
+    @Override
+    public void add(Messages messages)
+    {
+        putAll(messages.getMessages());
+    }
+
+    /**
+     * Returns the messages.
+     *
+     * @return the message identifiers, and their corresponding formats
+     */
+    @Override
+    public Map<String, String> getMessages()
+    {
+        return Collections.unmodifiableMap(this);
+    }
+
+    /**
+     * Creates a new messages instance from the named resource that inherits the current messages.
+     *
+     * @param name the messages resource name
+     * @return the messages
+     */
+    @Override
+    public Messages newMessages(String name)
+    {
+        Messages child = locales.getMessages(name);
+        Messages result = new LocaleDatabase(this, locales);
+        result.add(child);
         return result;
     }
 
@@ -227,7 +319,7 @@ public class LocaleDatabase extends TreeMap<String, String> implements Messages
         // don't substitute quoted place holders '{0}'
         message = message.replace('\'', TEMP_QUOTING_CHARACTER);
 
-        message = MessageFormat.format(message, variables);
+        message = MessageFormat.format(message, (Object[]) variables);
 
         // replace all ' characters back
         return message.replace(TEMP_QUOTING_CHARACTER, '\'');

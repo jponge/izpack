@@ -23,6 +23,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+
+import com.izforge.izpack.api.resource.Locales;
 
 public class LocaleDatabaseTest
 {
@@ -32,7 +35,8 @@ public class LocaleDatabaseTest
     @Before
     public void setUp() throws Exception
     {
-        db = new LocaleDatabase(LocaleDatabaseTest.class.getResourceAsStream("testing-langpack.xml"));
+        db = new LocaleDatabase(LocaleDatabaseTest.class.getResourceAsStream("testing-langpack.xml"),
+                                Mockito.mock(Locales.class));
 
     }
 

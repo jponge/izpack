@@ -3,7 +3,6 @@ package com.izforge.izpack.installer.console;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.test.util.TestConsole;
@@ -22,23 +21,21 @@ public class TestConsoleInstaller extends ConsoleInstaller
     /**
      * Constructs a <tt>TestConsoleInstaller</tt>
      *
-     * @param factory         the object factory
-     * @param installData     the installation date
-     * @param rules           the rules engine
-     * @param resourceManager the resources
-     * @param requirements    the installation requirements
-     * @param writer          the uninstallation data writer
-     * @param console         the console
-     * @param housekeeper     the house-keeper
+     * @param factory      the object factory
+     * @param installData  the installation date
+     * @param rules        the rules engine
+     * @param requirements the installation requirements
+     * @param writer       the uninstallation data writer
+     * @param console      the console
+     * @param housekeeper  the house-keeper
      * @throws Exception for any error
      */
     public TestConsoleInstaller(ObjectFactory factory, AutomatedInstallData installData,
-                                RulesEngine rules, ResourceManager resourceManager,
-                                RequirementsChecker requirements, UninstallDataWriter writer, TestConsole console,
-                                Housekeeper housekeeper)
+                                RulesEngine rules, RequirementsChecker requirements, UninstallDataWriter writer,
+                                TestConsole console, Housekeeper housekeeper)
             throws Exception
     {
-        super(factory, installData, rules, resourceManager, requirements, writer, console, housekeeper);
+        super(factory, installData, rules, requirements, writer, console, housekeeper);
     }
 
     /**

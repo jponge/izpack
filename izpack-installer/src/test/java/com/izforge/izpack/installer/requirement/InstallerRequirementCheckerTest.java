@@ -9,11 +9,13 @@ import java.util.Map;
 
 import org.apache.tools.ant.filters.StringInputStream;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.handler.Prompt;
+import com.izforge.izpack.api.resource.Locales;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.data.DefaultVariables;
@@ -49,7 +51,7 @@ public class InstallerRequirementCheckerTest
         DefaultVariables variables = new DefaultVariables();
         installData = new InstallData(variables);
         installData.setInstallerrequirements(new ArrayList<InstallerRequirement>());
-        installData.setLangpack(new LocaleDatabase(new StringInputStream("<langpack/>")));
+        installData.setLangpack(new LocaleDatabase(new StringInputStream("<langpack/>"), Mockito.mock(Locales.class)));
         rules = new RulesEngineImpl(installData, null);
         variables.setRules(rules);
 

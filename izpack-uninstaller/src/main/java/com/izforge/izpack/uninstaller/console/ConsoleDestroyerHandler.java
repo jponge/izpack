@@ -1,8 +1,8 @@
 package com.izforge.izpack.uninstaller.console;
 
-import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.resource.Messages;
 
 /**
  * The destroyer handler.
@@ -14,10 +14,10 @@ public class ConsoleDestroyerHandler implements AbstractUIProgressHandler
     /**
      * The locale-specific messages.
      */
-    private final LocaleDatabase messages;
+    private final Messages messages;
 
 
-    public ConsoleDestroyerHandler(LocaleDatabase messages)
+    public ConsoleDestroyerHandler(Messages messages)
     {
         this.messages = messages;
     }

@@ -22,6 +22,7 @@
 package com.izforge.izpack.panels.packs;
 
 import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.installer.debugger.Debugger;
 
 /**
@@ -40,6 +41,9 @@ import com.izforge.izpack.installer.debugger.Debugger;
 public interface PacksPanelInterface
 {
 
+    public Messages getMessages();
+
+    @Deprecated
     public LocaleDatabase getLangpack();
 
     public long getBytes();
