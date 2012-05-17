@@ -27,8 +27,9 @@ import java.io.FileOutputStream;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Resources;
+import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.util.SummaryProcessor;
 import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.helper.SummaryProcessor;
 
 /**
  * Installer listener which writes the summary of all panels into the logfile which is defined by
@@ -59,34 +60,38 @@ public class SummaryLoggerInstallerListener extends SimpleInstallerListener
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception
     {
-        if (!getInstalldata().isInstallSuccess())
+        if (idata instanceof GUIInstallData)
         {
-            return;
-        }
-        // No logfile at automated installation because panels are not
-        // involved.
-        if (getInstalldata().getPanels() == null || getInstalldata().getPanels().size() < 1)
-        {
-            return;
-        }
-        String path = getInstalldata().getInfo().getSummaryLogFilePath();
-        if (path == null)
-        {
-            return;
-        }
-        path = IoHelper.translatePath(path, idata.getVariables());
-        File parent = new File(path).getParentFile();
+            GUIInstallData installData = (GUIInstallData) idata;
+            if (!installData.isInstallSuccess())
+            {
+                return;
+            }
+            // No logfile at automated installation because panels are not
+            // involved.
+            if (installData.getPanels().isEmpty())
+            {
+                return;
+            }
+            String path = installData.getInfo().getSummaryLogFilePath();
+            if (path == null)
+            {
+                return;
+            }
+            path = IoHelper.translatePath(path, idata.getVariables());
+            File parent = new File(path).getParentFile();
 
-        if (!parent.exists())
-        {
-            parent.mkdirs();
+            if (!parent.exists())
+            {
+                parent.mkdirs();
+            }
+
+            String summary = SummaryProcessor.getSummary(installData);
+            java.io.OutputStream out = new FileOutputStream(path);
+
+            out.write(summary.getBytes("utf-8"));
+            out.close();
         }
-
-        String summary = SummaryProcessor.getSummary(getInstalldata());
-        java.io.OutputStream out = new FileOutputStream(path);
-
-        out.write(summary.getBytes("utf-8"));
-        out.close();
     }
 
 }

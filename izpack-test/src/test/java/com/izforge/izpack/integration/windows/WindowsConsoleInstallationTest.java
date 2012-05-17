@@ -44,6 +44,7 @@ import com.izforge.izpack.util.PrivilegedRunner;
  * installation</li>
  * <li>The <em>Uninstall</em> entry is removed at uninstallation by {@link RegistryUninstallerListener}</li>
  * </ul>
+ * N
  *
  * @author Tim Anderson
  */

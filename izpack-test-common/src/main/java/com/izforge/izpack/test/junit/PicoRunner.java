@@ -5,6 +5,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
@@ -35,6 +37,11 @@ public class PicoRunner extends BlockJUnit4ClassRunner
     private Object currentTestInstance;
     private Class<? extends Container> containerClass;
     private Container containerInstance;
+
+    /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(PicoRunner.class.getName());
 
     public PicoRunner(Class<?> klass) throws InitializationError
     {
@@ -120,6 +127,7 @@ public class PicoRunner extends BlockJUnit4ClassRunner
     protected Object createTest() throws Exception
     {
         containerClass = getTestClass().getJavaClass().getAnnotation(com.izforge.izpack.test.Container.class).value();
+        logger.info("Creating test=" + getTestClass().getName());
         SwingUtilities.invokeAndWait(new Runnable()
         {
             public void run()
@@ -132,7 +140,7 @@ public class PicoRunner extends BlockJUnit4ClassRunner
                 }
                 catch (Exception e)
                 {
-                    e.printStackTrace();
+                    logger.log(Level.SEVERE, e.getMessage(), e);
                     throw new IzPackException(e);
                 }
             }

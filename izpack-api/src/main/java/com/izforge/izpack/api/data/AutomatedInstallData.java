@@ -85,11 +85,6 @@ public abstract class AutomatedInstallData
     private List<Pack> selectedPacks;
 
     /**
-     * The panels list.
-     */
-    private List panels;
-
-    /**
      * The panels order.
      */
     private List<Panel> panelsOrder;
@@ -187,7 +182,6 @@ public abstract class AutomatedInstallData
         this.variables = variables;
         setAvailablePacks(new ArrayList<Pack>());
         setSelectedPacks(new ArrayList<Pack>());
-        panels = new ArrayList();
         setPanelsOrder(new ArrayList<Panel>());
         setXmlData(new XMLElementImpl("AutomatedInstallation"));
         setAttributes(new HashMap<String, Object>());
@@ -444,11 +438,6 @@ public abstract class AutomatedInstallData
     public void setSelectedPacks(List<Pack> selectedPacks)
     {
         this.selectedPacks = selectedPacks;
-    }
-
-    public List getPanels()
-    {
-        return panels;
     }
 
     public List<Panel> getPanelsOrder()

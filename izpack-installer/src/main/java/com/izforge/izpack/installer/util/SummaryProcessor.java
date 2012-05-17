@@ -19,10 +19,10 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util.helper;
+package com.izforge.izpack.installer.util;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.installer.ISummarisable;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 /**
  * A helper class which creates a summary from all panels. This class calls all declared panels for
@@ -49,7 +49,7 @@ public class SummaryProcessor
     static
     {
         // Initialize HTML header and footer.
-        StringBuffer buffer = new StringBuffer(256);
+        StringBuilder buffer = new StringBuilder(256);
         buffer.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n").append(
                 "<html>\n" + "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">" +
                         "<head>\n<STYLE TYPE=\"text/css\" media=screen,print>\n").append(
@@ -67,13 +67,12 @@ public class SummaryProcessor
      * @param idata AutomatedInstallData which contains the panel references
      * @return a HTML formated string with the summary of all panels
      */
-    public static String getSummary(AutomatedInstallData idata)
+    public static String getSummary(GUIInstallData idata)
     {
-        StringBuffer buffer = new StringBuffer(2048);
+        StringBuilder buffer = new StringBuilder(2048);
         buffer.append(HTML_HEADER);
-        for (Object o : idata.getPanels())
+        for (ISummarisable panel : idata.getPanels())
         {
-            ISummarisable panel = (ISummarisable) o;
             String caption = panel.getSummaryCaption();
             String msg = panel.getSummaryBody();
             // If no caption or/and message, ignore it.

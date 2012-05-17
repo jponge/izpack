@@ -336,7 +336,7 @@ public class InstallerFrame extends JFrame implements InstallerView
 
         // We put the first panel
         installdata.setCurPanelNumber(0);
-        IzPanel panel_0 = (IzPanel) installdata.getPanels().get(0);
+        IzPanel panel_0 = installdata.getPanels().get(0);
         panelsContainer.add(panel_0);
 
         logger.fine("Building GUI. The panel list to display is " + installdata.getPanels());
@@ -599,8 +599,8 @@ public class InstallerFrame extends JFrame implements InstallerView
                 isBack = true;
             }
             panelsContainer.setVisible(false);
-            IzPanel newPanel = (IzPanel) installdata.getPanels().get(installdata.getCurPanelNumber());
-            IzPanel oldPanel = (IzPanel) installdata.getPanels().get(oldIndex);
+            IzPanel newPanel = installdata.getPanels().get(installdata.getCurPanelNumber());
+            IzPanel oldPanel = installdata.getPanels().get(oldIndex);
             showHelpButton(newPanel.canShowHelp());
             if (Debug.isTRACE())
             {
@@ -855,7 +855,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         // write.write(root);
         for (int i = 0; i < installdata.getPanels().size(); i++)
         {
-            IzPanel panel = (IzPanel) installdata.getPanels().get(i);
+            IzPanel panel = installdata.getPanels().get(i);
             panel.makeXMLData(installdata.getXmlData().getChildAtIndex(i));
         }
         writer.write(root);
@@ -1026,7 +1026,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public boolean canShow(int panelnumber)
     {
-        IzPanel panel = (IzPanel) installdata.getPanels().get(panelnumber);
+        IzPanel panel = installdata.getPanels().get(panelnumber);
         com.izforge.izpack.api.data.Panel panelmetadata = panel.getMetadata();
         String panelid = panelmetadata.getPanelid();
         logger.fine("Current Panel: " + panelid);
@@ -1084,7 +1084,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         {
             // We must trasfer all fields into the variables before
             // panelconditions try to resolve the rules based on unassigned vars.
-            final IzPanel panel = (IzPanel) installdata.getPanels().get(startPanel);
+            final IzPanel panel = installdata.getPanels().get(startPanel);
             panel.executePreValidationActions();
             boolean isValid = doValidation ? panel.panelValidated() : true;
             panel.executePostValidationActions();
@@ -1213,7 +1213,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     @Override
     public void showHelp()
     {
-        IzPanel izPanel = (IzPanel) installdata.getPanels().get(installdata.getCurPanelNumber());
+        IzPanel izPanel = installdata.getPanels().get(installdata.getCurPanelNumber());
         izPanel.showHelp();
     }
 

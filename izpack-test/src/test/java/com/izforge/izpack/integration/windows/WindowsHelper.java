@@ -1,14 +1,19 @@
 package com.izforge.izpack.integration.windows;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+
+import javax.swing.SwingUtilities;
+
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
 import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.os.ShellLink;
-
-import java.io.File;
-
-import static org.junit.Assert.*;
 
 /**
  * Helper for Windows tests.
@@ -35,21 +40,39 @@ public class WindowsHelper
      * @param description the expected shortcut description
      * @param librarian   the librarian
      * @return the shortcut
-     * @throws Exception for any error
      */
-    public static File checkShortcut(int linkType, int userType, String group, String name, File target,
-                                     String description, Librarian librarian) throws Exception
+    public static File checkShortcut(final int linkType, final int userType, final String group, final String name,
+                                     final File target, final String description, final Librarian librarian)
+            throws Exception
     {
-        ShellLink link = new ShellLink(linkType, userType, group, name, librarian);
-        assertEquals(linkType, link.getLinkType());
-        assertEquals(userType, link.getUserType());
-        assertEquals(target, new File(link.getTargetPath()));
-        assertEquals(description, link.getDescription());
+        final File[] shortcut = new File[1];
+        // TODO - need create ShellLink in the same thread each time, or it fails with a COM error.
+        SwingUtilities.invokeAndWait(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                ShellLink link;
+                try
+                {
+                    link = new ShellLink(linkType, userType, group, name, librarian);
+                }
+                catch (Exception exception)
+                {
+                    throw new IzPackException(exception);
+                }
+                assertEquals(linkType, link.getLinkType());
+                assertEquals(userType, link.getUserType());
+                assertEquals(target, new File(link.getTargetPath()));
+                assertEquals(description, link.getDescription());
 
-        // verify the shortcut file exists
-        File shortcut = new File(link.getFileName());
-        assertTrue(shortcut.exists());
-        return shortcut;
+                // verify the shortcut file exists
+                shortcut[0] = new File(link.getFileName());
+                assertTrue(shortcut[0].exists());
+
+            }
+        });
+        return shortcut[0];
     }
 
     /**
@@ -79,7 +102,8 @@ public class WindowsHelper
     {
         RegistryHandler registry = handler.getInstance();
         assertNotNull(registry);
-        if (!key.matches(".*\\\\Uninstall\\\\.+")) {
+        if (!key.matches(".*\\\\Uninstall\\\\.+"))
+        {
             // don't want to delete too much
             throw new IllegalArgumentException("Invalid key for deletion: " + key);
         }
