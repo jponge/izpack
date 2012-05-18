@@ -35,7 +35,6 @@ import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.gui.IzPanel;
-import com.izforge.izpack.installer.unpacker.IUnpacker;
 
 /**
  * The install panel class. Launches the actual installation job.
@@ -94,14 +93,11 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
      * @param parent      the parent window
      * @param installData the installation data
      * @param resources   the resources
-     * @param unpacker    the unpacker
      * @param log         the log
      */
-    public InstallPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
-                        IUnpacker unpacker, Log log)
+    public InstallPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources, Log log)
     {
         super(panel, parent, installData, new IzPanelLayout(log), resources);
-        unpacker.setHandler(this);
         this.tipLabel = LabelFactory.create(getString("InstallPanel.tip"), parent.getIcons().get(iconName), LEADING);
         add(this.tipLabel, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
         packOpLabel = LabelFactory.create(" ", LEADING);
@@ -211,7 +207,8 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
                 packOpLabel.setEnabled(false);
                 installData.setCanClose(true);
                 validated = true;
-                if (installData.getPanels().indexOf(this) != (installData.getPanels().size() - 1))
+                if (installData.isInstallSuccess() &&
+                        installData.getPanels().indexOf(InstallPanel.this) != (installData.getPanels().size() - 1))
                 {
                     parent.unlockNextButton();
                 }

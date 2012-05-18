@@ -63,7 +63,9 @@ public interface AbstractUIHandler
      *
      * @param title   The message title (used for dialog name, might not be displayed)
      * @param message The error message.
+     * @deprecated Inject the InstallerFrame to disable the next button
      */
+    @Deprecated
     public void emitErrorAndBlockNext(String title, String message);
 
     // constants for asking questions

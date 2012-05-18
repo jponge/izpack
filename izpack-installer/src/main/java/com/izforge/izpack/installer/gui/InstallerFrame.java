@@ -821,7 +821,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public void install(AbstractUIProgressHandler listener)
     {
-        // unpacker.setHandler(listener);
+        unpacker.setHandler(listener);
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
         unpackerthread.start();
     }
@@ -1071,7 +1071,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             // panelconditions try to resolve the rules based on unassigned vars.
             final IzPanel panel = installdata.getPanels().get(startPanel);
             panel.executePreValidationActions();
-            boolean isValid = doValidation ? panel.panelValidated() : true;
+            boolean isValid = !doValidation || panel.panelValidated();
             panel.executePostValidationActions();
 
             // check if we can display the next panel or if there was an error during actions that

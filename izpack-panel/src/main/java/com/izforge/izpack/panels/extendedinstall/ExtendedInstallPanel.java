@@ -26,7 +26,6 @@ import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
-import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.panels.install.InstallPanel;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 
@@ -49,13 +48,12 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
      * @param parent      the parent window
      * @param installData the installation data
      * @param resources   the resources
-     * @param unpacker    the unpacker
      * @param log         the log
      */
     public ExtendedInstallPanel(Panel panel, InstallerFrame parent, GUIInstallData installData, Resources resources,
-                                IUnpacker unpacker, Log log)
+                                Log log)
     {
-        super(panel, parent, installData, resources, unpacker, log);
+        super(panel, parent, installData, resources, log);
     }
 
     /*

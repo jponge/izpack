@@ -193,7 +193,7 @@ public class FileExecutor
      */
     public int executeCommand(String[] params, String[] output, String dir)
     {
-        StringBuffer retval = new StringBuffer();
+        StringBuilder retval = new StringBuilder();
         retval.append("executeCommand\n");
         if (params != null)
         {
@@ -205,7 +205,7 @@ public class FileExecutor
         }
         if (dir != null)
         {
-            retval.append("working dir: " + dir + "\n");
+            retval.append("working dir: ").append(dir).append("\n");
         }
         Process process = null;
         MonitorInputStream outMonitor = null;
@@ -392,7 +392,7 @@ public class FileExecutor
 
                     if (efile.onFailure == ExecutableFile.ABORT)
                     {
-                        handler.emitErrorAndBlockNext("File execution returned " + exitStatus, message);
+                        handler.emitError("File execution returned " + exitStatus, message);
                     }
                     else if (efile.onFailure == ExecutableFile.WARN)
                     {
@@ -407,7 +407,8 @@ public class FileExecutor
                     else
                     {
                         if (handler
-                                .askQuestion("Execution Failed", message + "\nContinue Installation?", AbstractUIHandler.CHOICES_YES_NO) == AbstractUIHandler.ANSWER_YES)
+                                .askQuestion("Execution Failed", message + "\nContinue Installation?",
+                                             AbstractUIHandler.CHOICES_YES_NO) == AbstractUIHandler.ANSWER_YES)
                         {
                             exitStatus = 0;
                         }
@@ -442,7 +443,7 @@ public class FileExecutor
      */
     private String buildClassPath(String targetFile) throws Exception
     {
-        StringBuffer classPath = new StringBuffer();
+        StringBuilder classPath = new StringBuilder();
         List<String> jars = new ArrayList<String>();
         String rawClassPath =
                 targetFile
@@ -459,15 +460,15 @@ public class FileExecutor
             if (file.isDirectory())
             {
                 String[] subDirJars = FileUtil.getFileNames(rawJar,
-                        new FilenameFilter()
-                        {
-                            @Override
-                            public boolean accept(File dir, String name)
-                            {
-                                return name.toLowerCase().endsWith(JAR_FILE_SUFFIX);
-                            }
+                                                            new FilenameFilter()
+                                                            {
+                                                                @Override
+                                                                public boolean accept(File dir, String name)
+                                                                {
+                                                                    return name.toLowerCase().endsWith(JAR_FILE_SUFFIX);
+                                                                }
 
-                        });
+                                                            });
                 if (subDirJars != null)
                 {
                     for (String subDirJar : subDirJars)
