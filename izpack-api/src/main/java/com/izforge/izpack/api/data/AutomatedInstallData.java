@@ -37,7 +37,7 @@ import com.izforge.izpack.api.rules.RulesEngine;
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public abstract class AutomatedInstallData
+public class AutomatedInstallData
 {
 
     // --- Static members -------------------------------------------------
@@ -237,7 +237,10 @@ public abstract class AutomatedInstallData
      * @param path the new install path
      * @see #getInstallPath
      */
-    public abstract void setInstallPath(String path);
+    public void setInstallPath(String path)
+    {
+        setVariable(INSTALL_PATH, path);
+    }
 
     /**
      * Returns the install path.
@@ -245,7 +248,10 @@ public abstract class AutomatedInstallData
      * @return the current install path or null if none set yet
      * @see #setInstallPath
      */
-    public abstract String getInstallPath();
+    public String getInstallPath()
+    {
+        return getVariable(INSTALL_PATH);
+    }
 
     /**
      * Sets the default install path.
@@ -253,7 +259,10 @@ public abstract class AutomatedInstallData
      * @param path the default install path
      * @see #getDefaultInstallPath
      */
-    public abstract void setDefaultInstallPath(String path);
+    public void setDefaultInstallPath(String path)
+    {
+        setVariable(DEFAULT_INSTALL_PATH, path);
+    }
 
     /**
      * Returns the default install path.
@@ -261,7 +270,10 @@ public abstract class AutomatedInstallData
      * @return the default install path or null if none set yet
      * @see #setDefaultInstallPath
      */
-    public abstract String getDefaultInstallPath();
+    public String getDefaultInstallPath()
+    {
+        return getVariable(DEFAULT_INSTALL_PATH);
+    }
 
     /**
      * Sets the media path for multi-volume installation.

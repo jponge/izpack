@@ -46,7 +46,7 @@ public class WindowsHelper
             throws Exception
     {
         final File[] shortcut = new File[1];
-        // TODO - need create ShellLink in the same thread each time, or it fails with a COM error.
+        // TODO - need to create ShellLink in the same thread each time, or it fails with a COM error.
         SwingUtilities.invokeAndWait(new Runnable()
         {
             @Override

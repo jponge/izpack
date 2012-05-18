@@ -62,6 +62,7 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.resource.Resources;
@@ -190,9 +191,10 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         {
             messages = installData.getMessages().newMessages(LANG_FILE_NAME);
         }
-        catch (Throwable t)
+        catch (ResourceNotFoundException exception)
         {
-            logger.log(Level.WARNING, "Error loading language pack" + t.toString(), t);
+            // no packs messages resource, so fall back to the default
+            logger.info(exception.getMessage());
             messages = installData.getMessages();
         }
         // init the map

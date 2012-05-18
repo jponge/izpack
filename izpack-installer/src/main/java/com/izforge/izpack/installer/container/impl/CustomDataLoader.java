@@ -80,7 +80,7 @@ public class CustomDataLoader
      * @throws InstallerException if an {@link InstallerListener} throws an exception
      */
     @SuppressWarnings("unchecked")
-    public void loadCustomData() throws InstallerException
+    public void loadCustomData()
     {
         List<CustomData> customData = (List<CustomData>) resources.getObject("customData");
         for (CustomData data : customData)
@@ -112,7 +112,7 @@ public class CustomDataLoader
      *
      * @throws InstallerException if a listener throws an exception
      */
-    private void notifyInstallerListeners() throws InstallerException
+    private void notifyInstallerListeners()
     {
         try
         {

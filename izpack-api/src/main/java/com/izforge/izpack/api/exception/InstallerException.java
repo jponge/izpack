@@ -26,18 +26,8 @@ package com.izforge.izpack.api.exception;
  *
  * @author Klaus Bartz
  */
-public class InstallerException extends Exception
+public class InstallerException extends IzPackException
 {
-
-    private static final long serialVersionUID = 3978984358113982004L;
-
-    /**
-     *
-     */
-    public InstallerException()
-    {
-        super();
-    }
 
     /**
      * @param message

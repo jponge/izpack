@@ -23,6 +23,7 @@ package com.izforge.izpack.event;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
@@ -35,6 +36,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.exception.NativeLibException;
+import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.exception.WrappedNativeLibException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Resources;
@@ -476,7 +478,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
         }
     }
 
-    private int resolveRoot(IXMLElement regEntry, String root) throws InstallerException
+    private int resolveRoot(IXMLElement regEntry, String root)
     {
         String root1 = substituter.substitute(root);
         Integer tmp = RegistryHandler.ROOT_KEY_MAP.get(root1);
@@ -501,7 +503,8 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
     /**
      * Registers the uninstaller.
      *
-     * @throws NativeLibException for any native library exception.
+     * @throws NativeLibException for any native library exception
+     * @throws InstallerException for any other error
      */
     private void registerUninstallKey() throws NativeLibException
     {
@@ -546,10 +549,14 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             IoHelper.copyStream(in, out);
             registry.setValue(keyName, "DisplayIcon", iconPath);
         }
-        catch (Exception e)
+        catch (ResourceNotFoundException exception)
         {
-            // May be no icon resource defined; ignore it
-            logger.log(Level.WARNING, e.getMessage(), e);
+            // No icon resource defined; ignore it
+            logger.info(exception.getMessage());
+        }
+        catch (IOException exception)
+        {
+            throw new InstallerException(exception);
         }
         finally
         {

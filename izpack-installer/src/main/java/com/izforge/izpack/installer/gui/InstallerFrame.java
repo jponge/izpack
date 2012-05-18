@@ -73,6 +73,7 @@ import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Variables;
+import com.izforge.izpack.api.exception.ResourceException;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Messages;
@@ -408,25 +409,17 @@ public class InstallerFrame extends JFrame implements InstallerView
             }
         }
 
-        try
+        ImageIcon icon = loadIcon(ICON_RESOURCE, 0 + "");
+        if (icon != null)
         {
-            ImageIcon icon = loadIcon(ICON_RESOURCE, 0 + "");
-            if (icon != null)
-            {
-                JPanel imgPanel = new JPanel();
-                imgPanel.setLayout(new BorderLayout());
-                imgPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 0));
-                iconLabel = new JLabel(icon);
-                iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
-                imgPanel.add(iconLabel, BorderLayout.NORTH);
-                contentPane.add(imgPanel, BorderLayout.WEST);
-                loadAndShowImageForPanelNum(iconLabel, 0);
-            }
-        }
-        catch (Exception e)
-        {
-            logger.log(Level.WARNING, "Error when loading icon image", e);
-            // ignore
+            JPanel imgPanel = new JPanel();
+            imgPanel.setLayout(new BorderLayout());
+            imgPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 0));
+            iconLabel = new JLabel(icon);
+            iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
+            imgPanel.add(iconLabel, BorderLayout.NORTH);
+            contentPane.add(imgPanel, BorderLayout.WEST);
+            loadAndShowImageForPanelNum(iconLabel, 0);
         }
         getRootPane().setDefaultButton(nextButton);
         callGUIListener(GUIListener.GUI_BUILDED, navPanel);
@@ -449,17 +442,24 @@ public class InstallerFrame extends JFrame implements InstallerView
     /**
      * Loads icon for given panel id.
      *
-     * @param resPrefix resource prefix.
-     * @param panelid   panel id.
-     * @return image icon
-     * @throws ResourceNotFoundException
+     * @param resPrefix resource prefix
+     * @param panelid   panel id
+     * @return image icon, or {@code null} if no icon exists
+     * @throws ResourceException if the resource exists but cannot be retrieved
      */
     private ImageIcon loadIcon(String resPrefix, String panelid)
     {
-        ImageIcon icon;
-        String iconext = this.getIconResourceNameExtension();
-        icon = resourceManager.getImageIcon(resPrefix, resPrefix + "." + panelid + iconext);
-        return (icon);
+        ImageIcon icon = null;
+        String ext = getIconResourceNameExtension();
+        try
+        {
+            icon = resourceManager.getImageIcon(resPrefix, resPrefix + "." + panelid + ext);
+        }
+        catch (ResourceNotFoundException exception)
+        {
+            logger.fine("No icon for panel=" + panelid + ": " + exception.getMessage());
+        }
+        return icon;
     }
 
     /**
@@ -507,12 +507,8 @@ public class InstallerFrame extends JFrame implements InstallerView
 
     private void loadAndShowImage(JLabel jLabel, String resPrefix, int panelNo, String panelId)
     {
-        ImageIcon icon;
-        try
-        {
-            icon = loadIcon(resPrefix, panelId);
-        }
-        catch (Exception e)
+        ImageIcon icon = loadIcon(resPrefix, panelId);
+        if (icon != null)
         {
             icon = loadIcon(resPrefix, panelNo + "");
         }
@@ -523,21 +519,10 @@ public class InstallerFrame extends JFrame implements InstallerView
 
     private void loadAndShowImage(JLabel jLabel, String resPrefix, int panelNo)
     {
-        ImageIcon icon = null;
-        try
+        ImageIcon icon = loadIcon(resPrefix, panelNo + "");
+        if (icon == null)
         {
             icon = loadIcon(resPrefix, panelNo + "");
-        }
-        catch (Exception e)
-        {
-            try
-            {
-                icon = loadIcon(resPrefix, panelNo + "");
-            }
-            catch (Exception e1)
-            {
-                // ignore
-            }
         }
         if (icon != null)
         {
@@ -1520,16 +1505,6 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     private JPanel createHeadingIcon(Color back)
     {
-        // the icon
-        ImageIcon icon = null;
-        try
-        {
-            icon = loadIcon(HEADING_ICON_RESOURCE, 0 + "");
-        }
-        catch (Exception e)
-        {
-            // ignore
-        }
         JPanel imgPanel = new JPanel();
         imgPanel.setLayout(new BoxLayout(imgPanel, BoxLayout.Y_AXIS));
 
@@ -1549,16 +1524,20 @@ public class InstallerFrame extends JFrame implements InstallerView
         {
             imgPanel.setBackground(back);
         }
-        JLabel iconLab = new JLabel(icon);
-        if (imageLeft)
+        ImageIcon icon = loadIcon(HEADING_ICON_RESOURCE, 0 + "");
+        if (icon != null)
         {
-            imgPanel.add(iconLab, BorderLayout.WEST);
+            JLabel iconLab = new JLabel(icon);
+            if (imageLeft)
+            {
+                imgPanel.add(iconLab, BorderLayout.WEST);
+            }
+            else
+            {
+                imgPanel.add(iconLab, BorderLayout.EAST);
+            }
+            headingLabels[headingLabels.length - 1] = iconLab;
         }
-        else
-        {
-            imgPanel.add(iconLab, BorderLayout.EAST);
-        }
-        headingLabels[headingLabels.length - 1] = iconLab;
         return (imgPanel);
 
     }
@@ -1784,7 +1763,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     {
         try
         {
-            ;
+            installdata.refreshVariables();
         }
         catch (Exception e)
         {

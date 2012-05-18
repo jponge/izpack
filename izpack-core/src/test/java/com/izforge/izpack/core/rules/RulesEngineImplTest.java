@@ -13,6 +13,7 @@ import org.junit.Test;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
+import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.container.DefaultContainer;
@@ -30,7 +31,6 @@ import com.izforge.izpack.core.rules.process.PackSelectionCondition;
 import com.izforge.izpack.core.rules.process.RefCondition;
 import com.izforge.izpack.core.rules.process.UserCondition;
 import com.izforge.izpack.core.rules.process.VariableCondition;
-import com.izforge.izpack.installer.data.InstallData;
 
 
 public class RulesEngineImplTest
@@ -42,7 +42,7 @@ public class RulesEngineImplTest
     public void setUp() throws Exception
     {
         DefaultVariables variables = new DefaultVariables();
-        engine = new RulesEngineImpl(new InstallData(variables), null);
+        engine = new RulesEngineImpl(new AutomatedInstallData(variables), null);
         variables.setRules(engine);
 
         Map<String, Condition> conditions = new HashMap<String, Condition>();

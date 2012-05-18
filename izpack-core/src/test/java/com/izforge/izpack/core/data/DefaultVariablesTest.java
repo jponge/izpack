@@ -17,7 +17,6 @@ import com.izforge.izpack.core.rules.ConditionContainer;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.core.rules.process.VariableCondition;
 import com.izforge.izpack.core.variable.PlainValue;
-import com.izforge.izpack.installer.data.InstallData;
 
 
 /**
@@ -194,7 +193,7 @@ public class DefaultVariablesTest
         conditions.put("cond2", new VariableCondition("os", "unix"));    // true when os = unix
 
         // set up the rules
-        AutomatedInstallData installData = new InstallData(variables);
+        AutomatedInstallData installData = new AutomatedInstallData(variables);
         RulesEngineImpl rules = new RulesEngineImpl(installData, new ConditionContainer(new DefaultContainer()));
         rules.readConditionMap(conditions);
         ((DefaultVariables) variables).setRules(rules);
