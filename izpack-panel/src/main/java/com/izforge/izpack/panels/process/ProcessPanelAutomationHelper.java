@@ -24,7 +24,6 @@ package com.izforge.izpack.panels.process;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.handler.AbstractUIProcessHandler;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.automation.PanelAutomationHelper;
 import com.izforge.izpack.util.Housekeeper;
@@ -79,7 +78,8 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
         processPanelWorker.run();
         if (!processPanelWorker.getResult())
         {
-            throw new InstallerException("The work done by the ProcessPanel (line " + panelRoot.getLineNr() + ") failed");
+            throw new InstallerException(
+                    "The work done by the ProcessPanel (line " + panelRoot.getLineNr() + ") failed");
         }
     }
 
@@ -98,7 +98,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * Reports progress on System.out
      *
-     * @see com.izforge.izpack.api.handler.AbstractUIProcessHandler#startProcessing(int)
+     * @see AbstractUIProcessHandler#startProcessing(int)
      */
     public void startProcessing(int noOfJobs)
     {
@@ -107,7 +107,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     }
 
     /**
-     * @see com.izforge.izpack.api.handler.AbstractUIProcessHandler#finishProcessing
+     * @see AbstractUIProcessHandler#finishProcessing
      */
     public void finishProcessing(boolean unlockPrev, boolean unlockNext)
     {
@@ -122,7 +122,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     {
         this.currentJob++;
         System.out.println("Starting process " + name + " (" + Integer.toString(this.currentJob)
-                + "/" + Integer.toString(this.noOfJobs) + ")");
+                                   + "/" + Integer.toString(this.noOfJobs) + ")");
     }
 
     public void finishProcess()

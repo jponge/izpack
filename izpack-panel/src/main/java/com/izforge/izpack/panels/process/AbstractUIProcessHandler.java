@@ -19,7 +19,9 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.api.handler;
+package com.izforge.izpack.panels.process;
+
+import com.izforge.izpack.api.handler.AbstractUIHandler;
 
 /**
  * Interface for UIs which need to interface to external processes.
