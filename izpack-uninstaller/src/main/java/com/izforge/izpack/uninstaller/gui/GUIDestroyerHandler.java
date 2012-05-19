@@ -1,11 +1,10 @@
 package com.izforge.izpack.uninstaller.gui;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.resource.Messages;
+import com.izforge.izpack.uninstaller.event.DestroyerHandler;
 
 /**
  * The destroyer handler.
@@ -13,15 +12,30 @@ import com.izforge.izpack.api.resource.Messages;
  * @author Julien Ponge
  * @author Tino Schwarze
  */
-public class GUIDestroyerHandler implements AbstractUIProgressHandler
+public class GUIDestroyerHandler extends DestroyerHandler
 {
 
+    /**
+     * The parent frame.
+     */
     private UninstallerFrame uninstallerFrame;
 
+    /**
+     * The locale specific messages.
+     */
     private final Messages messages;
 
-    public GUIDestroyerHandler(UninstallerFrame uninstallerFrame, Messages messages)
+
+    /**
+     * Constructs a {@code GUIDestroyerHandler}.
+     *
+     * @param uninstallerFrame the parent frame
+     * @param prompt           the prompt
+     * @param messages         the locale-specific messages
+     */
+    public GUIDestroyerHandler(UninstallerFrame uninstallerFrame, Prompt prompt, Messages messages)
     {
+        super(prompt);
         this.uninstallerFrame = uninstallerFrame;
         this.messages = messages;
     }
@@ -81,120 +95,29 @@ public class GUIDestroyerHandler implements AbstractUIProgressHandler
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public void nextStep(String step_name, int step_no, int no_of_substeps)
-    {
-        // not used
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setSubStepNo(int no_of_substeps)
-    {
-        // not used
-    }
-
-    /**
-     * Output a notification.
+     * Notify the user about something.
      * <p/>
-     * Does nothing here.
+     * This implementation is a no-op
      *
-     * @param text
+     * @param message the notification
      */
-    public void emitNotification(String text)
+    @Override
+    public void emitNotification(String message)
     {
+        // do nothing
     }
 
     /**
-     * Output a warning.
+     * Notify the user of some error.
      *
-     * @param text
+     * @param title   the message title (used for dialog name, might not be displayed)
+     * @param message the error message
      */
-    public boolean emitWarning(String title, String text)
+    @Override
+    public void emitError(String title, String message)
     {
-        return (JOptionPane.showConfirmDialog(null, text, title, JOptionPane.OK_CANCEL_OPTION,
-                                              JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION);
-    }
-
-    /**
-     * The destroyer encountered an error.
-     *
-     * @param error The error message.
-     */
-    public void emitError(String title, String error)
-    {
-        uninstallerFrame.progressBar.setString(error);
-        JOptionPane.showMessageDialog(null, error, title, JOptionPane.OK_CANCEL_OPTION);
-    }
-
-    /**
-     * The destroyer encountered an error.
-     *
-     * @param error The error message.
-     */
-    public void emitErrorAndBlockNext(String title, String error)
-    {
-        emitError(title, error);
-    }
-
-    /**
-     * Ask the user a question.
-     *
-     * @param title    Message title.
-     * @param question The question.
-     * @param choices  The set of choices to present.
-     * @return The user's choice.
-     * @see com.izforge.izpack.api.handler.AbstractUIHandler#askQuestion(String, String, int)
-     */
-    public int askQuestion(String title, String question, int choices)
-    {
-        return askQuestion(title, question, choices, -1);
-    }
-
-    /**
-     * Ask the user a question.
-     *
-     * @param title          Message title.
-     * @param question       The question.
-     * @param choices        The set of choices to present.
-     * @param default_choice The default choice. (-1 = no default choice)
-     * @return The user's choice.
-     * @see com.izforge.izpack.api.handler.AbstractUIHandler#askQuestion(String, String, int, int)
-     */
-    public int askQuestion(String title, String question, int choices, int default_choice)
-    {
-        int jo_choices = 0;
-
-        if (choices == AbstractUIHandler.CHOICES_YES_NO)
-        {
-            jo_choices = JOptionPane.YES_NO_OPTION;
-        }
-        else if (choices == AbstractUIHandler.CHOICES_YES_NO_CANCEL)
-        {
-            jo_choices = JOptionPane.YES_NO_CANCEL_OPTION;
-        }
-
-        int user_choice = JOptionPane.showConfirmDialog(null, question, title,
-                                                        jo_choices, JOptionPane.QUESTION_MESSAGE);
-
-        if (user_choice == JOptionPane.CANCEL_OPTION)
-        {
-            return AbstractUIHandler.ANSWER_CANCEL;
-        }
-
-        if (user_choice == JOptionPane.YES_OPTION)
-        {
-            return AbstractUIHandler.ANSWER_YES;
-        }
-
-        if (user_choice == JOptionPane.NO_OPTION)
-        {
-            return AbstractUIHandler.ANSWER_NO;
-        }
-
-        return default_choice;
+        uninstallerFrame.progressBar.setString(message);
+        super.emitError(title, message);
     }
 
 }

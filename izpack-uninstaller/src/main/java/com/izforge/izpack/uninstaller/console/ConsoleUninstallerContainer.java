@@ -4,7 +4,9 @@ import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoException;
 
 import com.izforge.izpack.api.exception.ContainerException;
+import com.izforge.izpack.core.handler.ConsolePrompt;
 import com.izforge.izpack.uninstaller.container.UninstallerContainer;
+import com.izforge.izpack.util.Console;
 
 
 /**
@@ -35,6 +37,8 @@ public class ConsoleUninstallerContainer extends UninstallerContainer
     protected void fillContainer(MutablePicoContainer container)
     {
         super.fillContainer(container);
+        addComponent(Console.class);
+        addComponent(ConsolePrompt.class);
         addComponent(ConsoleDestroyerHandler.class);
     }
 }

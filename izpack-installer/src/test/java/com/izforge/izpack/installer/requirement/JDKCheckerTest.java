@@ -1,17 +1,18 @@
 package com.izforge.izpack.installer.requirement;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.Info;
-import com.izforge.izpack.api.handler.Prompt;
-import com.izforge.izpack.installer.console.ConsolePrompt;
-import com.izforge.izpack.installer.data.InstallData;
-import com.izforge.izpack.test.util.TestConsole;
-import com.izforge.izpack.util.FileExecutor;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
+import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.handler.Prompt;
+import com.izforge.izpack.core.handler.ConsolePrompt;
+import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.test.util.TestConsole;
+import com.izforge.izpack.util.FileExecutor;
 
 /**
  * Tests the {@link JDKChecker} class.
@@ -80,7 +81,8 @@ public class JDKCheckerTest
      * Verifies that when the JDK is required, the {@link JDKChecker} determines the existence of the JDK correctly.
      */
     @Test
-    public void testLocalJDKInstallation() {
+    public void testLocalJDKInstallation()
+    {
         String[] output = new String[2];
         int code = new FileExecutor().executeCommand(new String[]{"javac", "-help"}, output, null);
         boolean exists = (code == 0); // exists if javac is in the path

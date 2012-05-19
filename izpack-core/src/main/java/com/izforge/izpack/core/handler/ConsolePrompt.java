@@ -1,0 +1,173 @@
+package com.izforge.izpack.core.handler;
+
+import com.izforge.izpack.api.handler.Prompt;
+import com.izforge.izpack.util.Console;
+
+/**
+ * Console implementation of {@link Prompt}.
+ *
+ * @author Tim Anderson
+ */
+public class ConsolePrompt implements Prompt
+{
+    /**
+     * The console.
+     */
+    private final Console console;
+
+    /**
+     * Constructs a <tt>ConsolePrompt</tt>.
+     *
+     * @param console the console
+     */
+    public ConsolePrompt(Console console)
+    {
+        this.console = console;
+    }
+
+    /**
+     * Displays a message.
+     *
+     * @param type    the type of the message
+     * @param message the message to display
+     */
+    @Override
+    public void message(Type type, String message)
+    {
+        console.println(message);
+    }
+
+    /**
+     * Displays a message.
+     *
+     * @param type    the type of the message
+     * @param title   the message title. If {@code null}, the title will be determined from the type
+     * @param message the message to display
+     */
+    @Override
+    public void message(Type type, String title, String message)
+    {
+        message(type, message);
+    }
+
+    /**
+     * Displays a confirmation message.
+     *
+     * @param type    the type of the message
+     * @param message the message
+     * @param options the options which may be selected
+     * @return the selected option
+     */
+    @Override
+    public Option confirm(Type type, String message, Options options)
+    {
+        return confirm(type, null, message, options);
+    }
+
+    /**
+     * Displays a confirmation message.
+     *
+     * @param type          the type of the message
+     * @param message       the message
+     * @param options       the options which may be selected
+     * @param defaultOption the default option to select. May be {@code null}
+     * @return the selected option
+     */
+    @Override
+    public Option confirm(Type type, String message, Options options, Option defaultOption)
+    {
+        return confirm(type, null, message, options, defaultOption);
+    }
+
+    /**
+     * Displays a confirmation message.
+     *
+     * @param type    the type of the message
+     * @param title   the message title. May be {@code null}
+     * @param message the message
+     * @param options the options which may be selected
+     * @return the selected option
+     */
+    @Override
+    public Option confirm(Type type, String title, String message, Options options)
+    {
+        return confirm(type, title, message, options, null);
+    }
+
+    /**
+     * Displays a confirmation message.
+     *
+     * @param type          the type of the message
+     * @param title         the message title. May be {@code null}
+     * @param message       the message
+     * @param options       the options which may be selected
+     * @param defaultOption the default option to select. May be {@code null}
+     * @return the selected option
+     */
+    @Override
+    public Option confirm(Type type, String title, String message, Options options, Option defaultOption)
+    {
+        Option result;
+        console.println(message);
+        if (options == Options.OK_CANCEL)
+        {
+            String defaultValue = (defaultOption != null && defaultOption == Option.OK) ? "O" : "C";
+            String selected = console.prompt("Enter O for OK, C to Cancel", new String[]{"O", "C"}, defaultValue);
+            if ("O".equals(selected))
+            {
+                result = Option.OK;
+            }
+            else
+            {
+                result = Option.CANCEL;
+            }
+        }
+        else if (options == Options.YES_NO_CANCEL)
+        {
+            String defaultValue = "C";
+            if (defaultOption != null)
+            {
+                if (defaultOption == Option.YES)
+                {
+                    defaultValue = "Y";
+                }
+                else if (defaultOption == Option.NO)
+                {
+                    defaultValue = "N";
+                }
+            }
+            String selected = console.prompt("Enter Y for Yes, N for No, or C to Cancel",
+                                             new String[]{"Y", "N", "C"}, defaultValue);
+            if ("Y".equals(selected))
+            {
+                result = Option.YES;
+            }
+            else if ("N".equals(selected))
+            {
+                result = Option.NO;
+            }
+            else
+            {
+                result = Option.CANCEL;
+            }
+        }
+        else
+        {
+            String defaultValue = "N";
+            if (defaultOption != null && defaultOption == Option.YES)
+            {
+                defaultValue = "Y";
+            }
+            String selected = console.prompt("Enter Y for Yes or N for No", new String[]{"Y", "N"}, defaultValue);
+            if ("Y".equals(selected))
+            {
+                result = Option.YES;
+            }
+            else
+            {
+                result = Option.NO;
+            }
+        }
+        return result;
+    }
+}

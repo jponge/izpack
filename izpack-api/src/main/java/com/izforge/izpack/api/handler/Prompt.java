@@ -12,7 +12,7 @@ public interface Prompt
      */
     enum Type
     {
-        WARNING, ERROR
+        INFORMATION, QUESTION, WARNING, ERROR
     }
 
     /**
@@ -20,7 +20,7 @@ public interface Prompt
      */
     enum Option
     {
-        YES, NO, CANCEL
+        OK, YES, NO, CANCEL
     }
 
     /**
@@ -28,7 +28,7 @@ public interface Prompt
      */
     enum Options
     {
-        YES_NO, YES_NO_CANCEL
+        OK_CANCEL, YES_NO, YES_NO_CANCEL
     }
 
     /**
@@ -40,6 +40,15 @@ public interface Prompt
     void message(Type type, String message);
 
     /**
+     * Displays a message.
+     *
+     * @param type    the type of the message
+     * @param title   the message title. If {@code null}, the title will be determined from the type
+     * @param message the message to display
+     */
+    void message(Type type, String title, String message);
+
+    /**
      * Displays a confirmation message.
      *
      * @param type    the type of the message
@@ -48,5 +57,39 @@ public interface Prompt
      * @return the selected option
      */
     Option confirm(Type type, String message, Options options);
+
+    /**
+     * Displays a confirmation message.
+     *
+     * @param type          the type of the message
+     * @param message       the message
+     * @param options       the options which may be selected
+     * @param defaultOption the default option to select
+     * @return the selected option
+     */
+    Option confirm(Type type, String message, Options options, Option defaultOption);
+
+    /**
+     * Displays a confirmation message.
+     *
+     * @param type    the type of the message
+     * @param title   the message title. May be {@code null}
+     * @param message the message
+     * @param options the options which may be selected
+     * @return the selected option
+     */
+    Option confirm(Type type, String title, String message, Options options);
+
+    /**
+     * Displays a confirmation message.
+     *
+     * @param type          the type of the message
+     * @param title         the message title. May be {@code null}
+     * @param message       the message
+     * @param options       the options which may be selected
+     * @param defaultOption the default option to select
+     * @return the selected option
+     */
+    Option confirm(Type type, String title, String message, Options options, Option defaultOption);
 
 }

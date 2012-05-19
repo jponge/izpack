@@ -1,13 +1,14 @@
 package com.izforge.izpack.installer.requirement;
 
-import com.izforge.izpack.api.data.Info;
-import com.izforge.izpack.installer.console.ConsolePrompt;
-import com.izforge.izpack.installer.data.InstallData;
-import com.izforge.izpack.test.util.TestConsole;
-import org.junit.Test;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
+import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.core.handler.ConsolePrompt;
+import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.test.util.TestConsole;
 
 /**
  * Tests the {@link JavaVersionChecker} class.

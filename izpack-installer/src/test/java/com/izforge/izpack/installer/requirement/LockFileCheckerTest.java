@@ -1,16 +1,17 @@
 package com.izforge.izpack.installer.requirement;
 
-import com.izforge.izpack.api.data.Info;
-import com.izforge.izpack.installer.console.ConsolePrompt;
-import com.izforge.izpack.installer.data.InstallData;
-import com.izforge.izpack.test.util.TestConsole;
-import com.izforge.izpack.util.FileUtil;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
+import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.core.handler.ConsolePrompt;
+import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.test.util.TestConsole;
+import com.izforge.izpack.util.FileUtil;
 
 /**
  * Tests the {@link LockFileChecker} class.
@@ -48,7 +49,7 @@ public class LockFileCheckerTest
 
         // no lock file yet.
         assertTrue(checker.check());
-        
+
         // lock file should now exist. Enter n to cancel
         console.addScript("LockFileExists-enter-N", "n");
         assertFalse(checker.check());
