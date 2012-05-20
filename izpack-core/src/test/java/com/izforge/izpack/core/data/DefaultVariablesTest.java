@@ -17,6 +17,7 @@ import com.izforge.izpack.core.rules.ConditionContainer;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.core.rules.process.VariableCondition;
 import com.izforge.izpack.core.variable.PlainValue;
+import com.izforge.izpack.util.Platforms;
 
 
 /**
@@ -194,7 +195,8 @@ public class DefaultVariablesTest
 
         // set up the rules
         AutomatedInstallData installData = new AutomatedInstallData(variables);
-        RulesEngineImpl rules = new RulesEngineImpl(installData, new ConditionContainer(new DefaultContainer()));
+        RulesEngineImpl rules = new RulesEngineImpl(installData, new ConditionContainer(new DefaultContainer()),
+                                                    Platforms.FREEBSD);
         rules.readConditionMap(conditions);
         ((DefaultVariables) variables).setRules(rules);
 

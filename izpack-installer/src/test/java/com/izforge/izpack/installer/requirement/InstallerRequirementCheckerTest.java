@@ -25,6 +25,7 @@ import com.izforge.izpack.core.rules.logic.NotCondition;
 import com.izforge.izpack.core.rules.process.JavaCondition;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.test.util.TestConsole;
+import com.izforge.izpack.util.Platforms;
 
 /**
  * Tests the {@link InstallerRequirementChecker} class.
@@ -52,7 +53,7 @@ public class InstallerRequirementCheckerTest
         installData = new InstallData(variables);
         installData.setInstallerrequirements(new ArrayList<InstallerRequirement>());
         installData.setLangpack(new LocaleDatabase(new StringInputStream("<langpack/>"), Mockito.mock(Locales.class)));
-        rules = new RulesEngineImpl(installData, null);
+        rules = new RulesEngineImpl(installData, null, Platforms.SUNOS_X86);
         variables.setRules(rules);
 
         Map<String, Condition> conditionsmap = new HashMap<String, Condition>();

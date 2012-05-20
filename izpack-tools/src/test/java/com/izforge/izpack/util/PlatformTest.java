@@ -20,8 +20,12 @@ package com.izforge.izpack.util;
 
 import static com.izforge.izpack.util.Platform.Arch;
 import static com.izforge.izpack.util.Platform.Name;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 
 /**
@@ -41,21 +45,21 @@ public class PlatformTest extends AbstractPlatformTest
         checkPlatform(new Platform(Name.UNIX), Name.UNIX, null, null, Arch.UNKNOWN);
 
         checkPlatform(new Platform(Name.WINDOWS, OsVersionConstants.WINDOWS_7_VERSION),
-                Name.WINDOWS, null, OsVersionConstants.WINDOWS_7_VERSION, Arch.UNKNOWN);
+                      Name.WINDOWS, null, OsVersionConstants.WINDOWS_7_VERSION, Arch.UNKNOWN);
 
         checkPlatform(new Platform(Name.WINDOWS, "windows_vista", OsVersionConstants.WINDOWS_VISTA_VERSION),
-                Name.WINDOWS, "windows_vista", OsVersionConstants.WINDOWS_VISTA_VERSION, Arch.UNKNOWN);
+                      Name.WINDOWS, "windows_vista", OsVersionConstants.WINDOWS_VISTA_VERSION, Arch.UNKNOWN);
 
         checkPlatform(new Platform(Name.WINDOWS, Arch.X86), Name.WINDOWS, null, null, Arch.X86);
 
         checkPlatform(new Platform(Name.SUNOS, "sunos_sparc", Arch.SPARC), Name.SUNOS, "sunos_sparc", null, Arch.SPARC);
 
         checkPlatform(new Platform(Name.MAC_OSX, "mac_osx", OsVersionConstants.MACOSX, Arch.X64), Name.MAC_OSX,
-                "mac_osx", OsVersionConstants.MACOSX, Arch.X64);
+                      "mac_osx", OsVersionConstants.MACOSX, Arch.X64);
 
         Platform win7 = new Platform(Name.WINDOWS, "windows_7", OsVersionConstants.WINDOWS_7_VERSION);
         checkPlatform(new Platform(win7, Arch.X64), Name.WINDOWS, "windows_7", OsVersionConstants.WINDOWS_7_VERSION,
-                Arch.X64);
+                      Arch.X64);
     }
 
     /**
@@ -90,14 +94,13 @@ public class PlatformTest extends AbstractPlatformTest
             Platform unix = new Platform(name);
             assertTrue(unix.isA(name));
             assertTrue(unix.isA(Name.UNIX));
-            assertFalse(unix.isA(Name.MAC));
         }
 
         Platform p3 = new Platform(Name.MAC_OSX);
         assertTrue(p3.isA(Name.MAC_OSX));
         assertTrue(p3.isA(Name.UNIX));
         assertFalse(p3.isA(Name.LINUX));
-        assertFalse(p3.isA(Name.MAC));
+        assertTrue(p3.isA(Name.MAC));
 
         Platform p4 = new Platform(Name.MAC);
         assertTrue(p4.isA(Name.MAC));
@@ -179,24 +182,31 @@ public class PlatformTest extends AbstractPlatformTest
      * Verifies that symbolic names cannot contain commas or spaces.
      */
     @Test
-    public void testSymbolicName() {
+    public void testSymbolicName()
+    {
         String validName = "Windows_7";
         Platform platform1 = new Platform(Name.WINDOWS, validName, OsVersionConstants.WINDOWS_7_VERSION);
         assertEquals(validName, platform1.getSymbolicName());
 
         String invalidSpaces = "Windows 7";
-        try {
+        try
+        {
             new Platform(Name.WINDOWS, invalidSpaces, OsVersionConstants.WINDOWS_7_VERSION);
             fail("Expected IllegalArgumentException to be thrown");
-        } catch (IllegalArgumentException expected) {
+        }
+        catch (IllegalArgumentException expected)
+        {
             // do nothing
         }
 
         String invalidCommas = "Windows,7";
-        try {
+        try
+        {
             new Platform(Name.WINDOWS, invalidCommas, OsVersionConstants.WINDOWS_7_VERSION);
             fail("Expected IllegalArgumentException to be thrown");
-        } catch (IllegalArgumentException expected) {
+        }
+        catch (IllegalArgumentException expected)
+        {
             // do nothing
         }
     }
@@ -205,7 +215,8 @@ public class PlatformTest extends AbstractPlatformTest
      * Tests the {@link Platform#toString()} method.
      */
     @Test
-    public void testToString() {
+    public void testToString()
+    {
         Platform platform1 = new Platform(Name.WINDOWS, "windows_7", OsVersionConstants.WINDOWS_7_VERSION, Arch.X64);
         assertEquals("windows,version=6.1,arch=x64,symbolicName=windows_7", platform1.toString());
 

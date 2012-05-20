@@ -16,6 +16,8 @@ import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
+import com.izforge.izpack.util.Platform;
+import com.izforge.izpack.util.Platforms;
 
 /**
  * Container for condition tests.
@@ -54,5 +56,6 @@ public class TestConditionContainer extends AbstractContainer
         addComponent(DefaultVariables.class);
         addComponent(ConditionContainer.class);
         addComponent(AbstractContainer.class, this);
+        addComponent(Platform.class, Platforms.HP_UX);
     }
 }

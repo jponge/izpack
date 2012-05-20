@@ -39,7 +39,7 @@ public class Platform
         FREEBSD(Name.UNIX),
         HP_UX(Name.UNIX),
         MAC,
-        MAC_OSX(Name.UNIX),
+        MAC_OSX(Name.MAC, Name.UNIX),
         MANDRAKE_LINUX(Name.LINUX),
         MANDRIVA_LINUX(Name.LINUX), // formerly 'Mandrake'
         OS_2,
@@ -55,33 +55,33 @@ public class Platform
          */
         Name()
         {
-            this(null);
+            parents = new Name[0];
         }
 
         /**
          * Constructs a <tt>Name</tt> with a parent family.
          *
-         * @param parent the parent family name. May be <tt>null</tt>
+         * @param parents the immediate parent family names. May be empty
          */
-        Name(Name parent)
+        Name(Name... parents)
         {
-            this.parent = parent;
+            this.parents = parents;
         }
 
         /**
-         * Returns the parent family name.
+         * Returns the parent family names.
          *
-         * @return the parent family name. May be <tt>null</tt>
+         * @return the parent family names
          */
-        public Name getParent()
+        public Name[] getParents()
         {
-            return parent;
+            return parents;
         }
 
         /**
-         * The parent platform family. May be <tt>null</tt>
+         * The parent platform families. May be empty
          */
-        private final Name parent;
+        private final Name[] parents;
     }
 
     /**
@@ -271,18 +271,7 @@ public class Platform
      */
     public boolean isA(Name name)
     {
-        boolean result = false;
-        Name n = this.name;
-        while (n != null)
-        {
-            if (n == name)
-            {
-                result = true;
-                break;
-            }
-            n = n.parent;
-        }
-        return result;
+        return isA(this.name, name);
     }
 
     /**
@@ -344,6 +333,32 @@ public class Platform
     {
         return name.toString().toLowerCase() + ",version=" + version + ",arch=" + arch.toString().toLowerCase()
                 + ",symbolicName=" + symbolicName;
+    }
+
+    /**
+     * Determines if the current name is an instance of the specified platform family name.
+     *
+     * @param current the current name
+     * @param name    the plaform family name
+     * @return <tt>true</tt> if current is an instance of <tt>name</tt>
+     */
+    private boolean isA(Name current, Name name)
+    {
+        if (name == current)
+        {
+            return true;
+        }
+        else
+        {
+            for (Name parent : current.getParents())
+            {
+                if (isA(parent, name))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

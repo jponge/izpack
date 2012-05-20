@@ -24,12 +24,15 @@ import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.compiler.listener.CmdlinePackagerListener;
 import com.izforge.izpack.compiler.resource.ResourceFinder;
 import com.izforge.izpack.core.container.AbstractContainer;
+import com.izforge.izpack.core.container.PlatformProvider;
 import com.izforge.izpack.core.factory.DefaultObjectFactory;
 import com.izforge.izpack.core.rules.ConditionContainer;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.merge.MergeManager;
 import com.izforge.izpack.merge.MergeManagerImpl;
+import com.izforge.izpack.util.Platform;
+import com.izforge.izpack.util.Platforms;
 
 /**
  * Container for compiler.
@@ -82,16 +85,20 @@ public class CompilerContainer extends AbstractContainer
         addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
         addComponent(CompilerHelper.class);
         container.addComponent(RulesEngine.class, RulesEngineImpl.class,
-                               new ComponentParameter(ConditionContainer.class));
+                               new ComponentParameter(ConditionContainer.class),
+                               new ComponentParameter(Platform.class));
         addComponent(MergeManager.class, MergeManagerImpl.class);
         container.addComponent(ObjectFactory.class, DefaultObjectFactory.class,
                                new ComponentParameter(CompilerContainer.class));
+        addComponent(Platforms.class);
 
         new ResolverContainerFiller().fillContainer(this);
         container.addAdapter(new ProviderAdapter(new XmlCompilerHelperProvider()))
                 .addAdapter(new ProviderAdapter(new JarOutputStreamProvider()))
                 .addAdapter(new ProviderAdapter(new CompressedOutputStreamProvider()))
-                .addAdapter(new ProviderAdapter(new PackCompressorProvider()));
+                .addAdapter(new ProviderAdapter(new PackCompressorProvider()))
+                .addAdapter(new ProviderAdapter(new PlatformProvider()));
+
     }
 
     /**
