@@ -27,7 +27,6 @@ import com.izforge.izpack.installer.container.provider.IconsProvider;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.language.LanguageDialog;
-import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.merge.resolve.PathResolver;
 import com.izforge.izpack.test.provider.GUIInstallDataMockProvider;
@@ -71,7 +70,6 @@ public class TestLanguageContainer extends AbstractContainer
                 .addComponent(Mockito.mock(UninstallDataWriter.class))
                 .addComponent(Mockito.mock(AutomatedInstaller.class))
                 .addComponent(Mockito.mock(PathResolver.class))
-                .addComponent(Mockito.mock(PanelManager.class))
                 .addComponent(locales)
                 .addComponent(DialogFixture.class, DialogFixture.class, new ComponentParameter(LanguageDialog.class))
                 .addComponent(Container.class, this)

@@ -10,6 +10,7 @@ import org.picocontainer.PicoException;
 import org.picocontainer.injectors.ProviderAdapter;
 import org.picocontainer.parameters.ComponentParameter;
 
+import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.core.container.AbstractContainer;
@@ -27,7 +28,6 @@ import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.gui.InstallerController;
 import com.izforge.izpack.installer.gui.InstallerFrame;
-import com.izforge.izpack.installer.manager.PanelManager;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.test.provider.GUIInstallDataMockProvider;
 import com.izforge.izpack.util.Housekeeper;
@@ -75,11 +75,11 @@ public class TestPanelContainer extends AbstractContainer
 
         container.addComponent(new DefaultObjectFactory(this));
         addComponent(IUnpacker.class, Mockito.mock(IUnpacker.class));
+        addComponent(TestIzPanels.class);
         addComponent(Log.class, Mockito.mock(Log.class));
         addComponent(Housekeeper.class, Mockito.mock(Housekeeper.class));
-        addComponent(PanelManager.class);
         addComponent(Platforms.class);
-        addComponent("installerContainer", this);
+        addComponent(Container.class, this);
 
         container.addConfig("title", "testPanel");
 

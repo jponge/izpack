@@ -72,6 +72,7 @@ import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.LocaleDatabase;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.ResourceException;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
@@ -87,7 +88,7 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.debugger.Debugger;
-import com.izforge.izpack.installer.manager.PanelManager;
+import com.izforge.izpack.installer.panel.PanelView;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
@@ -209,9 +210,9 @@ public class InstallerFrame extends JFrame implements InstallerView
     private boolean imageLeft = false;
 
     /**
-     * Panel manager
+     * The panels.
      */
-    private PanelManager panelManager;
+    private IzPanels panels;
 
     /**
      * The resources.
@@ -252,7 +253,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      * @param installData         the installation data
      * @param rules               the rules engine
      * @param icons               the icons database
-     * @param panelManager        the panel manager
+     * @param panels              the panels
      * @param uninstallDataWriter the uninstallation data writer
      * @param resourceManager     the resources
      * @param uninstallData       the uninstallation data
@@ -262,7 +263,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      * @throws Exception for any error
      */
     public InstallerFrame(String title, GUIInstallData installData, RulesEngine rules, IconsDatabase icons,
-                          PanelManager panelManager, UninstallDataWriter uninstallDataWriter,
+                          IzPanels panels, UninstallDataWriter uninstallDataWriter,
                           ResourceManager resourceManager, UninstallData uninstallData,
                           IUnpacker unpacker, Housekeeper housekeeper, Log log)
             throws Exception
@@ -274,11 +275,32 @@ public class InstallerFrame extends JFrame implements InstallerView
         this.resourceManager = resourceManager;
         this.uninstallDataWriter = uninstallDataWriter;
         this.uninstallData = uninstallData;
-        this.panelManager = panelManager;
+        this.panels = panels;
         this.unpacker = unpacker;
         this.variables = installData.getVariables();
         this.housekeeper = housekeeper;
         this.log = log;
+
+        panels.setListener(new IzPanelsListener()
+        {
+            @Override
+            public void switchPanel(PanelView<IzPanel> newPanel, PanelView<IzPanel> oldPanel)
+            {
+                InstallerFrame.this.switchPanel(newPanel, oldPanel);
+            }
+
+            @Override
+            public void setNextEnabled(boolean enable)
+            {
+                nextButton.setEnabled(enable);
+            }
+
+            @Override
+            public void setPreviousEnabled(boolean enable)
+            {
+                prevButton.setEnabled(enable);
+            }
+        });
 
         this.messages = installData.getMessages();
         this.setIcons(icons);
@@ -335,15 +357,9 @@ public class InstallerFrame extends JFrame implements InstallerView
         panelsContainer.setLayout(new GridLayout(1, 1));
         contentPane.add(panelsContainer, BorderLayout.CENTER);
 
-        // We put the first panel
-        installdata.setCurPanelNumber(0);
-        IzPanel panel_0 = installdata.getPanels().get(0);
-        panelsContainer.add(panel_0);
-
         logger.fine("Building GUI. The panel list to display is " + installdata.getPanels());
 
         // We add the navigation buttons & labels
-
         NavigationHandler navHandler = new NavigationHandler();
 
         JPanel navPanel = new JPanel();
@@ -424,6 +440,9 @@ public class InstallerFrame extends JFrame implements InstallerView
         getRootPane().setDefaultButton(nextButton);
         callGUIListener(GUIListener.GUI_BUILDED, navPanel);
         createHeading(navPanel);
+
+        // need to initialise the panels after construction, as many of the panels require InstallerFrame
+        panels.initialise();
     }
 
     private void callGUIListener(int what)
@@ -533,67 +552,33 @@ public class InstallerFrame extends JFrame implements InstallerView
     }
 
     /**
-     * Here is persisted the direction of panel traversing.
-     */
-    private boolean isBack = false;
-
-    /**
      * Switches the current panel.
      *
-     * @param oldIndex Description of the Parameter
+     * @param newPanel the new panel
+     * @param oldPanel the old panel. May be {@code null}
      */
-    public void switchPanel(int oldIndex)
+    protected void switchPanel(PanelView<IzPanel> newPanel, PanelView<IzPanel> oldPanel)
     {
+        int oldIndex = (oldPanel != null) ? oldPanel.getIndex() : -1;
         logger.fine("Switching panel, old index is " + oldIndex);
-        // refresh dynamic variables every time, a panel switch is done
+
+        // refresh dynamic variables every time a panel switch is done
+        refreshDynamicVariables();
+
         try
         {
-            installdata.refreshVariables();
-        }
-        catch (Exception e)
-        {
-            logger.fine("Refreshing dynamic variables failed, asking user whether to proceed.");
-            StringBuilder msg = new StringBuilder();
-            msg.append("<html>");
-            msg.append("The following error occured during refreshing panel contents:<br>");
-            msg.append("<i>").append(e.getMessage()).append("</i><br>");
-            msg.append("Are you sure you want to continue with this installation?");
-            msg.append("</html>");
-            JLabel label = new JLabel(msg.toString());
-            label.setFont(new Font("Sans Serif", Font.PLAIN, 12));
-            Object[] optionValues = {"Continue", "Exit"};
-            int selectedOption = JOptionPane.showOptionDialog(null, label, "Warning",
-                                                              JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
-                                                              null, optionValues,
-                                                              optionValues[1]);
-            logger.fine("Selected option: " + selectedOption);
-            if (selectedOption == 0)
-            {
-                logger.fine("Continuing installation");
-            }
-            else
-            {
-                logger.fine("Exiting");
-                System.exit(1);
-            }
-        }
-        try
-        {
-            if (installdata.getCurPanelNumber() < oldIndex)
-            {
-                isBack = true;
-            }
             panelsContainer.setVisible(false);
-            IzPanel newPanel = installdata.getPanels().get(installdata.getCurPanelNumber());
-            IzPanel oldPanel = installdata.getPanels().get(oldIndex);
-            showHelpButton(newPanel.canShowHelp());
+            IzPanel newView = newPanel.getView();
+            showHelpButton(newView.canShowHelp());
             if (Debug.isTRACE())
             {
-                debugger.switchPanel(newPanel.getMetadata(), oldPanel.getMetadata());
+                Panel panel = (oldPanel != null) ? oldPanel.getPanel() : null;
+                debugger.switchPanel(newPanel.getPanel(), panel);
             }
+            String oldPanelClass = (oldPanel != null) ? oldPanel.getClass().getName() : null;
             log.addDebugMessage(
                     "InstallerFrame.switchPanel: try switching newPanel from {0} to {1} ({2} to {3})",
-                    new String[]{oldPanel.getClass().getName(), newPanel.getClass().getName(),
+                    new String[]{oldPanelClass, newPanel.getClass().getName(),
                             Integer.toString(oldIndex), Integer.toString(installdata.getCurPanelNumber())},
                     Log.PANEL_TRACE, null);
 
@@ -603,7 +588,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             // oldPanel.makeXMLData(installdata.xmlData.getChildAtIndex(oldIndex));
             // No previos button in the first visible newPanel
 
-            configureButtonVisibility();
+            configureButtonVisibility(newPanel);
             // With VM version >= 1.5 setting default button one time will not work.
             // Therefore we set it every newPanel switch and that also later. But in
             // the moment it seems so that the quit button will not used as default button.
@@ -639,16 +624,22 @@ public class InstallerFrame extends JFrame implements InstallerView
             });
 
             // Change panels container to the current one.
-            panelsContainer.remove(oldPanel);
-            oldPanel.panelDeactivate();
-            panelsContainer.add(newPanel);
+            if (oldPanel != null)
+            {
+                IzPanel oldView = oldPanel.getView();
+                panelsContainer.remove(oldView);
+                oldView.panelDeactivate();
+            }
+            panelsContainer.add(newView);
+            installdata.setCurPanelNumber(newPanel.getIndex());
 
-            if (newPanel.getInitialFocus() != null)
-            { // Initial focus hint should be performed after current newPanel
+            if (newView.getInitialFocus() != null)
+            {
+                // Initial focus hint should be performed after current newPanel
                 // was added to the panels container, else the focus hint will
                 // be ignored.
                 // Give a hint for the initial focus to the system.
-                final Component inFoc = newPanel.getInitialFocus();
+                final Component inFoc = newView.getInitialFocus();
 
                 // On java VM version >= 1.5 it works only if
                 // invoke later will be used.
@@ -676,24 +667,21 @@ public class InstallerFrame extends JFrame implements InstallerView
                 }
             }
             performHeading(newPanel);
-            performHeadingCounter();
-            newPanel.executePreActivationActions();
-            newPanel.panelActivate();
+            performHeadingCounter(newPanel);
+            newPanel.executePreActivationActions(newView);
+            newView.panelActivate();
             panelsContainer.setVisible(true);
-            com.izforge.izpack.api.data.Panel metadata = newPanel.getMetadata();
             if (iconLabel != null)
             {
-                if ((metadata != null) && (!"UNKNOWN".equals(metadata.getPanelid())))
+                if (!"UNKNOWN".equals(newPanel.getPanelId()))
                 {
-                    loadAndShowImageForPanelOrId(iconLabel, getCurrentPanelVisbilityNumber(), metadata
-                            .getPanelid());
+                    loadAndShowImageForPanelOrId(iconLabel, panels.getVisibleIndex(newPanel), newPanel.getPanelId());
                 }
                 else
                 {
-                    loadAndShowImageForPanelNum(iconLabel, getCurrentPanelVisbilityNumber());
+                    loadAndShowImageForPanelNum(iconLabel, panels.getVisibleIndex(newPanel));
                 }
             }
-            isBack = false;
             callGUIListener(GUIListener.PANEL_SWITCHED);
             log.addDebugMessage("InstallerFrame.switchPanel: switched", null, Log.PANEL_TRACE, null);
         }
@@ -703,14 +691,10 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
     }
 
-    private int getCurrentPanelVisbilityNumber()
+    private void configureButtonVisibility(PanelView<IzPanel> panel)
     {
-        return panelManager.getPanelVisibilityNumber(installdata.getCurPanelNumber());
-    }
-
-    private void configureButtonVisibility()
-    {
-        if (panelManager.isLast(installdata.getCurPanelNumber()))
+        int index = panel.getIndex();
+        if (panels.getNext(index, true) == -1)
         {
             prevButton.setVisible(false);
             nextButton.setVisible(false);
@@ -718,7 +702,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         }
         else
         {
-            if (hasNavigatePrevious(installdata.getCurPanelNumber(), true) != -1)
+            if (hasNavigatePrevious(index, true) != -1)
             {
                 prevButton.setVisible(true);
                 unlockPrevButton();
@@ -729,7 +713,7 @@ public class InstallerFrame extends JFrame implements InstallerView
                 prevButton.setVisible(false);
             }
 
-            if (hasNavigateNext(installdata.getCurPanelNumber(), true) != -1)
+            if (hasNavigateNext(index, true) != -1)
             {
                 nextButton.setVisible(true);
                 unlockNextButton();
@@ -739,7 +723,6 @@ public class InstallerFrame extends JFrame implements InstallerView
                 lockNextButton();
                 nextButton.setVisible(false);
             }
-
         }
     }
 
@@ -927,7 +910,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     @Override
     public void lockPrevButton()
     {
-        prevButton.setEnabled(false);
+        panels.setPreviousEnabled(false);
     }
 
     /**
@@ -936,7 +919,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     @Override
     public void lockNextButton()
     {
-        nextButton.setEnabled(false);
+        panels.setNextEnabled(false);
     }
 
     /**
@@ -945,7 +928,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     @Override
     public void unlockPrevButton()
     {
-        prevButton.setEnabled(true);
+        panels.setPreviousEnabled(true);
     }
 
     /**
@@ -965,7 +948,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     @Override
     public void unlockNextButton(boolean requestFocus)
     {
-        nextButton.setEnabled(true);
+        panels.setNextEnabled(true);
         if (requestFocus)
         {
             nextButton.requestFocusInWindow();
@@ -990,55 +973,14 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public void skipPanel()
     {
-        if (installdata.getCurPanelNumber() < installdata.getPanels().size() - 1)
+        if (panels.isBack())
         {
-            if (isBack)
-            {
-                navigatePrevious(installdata.getCurPanelNumber());
-            }
-            else
-            {
-                navigateNext(installdata.getCurPanelNumber(), false);
-            }
-        }
-    }
-
-    /**
-     * Method checks whether conditions are met to show the given panel.
-     *
-     * @param panelnumber the panel number to check
-     * @return true or false
-     */
-    public boolean canShow(int panelnumber)
-    {
-        IzPanel panel = installdata.getPanels().get(panelnumber);
-        com.izforge.izpack.api.data.Panel panelmetadata = panel.getMetadata();
-        String panelid = panelmetadata.getPanelid();
-        logger.fine("Current Panel: " + panelid);
-        boolean canShow;
-
-        refreshDynamicVariables();
-
-        if (panelmetadata.hasCondition())
-        {
-            canShow = rules.isConditionTrue(panelmetadata.getCondition());
-            logger.fine("Skipping panel " + panelid + " due to unmet condition " + panelmetadata.getCondition());
+            panels.previous();
         }
         else
         {
-            if (!rules.canShowPanel(panelid, installdata.getVariables()))
-            {
-                // skip panel, if conditions for panel aren't met
-                logger.fine("Can't show panel " + panelid);
-                // panel should be skipped, so we have to decrement panelnumber for skipping
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            panels.next(false);
         }
-        return canShow;
     }
 
     /**
@@ -1047,57 +989,8 @@ public class InstallerFrame extends JFrame implements InstallerView
     @Override
     public void navigateNext()
     {
-        // If the button is inactive this indicates that we cannot move
-        // so we don't do the move
-        if (!nextButton.isEnabled())
-        {
-            return;
-        }
-        this.navigateNext(installdata.getCurPanelNumber(), true);
+        panels.next();
     }
-
-    /**
-     * This function searches for the next available panel, the search begins from given panel+1
-     *
-     * @param startPanel   the starting panel number
-     * @param doValidation whether to do panel validation
-     */
-    public void navigateNext(int startPanel, boolean doValidation)
-    {
-        logger.fine("Navigate to next panel. Start panel is " + startPanel);
-        if ((installdata.getCurPanelNumber() < installdata.getPanels().size() - 1))
-        {
-            // We must trasfer all fields into the variables before
-            // panelconditions try to resolve the rules based on unassigned vars.
-            final IzPanel panel = installdata.getPanels().get(startPanel);
-            panel.executePreValidationActions();
-            boolean isValid = !doValidation || panel.panelValidated();
-            panel.executePostValidationActions();
-
-            // check if we can display the next panel or if there was an error during actions that
-            // disables the next button
-            if (!nextButton.isEnabled())
-            {
-                return;
-            }
-
-            // if this is not here, validation will
-            // occur mutilple times while skipping panels through the recursion
-            if (!isValid)
-            {
-                return;
-            }
-
-            // We try to show the next panel that we can.
-            int nextPanel = hasNavigateNext(startPanel, false);
-            if (-1 != nextPanel)
-            {
-                installdata.setCurPanelNumber(nextPanel);
-                switchPanel(startPanel);
-            }
-        }
-    }
-
 
     /**
      * Check to see if there is another panel that can be navigated to next. This checks the
@@ -1111,24 +1004,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public int hasNavigateNext(int startPanel, boolean visibleOnly)
     {
-        // Assume that we cannot navigate to another panel
-        int res = -1;
-        // Start from the panel given and check each one until we find one
-        // that we can navigate to or until there are no more panels
-        for (int panel = startPanel + 1; res == -1 && panel < installdata.getPanels().size(); panel++)
-        {
-            // See if we can show this panel
-            if (!visibleOnly || panelManager.isVisible(panel))
-            {
-                if (canShow(panel))
-                {
-                    res = panel;
-                }
-            }
-        }
-        // Return the result
-        logger.fine("The next panel of " + startPanel + " is panel number " + res);
-        return res;
+        return panels.getNext(startPanel, visibleOnly);
     }
 
     /**
@@ -1142,23 +1018,7 @@ public class InstallerFrame extends JFrame implements InstallerView
      */
     public int hasNavigatePrevious(int endingPanel, boolean visibleOnly)
     {
-        // Assume that we cannot navigate to another panel
-        int res = -1;
-        // Start from the panel given and check each one until we find one
-        // that we can navigate to or until there are no more panels
-        for (int panel = endingPanel - 1; res == -1 && panel >= 0; panel--)
-        {
-            // See if we can show this panel
-            if (!visibleOnly || panelManager.isVisible(panel))
-            {
-                if (canShow(panel))
-                {
-                    res = panel;
-                }
-            }
-        }
-        // Return the result
-        return res;
+        return panels.getPrevious(endingPanel, visibleOnly);
     }
 
     /**
@@ -1167,29 +1027,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     @Override
     public void navigatePrevious()
     {
-        // If the button is inactive this indicates that we cannot move
-        // so we don't do the move
-        if (!prevButton.isEnabled())
-        {
-            return;
-        }
-        this.navigatePrevious(installdata.getCurPanelNumber());
-    }
-
-    /**
-     * This function switches to the available panel that is just before the given one.
-     *
-     * @param endingPanel the panel to search backwards, beginning from this.
-     */
-    public void navigatePrevious(int endingPanel)
-    {
-        // We try to show the previous panel that we can.
-        int prevPanel = hasNavigatePrevious(endingPanel, false);
-        if (-1 != prevPanel)
-        {
-            installdata.setCurPanelNumber(prevPanel);
-            switchPanel(endingPanel);
-        }
+        panels.previous();
     }
 
     /**
@@ -1656,7 +1494,7 @@ public class InstallerFrame extends JFrame implements InstallerView
 
     }
 
-    private void performHeading(IzPanel panel)
+    private void performHeading(PanelView<IzPanel> panel)
     {
         int i;
         int headingLines = 1;
@@ -1669,7 +1507,8 @@ public class InstallerFrame extends JFrame implements InstallerView
         {
             return;
         }
-        String headline = panel.getI18nStringForClass("headline");
+        IzPanel view = panel.getView();
+        String headline = view.getI18nStringForClass("headline");
         if (headline == null)
         {
             headingPanel.setVisible(false);
@@ -1685,7 +1524,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         String info;
         for (i = 0; i < headingLines - 1; ++i)
         {
-            info = panel.getI18nStringForClass("headinfo" + Integer.toString(i));
+            info = view.getI18nStringForClass("headinfo" + Integer.toString(i));
             if (info == null)
             {
                 info = " ";
@@ -1700,22 +1539,21 @@ public class InstallerFrame extends JFrame implements InstallerView
         // Do not forgett the first headline.
         headingLabels[0].setText(headline);
         headingLabels[0].setVisible(true);
-        int curPanelNo = getCurrentPanelVisbilityNumber();
+        int curPanelNo = panels.getVisibleIndex(panel);
         if (headingLabels[headingLines] != null)
         {
             loadAndShowImage(headingLabels[headingLines], HEADING_ICON_RESOURCE, curPanelNo);
             headingLabels[headingLines].setVisible(true);
         }
         headingPanel.setVisible(true);
-
     }
 
-    public void performHeadingCounter()
+    private void performHeadingCounter(PanelView<IzPanel> panel)
     {
         if (headingCounterComponent != null)
         {
-            int curPanelNo = panelManager.getPanelVisibilityNumber((installdata.getCurPanelNumber()));
-            int visPanelsCount = panelManager.getCountVisiblePanel();
+            int curPanelNo = panels.getVisibleIndex(panel);
+            int visPanelsCount = panels.getVisible();
             String message = String.format(
                     "%s %d %s %d",
                     messages.get("installer.step"), curPanelNo + 1,
@@ -1772,7 +1610,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             StringBuilder msg = new StringBuilder();
             msg.append("<html>");
             msg.append("The following error occured during refreshing panel contents:<br>");
-            msg.append("<i>" + e.getMessage() + "</i><br>");
+            msg.append("<i>").append(e.getMessage()).append("</i><br>");
             msg.append("Are you sure you want to continue with this installation?");
             msg.append("</html>");
             JLabel label = new JLabel(msg.toString());
@@ -1789,6 +1627,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             }
             else
             {
+                // TODO - shouldn't do this. Should try and clean up the installation
                 logger.fine("Exiting");
                 System.exit(1);
             }

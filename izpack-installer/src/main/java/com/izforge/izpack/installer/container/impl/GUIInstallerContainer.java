@@ -18,10 +18,10 @@ import com.izforge.izpack.gui.GUIPrompt;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.container.provider.GUIInstallDataProvider;
 import com.izforge.izpack.installer.container.provider.IconsProvider;
+import com.izforge.izpack.installer.container.provider.IzPanelsProvider;
 import com.izforge.izpack.installer.gui.InstallerController;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.language.LanguageDialog;
-import com.izforge.izpack.installer.manager.PanelManager;
 
 /**
  * GUI Installer container.
@@ -63,10 +63,10 @@ public class GUIInstallerContainer extends InstallerContainer
         super.registerComponents(pico);
         pico
                 .addAdapter(new ProviderAdapter(new GUIInstallDataProvider()))
+                .addAdapter(new ProviderAdapter(new IzPanelsProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()));
 
         pico
-                .addComponent(PanelManager.class)
                 .addComponent(GUIPrompt.class)
                 .addComponent(InstallerController.class)
                 .addComponent(InstallerFrame.class)

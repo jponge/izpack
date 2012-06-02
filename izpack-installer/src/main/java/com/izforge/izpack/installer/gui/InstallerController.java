@@ -1,8 +1,6 @@
 package com.izforge.izpack.installer.gui;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.installer.base.InstallDataConfiguratorWithRules;
-import com.izforge.izpack.installer.manager.PanelManager;
 
 /**
  * Installer frame controller
@@ -13,29 +11,18 @@ public class InstallerController
 {
 
     private InstallerFrame installerFrame;
-    private PanelManager panelManager;
-    private AutomatedInstallData automatedInstallData;
 
-    public InstallerController(PanelManager panelManager,
-                               InstallDataConfiguratorWithRules installDataRulesEngineManager,
-                               InstallerFrame installerFrame, AutomatedInstallData automatedInstallData)
+    public InstallerController(InstallDataConfiguratorWithRules installDataRulesEngineManager,
+                               InstallerFrame installerFrame)
     {
 
-        this.panelManager = panelManager;
         this.installerFrame = installerFrame;
-        this.automatedInstallData = automatedInstallData;
         installDataRulesEngineManager.configureInstallData();
 
     }
 
-    public InstallerController preloadInstaller() throws ClassNotFoundException
-    {
-        return this;
-    }
-
     public InstallerController buildInstallation() throws Exception
     {
-        panelManager.createPanels();
         installerFrame.buildGUI();
         installerFrame.sizeFrame();
         return this;
@@ -43,18 +30,8 @@ public class InstallerController
 
     public void launchInstallation()
     {
-        activateFirstPanel();
-    }
-
-    private void activateFirstPanel()
-    {
-        int firstPanel = installerFrame.hasNavigateNext(-1, false);
-        if (firstPanel > -1)
-        {
-            installerFrame.setVisible(true);
-            automatedInstallData.setCurPanelNumber(firstPanel);
-            installerFrame.switchPanel(firstPanel);
-        }
+        installerFrame.setVisible(true);
+        installerFrame.navigateNext();
     }
 
 }

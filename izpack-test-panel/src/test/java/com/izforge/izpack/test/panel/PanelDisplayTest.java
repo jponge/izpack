@@ -19,11 +19,16 @@ import org.mockito.Mockito;
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.binding.Help;
+import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.gui.InstallerController;
+import com.izforge.izpack.installer.gui.IzPanel;
+import com.izforge.izpack.installer.gui.IzPanelView;
+import com.izforge.izpack.installer.panel.PanelView;
 import com.izforge.izpack.test.Container;
+import com.izforge.izpack.test.container.TestIzPanels;
 import com.izforge.izpack.test.container.TestPanelContainer;
 import com.izforge.izpack.test.junit.PicoRunner;
 
@@ -40,15 +45,20 @@ public class PanelDisplayTest
     private ResourceManager resourceManager;
     private UninstallDataWriter uninstallDataWriter;
     private InstallerController installerController;
+    private final TestIzPanels panels;
+    private final ObjectFactory factory;
 
     public PanelDisplayTest(GUIInstallData guiInstallData, ResourceManager resourceManager, FrameFixture frameFixture,
-                            UninstallDataWriter uninstallDataWriter, InstallerController installerController)
+                            UninstallDataWriter uninstallDataWriter, InstallerController installerController,
+                            TestIzPanels panels, ObjectFactory factory)
     {
         this.guiInstallData = guiInstallData;
         this.resourceManager = resourceManager;
         this.frameFixture = frameFixture;
         this.uninstallDataWriter = uninstallDataWriter;
         this.installerController = installerController;
+        this.panels = panels;
+        this.factory = factory;
     }
 
     @Before
@@ -115,24 +125,22 @@ public class PanelDisplayTest
     private void addPanelAndShow(String... classNames)
             throws Exception
     {
-        ArrayList<Panel> panelList = new ArrayList<Panel>();
+        List<PanelView<IzPanel>> panelList = new ArrayList<PanelView<IzPanel>>();
         for (String className : classNames)
         {
             Panel panel = new Panel();
             panel.setClassName(className);
-            panelList.add(panel);
+            IzPanelView panelView = new IzPanelView(panel, factory, guiInstallData.getVariables(), guiInstallData);
+            panelList.add(panelView);
         }
         addPanelAndShow(panelList);
     }
 
-    private void addPanelAndShow(List<Panel> panelList)
+    private void addPanelAndShow(List<PanelView<IzPanel>> panelList)
             throws Exception
     {
-        for (Panel panel : panelList)
-        {
-            guiInstallData.getPanelsOrder().add(panel);
-        }
-        installerController.preloadInstaller().buildInstallation();
+        panels.setPanels(panelList);
+        installerController.buildInstallation();
         installerController.launchInstallation();
     }
 
@@ -142,7 +150,8 @@ public class PanelDisplayTest
         Panel panel = new Panel();
         panel.setClassName("com.izforge.izpack.panels.hello.HelloPanel");
         panel.setHelps(Arrays.asList(new Help("eng", "un.html")));
-        addPanelAndShow(Collections.singletonList(panel));
+        PanelView<IzPanel> panelView = new IzPanelView(panel, factory, guiInstallData.getVariables(), guiInstallData);
+        addPanelAndShow(Collections.singletonList(panelView));
         frameFixture.button(GuiId.BUTTON_HELP.id).requireVisible();
         frameFixture.button(GuiId.BUTTON_HELP.id).click();
         DialogFixture dialogFixture = frameFixture.dialog(GuiId.HELP_WINDOWS.id);
