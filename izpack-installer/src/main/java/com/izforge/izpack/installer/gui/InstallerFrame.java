@@ -212,7 +212,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     /**
      * The panels.
      */
-    private IzPanels panels;
+    private final IzPanels panels;
 
     /**
      * The resources.
@@ -280,27 +280,6 @@ public class InstallerFrame extends JFrame implements InstallerView
         this.variables = installData.getVariables();
         this.housekeeper = housekeeper;
         this.log = log;
-
-        panels.setListener(new IzPanelsListener()
-        {
-            @Override
-            public void switchPanel(PanelView<IzPanel> newPanel, PanelView<IzPanel> oldPanel)
-            {
-                InstallerFrame.this.switchPanel(newPanel, oldPanel);
-            }
-
-            @Override
-            public void setNextEnabled(boolean enable)
-            {
-                nextButton.setEnabled(enable);
-            }
-
-            @Override
-            public void setPreviousEnabled(boolean enable)
-            {
-                prevButton.setEnabled(enable);
-            }
-        });
 
         this.messages = installData.getMessages();
         this.setIcons(icons);
@@ -443,6 +422,26 @@ public class InstallerFrame extends JFrame implements InstallerView
 
         // need to initialise the panels after construction, as many of the panels require InstallerFrame
         panels.initialise();
+        panels.setListener(new IzPanelsListener()
+        {
+            @Override
+            public void switchPanel(IzPanelView newPanel, IzPanelView oldPanel)
+            {
+                InstallerFrame.this.switchPanel(newPanel, oldPanel);
+            }
+
+            @Override
+            public void setNextEnabled(boolean enable)
+            {
+                nextButton.setEnabled(enable);
+            }
+
+            @Override
+            public void setPreviousEnabled(boolean enable)
+            {
+                prevButton.setEnabled(enable);
+            }
+        });
     }
 
     private void callGUIListener(int what)
@@ -557,13 +556,10 @@ public class InstallerFrame extends JFrame implements InstallerView
      * @param newPanel the new panel
      * @param oldPanel the old panel. May be {@code null}
      */
-    protected void switchPanel(PanelView<IzPanel> newPanel, PanelView<IzPanel> oldPanel)
+    protected void switchPanel(IzPanelView newPanel, IzPanelView oldPanel)
     {
         int oldIndex = (oldPanel != null) ? oldPanel.getIndex() : -1;
         logger.fine("Switching panel, old index is " + oldIndex);
-
-        // refresh dynamic variables every time a panel switch is done
-        refreshDynamicVariables();
 
         try
         {
@@ -668,7 +664,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             }
             performHeading(newPanel);
             performHeadingCounter(newPanel);
-            newPanel.executePreActivationActions(newView);
+            newPanel.executePreActivationActions();
             newView.panelActivate();
             panelsContainer.setVisible(true);
             if (iconLabel != null)
@@ -1494,7 +1490,7 @@ public class InstallerFrame extends JFrame implements InstallerView
 
     }
 
-    private void performHeading(PanelView<IzPanel> panel)
+    private void performHeading(IzPanelView panel)
     {
         int i;
         int headingLines = 1;
@@ -1548,7 +1544,7 @@ public class InstallerFrame extends JFrame implements InstallerView
         headingPanel.setVisible(true);
     }
 
-    private void performHeadingCounter(PanelView<IzPanel> panel)
+    private void performHeadingCounter(IzPanelView panel)
     {
         if (headingCounterComponent != null)
         {

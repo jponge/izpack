@@ -31,10 +31,7 @@ import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info;
-import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.api.factory.ObjectFactory;
-import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
@@ -53,9 +50,9 @@ public class ConsoleInstaller extends InstallerBase
 {
 
     /**
-     * The panel console factory.
+     * The panels.
      */
-    private PanelConsoleFactory factory;
+    private final ConsolePanels panels;
 
     /**
      * The installation data.
@@ -63,19 +60,9 @@ public class ConsoleInstaller extends InstallerBase
     private AutomatedInstallData installData;
 
     /**
-     * The rules engine.
-     */
-    private final RulesEngine rules;
-
-    /**
      * Verifies the installation requirements.
      */
     private final RequirementsChecker requirements;
-
-    /**
-     * The factory for <tt>DataValidator</tt> instances.
-     */
-    private final ObjectFactory objectFactory;
 
     /**
      * The uninstallation data writer.
@@ -101,24 +88,20 @@ public class ConsoleInstaller extends InstallerBase
     /**
      * Constructs a <tt>ConsoleInstaller</tt>
      *
-     * @param factory             the factory to create panels with
+     * @param panels              the panels
      * @param installData         the installation data
-     * @param rules               the rules engine
      * @param requirements        the installation requirements
      * @param uninstallDataWriter the uninstallation data writer
      * @param console             the console
      * @param housekeeper         the house-keeper
      * @throws IzPackException for any IzPack error
      */
-    public ConsoleInstaller(ObjectFactory factory, AutomatedInstallData installData, RulesEngine rules,
-                            RequirementsChecker requirements, UninstallDataWriter uninstallDataWriter, Console console,
-                            Housekeeper housekeeper)
+    public ConsoleInstaller(ConsolePanels panels, AutomatedInstallData installData, RequirementsChecker requirements,
+                            UninstallDataWriter uninstallDataWriter, Console console, Housekeeper housekeeper)
     {
-        this.factory = new PanelConsoleFactory(factory);
+        this.panels = panels;
         this.installData = installData;
-        this.rules = rules;
         this.requirements = requirements;
-        this.objectFactory = factory;
         this.uninstallDataWriter = uninstallDataWriter;
         this.console = console;
         this.housekeeper = housekeeper;
@@ -132,12 +115,12 @@ public class ConsoleInstaller extends InstallerBase
     public boolean canInstall()
     {
         boolean success = true;
-        for (Panel panel : installData.getPanelsOrder())
+        for (ConsolePanelView panel : panels.getPanels())
         {
-            if (factory.getClass(panel) == null)
+            if (panel.getViewClass() == null)
             {
                 success = false;
-                logger.warning("No console implementation of panel: " + panel.getClassName());
+                logger.warning("No console implementation of panel: " + panel.getPanel().getClassName());
             }
         }
         return success;
@@ -178,7 +161,19 @@ public class ConsoleInstaller extends InstallerBase
                 if (requirements.check())
                 {
                     action = createConsoleAction(type, path, console);
-                    success = run(action);
+                    panels.setAction(action);
+                    while (panels.hasNext())
+                    {
+                        success = panels.next();
+                        if (!success)
+                        {
+                            break;
+                        }
+                    }
+                    if (success)
+                    {
+                        success = action.complete();
+                    }
                 }
             }
             catch (Throwable t)
@@ -264,17 +259,6 @@ public class ConsoleInstaller extends InstallerBase
     }
 
     /**
-     * Runs a console action.
-     *
-     * @param action the action to run
-     * @return <tt>true</tt> if the action was successful, otherwise <tt>false</tt>
-     */
-    protected boolean run(ConsoleAction action)
-    {
-        return action.run(console);
-    }
-
-    /**
      * Returns the console.
      *
      * @return the console
@@ -295,7 +279,7 @@ public class ConsoleInstaller extends InstallerBase
      */
     private ConsoleAction createConsoleAction(int type, String path, Console console) throws IOException
     {
-        ConsoleAction action = null;
+        ConsoleAction action;
         switch (type)
         {
             case Installer.CONSOLE_GEN_TEMPLATE:
@@ -307,6 +291,7 @@ public class ConsoleInstaller extends InstallerBase
                 break;
 
             case Installer.CONSOLE_FROM_SYSTEMPROPERTIES:
+                action = new PropertyInstallAction(installData, uninstallDataWriter, System.getProperties());
                 break;
 
             case Installer.CONSOLE_FROM_SYSTEMPROPERTIESMERGE:
@@ -326,7 +311,7 @@ public class ConsoleInstaller extends InstallerBase
      */
     private ConsoleAction createInstallAction()
     {
-        return new ConsoleInstallAction(factory, installData, objectFactory, rules, uninstallDataWriter);
+        return new ConsoleInstallAction(console, installData, uninstallDataWriter);
     }
 
     /**
@@ -338,7 +323,7 @@ public class ConsoleInstaller extends InstallerBase
      */
     private ConsoleAction createGeneratePropertiesAction(String path) throws IOException
     {
-        return new GeneratePropertiesAction(factory, installData, objectFactory, rules, path);
+        return new GeneratePropertiesAction(installData, path);
     }
 
     /**
@@ -355,8 +340,7 @@ public class ConsoleInstaller extends InstallerBase
         {
             Properties properties = new Properties();
             properties.load(in);
-            return new PropertyInstallAction(factory, installData, objectFactory, rules, uninstallDataWriter,
-                                             properties);
+            return new PropertyInstallAction(installData, uninstallDataWriter, properties);
         }
         finally
         {
@@ -392,8 +376,7 @@ public class ConsoleInstaller extends InstallerBase
                                             + oldValue + "' --> '" + newValue + "'");
                 }
             }
-            return new PropertyInstallAction(factory, installData, objectFactory, rules, uninstallDataWriter,
-                                             properties);
+            return new PropertyInstallAction(installData, uninstallDataWriter, properties);
         }
         finally
         {

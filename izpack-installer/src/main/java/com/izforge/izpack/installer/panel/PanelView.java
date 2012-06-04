@@ -2,13 +2,16 @@ package com.izforge.izpack.installer.panel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.installer.DataValidator;
+import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.data.PanelAction;
 
 
@@ -17,7 +20,7 @@ import com.izforge.izpack.data.PanelAction;
  *
  * @author Tim Anderson
  */
-public class PanelView<T>
+public abstract class PanelView<T>
 {
 
     /**
@@ -34,11 +37,6 @@ public class PanelView<T>
      * The factory for creating the view.
      */
     private final ObjectFactory factory;
-
-    /**
-     * Variables used to determine if the view can be displayed.
-     */
-    private final Variables variables;
 
     /**
      * The panel index.
@@ -81,21 +79,24 @@ public class PanelView<T>
     private final List<PanelAction> postValidationActions = new ArrayList<PanelAction>();
 
     /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(PanelView.class.getName());
+
+
+    /**
      * Constructs a {@code PanelView}.
      *
      * @param panel       the panel
      * @param viewClass   the panel user interface class
      * @param factory     the factory for creating the view
-     * @param variables   variables used to determine if the view can be displayed
      * @param installData the installation data
      */
-    public PanelView(Panel panel, Class<T> viewClass, ObjectFactory factory, Variables variables,
-                     AutomatedInstallData installData)
+    public PanelView(Panel panel, Class<T> viewClass, ObjectFactory factory, AutomatedInstallData installData)
     {
         this.panel = panel;
         this.viewClass = viewClass;
         this.factory = factory;
-        this.variables = variables;
         this.installData = installData;
     }
 
@@ -151,7 +152,7 @@ public class PanelView<T>
         if (view == null)
         {
             executePreConstructionActions();
-            view = factory.create(panel.getClassName(), viewClass, panel);
+            view = createView(panel, viewClass);
             String dataValidator = panel.getValidator();
             if (dataValidator != null)
             {
@@ -165,17 +166,6 @@ public class PanelView<T>
             initialise(view, panel, installData);
         }
         return view;
-    }
-
-
-    /**
-     * Returns the panel validator.
-     *
-     * @return the panel validator, or {@code null} if there is none
-     */
-    public DataValidator getValidator()
-    {
-        return validator;
     }
 
     /**
@@ -199,6 +189,23 @@ public class PanelView<T>
     }
 
     /**
+     * Determines if the panel is valid.
+     *
+     * @return {@code true} if the panel is valid
+     */
+    public boolean isValid()
+    {
+        boolean result = false;
+
+        List<DynamicInstallerRequirementValidator> conditions = installData.getDynamicinstallerrequirements();
+        if (conditions == null || validateDynamicConditions())
+        {
+            result = validator == null || validateData();
+        }
+        return result;
+    }
+
+    /**
      * Determines if the panel can be shown.
      *
      * @return {@code true} if the panel can be shown
@@ -207,7 +214,7 @@ public class PanelView<T>
     {
         boolean result;
         String panelId = panel.getPanelid();
-        variables.refresh();
+        installData.refreshVariables();
         if (panel.hasCondition())
         {
             result = installData.getRules().isConditionTrue(panel.getCondition());
@@ -221,39 +228,51 @@ public class PanelView<T>
 
     /**
      * Executes actions prior to activating the panel.
-     *
-     * @param handler the handler to notify
      */
-    public void executePreActivationActions(AbstractUIHandler handler)
+    public void executePreActivationActions()
     {
-        execute(preActivationActions, handler);
+        execute(preActivationActions);
     }
 
     /**
      * Executes actions prior to validating the panel.
-     *
-     * @param handler the handler to notify
      */
-    public void executePreValidationActions(AbstractUIHandler handler)
+    public void executePreValidationActions()
     {
-        execute(preValidationActions, handler);
+        execute(preValidationActions);
     }
 
     /**
      * Executes actions after validating the panel.
-     *
-     * @param handler the handler to notify
      */
-    public void executePostValidationActions(AbstractUIHandler handler)
+    public void executePostValidationActions()
     {
-        execute(postValidationActions, handler);
+        execute(postValidationActions);
     }
 
+    /**
+     * Returns a handler to prompt the user.
+     *
+     * @return the handler
+     */
+    protected abstract AbstractUIHandler getHandler();
+
+    /**
+     * Creates a new view.
+     *
+     * @param panel     the panel to create the view for
+     * @param viewClass the view base class
+     * @return the new view
+     */
+    protected T createView(Panel panel, Class<T> viewClass)
+    {
+        return factory.create(panel.getClassName(), viewClass, panel);
+    }
 
     /**
      * Initialises the view.
      * <br/>
-     * This implementation is a no-op
+     * This implementation is a no-op.
      *
      * @param view        the view to initialise
      * @param panel       the panel the view represents
@@ -265,13 +284,134 @@ public class PanelView<T>
     }
 
     /**
+     * Validates dynamic conditions.
+     *
+     * @return {@code true} if there are no conditions, or conditions validate successfully
+     */
+    protected boolean validateDynamicConditions()
+    {
+        boolean result = true;
+        try
+        {
+            installData.refreshVariables();
+            for (DynamicInstallerRequirementValidator validator : installData.getDynamicinstallerrequirements())
+            {
+                if (!isValid(validator, installData))
+                {
+                    result = false;
+                    break;
+                }
+            }
+        }
+        catch (Throwable exception)
+        {
+            logger.log(Level.WARNING, exception.getMessage(), exception);
+            result = false;
+        }
+        return result;
+    }
+
+    /**
+     * Evaluates the panel data validator.
+     *
+     * @return {@code true} if the validator evaluated successfully, or with a warning that the user chose to skip;
+     *         otherwise {@code false}
+     */
+    protected boolean validateData()
+    {
+        return isValid(validator, installData);
+    }
+
+    /**
+     * Evaluates a validator.
+     * <p/>
+     * If the validator returns a warning status, then a prompt will be displayed asking the user to skip the
+     * validation or not.
+     *
+     * @param validator   the validator to evaluate
+     * @param installData the installation data
+     * @return {@code true} if the validator evaluated successfully, or with a warning that the user chose to skip;
+     *         otherwise {@code false}
+     */
+    protected boolean isValid(DataValidator validator, AutomatedInstallData installData)
+    {
+        boolean result = false;
+        DataValidator.Status status = validator.validateData(installData);
+        logger.fine("Data validation status=" + status + ", for validator=" + validator.getClass().getName());
+
+        if (status == DataValidator.Status.OK)
+        {
+            result = true;
+        }
+        else
+        {
+            if (status == DataValidator.Status.WARNING)
+            {
+                String message = getMessage(validator.getWarningMessageId(), true);
+                if (message == null)
+                {
+                    logger.warning("No warning message for validator=" + validator.getClass().getName());
+                }
+                result = isWarningValid(message, validator.getDefaultAnswer());
+            }
+            else
+            {
+                String message = getMessage(validator.getErrorMessageId(), true);
+                if (message == null)
+                {
+                    logger.warning("No error message for validator=" + validator.getClass().getName());
+                    message = "Validation error";
+                }
+                getHandler().emitError(getMessage("data.validation.error.title"), message);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Determines the behaviour when a warning is encountered during validation.
+     *
+     * @param message       the validation message. May be {@code null}
+     * @param defaultAnswer the default response for warnings
+     * @return {@code true} if the warning doesn't invalidate the panel; {@code false} if it does
+     */
+    protected boolean isWarningValid(String message, boolean defaultAnswer)
+    {
+        boolean result = false;
+        if (message != null)
+        {
+            if (getHandler().emitWarning(getMessage("data.validation.warning.title"), message))
+            {
+                result = true;
+                logger.fine("User decided to skip validation warning");
+            }
+        }
+        else
+        {
+            logger.fine("No warning message available, using default answer=" + defaultAnswer);
+            result = defaultAnswer;
+        }
+        return result;
+    }
+
+    /**
+     * Returns the factory.
+     *
+     * @return the factory
+     */
+    protected ObjectFactory getFactory()
+    {
+        return factory;
+    }
+
+    /**
      * Executes actions.
      *
      * @param actions the actions to execute
-     * @param handler the handler to notify
      */
-    private void execute(List<PanelAction> actions, AbstractUIHandler handler)
+    private void execute(List<PanelAction> actions)
     {
+        AbstractUIHandler handler = getHandler();
         for (PanelAction action : actions)
         {
             action.executeAction(installData, handler);
@@ -312,6 +452,39 @@ public class PanelView<T>
                 actions.add(action);
             }
         }
+    }
+
+    /**
+     * Helper to return a localised message, given its id.
+     *
+     * @param id the message identifier
+     * @return the corresponding message or {@code null} if none is found
+     */
+    private String getMessage(String id)
+    {
+        return getMessage(id, false);
+    }
+
+    /**
+     * Helper to return a localised message, given its id.
+     *
+     * @param id      the message identifier
+     * @param replace if {@code true}, replace any variables in the message with their corresponding values
+     * @return the corresponding message or {@code null} if none is found
+     */
+    private String getMessage(String id, boolean replace)
+    {
+        String message = null;
+        if (id != null)
+        {
+            Messages messages = installData.getMessages();
+            message = messages.get(id);
+            if (replace)
+            {
+                message = installData.getVariables().replace(message);
+            }
+        }
+        return message;
     }
 
 }

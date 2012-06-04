@@ -5,20 +5,25 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.data.Variables;
 
 /**
  * Abstract implementation of the {@link Panels} interface.
  *
  * @author Tim Anderson
  */
-public abstract class AbstractPanels<T> implements Panels<T>
+public abstract class AbstractPanels<T extends PanelView> implements Panels<T>
 {
 
     /**
      * The panels.
      */
-    private final List<PanelView<T>> panels;
+    private final List<T> panels;
+
+    /**
+     * The variables.
+     */
+    private final Variables variables;
 
     /**
      * The current panel index.
@@ -43,11 +48,13 @@ public abstract class AbstractPanels<T> implements Panels<T>
     /**
      * Constructs an {@code AbstractPanels}.
      *
-     * @param panels the panels
+     * @param panels    the panels
+     * @param variables the variables. These are refreshed prior to each panel switch
      */
-    public AbstractPanels(List<PanelView<T>> panels)
+    public AbstractPanels(List<T> panels, Variables variables)
     {
         this.panels = panels;
+        this.variables = variables;
         nextEnabled = !panels.isEmpty();
     }
 
@@ -57,7 +64,7 @@ public abstract class AbstractPanels<T> implements Panels<T>
      * @return the panels
      */
     @Override
-    public List<PanelView<T>> getPanels()
+    public List<T> getPanels()
     {
         return panels;
     }
@@ -68,7 +75,7 @@ public abstract class AbstractPanels<T> implements Panels<T>
      * @return the current panel, or {@code null} if there is no current panel
      */
     @Override
-    public PanelView<T> getPanel()
+    public T getPanel()
     {
         return getPanel(index);
     }
@@ -82,6 +89,17 @@ public abstract class AbstractPanels<T> implements Panels<T>
     public int getIndex()
     {
         return index;
+    }
+
+    /**
+     * Determines if there is another panel after the current panel.
+     *
+     * @return {@code true} if there is another panel
+     */
+    @Override
+    public boolean hasNext()
+    {
+        return getNext(index, false) != -1;
     }
 
     /**
@@ -127,7 +145,7 @@ public abstract class AbstractPanels<T> implements Panels<T>
     public boolean next(boolean validate)
     {
         boolean result = false;
-        PanelView<T> panel = getPanel();
+        T panel = getPanel();
         boolean isValid = panel == null || executeValidationActions(panel, validate);
         if (isValid && isNextEnabled())     // NOTE: actions may change isNextEnabled() status
         {
@@ -206,7 +224,7 @@ public abstract class AbstractPanels<T> implements Panels<T>
     public int getNext(int index, boolean visibleOnly)
     {
         int result = -1;
-        List<PanelView<T>> panels = getPanels();
+        List<T> panels = getPanels();
         for (int i = index + 1; i < panels.size(); ++i)
         {
             if (canShow(panels.get(i), visibleOnly))
@@ -247,7 +265,7 @@ public abstract class AbstractPanels<T> implements Panels<T>
      * @return the panel's visible index, or {@code -1} if the panel is not visible
      */
     @Override
-    public int getVisibleIndex(PanelView<T> panel)
+    public int getVisibleIndex(T panel)
     {
         int result = 0;
         if (panel.isVisible())
@@ -299,8 +317,12 @@ public abstract class AbstractPanels<T> implements Panels<T>
         {
             logger.fine("Selecting panel=" + newIndex + ", old index=" + index);
         }
-        PanelView<T> oldPanel = getPanel(index);
-        PanelView<T> newPanel = getPanel(newIndex);
+
+        // refresh variables prior to switching panels
+        variables.refresh();
+
+        T oldPanel = getPanel(index);
+        T newPanel = getPanel(newIndex);
         if (switchPanel(newPanel, oldPanel))
         {
             index = newIndex;
@@ -320,7 +342,7 @@ public abstract class AbstractPanels<T> implements Panels<T>
      * @param oldPanel the panel to switch from, or {@code null} if there was no prior panel
      * @return {@code true} if the switch was successful
      */
-    protected abstract boolean switchPanel(PanelView<T> newPanel, PanelView<T> oldPanel);
+    protected abstract boolean switchPanel(T newPanel, T oldPanel);
 
     /**
      * Executes any pre and post-validation actions for a panel.
@@ -329,30 +351,13 @@ public abstract class AbstractPanels<T> implements Panels<T>
      * @param validate if {@code true}, validate the panel after executing the pre-validation actions
      * @return {@code true} if the panel is valid
      */
-    protected boolean executeValidationActions(PanelView<T> panel, boolean validate)
+    protected boolean executeValidationActions(T panel, boolean validate)
     {
-        AbstractUIHandler handler = getHandler(panel);
-        panel.executePreValidationActions(handler);
-        boolean isValid = !validate || isValid(panel);
-        panel.executePostValidationActions(handler);
+        panel.executePreValidationActions();
+        boolean isValid = !validate || panel.isValid();
+        panel.executePostValidationActions();
         return isValid;
     }
-
-    /**
-     * Determines if a panel is valid.
-     *
-     * @param panel the panel to check
-     * @return {@code true} if the panel is valid
-     */
-    protected abstract boolean isValid(PanelView<T> panel);
-
-    /**
-     * Returns a handler to pass to a panel's actions.
-     *
-     * @param panel the panel
-     * @return the handler to use
-     */
-    protected abstract AbstractUIHandler getHandler(PanelView<T> panel);
 
     /**
      * Returns the panel at the specified index.
@@ -360,9 +365,9 @@ public abstract class AbstractPanels<T> implements Panels<T>
      * @param index the panel index
      * @return the corresponding panel, or {@code null} if there is no panel at the index
      */
-    private PanelView<T> getPanel(int index)
+    private T getPanel(int index)
     {
-        List<PanelView<T>> panels = getPanels();
+        List<T> panels = getPanels();
         return index >= 0 && index < panels.size() ? panels.get(index) : null;
     }
 
@@ -373,7 +378,7 @@ public abstract class AbstractPanels<T> implements Panels<T>
      * @param visibleOnly if {@code true}, only examine visible panels
      * @return {@code true} if the nominated panel can be shown
      */
-    private boolean canShow(PanelView<T> panel, boolean visibleOnly)
+    private boolean canShow(T panel, boolean visibleOnly)
     {
         return (!visibleOnly || panel.isVisible()) && panel.canShow();
     }

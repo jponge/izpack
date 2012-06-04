@@ -8,10 +8,8 @@ import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
-import com.izforge.izpack.installer.gui.IzPanel;
 import com.izforge.izpack.installer.gui.IzPanelView;
 import com.izforge.izpack.installer.gui.IzPanels;
-import com.izforge.izpack.installer.panel.PanelView;
 
 
 /**
@@ -21,7 +19,6 @@ import com.izforge.izpack.installer.panel.PanelView;
  */
 public class IzPanelsProvider extends PanelsProvider
 {
-
     /**
      * Creates the panels.
      * <p/>
@@ -31,11 +28,11 @@ public class IzPanelsProvider extends PanelsProvider
      */
     public IzPanels provide(ObjectFactory factory, InstallerContainer container, GUIInstallData installData)
     {
-        List<PanelView<IzPanel>> panels = new ArrayList<PanelView<IzPanel>>();
+        List<IzPanelView> panels = new ArrayList<IzPanelView>();
 
         for (Panel panel : prepare(installData))
         {
-            PanelView<IzPanel> panelView = new IzPanelView(panel, factory, installData.getVariables(), installData);
+            IzPanelView panelView = new IzPanelView(panel, factory, installData);
             panels.add(panelView);
             panelView.setIndex(panels.size() - 1);
         }

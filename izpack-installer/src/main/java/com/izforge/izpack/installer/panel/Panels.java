@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author Tim Anderson
  */
-public interface Panels<T>
+public interface Panels<T extends PanelView>
 {
 
     /**
@@ -16,14 +16,14 @@ public interface Panels<T>
      *
      * @return the panels
      */
-    List<PanelView<T>> getPanels();
+    List<T> getPanels();
 
     /**
      * Returns the current panel.
      *
      * @return the current panel, or {@code null} if there is no current panel
      */
-    PanelView<T> getPanel();
+    T getPanel();
 
     /**
      * Returns the current panel index.
@@ -31,6 +31,13 @@ public interface Panels<T>
      * @return the current panel index, or {@code -1} if there is no current panel
      */
     int getIndex();
+
+    /**
+     * Determines if there is another panel after the current panel.
+     *
+     * @return {@code true} if there is another panel
+     */
+    boolean hasNext();
 
     /**
      * Navigates to the next panel.
@@ -115,7 +122,7 @@ public interface Panels<T>
      * @param panel the panel
      * @return the panel's visible index, or {@code -1} if the panel is not visible
      */
-    int getVisibleIndex(PanelView<T> panel);
+    int getVisibleIndex(T panel);
 
     /**
      * Returns the number of visible panels.

@@ -38,6 +38,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
+import com.izforge.izpack.installer.console.ConsolePanels;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.panels.userinput.processor.Processor;
@@ -145,15 +146,22 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     private final Resources resources;
 
     /**
+     * The panels.
+     */
+    private final ConsolePanels panels;
+
+    /**
      * Constructs an <tt>UserInputPanelConsoleHelper</tt>.
      *
      * @param resources the resources
+     * @param panels    the panels
      */
-    public UserInputPanelConsoleHelper(Resources resources)
+    public UserInputPanelConsoleHelper(Resources resources, ConsolePanels panels)
     {
         instanceNumber = instanceCount++;
         listInputs = new ArrayList<Input>();
         this.resources = resources;
+        this.panels = panels;
     }
 
     @Override
@@ -250,7 +258,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         List<IXMLElement> specElements;
         String attribute;
         String dataID;
-        String panelid = installData.getPanelsOrder().get(installData.getCurPanelNumber()).getPanelid();
+        String panelid = panels.getPanel().getPanelId();
         String instance = Integer.toString(instanceNumber);
 
         SpecHelper specHelper = new SpecHelper(resources);

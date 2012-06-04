@@ -3,13 +3,7 @@ package com.izforge.izpack.installer.console;
 import java.util.Properties;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.factory.ObjectFactory;
-import com.izforge.izpack.api.installer.DataValidator;
-import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
-import com.izforge.izpack.util.Console;
 
 
 /**
@@ -27,39 +21,26 @@ class PropertyInstallAction extends AbstractInstallAction
     /**
      * Constructs a <tt>PropertyInstallAction</tt>.
      *
-     * @param factory       the panel console factory
-     * @param installData   the installation data
-     * @param objectFactory the factory for {@link DataValidator} instances
-     * @param rules         the rules engine
-     * @param writer        the uninstallation data writer
-     * @param properties    the installation properties
+     * @param installData the installation data
+     * @param writer      the uninstallation data writer
+     * @param properties  the installation properties
      */
-    public PropertyInstallAction(PanelConsoleFactory factory, AutomatedInstallData installData,
-                                 ObjectFactory objectFactory, RulesEngine rules, UninstallDataWriter writer,
-                                 Properties properties)
+    public PropertyInstallAction(AutomatedInstallData installData, UninstallDataWriter writer, Properties properties)
     {
-        super(factory, installData, objectFactory, rules, writer);
+        super(installData, writer);
         this.properties = properties;
     }
 
     /**
-     * Runs the action for the console panel associated with the specified panel.
+     * Runs the action for the panel.
      *
-     * @param panel        the panel
-     * @param panelConsole the console implementation of the panel
-     * @param console      the console
-     * @return <tt>true</tt> if the action was successful, otherwise <tt>false</tt>
-     * @throws InstallerException for any installer error
+     * @param panel the panel
+     * @return {@code true} if the action was successful, otherwise {@code false}
      */
     @Override
-    protected boolean run(Panel panel, PanelConsole panelConsole, Console console) throws InstallerException
+    public boolean run(ConsolePanelView panel)
     {
-        boolean result = panelConsole.runConsoleFromProperties(getInstallData(), properties);
-        if (result)
-        {
-            result = validatePanel(panel, console);
-        }
-        return result;
+        return panel.getView().runConsoleFromProperties(getInstallData(), properties);
     }
 
 }

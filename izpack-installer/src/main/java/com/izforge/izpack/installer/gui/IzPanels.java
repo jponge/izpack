@@ -3,10 +3,8 @@ package com.izforge.izpack.installer.gui;
 import java.util.List;
 
 import com.izforge.izpack.api.container.Container;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.panel.AbstractPanels;
-import com.izforge.izpack.installer.panel.PanelView;
 
 
 /**
@@ -14,7 +12,7 @@ import com.izforge.izpack.installer.panel.PanelView;
  *
  * @author Tim Anderson
  */
-public class IzPanels extends AbstractPanels<IzPanel>
+public class IzPanels extends AbstractPanels<IzPanelView>
 {
     /**
      * The installation data.
@@ -43,9 +41,9 @@ public class IzPanels extends AbstractPanels<IzPanel>
      * @param container   the container to register {@link IzPanel}s with
      * @param installData the installation data
      */
-    public IzPanels(List<PanelView<IzPanel>> panels, Container container, GUIInstallData installData)
+    public IzPanels(List<IzPanelView> panels, Container container, GUIInstallData installData)
     {
-        super(panels);
+        super(panels, installData.getVariables());
         this.container = container;
         this.installData = installData;
     }
@@ -55,13 +53,14 @@ public class IzPanels extends AbstractPanels<IzPanel>
      */
     public void initialise()
     {
-        for (PanelView<IzPanel> panel : getPanels())
+        for (IzPanelView panel : getPanels())
         {
             // need to defer creation of the IzPanel until after the InstallerFrame is constructed
             IzPanel view = panel.getView();
             installData.getPanels().add(view);
             String panelId = panel.getPanelId();
-            if (panelId == null) {
+            if (panelId == null)
+            {
                 panelId = view.getClass().getName();
             }
             container.addComponent(panelId, view);
@@ -69,7 +68,7 @@ public class IzPanels extends AbstractPanels<IzPanel>
     }
 
     /**
-     * Sets the listener to notfify of events.
+     * Sets the listener to notify of events.
      *
      * @param listener the listener. May be {@code null}
      */
@@ -120,30 +119,6 @@ public class IzPanels extends AbstractPanels<IzPanel>
     }
 
     /**
-     * Determines if a panel is valid.
-     *
-     * @param panel the panel to check
-     * @return {@code true} if the panel is valid
-     */
-    @Override
-    protected boolean isValid(PanelView<IzPanel> panel)
-    {
-        return panel.getView().panelValidated();
-    }
-
-    /**
-     * Returns a handler to pass to a panel's actions.
-     *
-     * @param panel the panel
-     * @return the handler to use
-     */
-    @Override
-    protected AbstractUIHandler getHandler(PanelView<IzPanel> panel)
-    {
-        return panel.getView();
-    }
-
-    /**
      * Switches panels.
      *
      * @param newPanel the panel to switch to
@@ -151,7 +126,7 @@ public class IzPanels extends AbstractPanels<IzPanel>
      * @return {@code true} if the switch was successful
      */
     @Override
-    protected boolean switchPanel(PanelView<IzPanel> newPanel, PanelView<IzPanel> oldPanel)
+    protected boolean switchPanel(IzPanelView newPanel, IzPanelView oldPanel)
     {
         boolean result = false;
         try

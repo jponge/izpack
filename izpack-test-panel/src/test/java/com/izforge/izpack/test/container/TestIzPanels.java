@@ -6,8 +6,8 @@ import java.util.List;
 import com.izforge.izpack.api.container.Container;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.IzPanel;
+import com.izforge.izpack.installer.gui.IzPanelView;
 import com.izforge.izpack.installer.gui.IzPanels;
-import com.izforge.izpack.installer.panel.PanelView;
 
 /**
  * Hack implementation of {@link IzPanels} to enable {@code PanelDisplayTest} to set the panels after the
@@ -20,7 +20,7 @@ public class TestIzPanels extends IzPanels
     /**
      * The panels
      */
-    private List<PanelView<IzPanel>> panels;
+    private List<IzPanelView> panels;
 
     /**
      * Constructs a {@code IzPanels}.
@@ -30,7 +30,7 @@ public class TestIzPanels extends IzPanels
      */
     public TestIzPanels(Container container, GUIInstallData installData)
     {
-        super(Collections.<PanelView<IzPanel>>emptyList(), container, installData);
+        super(Collections.<IzPanelView>emptyList(), container, installData);
     }
 
     /**
@@ -38,7 +38,7 @@ public class TestIzPanels extends IzPanels
      *
      * @param panels the panels
      */
-    public void setPanels(List<PanelView<IzPanel>> panels) {
+    public void setPanels(List<IzPanelView> panels) {
         this.panels = panels;
     }
 
@@ -48,7 +48,7 @@ public class TestIzPanels extends IzPanels
      * @return the panels
      */
     @Override
-    public List<PanelView<IzPanel>> getPanels()
+    public List<IzPanelView> getPanels()
     {
         return panels;
     }

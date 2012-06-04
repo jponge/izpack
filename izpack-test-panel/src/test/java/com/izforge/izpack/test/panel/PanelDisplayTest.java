@@ -24,9 +24,7 @@ import com.izforge.izpack.core.resource.ResourceManager;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.gui.InstallerController;
-import com.izforge.izpack.installer.gui.IzPanel;
 import com.izforge.izpack.installer.gui.IzPanelView;
-import com.izforge.izpack.installer.panel.PanelView;
 import com.izforge.izpack.test.Container;
 import com.izforge.izpack.test.container.TestIzPanels;
 import com.izforge.izpack.test.container.TestPanelContainer;
@@ -125,18 +123,18 @@ public class PanelDisplayTest
     private void addPanelAndShow(String... classNames)
             throws Exception
     {
-        List<PanelView<IzPanel>> panelList = new ArrayList<PanelView<IzPanel>>();
+        List<IzPanelView> panelList = new ArrayList<IzPanelView>();
         for (String className : classNames)
         {
             Panel panel = new Panel();
             panel.setClassName(className);
-            IzPanelView panelView = new IzPanelView(panel, factory, guiInstallData.getVariables(), guiInstallData);
+            IzPanelView panelView = new IzPanelView(panel, factory, guiInstallData);
             panelList.add(panelView);
         }
         addPanelAndShow(panelList);
     }
 
-    private void addPanelAndShow(List<PanelView<IzPanel>> panelList)
+    private void addPanelAndShow(List<IzPanelView> panelList)
             throws Exception
     {
         panels.setPanels(panelList);
@@ -150,7 +148,7 @@ public class PanelDisplayTest
         Panel panel = new Panel();
         panel.setClassName("com.izforge.izpack.panels.hello.HelloPanel");
         panel.setHelps(Arrays.asList(new Help("eng", "un.html")));
-        PanelView<IzPanel> panelView = new IzPanelView(panel, factory, guiInstallData.getVariables(), guiInstallData);
+        IzPanelView panelView = new IzPanelView(panel, factory, guiInstallData);
         addPanelAndShow(Collections.singletonList(panelView));
         frameFixture.button(GuiId.BUTTON_HELP.id).requireVisible();
         frameFixture.button(GuiId.BUTTON_HELP.id).click();

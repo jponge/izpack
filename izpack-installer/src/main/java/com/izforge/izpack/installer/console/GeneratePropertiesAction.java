@@ -5,12 +5,6 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.factory.ObjectFactory;
-import com.izforge.izpack.api.installer.DataValidator;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.util.Console;
 import com.izforge.izpack.util.file.FileUtils;
 
 /**
@@ -28,19 +22,14 @@ class GeneratePropertiesAction extends ConsoleAction
     /**
      * Constructs a <tt>GeneratePropertiesAction</tt>.
      *
-     * @param factory       the panel console factory
-     * @param installData   the installation data
-     * @param objectFactory the factory for {@link DataValidator} instances
-     * @param rules         the rules engine
-     * @param path          the path to write properties to
+     * @param installData the installation data
+     * @param path        the path to write properties to
      * @throws FileNotFoundException if the file exists but is a directory rather than a regular file, does not exist
      *                               but cannot be created, or cannot be opened for any other reason
      */
-    public GeneratePropertiesAction(PanelConsoleFactory factory, AutomatedInstallData installData,
-                                    ObjectFactory objectFactory, RulesEngine rules, String path)
-            throws FileNotFoundException
+    public GeneratePropertiesAction(AutomatedInstallData installData, String path) throws FileNotFoundException
     {
-        super(factory, installData, objectFactory, rules);
+        super(installData);
         writer = new PrintWriter(new FileOutputStream(path), true);
     }
 
@@ -56,36 +45,25 @@ class GeneratePropertiesAction extends ConsoleAction
     }
 
     /**
-     * Runs the action for each panel.
+     * Runs the action for the panel.
      *
-     * @param console the console
-     * @return <tt>true</tt> if the action was successful, otherwise <tt>false</tt>
+     * @param panel the panel
+     * @return {@code true} if the action was successful, otherwise {@code false}
      */
     @Override
-    public boolean run(Console console)
+    public boolean run(ConsolePanelView panel)
     {
-        boolean result = super.run(console);
-        FileUtils.close(writer);
-        return result;
+        return panel.getView().runGeneratePropertiesFile(getInstallData(), writer);
     }
 
     /**
-     * Runs the action for the console panel associated with the specified panel.
+     * Invoked after the action has been successfully run for each panel.
      *
-     * @param panel        the panel
-     * @param panelConsole the console implementation of the panel
-     * @param console      the console
-     * @return <tt>true</tt> if the action was successful, otherwise <tt>false</tt>
-     * @throws InstallerException for any installer error
-     */
-    @Override
-    protected boolean run(Panel panel, PanelConsole panelConsole, Console console) throws InstallerException
+     * @return {@code true} if the operation succeeds; {@code false} if it fails
+     */    @Override
+    public boolean complete()
     {
-        boolean result = panelConsole.runGeneratePropertiesFile(getInstallData(), writer);
-        if (result)
-        {
-            result = validatePanel(panel, console);
-        }
-        return result;
+        FileUtils.close(writer);
+        return true;
     }
 }

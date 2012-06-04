@@ -1,8 +1,5 @@
 package com.izforge.izpack.installer.gui;
 
-import com.izforge.izpack.installer.panel.PanelView;
-
-
 /**
  * Listener for {@link IzPanels} events.
  *
@@ -16,7 +13,7 @@ public interface IzPanelsListener
      * @param newPanel the panel to switch to
      * @param oldPanel the panel to switch from, or {@code null} if there was no prior panel
      */
-    void switchPanel(PanelView<IzPanel> newPanel, PanelView<IzPanel> oldPanel);
+    void switchPanel(IzPanelView newPanel, IzPanelView oldPanel);
 
     /**
      * Determines if the next panel may be navigated to.

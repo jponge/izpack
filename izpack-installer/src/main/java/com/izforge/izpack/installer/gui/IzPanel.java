@@ -21,15 +21,12 @@
 package com.izforge.izpack.installer.gui;
 
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.LayoutManager2;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -44,15 +41,11 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.installer.DataValidator;
-import com.izforge.izpack.api.installer.DataValidator.Status;
 import com.izforge.izpack.api.installer.ISummarisable;
 import com.izforge.izpack.api.resource.Resources;
-import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
@@ -106,7 +99,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Is this panel general hidden or not
      */
-    protected boolean hidden;
+    private boolean hidden;
 
     /**
      * HEADLINE = "headline"
@@ -114,12 +107,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     public final static String HEADLINE = "headline";
 
     private DataValidator validationService = null;
-
-    private java.util.List<PanelAction> preActivateActions = null;
-
-    private java.util.List<PanelAction> preValidateActions = null;
-
-    private java.util.List<PanelAction> postValidateActions = null;
 
     /**
      * DELIMITER = "." ( dot )
@@ -346,7 +333,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     public boolean panelValidated()
     {
-        return isValidated() && validatePanel();
+        return isValidated();
     }
 
     /**
@@ -1003,119 +990,16 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         return metadata;
     }
 
+    @Deprecated
     public DataValidator getValidationService()
     {
         return validationService;
     }
 
+    @Deprecated
     public void setValidationService(DataValidator validationService)
     {
         this.validationService = validationService;
-    }
-
-    /*--------------------------------------------------------------------------*/
-
-    /**
-     * This method validates the field content. Validating is performed through a user supplied
-     * service class that provides the validation rules.
-     *
-     * @return <code>true</code> if the validation passes or no implementation of a validation
-     *         rule exists. Otherwise <code>false</code> is returned.
-     */
-    /*--------------------------------------------------------------------------*/
-    private boolean validatePanel()
-    {
-        boolean returnValue = true;
-
-        // Evaluate all global dynamic conditions
-        List<DynamicInstallerRequirementValidator> dynConds = installData.getDynamicinstallerrequirements();
-        if (dynConds != null)
-        {
-            Component guiComponent = getTopLevelAncestor();
-            Cursor originalCursor = guiComponent.getCursor();
-            Cursor newCursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
-            try
-            {
-                guiComponent.setCursor(newCursor);
-                parent.refreshDynamicVariables();
-                for (DynamicInstallerRequirementValidator validator : dynConds)
-                {
-                    Status status = validator.validateData(installData);
-                    if (status == Status.ERROR)
-                    {
-                        logger.fine(
-                                "Dynamic installer requirement validation (" + validator.getClass().getName() + ") failed");
-                    }
-                    returnValue = processValidationState(status);
-                }
-            }
-            finally
-            {
-                guiComponent.setCursor(originalCursor);
-            }
-        }
-
-        if (this.validationService != null && returnValue)
-        {
-            Component guiComponent = getTopLevelAncestor();
-            Cursor originalCursor = guiComponent.getCursor();
-            Cursor newCursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
-            try
-            {
-                guiComponent.setCursor(newCursor);
-                // validating the data
-                Status status = this.validationService.validateData(this.installData);
-                if (status == Status.ERROR)
-                {
-                    logger.fine("Data validation (" + validationService.getClass().getName() + ") failed");
-                }
-                returnValue = processValidationState(status);
-            }
-            finally
-            {
-                guiComponent.setCursor(originalCursor);
-            }
-        }
-        else
-        {
-            returnValue = true;
-        }
-        return returnValue;
-    }
-
-    private boolean processValidationState(Status state)
-    {
-        boolean returnValue = false;
-
-        if (state == DataValidator.Status.OK)
-        {
-            returnValue = true;
-        }
-        else
-        {
-            logger.fine("Validation did not pass");
-            Variables variables = installData.getVariables();
-
-            // try to parse the text, and substitute any variable it finds
-            if (this.validationService.getWarningMessageId() != null
-                    && state == DataValidator.Status.WARNING)
-            {
-
-                String warningMessage = variables.replace(getString(validationService.getWarningMessageId()));
-                if (this.emitWarning(getString("data.validation.warning.title"), warningMessage))
-                {
-                    returnValue = true;
-                    logger.fine("User decided to skip validation warning");
-                }
-            }
-            else
-            {
-                String errorMessage = variables.replace(getString(validationService.getErrorMessageId()));
-                emitError(getString("data.validation.error.title"), errorMessage);
-
-            }
-        }
-        return returnValue;
     }
 
     /**
@@ -1163,66 +1047,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         this.helpWindow = new HelpWindow(parent, getString("installer.help.close"));
         helpWindow.setName(GuiId.HELP_WINDOWS.id);
         return this.helpWindow;
-    }
-
-    public void addPreActivationAction(PanelAction preActivateAction)
-    {
-        if (preActivateActions == null)
-        {
-            preActivateActions = new ArrayList<PanelAction>();
-        }
-        preActivateActions.add(preActivateAction);
-    }
-
-    public void addPreValidationAction(PanelAction preValidateAction)
-    {
-        if (preValidateActions == null)
-        {
-            preValidateActions = new ArrayList<PanelAction>();
-        }
-        preValidateActions.add(preValidateAction);
-    }
-
-    public void addPostValidationAction(PanelAction postValidateAction)
-    {
-        if (postValidateActions == null)
-        {
-            postValidateActions = new ArrayList<PanelAction>();
-        }
-        postValidateActions.add(postValidateAction);
-    }
-
-    protected final void executePreActivationActions()
-    {
-        if (preActivateActions != null)
-        {
-            for (PanelAction preActivateAction : preActivateActions)
-            {
-                preActivateAction.executeAction(this.installData, this);
-            }
-        }
-    }
-
-    protected final void executePreValidationActions()
-    {
-        if (preValidateActions != null)
-        {
-            for (PanelAction preValidateAction : preValidateActions)
-            {
-                preValidateAction.executeAction(this.installData, this);
-            }
-        }
-    }
-
-    protected final void executePostValidationActions()
-    {
-        if (postValidateActions != null)
-        {
-            for (PanelAction postValidateAction : postValidateActions)
-            {
-                postValidateAction.executeAction(this.installData, this);
-            }
-        }
     }
 
     public void setHelpUrl(String helpUrl)

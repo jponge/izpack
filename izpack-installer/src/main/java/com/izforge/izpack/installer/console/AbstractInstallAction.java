@@ -1,10 +1,7 @@
 package com.izforge.izpack.installer.console;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.factory.ObjectFactory;
-import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
-import com.izforge.izpack.util.Console;
 
 /**
  * A {@link ConsoleAction} for performing installations.
@@ -20,39 +17,33 @@ public abstract class AbstractInstallAction extends ConsoleAction
      */
     private final UninstallDataWriter writer;
 
+
     /**
      * Constructs an <tt>AbstractConsoleInstallAction</tt>.
      *
-     * @param factory       the panel console factory
-     * @param installData   the installation data
-     * @param objectFactory the factory for {@link com.izforge.izpack.api.installer.DataValidator}
-     *                      instances
-     * @param rules         the rules engine
-     * @param writer        the uninstallation data writer
+     * @param installData the installation data
+     * @param writer      the uninstallation data writer
      */
-    public AbstractInstallAction(PanelConsoleFactory factory, AutomatedInstallData installData,
-                                 ObjectFactory objectFactory, RulesEngine rules, UninstallDataWriter writer)
+    public AbstractInstallAction(AutomatedInstallData installData, UninstallDataWriter writer)
     {
-        super(factory, installData, objectFactory, rules);
+        super(installData);
         this.writer = writer;
     }
 
     /**
-     * Runs the action for each panel.
+     * Invoked after the action has been successfully run for each panel.
+     * <p/>
+     * This writes uninstallation information, if required.
      *
-     * @param console the console
-     * @return <tt>true</tt> if the action was successful, otherwise <tt>false</tt>
+     * @return {@code true} if the operation succeeds; {@code false} if it fails
      */
     @Override
-    public boolean run(Console console)
+    public boolean complete()
     {
-        boolean result = super.run(console);
-        if (result)
+        boolean result = true;
+        if (writer.isUninstallRequired())
         {
-            if (writer.isUninstallRequired())
-            {
-                result = writer.write();
-            }
+            result = writer.write();
         }
         return result;
     }
