@@ -575,7 +575,7 @@ public class InstallerFrame extends JFrame implements InstallerView
             log.addDebugMessage(
                     "InstallerFrame.switchPanel: try switching newPanel from {0} to {1} ({2} to {3})",
                     new String[]{oldPanelClass, newPanel.getClass().getName(),
-                            Integer.toString(oldIndex), Integer.toString(installdata.getCurPanelNumber())},
+                            Integer.toString(oldIndex), Integer.toString(newPanel.getIndex())},
                     Log.PANEL_TRACE, null);
 
             // instead of writing data here which leads to duplicated entries in
@@ -1032,7 +1032,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     @Override
     public void showHelp()
     {
-        IzPanel izPanel = installdata.getPanels().get(installdata.getCurPanelNumber());
+        IzPanel izPanel = panels.getPanel().getView();
         izPanel.showHelp();
     }
 

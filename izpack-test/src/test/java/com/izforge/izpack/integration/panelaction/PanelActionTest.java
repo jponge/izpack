@@ -23,12 +23,14 @@ import org.junit.runner.RunWith;
 import com.izforge.izpack.api.GuiId;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.binding.ActionStage;
+import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerController;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.gui.IzPanel;
+import com.izforge.izpack.installer.panel.Panels;
 import com.izforge.izpack.integration.HelperTestMethod;
 import com.izforge.izpack.panels.hello.HelloPanel;
 import com.izforge.izpack.panels.simplefinish.SimpleFinishPanel;
@@ -74,6 +76,11 @@ public class PanelActionTest
     private final TestHousekeeper housekeeper;
 
     /**
+     * The panels.
+     */
+    private final Panels panels;
+
+    /**
      * The frame fixture.
      */
     private FrameFixture frameFixture;
@@ -85,14 +92,16 @@ public class PanelActionTest
      * @param frame       the installer frame
      * @param controller  the installer controller
      * @param housekeeper the house-keeper
+     * @param panels      the panels
      */
     public PanelActionTest(GUIInstallData installData, InstallerFrame frame, InstallerController controller,
-                           TestHousekeeper housekeeper)
+                           TestHousekeeper housekeeper, Panels panels)
     {
         this.installData = installData;
         this.frame = frame;
         this.controller = controller;
         this.housekeeper = housekeeper;
+        this.panels = panels;
     }
 
     /**
@@ -120,7 +129,7 @@ public class PanelActionTest
     }
 
     /**
-     * Verifies that {@link com.izforge.izpack.api.installer.DataValidator}s associated with panels are invoked.
+     * Verifies that {@link DataValidator}s associated with panels are invoked.
      *
      * @throws Exception for any error
      */
@@ -180,7 +189,7 @@ public class PanelActionTest
      */
     private void checkCurrentPanel(Class<? extends IzPanel> type)
     {
-        Panel panel = installData.getPanelsOrder().get(installData.getCurPanelNumber());
+        Panel panel = panels.getPanel().getPanel();
         assertEquals(type.getName(), panel.getClassName());
     }
 

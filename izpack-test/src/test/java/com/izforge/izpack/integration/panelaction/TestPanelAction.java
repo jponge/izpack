@@ -9,6 +9,7 @@ import static org.junit.Assert.fail;
 import java.util.Map;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.PanelActionConfiguration;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.installer.DataValidator;
@@ -35,12 +36,13 @@ public abstract class TestPanelAction extends TestDataValidator implements Panel
     /**
      * Constructs a <tt>TestPanelAction</tt>.
      *
+     * @param panel       the panel
      * @param stage       the action stage
      * @param installData the installation data
      */
-    public TestPanelAction(ActionStage stage, AutomatedInstallData installData)
+    public TestPanelAction(Panel panel, ActionStage stage, AutomatedInstallData installData)
     {
-        super(installData);
+        super(panel, installData);
         this.stage = stage;
     }
 

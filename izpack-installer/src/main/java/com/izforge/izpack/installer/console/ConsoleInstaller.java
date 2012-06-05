@@ -158,6 +158,7 @@ public class ConsoleInstaller extends InstallerBase
         {
             try
             {
+                // refresh variables so they may be used by
                 if (requirements.check())
                 {
                     action = createConsoleAction(type, path, console);
@@ -172,7 +173,11 @@ public class ConsoleInstaller extends InstallerBase
                     }
                     if (success)
                     {
-                        success = action.complete();
+                        success = panels.isValid(); // last panel needs to be validated
+                        if (success)
+                        {
+                            success = action.complete();
+                        }
                     }
                 }
             }

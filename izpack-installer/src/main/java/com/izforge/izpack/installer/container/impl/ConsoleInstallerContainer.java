@@ -8,7 +8,9 @@ import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.core.handler.ConsolePrompt;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
+import com.izforge.izpack.installer.console.ConsolePanelAutomationHelper;
 import com.izforge.izpack.installer.container.provider.AutomatedInstallDataProvider;
+import com.izforge.izpack.installer.container.provider.AutomatedPanelsProvider;
 import com.izforge.izpack.installer.container.provider.ConsolePanelsProvider;
 import com.izforge.izpack.util.Console;
 
@@ -54,9 +56,11 @@ public class ConsoleInstallerContainer extends InstallerContainer
         super.registerComponents(container);
         container.addAdapter(new ProviderAdapter(new AutomatedInstallDataProvider()));
         container.addAdapter(new ProviderAdapter(new ConsolePanelsProvider()));
+        container.addAdapter(new ProviderAdapter(new AutomatedPanelsProvider()));
         container.addComponent(Console.class);
         container.addComponent(ConsolePrompt.class);
         container.addComponent(ConsoleInstaller.class);
         container.addComponent(AutomatedInstaller.class);
+        container.addComponent(ConsolePanelAutomationHelper.class);
     }
 }

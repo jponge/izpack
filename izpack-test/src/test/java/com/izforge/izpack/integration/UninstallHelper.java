@@ -56,7 +56,7 @@ public class UninstallHelper
     }
 
     /**
-     * Uninstalls the application at the specified path, by running te {@link Destroyer} in the supplied uninstall
+     * Uninstalls the application at the specified path, by running the {@link Destroyer} in the supplied uninstall
      * jar.
      * <p/>
      * The Destroyer is launched in an isolated class loader as it locates resources using its class loader.

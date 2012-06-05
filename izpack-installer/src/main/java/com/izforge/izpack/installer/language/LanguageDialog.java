@@ -503,11 +503,6 @@ public class LanguageDialog extends JDialog implements ActionListener
             runPicker();
         }
 
-        // Get dynamic variables immediately for being able to use them as
-        // variable condition in installerrequirements
-
-        installData.refreshVariables();
-
         // check installer conditions
         if (!requirements.check())
         {

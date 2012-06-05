@@ -274,6 +274,7 @@ public abstract class UnpackerBase implements IUnpacker
                 }
                 handler.emitError("An error occurred", message);
             }
+            // TODO - shouldn't do this. Should provide option to rollback changes
             housekeeper.shutDown(4);
         }
         finally

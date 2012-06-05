@@ -24,36 +24,19 @@ package com.izforge.izpack.installer.automation;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-import java.util.TreeMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.Info;
-import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.data.Variables;
-import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.factory.ObjectFactory;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.installer.DataValidator;
-import com.izforge.izpack.api.installer.DataValidator.Status;
 import com.izforge.izpack.api.resource.Locales;
-import com.izforge.izpack.api.resource.Messages;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.base.InstallerBase;
-import com.izforge.izpack.installer.console.ConsolePanelAutomationHelper;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
 import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.OsConstraintHelper;
 
 /**
  * Runs the install process in text only (no GUI) mode.
@@ -64,22 +47,16 @@ import com.izforge.izpack.util.OsConstraintHelper;
  */
 public class AutomatedInstaller extends InstallerBase
 {
-    private static final Logger logger = Logger.getLogger(AutomatedInstaller.class.getName());
 
-    // there are panels which can be instantiated multiple times
-    // we therefore need to select the right XML section for each
-    // instance
-    private TreeMap<String, Integer> panelInstanceCount;
+    /**
+     * The panels.
+     */
+    private final AutomatedPanels panels;
 
     /**
      * The automated installation data.
      */
     private final AutomatedInstallData installData;
-
-    /**
-     * The result of the installation.
-     */
-    private boolean result = false;
 
     /**
      * Installation requirements.
@@ -92,19 +69,9 @@ public class AutomatedInstaller extends InstallerBase
     private UninstallDataWriter uninstallDataWriter;
 
     /**
-     * The variables.
-     */
-    private Variables variables;
-
-    /**
      * The supported locales.
      */
     private final Locales locales;
-
-    /**
-     * The factory for {@link DataValidator} and {@link PanelAction} instances.
-     */
-    private final ObjectFactory factory;
 
     /**
      * The house-keeper.
@@ -112,28 +79,30 @@ public class AutomatedInstaller extends InstallerBase
     private final Housekeeper housekeeper;
 
     /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(AutomatedInstaller.class.getName());
+
+
+    /**
      * Constructs an <tt>AutomatedInstaller</tt>.
      *
+     * @param panels              the panels
      * @param installData         the installation data
      * @param locales             the supported locales
      * @param requirements        the installation requirements checker
      * @param uninstallDataWriter the uninstallation data writer
-     * @param variables           the variables
-     * @param factory             the factory for {@link DataValidator} and {@link PanelAction} instances
      * @param housekeeper         the house-keeper
      */
-    public AutomatedInstaller(AutomatedInstallData installData, Locales locales, RequirementsChecker requirements,
-                              UninstallDataWriter uninstallDataWriter, Variables variables, ObjectFactory factory,
+    public AutomatedInstaller(AutomatedPanels panels, AutomatedInstallData installData, Locales locales,
+                              RequirementsChecker requirements, UninstallDataWriter uninstallDataWriter,
                               Housekeeper housekeeper)
     {
+        this.panels = panels;
         this.installData = installData;
         this.locales = locales;
         this.requirements = requirements;
         this.uninstallDataWriter = uninstallDataWriter;
-
-        this.panelInstanceCount = new TreeMap<String, Integer>();
-        this.variables = variables;
-        this.factory = factory;
         this.housekeeper = housekeeper;
     }
 
@@ -165,8 +134,7 @@ public class AutomatedInstaller extends InstallerBase
      */
     public void doInstall() throws Exception
     {
-        // Get dynamic variables immediately for being able to use them as variable condition in installerrequirements
-        installData.refreshVariables();
+        boolean success = false;
 
         // check installer conditions
         if (!requirements.check())
@@ -180,69 +148,35 @@ public class AutomatedInstaller extends InstallerBase
         System.out.println("[ Starting automated installation ]");
         logger.info("[ Starting automated installation ]");
 
-        ConsolePanelAutomationHelper uihelper = new ConsolePanelAutomationHelper(housekeeper);
-
         try
         {
-            // assume that installation will succeed
-            this.result = true;
-
-            // walk the panels in order
-            for (Panel p : this.installData.getPanelsOrder())
+            while (panels.hasNext())
             {
-                RulesEngine rules = this.installData.getRules();
-                if (!rules.canShowPanel(p.getPanelid(), this.installData.getVariables()))
+                success = panels.next();
+                if (!success)
                 {
-                    logger.fine("Condition for panel " + p.getPanelid() + "is not fulfilled, skipping panel!");
-                    if (this.panelInstanceCount.containsKey(p.className))
-                    {
-                        // get number of panel instance to process
-                        this.panelInstanceCount.put(p.className, this.panelInstanceCount.get(p.className) + 1);
-                    }
-                    else
-                    {
-                        this.panelInstanceCount.put(p.className, 1);
-                    }
-                    continue;
+                    break;
                 }
-
-                if (!OsConstraintHelper.oneMatchesCurrentSystem(p.getOsConstraints()))
-                {
-                    continue;
-                }
-
-                PanelAutomation automationHelper = getPanelAutomationHelper(p);
-
-                if (automationHelper == null)
-                {
-                    executePreValidateActions(p, uihelper);
-                    validatePanel(p);
-                    executePostValidateActions(p, uihelper);
-                    continue;
-                }
-
-                IXMLElement panelRoot = updateInstanceCount(p);
-
-                // execute the installation logic for the current panel
-                installPanel(p, automationHelper, panelRoot);
-
-                installData.refreshVariables();
+            }
+            if (success)
+            {
+                success = panels.isValid();// last panel needs to be validated
             }
 
-            if (uninstallDataWriter.isUninstallRequired())
+            if (success && uninstallDataWriter.isUninstallRequired())
             {
-                result = uninstallDataWriter.write();
+                success = uninstallDataWriter.write();
             }
         }
         catch (Exception e)
         {
-            result = false;
+            success = false;
             System.err.println(e.toString());
             e.printStackTrace();
         }
         finally
         {
-            if (result)
+            if (success)
             {
                 System.out.println("[ Automated installation done ]");
             }
@@ -267,184 +201,7 @@ public class AutomatedInstaller extends InstallerBase
                     System.out.println("[ Rebooting now automatically ]");
                 }
             }
-            housekeeper.shutDown(this.result ? 0 : 1, reboot);
-        }
-    }
-
-    /**
-     * Run the installation logic for a panel.
-     *
-     * @param p                The panel to install.
-     * @param automationHelper The helper of the panel.
-     * @param panelRoot        The xml element describing the panel.
-     * @throws com.izforge.izpack.api.exception.InstallerException
-     *          if something went wrong while installing.
-     */
-    private void installPanel(Panel p, PanelAutomation automationHelper, IXMLElement panelRoot)
-            throws InstallerException
-    {
-        executePreActivateActions(p, null);
-
-        logger.fine("automationHelperInstance.runAutomated: "
-                            + automationHelper.getClass().getName() + " entered.");
-
-        automationHelper.runAutomated(this.installData, panelRoot);
-
-        logger.fine("automationHelperInstance.runAutomated: "
-                            + automationHelper.getClass().getName() + " successfully done.");
-
-        executePreValidateActions(p, null);
-        validatePanel(p);
-        executePostValidateActions(p, null);
-    }
-
-    /**
-     * Update the panelInstanceCount object with a panel.
-     *
-     * @param p The panel.
-     * @return The xml element which describe the panel.
-     * @see this.panelInstanceCount
-     */
-    private IXMLElement updateInstanceCount(Panel p)
-    {
-        String panelClassName = p.className;
-
-        // We get the panels root xml markup
-        List<IXMLElement> panelRoots = this.installData.getXmlData().getChildrenNamed(panelClassName);
-        int panelRootNo = 0;
-
-        if (this.panelInstanceCount.containsKey(panelClassName))
-        {
-            // get number of panel instance to process
-            panelRootNo = this.panelInstanceCount.get(panelClassName);
-        }
-
-        IXMLElement panelRoot = panelRoots.get(panelRootNo);
-
-        this.panelInstanceCount.put(panelClassName, panelRootNo + 1);
-
-        return panelRoot;
-    }
-
-    /**
-     * Try to get the automation helper for the specified panel.
-     *
-     * @param p The panel to handle.
-     * @return The automation helper if possible, null otherwise.
-     */
-    private PanelAutomation getPanelAutomationHelper(Panel p)
-    {
-        Class<PanelAutomation> automationHelperClass = null;
-        PanelAutomation automationHelperInstance = null;
-
-        String praefix = "com.izforge.izpack.panels.";
-        if (p.className.contains("."))
-        // Full qualified class name
-        {
-            praefix = "";
-        }
-
-        String automationHelperClassName = praefix + p.className + "AutomationHelper";
-
-        try
-        {
-            logger.fine("AutomationHelper: " + automationHelperClassName);
-            // determine if the panel supports automated install
-            automationHelperClass = (Class<PanelAutomation>) Class.forName(automationHelperClassName);
-        }
-        catch (ClassNotFoundException e)
-        {
-            // this is OK - not all panels have/need automation support.
-            logger.log(Level.WARNING, "AutomationHelper class not found: " + automationHelperClassName, e);
-        }
-
-        executePreConstructActions(p, null);
-
-        if (automationHelperClass != null)
-        {
-            try
-            {
-                // instantiate the automation logic for the panel
-                logger.fine("Instantiate :" + automationHelperClassName);
-                automationHelperInstance = automationHelperClass.newInstance();
-            }
-            catch (IllegalAccessException e)
-            {
-                logger.log(Level.WARNING, "no default constructor for " + automationHelperClassName + ", skipping...",
-                           e);
-            }
-            catch (InstantiationException e)
-            {
-                logger.log(Level.WARNING, "no default constructor for " + automationHelperClassName + ", skipping...",
-                           e);
-            }
-        }
-
-        return automationHelperInstance;
-    }
-
-    /**
-     * Validate a panel.
-     *
-     * @param p The panel to validate
-     * @throws com.izforge.izpack.api.exception.InstallerException
-     *          thrown if the validation fails.
-     */
-    private void validatePanel(final Panel p) throws InstallerException
-    {
-        installData.refreshVariables();
-
-        // Evaluate all global dynamic conditions
-        List<DynamicInstallerRequirementValidator> dynConds = installData.getDynamicinstallerrequirements();
-        Messages messages = installData.getMessages();
-        if (dynConds != null)
-        {
-            for (DynamicInstallerRequirementValidator validator : dynConds)
-            {
-                Status validationResult = validator.validateData(installData);
-                if (validationResult != DataValidator.Status.OK)
-                {
-                    String message = messages.get(validator.getErrorMessageId());
-                    String errorMessage = messages.get("data.validation.error.title")
-                            + ": " + variables.replace(message);
-
-                    // if defaultAnswer is true, result is ok
-                    if (validationResult == Status.WARNING && validator.getDefaultAnswer())
-                    {
-                        System.out.println(errorMessage + " - ignoring");
-                        return;
-                    }
-                    // make installation fail instantly
-                    this.result = false;
-                    logger.warning(
-                            "Dynamic installer requirement validation (" + validator.getClass().getName() + ") failed");
-                    throw new InstallerException(errorMessage);
-                }
-            }
-        }
-
-        // Evaluate panel condition
-        String dataValidator = p.getValidator();
-        if (dataValidator != null)
-        {
-            DataValidator validator = factory.create(dataValidator, DataValidator.class);
-            Status validationResult = validator.validateData(installData);
-            if (validationResult != DataValidator.Status.OK)
-            {
-                String errorMessage = messages.get("data.validation.error.title")
-                        + ": " + variables.replace(messages.get(validator.getErrorMessageId()));
-                // if defaultAnswer is true, result is ok
-                // if defaultAnswer is true, result is ok
-                if (validationResult == Status.WARNING && validator.getDefaultAnswer())
-                {
-                    System.out.println(errorMessage + " - ignoring");
-                    return;
-                }
-                // make installation fail instantly
-                this.result = false;
-                logger.warning("Data validation (" + validator.getClass().getName() + ") failed");
-                throw new InstallerException(errorMessage);
-            }
+            housekeeper.shutDown(success ? 0 : 1, reboot);
         }
     }
 
@@ -455,7 +212,7 @@ public class AutomatedInstaller extends InstallerBase
      * @return The root of the XML file.
      * @throws IOException thrown if there are problems reading the file.
      */
-    public IXMLElement getXMLData(File input) throws IOException
+    private IXMLElement getXMLData(File input) throws IOException
     {
         FileInputStream in = new FileInputStream(input);
 
@@ -467,81 +224,4 @@ public class AutomatedInstaller extends InstallerBase
         return rtn;
     }
 
-    /**
-     * Get the result of the installation.
-     *
-     * @return True if the installation was successful.
-     */
-    public boolean getResult()
-    {
-        return this.result;
-    }
-
-    private List<PanelAction> createPanelActionsFromStringList(Panel panel, List<String> actions)
-    {
-        List<PanelAction> actionList = null;
-        if (actions != null)
-        {
-            actionList = new ArrayList<PanelAction>();
-            for (String actionClassName : actions)
-            {
-                PanelAction action = factory.create(actionClassName, PanelAction.class);
-                action.initialize(panel.getPanelActionConfiguration(actionClassName));
-                actionList.add(action);
-            }
-        }
-        return actionList;
-    }
-
-    private void executePreConstructActions(Panel panel, AbstractUIHandler handler)
-    {
-        List<PanelAction> preConstructActions = createPanelActionsFromStringList(panel, panel
-                .getPreConstructionActions());
-        if (preConstructActions != null)
-        {
-            for (PanelAction preConstructAction : preConstructActions)
-            {
-                preConstructAction.executeAction(installData, handler);
-            }
-        }
-    }
-
-    private void executePreActivateActions(Panel panel, AbstractUIHandler handler)
-    {
-        List<PanelAction> preActivateActions = createPanelActionsFromStringList(panel, panel
-                .getPreActivationActions());
-        if (preActivateActions != null)
-        {
-            for (PanelAction preActivateAction : preActivateActions)
-            {
-                preActivateAction.executeAction(installData, handler);
-            }
-        }
-    }
-
-    private void executePreValidateActions(Panel panel, AbstractUIHandler handler)
-    {
-        List<PanelAction> preValidateActions = createPanelActionsFromStringList(panel, panel
-                .getPreValidationActions());
-        if (preValidateActions != null)
-        {
-            for (PanelAction preValidateAction : preValidateActions)
-            {
-                preValidateAction.executeAction(installData, handler);
-            }
-        }
-    }
-
-    private void executePostValidateActions(Panel panel, AbstractUIHandler handler)
-    {
-        List<PanelAction> postValidateActions = createPanelActionsFromStringList(panel, panel
-                .getPostValidationActions());
-        if (postValidateActions != null)
-        {
-            for (PanelAction postValidateAction : postValidateActions)
-            {
-                postValidateAction.executeAction(installData, handler);
-            }
-        }
-    }
 }

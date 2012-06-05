@@ -1,5 +1,6 @@
 package com.izforge.izpack.installer.requirement;
 
+import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.installer.RequirementChecker;
 
 
@@ -11,42 +12,50 @@ import com.izforge.izpack.api.installer.RequirementChecker;
 public class RequirementsChecker implements RequirementChecker
 {
     /**
+     * The variables.
+     */
+    private final Variables variables;
+
+    /**
      * The language pack checker.
      */
-    private LangPackChecker langChecker;
+    private final LangPackChecker langChecker;
 
     /**
      * The version checker.
      */
-    private JavaVersionChecker versionChecker;
+    private final JavaVersionChecker versionChecker;
 
     /**
      * The JDK checker.
      */
-    private JDKChecker jdkChecker;
+    private final JDKChecker jdkChecker;
 
     /**
      * The lock file checker.
      */
-    private LockFileChecker lockChecker;
+    private final LockFileChecker lockChecker;
 
     /**
      * The installer requirement checker.
      */
-    private InstallerRequirementChecker installerRequirementChecker;
+    private final InstallerRequirementChecker installerRequirementChecker;
 
     /**
      * Constructs a <tt>RequirementsChecker</tt>.
      *
-     * @param langChecker the language pack checker
-     * @param versionChecker the java version checker
-     * @param jdkChecker the JDK checker
-     * @param lockChecker the lock file checker
+     * @param variables                   the variables. These are refreshed prior to checking requirements
+     * @param langChecker                 the language pack checker
+     * @param versionChecker              the java version checker
+     * @param jdkChecker                  the JDK checker
+     * @param lockChecker                 the lock file checker
      * @param installerRequirementChecker the installer requirement checker
      */
-    public RequirementsChecker(LangPackChecker langChecker, JavaVersionChecker versionChecker, JDKChecker jdkChecker,
-                               LockFileChecker lockChecker, InstallerRequirementChecker installerRequirementChecker)
+    public RequirementsChecker(Variables variables, LangPackChecker langChecker, JavaVersionChecker versionChecker,
+                               JDKChecker jdkChecker, LockFileChecker lockChecker,
+                               InstallerRequirementChecker installerRequirementChecker)
     {
+        this.variables = variables;
         this.versionChecker = versionChecker;
         this.jdkChecker = jdkChecker;
         this.lockChecker = lockChecker;
@@ -62,6 +71,7 @@ public class RequirementsChecker implements RequirementChecker
     @Override
     public boolean check()
     {
+        variables.refresh();
         return langChecker.check() && versionChecker.check() && jdkChecker.check() && lockChecker.check() &&
                 installerRequirementChecker.check();
     }

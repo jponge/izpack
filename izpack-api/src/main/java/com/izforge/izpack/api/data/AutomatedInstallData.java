@@ -462,11 +462,25 @@ public class AutomatedInstallData
         this.panelsOrder = panelsOrder;
     }
 
+    /**
+     * Returns the current panel number.
+     *
+     * @return the current panel  number
+     * @deprecated use {@code Panels#getIndex()}.
+     */
+    @Deprecated
     public int getCurPanelNumber()
     {
         return curPanelNumber;
     }
 
+    /**
+     * Sets the current panel number.
+     *
+     * @param curPanelNumber the current panel number
+     * @deprecated no replacement
+     */
+    @Deprecated
     public void setCurPanelNumber(int curPanelNumber)
     {
         this.curPanelNumber = curPanelNumber;

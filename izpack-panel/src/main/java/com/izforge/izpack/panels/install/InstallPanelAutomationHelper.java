@@ -56,6 +56,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
     {
         super(housekeeper);
         this.unpacker = unpacker;
+        unpacker.setHandler(this);
     }
 
     /**

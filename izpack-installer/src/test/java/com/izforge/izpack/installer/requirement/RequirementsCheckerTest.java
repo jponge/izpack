@@ -1,12 +1,14 @@
 package com.izforge.izpack.installer.requirement;
 
-import com.izforge.izpack.api.installer.RequirementChecker;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.stubbing.answers.Returns;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import com.izforge.izpack.api.data.Variables;
+import com.izforge.izpack.api.installer.RequirementChecker;
 
 /**
  * Tests the {@link RequirementsChecker} class.
@@ -22,10 +24,12 @@ public class RequirementsCheckerTest
     @Test
     public void testCheckSuccess()
     {
-        RequirementChecker checker = new RequirementsChecker(mock(LangPackChecker.class, true),
-                mock(JavaVersionChecker.class, true), mock(JDKChecker.class, true),
-                mock(LockFileChecker.class, true),
-                mock(InstallerRequirementChecker.class, true));
+        Variables variables = Mockito.mock(Variables.class);
+        RequirementChecker checker = new RequirementsChecker(variables, mock(LangPackChecker.class, true),
+                                                             mock(JavaVersionChecker.class, true),
+                                                             mock(JDKChecker.class, true),
+                                                             mock(LockFileChecker.class, true),
+                                                             mock(InstallerRequirementChecker.class, true));
         assertTrue(checker.check());
     }
 
@@ -37,6 +41,7 @@ public class RequirementsCheckerTest
     @Test
     public void testCheckFailure()
     {
+        Variables variables = Mockito.mock(Variables.class);
         for (int i = 0; i < 5; ++i)
         {
             LangPackChecker langChecker = mock(LangPackChecker.class, (i != 0));
@@ -45,8 +50,8 @@ public class RequirementsCheckerTest
             LockFileChecker lockChecker = mock(LockFileChecker.class, (i != 3));
             InstallerRequirementChecker requirementChecker = mock(InstallerRequirementChecker.class, (i != 4));
 
-            RequirementsChecker checker2 = new RequirementsChecker(langChecker, javaChecker, jdkChecker,
-                    lockChecker, requirementChecker);
+            RequirementsChecker checker2 = new RequirementsChecker(variables, langChecker, javaChecker, jdkChecker,
+                                                                   lockChecker, requirementChecker);
             assertFalse(checker2.check());
         }
     }

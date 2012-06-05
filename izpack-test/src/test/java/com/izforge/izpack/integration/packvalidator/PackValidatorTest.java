@@ -21,6 +21,7 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerController;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.gui.IzPanel;
+import com.izforge.izpack.installer.panel.Panels;
 import com.izforge.izpack.integration.HelperTestMethod;
 import com.izforge.izpack.panels.hello.HelloPanel;
 import com.izforge.izpack.panels.install.InstallPanel;
@@ -69,6 +70,11 @@ public class PackValidatorTest
     private final TestHousekeeper housekeeper;
 
     /**
+     * The panels.
+     */
+    private final Panels panels;
+
+    /**
      * The frame fixture.
      */
     private FrameFixture frameFixture;
@@ -80,14 +86,16 @@ public class PackValidatorTest
      * @param frame       the installer frame
      * @param controller  the installer controller
      * @param housekeeper the house-keeper
+     * @param panels      the panels
      */
     public PackValidatorTest(GUIInstallData installData, InstallerFrame frame, InstallerController controller,
-                             TestHousekeeper housekeeper)
+                             TestHousekeeper housekeeper, Panels panels)
     {
         this.installData = installData;
         this.frame = frame;
         this.controller = controller;
         this.housekeeper = housekeeper;
+        this.panels = panels;
     }
 
     /**
@@ -170,7 +178,7 @@ public class PackValidatorTest
      */
     private void checkCurrentPanel(Class<? extends IzPanel> type)
     {
-        Panel panel = installData.getPanelsOrder().get(installData.getCurPanelNumber());
+        Panel panel = panels.getPanel().getPanel();
         assertEquals(type.getName(), panel.getClassName());
     }
 

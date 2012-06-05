@@ -22,12 +22,16 @@
 package com.izforge.izpack.api.data;
 
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.izforge.izpack.api.data.binding.Action;
 import com.izforge.izpack.api.data.binding.Help;
 import com.izforge.izpack.api.data.binding.OsModel;
-
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * @author Jan Blok
@@ -41,7 +45,7 @@ public class Panel implements Serializable
     /**
      * The panel classname.
      */
-    public String className;
+    private String className;
 
     /**
      * The target operation system of this panel

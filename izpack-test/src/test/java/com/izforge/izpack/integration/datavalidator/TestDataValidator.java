@@ -21,18 +21,26 @@ public class TestDataValidator implements DataValidator
 {
 
     /**
+     * The panel.
+     */
+    private final Panel panel;
+
+    /**
      * The installation data.
      */
     private final AutomatedInstallData installData;
 
+
     /**
      * Constructs a <tt>TestDataValidator</tt>.
      *
+     * @param panel       the panel
      * @param installData the installation data
      */
-    public TestDataValidator(AutomatedInstallData installData)
+    public TestDataValidator(Panel panel, AutomatedInstallData installData)
     {
         this.installData = installData;
+        this.panel = panel;
     }
 
     /**
@@ -112,8 +120,6 @@ public class TestDataValidator implements DataValidator
      */
     protected String getPanelId()
     {
-        int index = installData.getCurPanelNumber();
-        Panel panel = installData.getPanelsOrder().get(index);
         return panel.getPanelid();
     }
 

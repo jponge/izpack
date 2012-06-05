@@ -144,6 +144,11 @@ public abstract class PanelView<T>
 
     /**
      * Returns the panel user interface.
+     * <br/>
+     * The view will be created if it doesn't exist.
+     * <br/>
+     * If the panel has a {@link DataValidator} specified, this will be constructed, with both the panel and view
+     * supplied for injection into it's constructor.
      *
      * @return the panel user interface
      */
@@ -156,7 +161,7 @@ public abstract class PanelView<T>
             String dataValidator = panel.getValidator();
             if (dataValidator != null)
             {
-                validator = factory.create(dataValidator, DataValidator.class);
+                validator = factory.create(dataValidator, DataValidator.class, panel, view);
             }
 
             addActions(panel.getPreActivationActions(), preActivationActions);
@@ -395,6 +400,36 @@ public abstract class PanelView<T>
     }
 
     /**
+     * Returns a class for the specified class name.
+     *
+     * @param name the class name
+     * @return the corresponding class, or <tt>null</tt> if it cannot be found or does not implement {@link #viewClass}.
+     */
+    @SuppressWarnings("unchecked")
+    protected Class<T> getClass(String name)
+    {
+        Class<T> result = null;
+        try
+        {
+            Class type = Class.forName(name);
+            if (!viewClass.isAssignableFrom(type))
+            {
+                logger.warning(name + " does not implement " + viewClass.getName() + ", ignoring");
+            }
+            else
+            {
+                result = (Class<T>) type;
+            }
+        }
+        catch (ClassNotFoundException e)
+        {
+            // ignore
+            logger.fine("No " + viewClass.getSimpleName() + " + found for class " + name + ": " + e.toString());
+        }
+        return result;
+    }
+
+    /**
      * Returns the factory.
      *
      * @return the factory
@@ -402,6 +437,17 @@ public abstract class PanelView<T>
     protected ObjectFactory getFactory()
     {
         return factory;
+    }
+
+    /**
+     * Helper to return a localised message, given its id.
+     *
+     * @param id the message identifier
+     * @return the corresponding message or {@code null} if none is found
+     */
+    protected String getMessage(String id)
+    {
+        return getMessage(id, false);
     }
 
     /**
@@ -420,6 +466,8 @@ public abstract class PanelView<T>
 
     /**
      * Executes actions prior to creating the panel.
+     * <br/>
+     * Both the panel and view are supplied for injection into the action's constructor.
      */
     private void executePreConstructionActions()
     {
@@ -428,7 +476,7 @@ public abstract class PanelView<T>
         {
             for (String className : classNames)
             {
-                PanelAction action = factory.create(className, PanelAction.class);
+                PanelAction action = factory.create(className, PanelAction.class, panel);
                 action.initialize(panel.getPanelActionConfiguration(className));
                 action.executeAction(installData, null);
             }
@@ -437,6 +485,8 @@ public abstract class PanelView<T>
 
     /**
      * Creates {@link PanelAction}s, adding them to the supplied list.
+     * <br/>
+     * Both the panel and view are supplied for injection into the action's constructor.
      *
      * @param classNames the action class names. May be {@code null}
      * @param actions    the actions to add to
@@ -447,22 +497,11 @@ public abstract class PanelView<T>
         {
             for (String className : classNames)
             {
-                PanelAction action = factory.create(className, PanelAction.class);
+                PanelAction action = factory.create(className, PanelAction.class, panel, view);
                 action.initialize(panel.getPanelActionConfiguration(className));
                 actions.add(action);
             }
         }
-    }
-
-    /**
-     * Helper to return a localised message, given its id.
-     *
-     * @param id the message identifier
-     * @return the corresponding message or {@code null} if none is found
-     */
-    private String getMessage(String id)
-    {
-        return getMessage(id, false);
     }
 
     /**

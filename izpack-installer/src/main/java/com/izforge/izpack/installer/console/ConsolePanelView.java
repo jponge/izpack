@@ -1,7 +1,5 @@
 package com.izforge.izpack.installer.console;
 
-import java.util.logging.Logger;
-
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.IzPackException;
@@ -20,11 +18,6 @@ import com.izforge.izpack.util.Console;
  */
 public class ConsolePanelView extends PanelView<PanelConsole>
 {
-
-    /**
-     * The logger.
-     */
-    private static final Logger logger = Logger.getLogger(ConsolePanelView.class.getName());
 
     /**
      * The console.
@@ -49,24 +42,6 @@ public class ConsolePanelView extends PanelView<PanelConsole>
         super(panel, PanelConsole.class, factory, installData);
         this.console = console;
         this.prompt = new ConsolePrompt(console);
-    }
-
-    /**
-     * Returns a handler to prompt the user.
-     *
-     * @return the handler
-     */
-    @Override
-    protected AbstractUIHandler getHandler()
-    {
-        return new PromptUIHandler(prompt)
-        {
-            @Override
-            public void emitNotification(String message)
-            {
-                console.println(message);
-            }
-        };
     }
 
     /**
@@ -105,34 +80,21 @@ public class ConsolePanelView extends PanelView<PanelConsole>
     }
 
     /**
-     * Returns the {@link PanelConsole} class for the specified class name.
+     * Returns a handler to prompt the user.
      *
-     * @param name the class name
-     * @return the corresponding class, or <tt>null</tt> if it cannot be found or does not implement
-     *         {@link PanelConsole}.
+     * @return the handler
      */
-    @SuppressWarnings("unchecked")
-    private Class<PanelConsole> getClass(String name)
+    @Override
+    protected AbstractUIHandler getHandler()
     {
-        Class<PanelConsole> result = null;
-        try
+        return new PromptUIHandler(prompt)
         {
-            Class type = Class.forName(name);
-            if (!PanelConsole.class.isAssignableFrom(type))
+            @Override
+            public void emitNotification(String message)
             {
-                logger.warning(name + " does not implement " + PanelConsole.class.getName() + ", ignoring");
+                console.println(message);
             }
-            else
-            {
-                result = (Class<PanelConsole>) type;
-            }
-        }
-        catch (ClassNotFoundException e)
-        {
-            // Ignore
-            logger.fine("No PanelConsole found for class " + name + ": " + e.toString());
-        }
-        return result;
+        };
     }
 
 }

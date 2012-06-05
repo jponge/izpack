@@ -81,6 +81,18 @@ public abstract class AbstractPanels<T extends PanelView> implements Panels<T>
     }
 
     /**
+     * Determines if the current panel is valid.
+     *
+     * @return {@code true} if the current panel is valid
+     */
+    @Override
+    public boolean isValid()
+    {
+        T panel = getPanel();
+        return panel != null && executeValidationActions(panel, true);
+    }
+
+    /**
      * Returns the current panel index.
      *
      * @return the current panel index, or {@code -1} if there is no current panel
@@ -126,6 +138,8 @@ public abstract class AbstractPanels<T extends PanelView> implements Panels<T>
 
     /**
      * Navigates to the next panel.
+     * <br/>
+     * Navigation can only occur if the current panel is valid.
      *
      * @return {@code true} if the next panel was navigated to
      */

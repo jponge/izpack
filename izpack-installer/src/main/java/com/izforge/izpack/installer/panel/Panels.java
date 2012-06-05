@@ -26,6 +26,13 @@ public interface Panels<T extends PanelView>
     T getPanel();
 
     /**
+     * Determines if the current panel is valid.
+     *
+     * @return {@code true} if the current panel is valid
+     */
+    boolean isValid();
+
+    /**
      * Returns the current panel index.
      *
      * @return the current panel index, or {@code -1} if there is no current panel
@@ -41,6 +48,8 @@ public interface Panels<T extends PanelView>
 
     /**
      * Navigates to the next panel.
+     * <br/>
+     * Navigation can only occur if the current panel is valid.
      *
      * @return {@code true} if the next panel was navigated to
      */
