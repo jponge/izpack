@@ -28,7 +28,7 @@ import java.awt.LayoutManager2;
 
 import javax.swing.JComponent;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.gui.IzPanelConstraints;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LayoutConstants;
@@ -94,7 +94,7 @@ public class LayoutHelper implements LayoutConstants
     /**
      * The installation data.
      */
-    private final AutomatedInstallData installData;
+    private final InstallData installData;
 
     /**
      * Look-up table for gap identifier to gap names for the x direction. The gap names can be used
@@ -132,7 +132,7 @@ public class LayoutHelper implements LayoutConstants
      * @param parent      for which this layout manager will be used
      * @param installData the installation data
      */
-    public LayoutHelper(JComponent parent, AutomatedInstallData installData)
+    public LayoutHelper(JComponent parent, InstallData installData)
     {
         this(installData);
         this.parent = parent;
@@ -146,7 +146,7 @@ public class LayoutHelper implements LayoutConstants
      *
      * @param installData the installation data
      */
-    protected LayoutHelper(AutomatedInstallData installData)
+    protected LayoutHelper(InstallData installData)
     {
         this.installData = installData;
     }
@@ -745,7 +745,7 @@ public class LayoutHelper implements LayoutConstants
     }
 
     private static Object getModifierValue(Object currentVal, Object defaultVal, Object readLimit,
-                                           String key, AutomatedInstallData idata)
+                                           String key, InstallData idata)
     {
         if (defaultVal instanceof Integer)
         {

@@ -19,7 +19,7 @@ package com.izforge.izpack.util.file.types.selectors;
 
 import java.io.File;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 
 /**
  * This is the interface to be used by all selectors.
@@ -40,7 +40,7 @@ public interface FileSelector
      * @throws Exception if the selector was not configured correctly
      * @throws Exception
      */
-    boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
+    boolean isSelected(InstallData idata, File basedir, String filename, File file)
             throws Exception;
 
 }

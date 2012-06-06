@@ -22,7 +22,7 @@
 package com.izforge.izpack.panels.process;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.automation.PanelAutomationHelper;
@@ -62,7 +62,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
      * @param installData installation parameters
      * @param panelRoot   unused.
      */
-    public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot)
+    public void makeXMLData(InstallData installData, IXMLElement panelRoot)
     {
         // not used here - during automatic installation, no automatic
         // installation information is generated
@@ -73,7 +73,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
      *
      * @param panelRoot The panel XML tree root.
      */
-    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
+    public void runAutomated(InstallData idata, IXMLElement panelRoot) throws InstallerException
     {
         processPanelWorker.run();
         if (!processPanelWorker.getResult())

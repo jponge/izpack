@@ -1,6 +1,6 @@
 package com.izforge.izpack.installer.requirement;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.installer.RequirementChecker;
 import com.izforge.izpack.util.FileExecutor;
@@ -17,7 +17,7 @@ public class JDKChecker implements RequirementChecker
     /**
      * The installation data.
      */
-    private final AutomatedInstallData installData;
+    private final InstallData installData;
 
     /**
      * The prompt.
@@ -30,7 +30,7 @@ public class JDKChecker implements RequirementChecker
      * @param installData the installation data
      * @param prompt      the prompt
      */
-    public JDKChecker(AutomatedInstallData installData, Prompt prompt)
+    public JDKChecker(InstallData installData, Prompt prompt)
     {
         this.installData = installData;
         this.prompt = prompt;
@@ -66,6 +66,7 @@ public class JDKChecker implements RequirementChecker
      * Invoked when the JDK is not found.
      * <p/>
      * This prompts the user to proceed with the installation or cancel it
+     *
      * @return <tt>true</tt> if the user proceeds with the installation, <tt>false</tt> if they cancel it
      */
     protected boolean notFound()

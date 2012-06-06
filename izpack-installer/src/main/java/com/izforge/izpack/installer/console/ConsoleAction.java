@@ -1,6 +1,6 @@
 package com.izforge.izpack.installer.console;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 
 /**
  * Console installer action.
@@ -12,14 +12,14 @@ abstract class ConsoleAction
     /**
      * The installation data.
      */
-    private final AutomatedInstallData installData;
+    private final InstallData installData;
 
     /**
      * Constructs a <tt>ConsoleAction</tt>.
      *
      * @param installData the installation data
      */
-    public ConsoleAction(AutomatedInstallData installData)
+    public ConsoleAction(InstallData installData)
     {
         this.installData = installData;
     }
@@ -61,7 +61,7 @@ abstract class ConsoleAction
      *
      * @return the installation data
      */
-    protected AutomatedInstallData getInstallData()
+    protected InstallData getInstallData()
     {
         return installData;
     }

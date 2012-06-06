@@ -21,6 +21,7 @@ import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.Info.TempDir;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Panel;
@@ -38,7 +39,7 @@ import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.TemporaryDirectory;
 
 /**
- * Abstract base class for providers of {@link AutomatedInstallData}.
+ * Abstract base class for providers of {@link InstallData}.
  */
 public abstract class AbstractInstallDataProvider implements Provider
 {
@@ -98,7 +99,7 @@ public abstract class AbstractInstallDataProvider implements Provider
         installData.setDefaultInstallPath(installPath);
         // Pre-set install path from a system property,
         // for instance in unattended installations
-        installPath = System.getProperty(AutomatedInstallData.INSTALL_PATH);
+        installPath = System.getProperty(InstallData.INSTALL_PATH);
         if (installPath != null)
         {
             installData.setInstallPath(installPath);
@@ -342,7 +343,7 @@ public abstract class AbstractInstallDataProvider implements Provider
      * @param installData the installation data
      */
     @SuppressWarnings("unchecked")
-    protected void loadDynamicVariables(Variables variables, AutomatedInstallData installData, Resources resources)
+    protected void loadDynamicVariables(Variables variables, InstallData installData, Resources resources)
     {
         try
         {

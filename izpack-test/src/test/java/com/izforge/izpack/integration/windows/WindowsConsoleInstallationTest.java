@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.compiler.container.TestConsoleInstallationContainer;
 import com.izforge.izpack.compiler.container.TestConsoleInstallerContainer;
@@ -182,7 +183,7 @@ public class WindowsConsoleInstallationTest extends AbstractConsoleInstallationT
         console2.addScript("TargetPanel", "\n", "1");
 
         assertFalse(registryKeyExists(handler, UNINSTALL_KEY2));
-        checkInstall(installer2, container2.getComponent(AutomatedInstallData.class));
+        checkInstall(installer2, container2.getComponent(InstallData.class));
 
         // verify a second key is created
         assertTrue(registryKeyExists(handler, UNINSTALL_KEY2));
@@ -210,7 +211,7 @@ public class WindowsConsoleInstallationTest extends AbstractConsoleInstallationT
         installer2.run(Installer.CONSOLE_INSTALL, null);
 
         // verify the installation thinks it was unsuccessful
-        assertFalse(container2.getComponent(AutomatedInstallData.class).isInstallSuccess());
+        assertFalse(container2.getComponent(InstallData.class).isInstallSuccess());
 
         // make sure the script has completed
         TestConsole console = installer2.getConsole();

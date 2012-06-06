@@ -1,6 +1,6 @@
 package com.izforge.izpack.integration.panelaction;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Panel;
 
 
@@ -17,7 +17,7 @@ public class PreValidatePanelAction extends TestPanelAction
      * @param panel       the panel
      * @param installData the installation data
      */
-    public PreValidatePanelAction(Panel panel, AutomatedInstallData installData)
+    public PreValidatePanelAction(Panel panel, InstallData installData)
     {
         super(panel, ActionStage.prevalidate, installData);
     }

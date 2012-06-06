@@ -18,17 +18,8 @@
 
 package com.izforge.izpack.test;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.rules.RulesEngine;
-import com.izforge.izpack.core.rules.logic.AndCondition;
-import com.izforge.izpack.core.rules.logic.NotCondition;
-import com.izforge.izpack.core.rules.logic.OrCondition;
-import com.izforge.izpack.core.rules.process.ExistsCondition;
-import com.izforge.izpack.core.rules.process.RefCondition;
-import com.izforge.izpack.core.rules.process.VariableCondition;
-import com.izforge.izpack.test.junit.PicoRunner;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import org.hamcrest.Matcher;
 import org.hamcrest.core.Is;
 import org.hamcrest.core.IsNull;
@@ -37,7 +28,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Document;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.api.data.InstallData;
+import com.izforge.izpack.api.rules.RulesEngine;
+import com.izforge.izpack.core.rules.logic.AndCondition;
+import com.izforge.izpack.core.rules.logic.NotCondition;
+import com.izforge.izpack.core.rules.logic.OrCondition;
+import com.izforge.izpack.core.rules.process.ExistsCondition;
+import com.izforge.izpack.core.rules.process.RefCondition;
+import com.izforge.izpack.core.rules.process.VariableCondition;
+import com.izforge.izpack.test.junit.PicoRunner;
 
 
 /**
@@ -53,9 +54,9 @@ public class ConditionTest
     private static final Matcher<Object> IS_NULL = IsNull.nullValue();
     private static final Matcher<Object> IS_NOT_NULL = IsNull.notNullValue();
     private RulesEngine rules;
-    private AutomatedInstallData idata;
+    private InstallData idata;
 
-    public ConditionTest(AutomatedInstallData idata, RulesEngine rules)
+    public ConditionTest(InstallData idata, RulesEngine rules)
     {
         this.rules = rules;
         this.idata = idata;
@@ -81,7 +82,6 @@ public class ConditionTest
 
         conditions.addChild(createOrCondition("newOrUpgrade", "isNew", "isUpgrade", ownerDocument));
 
-        idata.setRules(rules);
         rules.analyzeXml(conditions);
         rules.resolveConditions();
     }

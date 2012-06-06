@@ -21,7 +21,6 @@
 
 package com.izforge.izpack.installer.console;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.util.Console;
 
 /**
@@ -36,7 +35,7 @@ abstract public class PanelConsoleHelper extends AbstractPanelConsole
      * Prompts to end the console panel.
      *
      * @return <tt>1</tt> to continue, <tt>2</tt> to quit, <tt>3</tt> to redisplay
-     * @see {@link #promptEndPanel(AutomatedInstallData, Console)}
+     * @see {@link #promptEndPanel(com.izforge.izpack.api.data.InstallData, Console)}
      * @deprecated
      */
     @Deprecated

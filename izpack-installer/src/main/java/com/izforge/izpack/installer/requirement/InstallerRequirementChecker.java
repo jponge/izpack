@@ -2,7 +2,7 @@ package com.izforge.izpack.installer.requirement;
 
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.installer.RequirementChecker;
@@ -11,19 +11,18 @@ import com.izforge.izpack.api.rules.Condition;
 import com.izforge.izpack.api.rules.RulesEngine;
 
 /**
- * Evaluates each {@link InstallerRequirement} returned by {@link AutomatedInstallData#getInstallerrequirements()}
+ * Evaluates each {@link InstallerRequirement} returned by {@link InstallData#getInstallerrequirements()}
  * to determine if installation should proceed.
  *
  * @author Tim Anderson
  */
 public class InstallerRequirementChecker implements RequirementChecker
 {
-    private static final Logger logger = Logger.getLogger(InstallerRequirementChecker.class.getName());
 
     /**
      * The installation data.
      */
-    private final AutomatedInstallData installData;
+    private final InstallData installData;
 
     /**
      * The rules engine.
@@ -36,13 +35,19 @@ public class InstallerRequirementChecker implements RequirementChecker
     private final Prompt prompt;
 
     /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(InstallerRequirementChecker.class.getName());
+
+
+    /**
      * Constructs a <tt>InstallerRequirementChecker</tt>.
      *
      * @param installData the installation data.
      * @param rules       the rules engine
      * @param prompt      the prompt
      */
-    public InstallerRequirementChecker(AutomatedInstallData installData, RulesEngine rules, Prompt prompt)
+    public InstallerRequirementChecker(InstallData installData, RulesEngine rules, Prompt prompt)
     {
         this.installData = installData;
         this.rules = rules;

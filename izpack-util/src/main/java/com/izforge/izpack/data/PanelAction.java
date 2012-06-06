@@ -8,7 +8,7 @@
 
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.PanelActionConfiguration;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 
@@ -74,7 +74,7 @@ public interface PanelAction
      *                On a preconstruct action the handler is null because it is not available until it is constructed.
      *                During an automated installation the handler is null on each action because we have no GUI to handle.
      */
-    public void executeAction(final AutomatedInstallData adata, AbstractUIHandler handler);
+    public void executeAction(final InstallData adata, AbstractUIHandler handler);
 
 
     /**

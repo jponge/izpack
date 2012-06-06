@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -83,7 +83,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      * @param installData installation parameters
      * @param panelRoot   unused.
      */
-    public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot)
+    public void makeXMLData(InstallData installData, IXMLElement panelRoot)
     {
         // not used here - during automatic installation, no automatic
         // installation information is generated
@@ -92,10 +92,11 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * Perform the installation actions.
      *
+     *
      * @param panelRoot The panel XML tree root.
      * @throws InstallerException if something went wrong.
      */
-    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
+    public void runAutomated(InstallData idata, IXMLElement panelRoot) throws InstallerException
     {
         IXMLElement compiler_xml = panelRoot.getFirstChildNamed("compiler");
 

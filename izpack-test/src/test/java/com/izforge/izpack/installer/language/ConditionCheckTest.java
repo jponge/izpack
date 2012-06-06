@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
@@ -27,13 +27,11 @@ public class ConditionCheckTest
 {
 
     private ConditionCheck conditionCheck;
-    private ResourceManager resourceManager;
 
-    public ConditionCheckTest(AutomatedInstallData installData, ResourceManager resourceManager,
+    public ConditionCheckTest(InstallData installData, ResourceManager resourceManager,
                               RulesEngine rules)
     {
         this.conditionCheck = new ConditionCheck(installData, resourceManager, rules);
-        this.resourceManager = resourceManager;
     }
 
     @Test

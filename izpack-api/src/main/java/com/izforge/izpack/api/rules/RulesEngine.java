@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Variables;
 
 /**
@@ -16,9 +16,9 @@ public interface RulesEngine extends Serializable
 {
     Set<String> getKnownConditionIds();
 
-    boolean isConditionTrue(String id, AutomatedInstallData installData);
+    boolean isConditionTrue(String id, InstallData installData);
 
-    boolean isConditionTrue(Condition cond, AutomatedInstallData installData);
+    boolean isConditionTrue(Condition cond, InstallData installData);
 
     boolean isConditionTrue(String id);
 

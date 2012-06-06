@@ -4,7 +4,7 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.util.Console;
 
 /**
@@ -19,12 +19,13 @@ public abstract class AbstractTextPanelConsole extends AbstractPanelConsole
     /**
      * Runs the panel using the supplied properties.
      *
+     *
      * @param installData the installation data
      * @param properties  the properties
      * @return <tt>true</tt>
      */
     @Override
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties properties)
+    public boolean runConsoleFromProperties(InstallData installData, Properties properties)
     {
         return true;
     }
@@ -34,12 +35,13 @@ public abstract class AbstractTextPanelConsole extends AbstractPanelConsole
      * <p/>
      * If there is no text to display, the panel will return <tt>false</tt>.
      *
+     *
      * @param installData the installation data
      * @param console     the console
      * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
      */
     @Override
-    public boolean runConsole(AutomatedInstallData installData, Console console)
+    public boolean runConsole(InstallData installData, Console console)
     {
         boolean result;
         String text = getText();

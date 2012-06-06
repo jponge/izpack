@@ -22,7 +22,7 @@
 package com.izforge.izpack.installer.automation;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.InstallerException;
 
 /**
@@ -46,7 +46,7 @@ public interface PanelAutomation
      * @param installData The installation data
      * @param panelRoot   The XML root element of the panels blackbox tree.
      */
-    public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot);
+    public void makeXMLData(InstallData installData, IXMLElement panelRoot);
 
     /**
      * Makes the panel work in automated mode. Default is to do nothing, but any panel doing
@@ -57,5 +57,5 @@ public interface PanelAutomation
      * @throws com.izforge.izpack.api.exception.InstallerException
      *          if the automated work  failed critically.
      */
-    public void runAutomated(AutomatedInstallData installData, IXMLElement panelRoot) throws InstallerException;
+    public void runAutomated(InstallData installData, IXMLElement panelRoot) throws InstallerException;
 }

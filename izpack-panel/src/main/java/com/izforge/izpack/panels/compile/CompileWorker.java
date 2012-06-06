@@ -43,7 +43,7 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.resource.Messages;
@@ -87,7 +87,7 @@ public class CompileWorker implements Runnable
 
     private IXMLElement spec;
 
-    private AutomatedInstallData idata;
+    private InstallData idata;
 
     private CompileHandler handler;
 
@@ -116,8 +116,8 @@ public class CompileWorker implements Runnable
      * @param resources           the resources
      * @throws IOException for any I/O error
      */
-    public CompileWorker(AutomatedInstallData installData, CompileHandler handler,
-                         VariableSubstitutor variableSubstitutor, Resources resources) throws IOException
+    public CompileWorker(InstallData installData, CompileHandler handler, VariableSubstitutor variableSubstitutor,
+                         Resources resources) throws IOException
     {
         this.idata = installData;
         this.handler = handler;
@@ -635,7 +635,7 @@ public class CompileWorker implements Runnable
 
         private Messages messages;
 
-        private AutomatedInstallData idata;
+        private InstallData idata;
 
         // XXX: figure that out (on runtime?)
         private static final int MAX_CMDLINE_SIZE = 4096;
@@ -649,7 +649,7 @@ public class CompileWorker implements Runnable
          * @param files     The files to compile.
          * @param classpath The class path to use.
          */
-        public CompilationJob(CompileHandler listener, AutomatedInstallData idata, String name,
+        public CompilationJob(CompileHandler listener, InstallData idata, String name,
                               ArrayList<File> files, List<String> classpath)
         {
             this.listener = listener;

@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.automation.PanelAutomation;
@@ -49,7 +49,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
      * @param panelRoot The XML tree to write the installDataGUI in.
      */
     @Override
-    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
+    public void makeXMLData(InstallData idata, IXMLElement panelRoot)
     {
         // We add each pack to the panelRoot element
         for (int i = 0; i < idata.getAvailablePacks().size(); i++)
@@ -72,7 +72,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
      * @param panelRoot The root of the panel installDataGUI.
      */
     @Override
-    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot)
+    public void runAutomated(InstallData idata, IXMLElement panelRoot)
     {
         final class PInfo
         {

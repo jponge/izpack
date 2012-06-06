@@ -19,9 +19,17 @@ package com.izforge.izpack.util.file;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.util.file.types.Resource;
 import com.izforge.izpack.util.file.types.ResourceFactory;
 import com.izforge.izpack.util.file.types.selectors.FileSelector;
@@ -113,7 +121,7 @@ public class DirectoryScanner
         implements FileScanner, /*SelectorScanner, */ResourceFactory
 {
 
-    protected AutomatedInstallData idata;
+    protected InstallData idata;
 
     /** Is OpenVMS the operating system we're running on? */
     //private static final boolean ON_VMS = Os.isFamily("openvms");

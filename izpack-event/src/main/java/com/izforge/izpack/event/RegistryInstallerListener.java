@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.exception.NativeLibException;
@@ -110,7 +111,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
     /**
      * The installation data.
      */
-    private final AutomatedInstallData installData;
+    private final InstallData installData;
 
     /**
      * The uninstallation data.
@@ -151,7 +152,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
      * @param handler       the registry handler reference
      */
     public RegistryInstallerListener(IUnpacker unpacker, VariableSubstitutor substituter,
-                                     AutomatedInstallData installData, UninstallData uninstallData,
+                                     InstallData installData, UninstallData uninstallData,
                                      Resources resources, RulesEngine rules, Housekeeper housekeeper,
                                      RegistryDefaultHandler handler)
     {
@@ -490,7 +491,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
         return 0;
     }
 
-    private void initializeRegistryHandler(AutomatedInstallData installData) throws Exception
+    private void initializeRegistryHandler(InstallData installData) throws Exception
     {
         if (registry != null)
         {

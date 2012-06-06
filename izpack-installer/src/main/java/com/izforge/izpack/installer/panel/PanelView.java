@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
@@ -61,7 +61,7 @@ public abstract class PanelView<T>
     /**
      * The installation data.
      */
-    private final AutomatedInstallData installData;
+    private final InstallData installData;
 
     /**
      * Actions to invoke prior to the panel being displayed.
@@ -92,7 +92,7 @@ public abstract class PanelView<T>
      * @param factory     the factory for creating the view
      * @param installData the installation data
      */
-    public PanelView(Panel panel, Class<T> viewClass, ObjectFactory factory, AutomatedInstallData installData)
+    public PanelView(Panel panel, Class<T> viewClass, ObjectFactory factory, InstallData installData)
     {
         this.panel = panel;
         this.viewClass = viewClass;
@@ -283,7 +283,7 @@ public abstract class PanelView<T>
      * @param panel       the panel the view represents
      * @param installData the installation data
      */
-    protected void initialise(T view, Panel panel, AutomatedInstallData installData)
+    protected void initialise(T view, Panel panel, InstallData installData)
     {
 
     }
@@ -338,7 +338,7 @@ public abstract class PanelView<T>
      * @return {@code true} if the validator evaluated successfully, or with a warning that the user chose to skip;
      *         otherwise {@code false}
      */
-    protected boolean isValid(DataValidator validator, AutomatedInstallData installData)
+    protected boolean isValid(DataValidator validator, InstallData installData)
     {
         boolean result = false;
         DataValidator.Status status = validator.validateData(installData);

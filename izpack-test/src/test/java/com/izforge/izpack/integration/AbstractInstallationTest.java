@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 
 
 /**
@@ -25,7 +25,7 @@ public class AbstractInstallationTest
     /**
      * The installation data.
      */
-    private AutomatedInstallData installData;
+    private InstallData installData;
 
 
     /**
@@ -33,7 +33,7 @@ public class AbstractInstallationTest
      *
      * @param installData the installation data
      */
-    public AbstractInstallationTest(AutomatedInstallData installData)
+    public AbstractInstallationTest(InstallData installData)
     {
         this.installData = installData;
     }
@@ -66,7 +66,7 @@ public class AbstractInstallationTest
      *
      * @return the install data
      */
-    protected AutomatedInstallData getInstallData()
+    protected InstallData getInstallData()
     {
         return installData;
     }

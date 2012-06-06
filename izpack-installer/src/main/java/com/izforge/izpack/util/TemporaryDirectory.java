@@ -27,8 +27,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info.TempDir;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.util.file.FileUtils;
 
 /**
@@ -39,7 +39,7 @@ public class TemporaryDirectory implements CleanupClient
     private static final Logger logger = Logger.getLogger(TemporaryDirectory.class.getName());
 
     private File tempdir;
-    private final AutomatedInstallData installData;
+    private final InstallData installData;
     private final TempDir tempDirDescription;
     private boolean deleteOnExit = false;
 
@@ -55,7 +55,7 @@ public class TemporaryDirectory implements CleanupClient
      * @param installData        The install data in to which the temporary directories variable will be written
      * @param housekeeper the house-keeper
      */
-    public TemporaryDirectory(TempDir tempDirDescription, AutomatedInstallData installData, Housekeeper housekeeper)
+    public TemporaryDirectory(TempDir tempDirDescription, InstallData installData, Housekeeper housekeeper)
     {
         if (null == tempDirDescription)
         {

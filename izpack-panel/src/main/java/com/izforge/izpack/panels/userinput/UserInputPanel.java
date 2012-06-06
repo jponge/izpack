@@ -352,7 +352,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             existsCondition.setContentType(ContentType.VARIABLE);
             existsCondition.setContent(variable);
             existsCondition.setId("izpack.input." + variable);
-            existsCondition.setInstalldata(this.installData);
+            existsCondition.setInstallData(this.installData);
             rules.addCondition(existsCondition);
         }
     }

@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.util.file.FileUtils;
 
 /**
@@ -27,7 +27,7 @@ class GeneratePropertiesAction extends ConsoleAction
      * @throws FileNotFoundException if the file exists but is a directory rather than a regular file, does not exist
      *                               but cannot be created, or cannot be opened for any other reason
      */
-    public GeneratePropertiesAction(AutomatedInstallData installData, String path) throws FileNotFoundException
+    public GeneratePropertiesAction(InstallData installData, String path) throws FileNotFoundException
     {
         super(installData);
         writer = new PrintWriter(new FileOutputStream(path), true);
@@ -60,7 +60,8 @@ class GeneratePropertiesAction extends ConsoleAction
      * Invoked after the action has been successfully run for each panel.
      *
      * @return {@code true} if the operation succeeds; {@code false} if it fails
-     */    @Override
+     */
+    @Override
     public boolean complete()
     {
         FileUtils.close(writer);

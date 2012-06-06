@@ -11,7 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.compiler.container.TestCompilationContainer;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
 import com.izforge.izpack.integration.UninstallHelper;
@@ -71,7 +71,7 @@ public abstract class AbstractMultiVolumeInstallationTest
 
         // now run the installer
         InstallerContainer installer = createInstallerContainer();
-        AutomatedInstallData installData = installer.getComponent(AutomatedInstallData.class);
+        InstallData installData = installer.getComponent(InstallData.class);
 
         // write to temporary folder so the test doesn't need to be run with elevated permissions
         File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
@@ -118,6 +118,6 @@ public abstract class AbstractMultiVolumeInstallationTest
      * @param installPath the installation directory
      * @throws Exception for any error
      */
-    protected abstract void install(InstallerContainer container, AutomatedInstallData installData, File installPath)
+    protected abstract void install(InstallerContainer container, InstallData installData, File installPath)
             throws Exception;
 }

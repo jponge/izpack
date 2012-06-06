@@ -36,6 +36,7 @@ import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
@@ -290,7 +291,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * @return an ant call which is defined in the given XML element
      * @throws InstallerException
      */
-    private AntAction readAntCall(IXMLElement el, AutomatedInstallData idata) throws InstallerException
+    private AntAction readAntCall(IXMLElement el, InstallData idata) throws InstallerException
     {
         String buildFile = null;
         String buildResource = null;
@@ -396,7 +397,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         return act;
     }
 
-    private String processBuildfileResource(SpecHelper spec, AutomatedInstallData idata, IXMLElement el)
+    private String processBuildfileResource(SpecHelper spec, InstallData idata, IXMLElement el)
             throws InstallerException
     {
         String buildResource = null;

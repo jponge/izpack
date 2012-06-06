@@ -1,6 +1,6 @@
 package com.izforge.izpack.installer.requirement;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.installer.RequirementChecker;
 
@@ -15,7 +15,7 @@ public class JavaVersionChecker implements RequirementChecker
     /**
      * The installation data.
      */
-    private final AutomatedInstallData installData;
+    private final InstallData installData;
 
     /**
      * The prompt.
@@ -29,7 +29,7 @@ public class JavaVersionChecker implements RequirementChecker
      * @param installData the installation data
      * @param prompt      the prompt
      */
-    public JavaVersionChecker(AutomatedInstallData installData, Prompt prompt)
+    public JavaVersionChecker(InstallData installData, Prompt prompt)
     {
         this.installData = installData;
         this.prompt = prompt;

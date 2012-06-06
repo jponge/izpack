@@ -131,7 +131,7 @@ public class PackValidatorTest
     @InstallFile("samples/packvalidators.xml")
     public void testPackValidator() throws Exception
     {
-        assertEquals(4, installData.getPanelsOrder().size());
+        assertEquals(4, panels.getPanels().size());
 
         frameFixture = HelperTestMethod.prepareFrameFixture(frame, controller);
 

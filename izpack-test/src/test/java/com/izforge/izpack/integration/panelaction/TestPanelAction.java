@@ -8,7 +8,7 @@ import static org.junit.Assert.fail;
 
 import java.util.Map;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.PanelActionConfiguration;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
@@ -40,7 +40,7 @@ public abstract class TestPanelAction extends TestDataValidator implements Panel
      * @param stage       the action stage
      * @param installData the installation data
      */
-    public TestPanelAction(Panel panel, ActionStage stage, AutomatedInstallData installData)
+    public TestPanelAction(Panel panel, ActionStage stage, InstallData installData)
     {
         super(panel, installData);
         this.stage = stage;
@@ -53,7 +53,7 @@ public abstract class TestPanelAction extends TestDataValidator implements Panel
      * @param installData the installation data
      * @return the no. of times the pre-construction action has been invoked
      */
-    public static int getPreConstruct(String panelId, AutomatedInstallData installData)
+    public static int getPreConstruct(String panelId, InstallData installData)
     {
         return getValue(panelId + "." + ActionStage.preconstruct, installData);
     }
@@ -65,7 +65,7 @@ public abstract class TestPanelAction extends TestDataValidator implements Panel
      * @param installData the installation data
      * @return the no. of times the pre-activation action has been invoked
      */
-    public static int getPreActivate(String panelId, AutomatedInstallData installData)
+    public static int getPreActivate(String panelId, InstallData installData)
     {
         return getValue(panelId + "." + ActionStage.preactivate, installData);
     }
@@ -77,7 +77,7 @@ public abstract class TestPanelAction extends TestDataValidator implements Panel
      * @param installData the installation data
      * @return the no. of times the pre-validation action has been invoked
      */
-    public static int getPreValidate(String panelId, AutomatedInstallData installData)
+    public static int getPreValidate(String panelId, InstallData installData)
     {
         return getValue(panelId + "." + ActionStage.prevalidate, installData);
     }
@@ -89,7 +89,7 @@ public abstract class TestPanelAction extends TestDataValidator implements Panel
      * @param installData the installation data
      * @return the no. of times the post-validation action has been invoked
      */
-    public static int getPostValidate(String panelId, AutomatedInstallData installData)
+    public static int getPostValidate(String panelId, InstallData installData)
     {
         return getValue(panelId + "." + ActionStage.postvalidate, installData);
     }
@@ -105,7 +105,7 @@ public abstract class TestPanelAction extends TestDataValidator implements Panel
      *                    null on each action because we have no GUI to handle.
      */
     @Override
-    public void executeAction(AutomatedInstallData installData, AbstractUIHandler handler)
+    public void executeAction(InstallData installData, AbstractUIHandler handler)
     {
         String id = getPanelId();
         if (stage == ActionStage.preconstruct)
@@ -162,13 +162,13 @@ public abstract class TestPanelAction extends TestDataValidator implements Panel
     }
 
     /**
-     * Method to validate {@link AutomatedInstallData}.
+     * Method to validate {@link InstallData}.
      *
      * @param installData the installation data
      * @return the result of the validation
      */
     @Override
-    public Status validateData(AutomatedInstallData installData)
+    public Status validateData(InstallData installData)
     {
         Status status = super.validateData(installData);
 
@@ -198,7 +198,7 @@ public abstract class TestPanelAction extends TestDataValidator implements Panel
         if (configuration != null)
         {
             String prefix = getPanelId() + "." + stage.toString().toLowerCase() + ".config.";
-            AutomatedInstallData installData = getInstallData();
+            InstallData installData = getInstallData();
             for (Map.Entry<String, String> entry : configuration.getProperties().entrySet())
             {
                 installData.setVariable(prefix + entry.getKey(), entry.getValue());

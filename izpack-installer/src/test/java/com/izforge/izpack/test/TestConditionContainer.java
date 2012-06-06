@@ -5,7 +5,7 @@ import java.util.Properties;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoException;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -47,7 +47,7 @@ public class TestConditionContainer extends AbstractContainer
     @Override
     protected void fillContainer(MutablePicoContainer container)
     {
-        addComponent(AutomatedInstallData.class, GUIInstallData.class);
+        addComponent(InstallData.class, GUIInstallData.class);
         addComponent(RulesEngine.class, RulesEngineImpl.class);
         addComponent(VariableSubstitutor.class, VariableSubstitutorImpl.class);
         addComponent(MutablePicoContainer.class, container);

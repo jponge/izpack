@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.core.io.VolumeLocator;
@@ -20,7 +20,7 @@ public class MultiVolumeUnpackerHelper implements VolumeLocator
     /**
      * The installation data.
      */
-    private AutomatedInstallData installData;
+    private InstallData installData;
 
     /**
      * The progress handler.
@@ -38,7 +38,7 @@ public class MultiVolumeUnpackerHelper implements VolumeLocator
      * @param installData the installation data
      * @param handler     the progress handler
      */
-    public MultiVolumeUnpackerHelper(AutomatedInstallData installData, AbstractUIProgressHandler handler)
+    public MultiVolumeUnpackerHelper(InstallData installData, AbstractUIProgressHandler handler)
     {
         this.installData = installData;
         this.handler = handler;

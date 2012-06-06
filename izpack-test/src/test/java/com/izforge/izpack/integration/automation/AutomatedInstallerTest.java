@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.compiler.container.TestConsoleInstallationContainer;
 import com.izforge.izpack.installer.automation.AutomatedInstaller;
 import com.izforge.izpack.integration.AbstractInstallationTest;
@@ -58,7 +59,7 @@ public class AutomatedInstallerTest extends AbstractInstallationTest
     @InstallFile("samples/basicInstall/basicInstall.xml")
     public void testAutomatedInstaller() throws Exception
     {
-        AutomatedInstallData installData = getInstallData();
+        InstallData installData = getInstallData();
 
         URL url = getClass().getResource("/samples/basicInstall/auto.xml");
         assertNotNull(url);

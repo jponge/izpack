@@ -22,7 +22,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.util.file.types.Parameter;
 
 /**
@@ -295,7 +295,7 @@ public class SizeSelector extends BaseExtendSelector
      * @param file     A File object for this filename.
      * @return whether the file should be selected or not.
      */
-    public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
+    public boolean isSelected(InstallData idata, File basedir, String filename, File file)
             throws Exception
     {
         // throw Exception on error

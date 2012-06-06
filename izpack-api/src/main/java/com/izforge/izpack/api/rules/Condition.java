@@ -22,10 +22,10 @@
 
 package com.izforge.izpack.api.rules;
 
-import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.AutomatedInstallData;
-
 import java.io.Serializable;
+
+import com.izforge.izpack.api.adaptator.IXMLElement;
+import com.izforge.izpack.api.data.InstallData;
 
 /**
  * Abstract base class for all conditions. Implementations of custom conditions
@@ -40,7 +40,7 @@ public abstract class Condition implements Serializable
 
     private String id;
 
-    private AutomatedInstallData installData;
+    private InstallData installData;
 
     public Condition()
     {
@@ -68,6 +68,7 @@ public abstract class Condition implements Serializable
      * Parse and initialize this condition from parsed values. An exception
      * should be thrown if the condition description has not the expected
      * XML format, something missing or obviously bad values.
+     *
      * @param xmlcondition the root element to parse from
      * @throws Exception on a parse error
      */
@@ -75,13 +76,13 @@ public abstract class Condition implements Serializable
 
     public abstract boolean isTrue();
 
-    public AutomatedInstallData getInstallData()
+    public InstallData getInstallData()
     {
         return installData;
     }
 
 
-    public void setInstalldata(AutomatedInstallData installData)
+    public void setInstallData(InstallData installData)
     {
         this.installData = installData;
     }

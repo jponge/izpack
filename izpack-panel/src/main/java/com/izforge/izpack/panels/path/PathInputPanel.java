@@ -31,7 +31,7 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
@@ -156,14 +156,14 @@ public class PathInputPanel extends IzPanel implements ActionListener
         boolean ok = true;
 
         boolean modifyinstallation = Boolean.valueOf(
-                this.installData.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
+                this.installData.getVariable(InstallData.MODIFY_INSTALLATION));
         if (modifyinstallation)
         {
             // installation directory has to exist in a modification installation
             mustExist = true;
 
             File installationinformation = new File(
-                    pathSelectionPanel.getPath() + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
+                    pathSelectionPanel.getPath() + File.separator + InstallData.INSTALLATION_INFORMATION);
             if (!installationinformation.exists())
             {
                 emitError(getString("installer.error"),
@@ -333,7 +333,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
      * @param installData the installation data
      * @return the default installation directory for the current installation
      */
-    public static String loadDefaultInstallDir(Resources resources, AutomatedInstallData installData)
+    public static String loadDefaultInstallDir(Resources resources, InstallData installData)
     {
         String defaultInstallDir = getDefaultInstallDir();
         if (defaultInstallDir != null)

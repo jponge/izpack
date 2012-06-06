@@ -2,7 +2,7 @@ package com.izforge.izpack.installer.console;
 
 import java.util.Properties;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 
 
@@ -25,7 +25,7 @@ class PropertyInstallAction extends AbstractInstallAction
      * @param writer      the uninstallation data writer
      * @param properties  the installation properties
      */
-    public PropertyInstallAction(AutomatedInstallData installData, UninstallDataWriter writer, Properties properties)
+    public PropertyInstallAction(InstallData installData, UninstallDataWriter writer, Properties properties)
     {
         super(installData, writer);
         this.properties = properties;

@@ -1,6 +1,6 @@
 package com.izforge.izpack.installer.automation;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.factory.ObjectFactory;
@@ -29,7 +29,7 @@ public class AutomatedPanelView extends PanelView<PanelAutomation>
      * @param installData the installation data
      * @param handler     the handler
      */
-    public AutomatedPanelView(Panel panel, ObjectFactory factory, AutomatedInstallData installData,
+    public AutomatedPanelView(Panel panel, ObjectFactory factory, InstallData installData,
                               AbstractUIHandler handler)
     {
         super(panel, PanelAutomation.class, factory, installData);

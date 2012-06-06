@@ -24,7 +24,7 @@ package com.izforge.izpack.panels.target;
 import java.io.PrintWriter;
 import java.util.Properties;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
@@ -54,15 +54,15 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
         this.resources = resources;
     }
 
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
+    public boolean runGeneratePropertiesFile(InstallData installData, PrintWriter printWriter)
     {
-        printWriter.println(AutomatedInstallData.INSTALL_PATH + "=");
+        printWriter.println(InstallData.INSTALL_PATH + "=");
         return true;
     }
 
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties properties)
+    public boolean runConsoleFromProperties(InstallData installData, Properties properties)
     {
-        String strTargetPath = properties.getProperty(AutomatedInstallData.INSTALL_PATH);
+        String strTargetPath = properties.getProperty(InstallData.INSTALL_PATH);
         if (strTargetPath == null || "".equals(strTargetPath.trim()))
         {
             System.err.println("Missing mandatory target path!");
@@ -79,12 +79,13 @@ public class TargetPanelConsoleHelper extends PanelConsoleHelper implements Pane
     /**
      * Runs the panel using the specified console.
      *
+     *
      * @param installData the installation data
      * @param console     the console
      * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
      */
     @Override
-    public boolean runConsole(AutomatedInstallData installData, Console console)
+    public boolean runConsole(InstallData installData, Console console)
     {
         String strDefaultPath = PathInputPanel.loadDefaultInstallDir(resources, installData);
 

@@ -1,9 +1,9 @@
 package com.izforge.izpack.installer.console;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.Console;
-
 import java.io.PrintWriter;
+
+import com.izforge.izpack.api.data.InstallData;
+import com.izforge.izpack.util.Console;
 
 
 /**
@@ -24,7 +24,7 @@ public abstract class AbstractPanelConsole implements PanelConsole
      * @return <tt>true</tt>
      */
     @Override
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
+    public boolean runGeneratePropertiesFile(InstallData installData, PrintWriter printWriter)
     {
         return true;
     }
@@ -35,7 +35,7 @@ public abstract class AbstractPanelConsole implements PanelConsole
      * @param installData the installation data
      */
     @Override
-    public boolean runConsole(AutomatedInstallData installData)
+    public boolean runConsole(InstallData installData)
     {
         return runConsole(installData, new Console());
     }
@@ -44,14 +44,14 @@ public abstract class AbstractPanelConsole implements PanelConsole
      * Prompts to end the console panel.
      * <p/>
      * This displays a prompt to continue, quit, or redisplay. On redisplay, it invokes
-     * {@link #runConsole(AutomatedInstallData, Console)}.
+     * {@link #runConsole(InstallData, Console)}.
      *
      * @param installData the installation date
      * @param console     the console to use
      * @return <tt>true</tt> to continue, <tt>false</tt> to quit. If redisplaying the panel, the result of
-     *         {@link #runConsole(AutomatedInstallData, Console)} is returned
+     *         {@link #runConsole(InstallData, Console)} is returned
      */
-    protected boolean promptEndPanel(AutomatedInstallData installData, Console console)
+    protected boolean promptEndPanel(InstallData installData, Console console)
     {
         boolean result;
         int value = console.prompt("Press 1 to continue, 2 to quit, 3 to redisplay", 1, 3, 2);

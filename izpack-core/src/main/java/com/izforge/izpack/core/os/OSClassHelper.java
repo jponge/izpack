@@ -24,7 +24,7 @@ package com.izforge.izpack.core.os;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 
 /*---------------------------------------------------------------------------*/
 
@@ -41,7 +41,7 @@ public class OSClassHelper
 {
     private static final Logger logger = Logger.getLogger(OSClassHelper.class.getName());
 
-    protected AutomatedInstallData installdata;
+    protected InstallData installdata;
 
     protected Class workerClass = null;
 
@@ -110,7 +110,7 @@ public class OSClassHelper
      * @return whether the helper is good or not
      * @throws Exception
      */
-    public boolean verify(AutomatedInstallData idata) throws Exception
+    public boolean verify(InstallData idata) throws Exception
     {
         installdata = idata;
         return (false);

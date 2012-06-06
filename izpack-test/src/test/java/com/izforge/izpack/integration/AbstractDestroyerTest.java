@@ -2,7 +2,7 @@ package com.izforge.izpack.integration;
 
 import java.io.File;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.uninstaller.Destroyer;
 
 
@@ -19,7 +19,7 @@ public class AbstractDestroyerTest extends AbstractInstallationTest
      *
      * @param installData the install data
      */
-    public AbstractDestroyerTest(AutomatedInstallData installData)
+    public AbstractDestroyerTest(InstallData installData)
     {
         super(installData);
     }

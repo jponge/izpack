@@ -17,10 +17,14 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.file.types.Parameter;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-import java.io.*;
+import com.izforge.izpack.api.data.InstallData;
+import com.izforge.izpack.util.file.types.Parameter;
 
 /**
  * Selector that filters files based on whether they contain a
@@ -172,7 +176,7 @@ public class ContainsSelector extends BaseExtendSelector
      * @param file     is a java.io.File object the selector can use
      * @return whether the file should be selected or not
      */
-    public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
+    public boolean isSelected(InstallData idata, File basedir, String filename, File file)
             throws Exception
     {
         // throw BuildException on error

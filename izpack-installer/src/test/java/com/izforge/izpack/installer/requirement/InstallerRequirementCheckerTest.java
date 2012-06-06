@@ -23,7 +23,6 @@ import com.izforge.izpack.core.handler.ConsolePrompt;
 import com.izforge.izpack.core.rules.RulesEngineImpl;
 import com.izforge.izpack.core.rules.logic.NotCondition;
 import com.izforge.izpack.core.rules.process.JavaCondition;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.test.util.TestConsole;
 import com.izforge.izpack.util.Platforms;
 
@@ -50,20 +49,20 @@ public class InstallerRequirementCheckerTest
     public InstallerRequirementCheckerTest()
     {
         DefaultVariables variables = new DefaultVariables();
-        installData = new InstallData(variables);
+        installData = new AutomatedInstallData(variables);
         installData.setInstallerrequirements(new ArrayList<InstallerRequirement>());
-        installData.setLangpack(new LocaleDatabase(new StringInputStream("<langpack/>"), Mockito.mock(Locales.class)));
+        installData.setMessages(new LocaleDatabase(new StringInputStream("<langpack/>"), Mockito.mock(Locales.class)));
         rules = new RulesEngineImpl(installData, null, Platforms.SUNOS_X86);
         variables.setRules(rules);
 
-        Map<String, Condition> conditionsmap = new HashMap<String, Condition>();
+        Map<String, Condition> conditions = new HashMap<String, Condition>();
         Condition alwaysFalse = new JavaCondition();
-        conditionsmap.put("false", alwaysFalse);
+        conditions.put("false", alwaysFalse);
 
         Condition alwaysTrue = NotCondition.createFromCondition(alwaysFalse, rules);
-        conditionsmap.put("true", alwaysTrue);
+        conditions.put("true", alwaysTrue);
 
-        rules.readConditionMap(conditionsmap);
+        rules.readConditionMap(conditions);
     }
 
     /**

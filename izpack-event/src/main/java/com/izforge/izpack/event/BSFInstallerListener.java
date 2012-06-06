@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.exception.InstallerException;
@@ -52,7 +53,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
     private HashMap<String, ArrayList<BSFAction>> actions = null;
     private ArrayList<BSFAction> uninstActions = null;
     private String currentPack = null;
-    private AutomatedInstallData installdata = null;
+    private InstallData installdata = null;
     private VariableSubstitutor variableSubstitutor;
     private UninstallData uninstallData;
     private final Resources resources;
@@ -275,7 +276,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
 
     }
 
-    private BSFAction readAction(IXMLElement element, AutomatedInstallData idata) throws InstallerException
+    private BSFAction readAction(IXMLElement element, InstallData idata) throws InstallerException
     {
         BSFAction action = new BSFAction();
         String src = element.getAttribute("src");

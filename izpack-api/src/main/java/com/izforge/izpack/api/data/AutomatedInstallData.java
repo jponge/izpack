@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
@@ -37,20 +39,8 @@ import com.izforge.izpack.api.rules.RulesEngine;
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public class AutomatedInstallData
+public class AutomatedInstallData implements InstallData
 {
-
-    // --- Static members -------------------------------------------------
-    public static final String MODIFY_INSTALLATION = "modify.izpack.install";
-    public static final String INSTALLATION_INFORMATION = ".installationinformation";
-
-    /**
-     * The path for multi-volume installation media.
-     */
-    public static final String MEDIA_PATH = "MEDIA_PATH";
-
-
-    // --- Instance members -----------------------------------------------
 
     private RulesEngine rules;
 
@@ -145,10 +135,6 @@ public class AutomatedInstallData
     private Map<String, Object> attributes;
 
     /**
-     * The install path
-     */
-    public final static String INSTALL_PATH = "INSTALL_PATH";
-    /**
      * The default install path
      */
     public final static String DEFAULT_INSTALL_PATH = "INSTALL_PATH";
@@ -160,17 +146,16 @@ public class AutomatedInstallData
      * The default install drive (Windows only, otherwise not set)
      */
     public final static String DEFAULT_INSTALL_DRIVE = "INSTALL_DRIVE";
-    /**
-     * Helps information
-     */
-    public final static String HELP_TAG = "help";
-    public final static String ISO3_ATTRIBUTE = "iso3";
-    public final static String SRC_ATTRIBUTE = "src";
 
     /**
      * The listeners.
      */
     private List<InstallerListener> installerListener = new ArrayList<InstallerListener>();
+
+    /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(InstallerListener.class.getName());
 
     /**
      * Constructs an <tt>AutomatedInstallData</tt>.
@@ -192,6 +177,7 @@ public class AutomatedInstallData
      *
      * @return the variables
      */
+    @Override
     public Variables getVariables()
     {
         return variables;
@@ -205,6 +191,7 @@ public class AutomatedInstallData
      * @param value the new value of the variable
      * @see #getVariable
      */
+    @Override
     public void setVariable(String name, String value)
     {
         variables.set(name, value);
@@ -214,18 +201,20 @@ public class AutomatedInstallData
      * Returns the current value of the specified variable. This is short hand for
      * {@code getVariables().get(name)}.
      *
-     * @param var the name of the variable
+     * @param name the name of the variable
      * @return the value of the variable or null if not set
      * @see #setVariable
      */
-    public String getVariable(String var)
+    @Override
+    public String getVariable(String name)
     {
-        return variables.get(var);
+        return variables.get(name);
     }
 
     /**
      * Refreshes dynamic variables. This is short hand for {@code getVariables().refresh()}.
      */
+    @Override
     public void refreshVariables()
     {
         variables.refresh();
@@ -237,6 +226,7 @@ public class AutomatedInstallData
      * @param path the new install path
      * @see #getInstallPath
      */
+    @Override
     public void setInstallPath(String path)
     {
         setVariable(INSTALL_PATH, path);
@@ -248,6 +238,7 @@ public class AutomatedInstallData
      * @return the current install path or null if none set yet
      * @see #setInstallPath
      */
+    @Override
     public String getInstallPath()
     {
         return getVariable(INSTALL_PATH);
@@ -259,6 +250,7 @@ public class AutomatedInstallData
      * @param path the default install path
      * @see #getDefaultInstallPath
      */
+    @Override
     public void setDefaultInstallPath(String path)
     {
         setVariable(DEFAULT_INSTALL_PATH, path);
@@ -270,6 +262,7 @@ public class AutomatedInstallData
      * @return the default install path or null if none set yet
      * @see #setDefaultInstallPath
      */
+    @Override
     public String getDefaultInstallPath()
     {
         return getVariable(DEFAULT_INSTALL_PATH);
@@ -280,6 +273,7 @@ public class AutomatedInstallData
      *
      * @param path the media path. May be <tt>null</tt>
      */
+    @Override
     public void setMediaPath(String path)
     {
         setVariable(MEDIA_PATH, path);
@@ -290,6 +284,7 @@ public class AutomatedInstallData
      *
      * @return the media path. May be <tt>null</tt>
      */
+    @Override
     public String getMediaPath()
     {
         return getVariable(MEDIA_PATH);
@@ -298,13 +293,14 @@ public class AutomatedInstallData
     /**
      * Returns the value of the named attribute.
      *
-     * @param attr the name of the attribute
+     * @param name the name of the attribute
      * @return the value of the attribute or null if not set
      * @see #setAttribute
      */
-    public Object getAttribute(String attr)
+    @Override
+    public Object getAttribute(String name)
     {
-        return getAttributes().get(attr);
+        return getAttributes().get(name);
     }
 
     /**
@@ -314,19 +310,20 @@ public class AutomatedInstallData
      * name of the attribute should include the package and class name to prevent name space
      * collisions.
      *
-     * @param attr the name of the attribute to set
-     * @param val  the value of the attribute or null to unset the attribute
+     * @param name the name of the attribute to set
+     * @param value  the value of the attribute or null to unset the attribute
      * @see #getAttribute
      */
-    public void setAttribute(String attr, Object val)
+    @Override
+    public void setAttribute(String name, Object value)
     {
-        if (val == null)
+        if (value == null)
         {
-            getAttributes().remove(attr);
+            getAttributes().remove(name);
         }
         else
         {
-            getAttributes().put(attr, val);
+            getAttributes().put(name, value);
         }
     }
 
@@ -346,6 +343,7 @@ public class AutomatedInstallData
         this.messages = localeDatabase;
     }
 
+    @Override
     public RulesEngine getRules()
     {
         return rules;
@@ -357,9 +355,22 @@ public class AutomatedInstallData
         this.rules = rules;
     }
 
+    @Override
     public String getLocaleISO3()
     {
-        return (locale != null) ? locale.getISO3Language() : null;
+        String result = null;
+        try
+        {
+            if (locale != null)
+            {
+                result = locale.getISO3Language();
+            }
+        }
+        catch (MissingResourceException exception)
+        {
+            // do nothing
+        }
+        return result;
     }
 
     @Deprecated
@@ -367,6 +378,7 @@ public class AutomatedInstallData
     {
     }
 
+    @Override
     public Locale getLocale()
     {
         return locale;
@@ -395,6 +407,7 @@ public class AutomatedInstallData
      *
      * @return the localised messages
      */
+    @Override
     public Messages getMessages()
     {
         return messages;
@@ -412,6 +425,7 @@ public class AutomatedInstallData
         this.messages = langpack;
     }
 
+    @Override
     public Info getInfo()
     {
         return info;
@@ -422,6 +436,7 @@ public class AutomatedInstallData
         this.info = info;
     }
 
+    @Override
     public List<Pack> getAllPacks()
     {
         return allPacks;
@@ -432,6 +447,7 @@ public class AutomatedInstallData
         this.allPacks = allPacks;
     }
 
+    @Override
     public List<Pack> getAvailablePacks()
     {
         return availablePacks;
@@ -442,16 +458,19 @@ public class AutomatedInstallData
         this.availablePacks = availablePacks;
     }
 
+    @Override
     public List<Pack> getSelectedPacks()
     {
         return selectedPacks;
     }
 
+    @Override
     public void setSelectedPacks(List<Pack> selectedPacks)
     {
         this.selectedPacks = selectedPacks;
     }
 
+    @Override
     public List<Panel> getPanelsOrder()
     {
         return panelsOrder;
@@ -486,6 +505,7 @@ public class AutomatedInstallData
         this.curPanelNumber = curPanelNumber;
     }
 
+    @Override
     public boolean isCanClose()
     {
         return canClose;
@@ -496,26 +516,31 @@ public class AutomatedInstallData
         this.canClose = canClose;
     }
 
+    @Override
     public boolean isInstallSuccess()
     {
         return installSuccess;
     }
 
+    @Override
     public void setInstallSuccess(boolean installSuccess)
     {
         this.installSuccess = installSuccess;
     }
 
+    @Override
     public boolean isRebootNecessary()
     {
         return rebootNecessary;
     }
 
+    @Override
     public void setRebootNecessary(boolean rebootNecessary)
     {
         this.rebootNecessary = rebootNecessary;
     }
 
+    @Override
     public IXMLElement getXmlData()
     {
         return xmlData;
@@ -565,6 +590,7 @@ public class AutomatedInstallData
         this.dynamicvariables = dynamicvariables;
     }
 
+    @Override
     public List<DynamicInstallerRequirementValidator> getDynamicinstallerrequirements()
     {
         return this.dynamicinstallerrequirements;
@@ -580,6 +606,7 @@ public class AutomatedInstallData
         this.installerrequirements = installerrequirements;
     }
 
+    @Override
     public List<InstallerRequirement> getInstallerrequirements()
     {
         return installerrequirements;

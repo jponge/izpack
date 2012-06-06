@@ -1,16 +1,16 @@
 package com.izforge.izpack.integration.console;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
 import com.izforge.izpack.installer.console.TestConsoleInstaller;
 import com.izforge.izpack.integration.AbstractDestroyerTest;
 import com.izforge.izpack.test.util.TestConsole;
-
-import java.io.File;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -27,7 +27,7 @@ public class AbstractConsoleInstallationTest extends AbstractDestroyerTest
      * @param installData the installation date
      * @throws Exception for any error
      */
-    public AbstractConsoleInstallationTest(AutomatedInstallData installData) throws Exception
+    public AbstractConsoleInstallationTest(InstallData installData) throws Exception
     {
         super(installData);
     }
@@ -38,7 +38,7 @@ public class AbstractConsoleInstallationTest extends AbstractDestroyerTest
      * @param installer   the installer
      * @param installData the installation data
      */
-    protected void checkInstall(TestConsoleInstaller installer, AutomatedInstallData installData)
+    protected void checkInstall(TestConsoleInstaller installer, InstallData installData)
     {
         checkInstall(installer, installData, true);
     }
@@ -50,8 +50,7 @@ public class AbstractConsoleInstallationTest extends AbstractDestroyerTest
      * @param installData       the installation data
      * @param expectUninstaller whether to expect an uninstaller to be created
      */
-    protected void checkInstall(TestConsoleInstaller installer, AutomatedInstallData installData,
-                                boolean expectUninstaller)
+    protected void checkInstall(TestConsoleInstaller installer, InstallData installData, boolean expectUninstaller)
     {
         String installPath = installData.getInstallPath();
 

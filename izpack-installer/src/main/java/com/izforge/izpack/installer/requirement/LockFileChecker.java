@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.handler.Prompt.Option;
 import com.izforge.izpack.api.installer.RequirementChecker;
@@ -17,17 +18,22 @@ import com.izforge.izpack.util.FileUtil;
  */
 public class LockFileChecker implements RequirementChecker
 {
-    private static final Logger logger = Logger.getLogger(LockFileChecker.class.getName());
 
     /**
      * The installation data.
      */
-    private final AutomatedInstallData installData;
+    private final InstallData installData;
 
     /**
      * The prompt.
      */
     private final Prompt prompt;
+
+    /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(LockFileChecker.class.getName());
+
 
     /**
      * Constructs a <tt>LockFileChecker</tt>.

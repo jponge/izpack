@@ -23,7 +23,7 @@ package com.izforge.izpack.installer.base;
 
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 
 /**
@@ -42,10 +42,10 @@ public abstract class InstallerBase
     /**
      * Refreshes Dynamic Variables.
      *
-     * @deprecated see {@link com.izforge.izpack.api.data.AutomatedInstallData#refreshVariables()}
+     * @deprecated see {@link com.izforge.izpack.api.data.InstallData#refreshVariables()}
      */
     @Deprecated
-    public static void refreshDynamicVariables(AutomatedInstallData installdata,
+    public static void refreshDynamicVariables(InstallData installdata,
                                                VariableSubstitutor... substitutors) throws Exception
     {
         installdata.refreshVariables();

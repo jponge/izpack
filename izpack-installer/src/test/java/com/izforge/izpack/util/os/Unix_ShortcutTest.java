@@ -1,11 +1,12 @@
 package com.izforge.izpack.util.os;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.exception.ResourceNotFoundException;
+import java.io.IOException;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.IOException;
+import com.izforge.izpack.api.data.InstallData;
+import com.izforge.izpack.api.exception.ResourceNotFoundException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,7 +15,7 @@ import java.io.IOException;
  */
 public class Unix_ShortcutTest
 {
-    private AutomatedInstallData idata;
+    private InstallData idata;
 
     @Test
     @Ignore

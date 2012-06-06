@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.compiler.container.TestConsoleInstallationContainer;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.installer.console.ConsoleInstaller;
@@ -96,7 +97,7 @@ public class ConsoleInstallationTest extends AbstractConsoleInstallationTest
     @InstallFile("samples/console/install.xml")
     public void testRejectLicence()
     {
-        AutomatedInstallData installData = getInstallData();
+        InstallData installData = getInstallData();
 
         File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
 
@@ -140,7 +141,7 @@ public class ConsoleInstallationTest extends AbstractConsoleInstallationTest
     @InstallFile("samples/console/install.xml")
     public void testGenerateProperties() throws Exception
     {
-        AutomatedInstallData installData = getInstallData();
+        InstallData installData = getInstallData();
 
         File file = new File(temporaryFolder.getRoot(), "IZPackInstall.properties");
         File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
@@ -155,8 +156,8 @@ public class ConsoleInstallationTest extends AbstractConsoleInstallationTest
         Properties properties = new Properties();
         properties.load(new FileInputStream(file));
         assertEquals(1, properties.size());
-        assertTrue(properties.containsKey(AutomatedInstallData.INSTALL_PATH));
-        assertEquals("", properties.getProperty(AutomatedInstallData.INSTALL_PATH));
+        assertTrue(properties.containsKey(InstallData.INSTALL_PATH));
+        assertEquals("", properties.getProperty(InstallData.INSTALL_PATH));
     }
 
     /**
@@ -168,12 +169,12 @@ public class ConsoleInstallationTest extends AbstractConsoleInstallationTest
     @InstallFile("samples/console/install.xml")
     public void testInstallFromProperties() throws Exception
     {
-        AutomatedInstallData installData = getInstallData();
+        InstallData installData = getInstallData();
 
         File file = new File(temporaryFolder.getRoot(), "IzPackInstall.properties");
         File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
         Properties properties = new Properties();
-        properties.put(AutomatedInstallData.INSTALL_PATH, installPath.getPath());
+        properties.put(InstallData.INSTALL_PATH, installPath.getPath());
         properties.store(new FileOutputStream(file), "IzPack installation properties");
 
         TestConsole console = installer.getConsole();
@@ -198,7 +199,7 @@ public class ConsoleInstallationTest extends AbstractConsoleInstallationTest
     @InstallFile("samples/basicInstall/basicInstall.xml")
     public void testUnsupportedInstaller()
     {
-        AutomatedInstallData installData = getInstallData();
+        InstallData installData = getInstallData();
 
         File installPath = new File(temporaryFolder.getRoot(), "izpackTest");
         installData.setInstallPath(installPath.getAbsolutePath());
@@ -223,8 +224,7 @@ public class ConsoleInstallationTest extends AbstractConsoleInstallationTest
      * @param expectUninstaller whether to expect an uninstaller to be created
      */
     @Override
-    protected void checkInstall(TestConsoleInstaller installer, AutomatedInstallData installData,
-                                boolean expectUninstaller)
+    protected void checkInstall(TestConsoleInstaller installer, InstallData installData, boolean expectUninstaller)
     {
         super.checkInstall(installer, installData, expectUninstaller);
 

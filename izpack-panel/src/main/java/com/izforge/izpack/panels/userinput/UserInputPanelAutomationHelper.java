@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.installer.automation.PanelAutomation;
@@ -85,7 +85,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
      * @param panelRoot The XML root element of the panels blackbox tree.
      */
     @Override
-    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
+    public void makeXMLData(InstallData idata, IXMLElement panelRoot)
     {
         IXMLElement userInput;
         IXMLElement dataElement;
@@ -113,12 +113,13 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
     /**
      * Deserialize state from panelRoot and set installData variables accordingly.
      *
+     *
      * @param idata     The installation installDataGUI.
      * @param panelRoot The XML root element of the panels blackbox tree.
      * @throws InstallerException if some elements are missing.
      */
     @Override
-    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
+    public void runAutomated(InstallData idata, IXMLElement panelRoot) throws InstallerException
     {
         IXMLElement userInput;
         String variable;

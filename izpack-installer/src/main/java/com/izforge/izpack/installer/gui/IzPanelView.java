@@ -3,7 +3,7 @@ package com.izforge.izpack.installer.gui;
 import java.awt.Component;
 import java.awt.Cursor;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
@@ -23,7 +23,7 @@ public class IzPanelView extends PanelView<IzPanel>
      * @param factory     the factory for creating the view
      * @param installData the installation data
      */
-    public IzPanelView(Panel panel, ObjectFactory factory, AutomatedInstallData installData)
+    public IzPanelView(Panel panel, ObjectFactory factory, InstallData installData)
     {
         super(panel, IzPanel.class, factory, installData);
     }
@@ -58,7 +58,7 @@ public class IzPanelView extends PanelView<IzPanel>
      * @param installData the installation data
      */
     @Override
-    protected void initialise(IzPanel view, Panel panel, AutomatedInstallData installData)
+    protected void initialise(IzPanel view, Panel panel, InstallData installData)
     {
         setVisible(!view.isHidden());
         view.setHelpUrl(panel.getHelpUrl(installData.getLocaleISO3()));

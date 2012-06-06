@@ -21,8 +21,16 @@
 
 package com.izforge.izpack.panels.jdkpath;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
+import java.util.StringTokenizer;
+
 import com.coi.tools.os.win.MSWinConstants;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
@@ -32,14 +40,6 @@ import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.util.Console;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
-
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
-import java.util.StringTokenizer;
 
 /**
  * The Target panel console helper class.
@@ -67,15 +67,15 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
         this.handler = handler;
     }
 
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter)
+    public boolean runGeneratePropertiesFile(InstallData installData, PrintWriter printWriter)
     {
-        printWriter.println(AutomatedInstallData.INSTALL_PATH + "=");
+        printWriter.println(InstallData.INSTALL_PATH + "=");
         return true;
     }
 
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties properties)
+    public boolean runConsoleFromProperties(InstallData installData, Properties properties)
     {
-        String strTargetPath = properties.getProperty(AutomatedInstallData.INSTALL_PATH);
+        String strTargetPath = properties.getProperty(InstallData.INSTALL_PATH);
         if (strTargetPath == null || "".equals(strTargetPath.trim()))
         {
             System.err.println("Missing mandatory target path!");
@@ -99,12 +99,13 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
     /**
      * Runs the panel using the specified console.
      *
+     *
      * @param installData the installation data
      * @param console     the console
      * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
      */
     @Override
-    public boolean runConsole(AutomatedInstallData installData, Console console)
+    public boolean runConsole(InstallData installData, Console console)
     {
         minVersion = installData.getVariable("JDKPathPanel.minVersion");
         maxVersion = installData.getVariable("JDKPathPanel.maxVersion");

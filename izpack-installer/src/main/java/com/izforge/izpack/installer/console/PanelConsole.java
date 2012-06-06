@@ -21,11 +21,11 @@
 
 package com.izforge.izpack.installer.console;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.Console;
-
 import java.io.PrintWriter;
 import java.util.Properties;
+
+import com.izforge.izpack.api.data.InstallData;
+import com.izforge.izpack.util.Console;
 
 /**
  * Defines the Interface that must be implemented for running Panels in console mode.
@@ -45,7 +45,7 @@ public interface PanelConsole
      * @param printWriter the properties file to write to
      * @return <tt>true</tt> if the generation is successful, otherwise <tt>false</tt>
      */
-    boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter);
+    boolean runGeneratePropertiesFile(InstallData installData, PrintWriter printWriter);
 
     /**
      * Runs the panel using the supplied properties.
@@ -54,7 +54,7 @@ public interface PanelConsole
      * @param properties  the properties
      * @return <tt>true</tt> if the installation is successful, otherwise <tt>false</tt>
      */
-    boolean runConsoleFromProperties(AutomatedInstallData installData, Properties properties);
+    boolean runConsoleFromProperties(InstallData installData, Properties properties);
 
     /**
      * Runs the panel in interactive console mode.
@@ -62,7 +62,7 @@ public interface PanelConsole
      * @param installData the installation data
      * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
      */
-    boolean runConsole(AutomatedInstallData installData);
+    boolean runConsole(InstallData installData);
 
     /**
      * Runs the panel using the specified console.
@@ -71,6 +71,6 @@ public interface PanelConsole
      * @param console     the console
      * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
      */
-    boolean runConsole(AutomatedInstallData installData, Console console);
+    boolean runConsole(InstallData installData, Console console);
 
 }

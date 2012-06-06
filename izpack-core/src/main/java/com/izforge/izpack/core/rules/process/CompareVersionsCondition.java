@@ -23,7 +23,7 @@ package com.izforge.izpack.core.rules.process;
 
 import java.util.Comparator;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.rules.CompareCondition;
 import com.izforge.izpack.api.rules.ComparisonOperator;
@@ -36,7 +36,7 @@ public class CompareVersionsCondition extends CompareCondition
     public boolean isTrue()
     {
         boolean result = false;
-        AutomatedInstallData installData = getInstallData();
+        InstallData installData = getInstallData();
         if (installData != null && operand1 != null && operand2 != null)
         {
             Variables variables = installData.getVariables();

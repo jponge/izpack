@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 
 import javax.swing.table.AbstractTableModel;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackColor;
 import com.izforge.izpack.api.data.Variables;
@@ -90,7 +90,7 @@ public class PacksModel extends AbstractTableModel
     public PacksModel(PacksPanelInterface panel, GUIInstallData idata, RulesEngine rules)
     {
         this.idata = idata;
-        modifyinstallation = Boolean.valueOf(idata.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
+        modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION));
         this.installedpacks = new HashMap<String, Pack>();
 
         if (modifyinstallation)
@@ -101,7 +101,7 @@ public class PacksModel extends AbstractTableModel
             try
             {
                 FileInputStream fin = new FileInputStream(new File(
-                        idata.getInstallPath() + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION));
+                        idata.getInstallPath() + File.separator + InstallData.INSTALLATION_INFORMATION));
                 ObjectInputStream oin = new ObjectInputStream(fin);
                 List<Pack> packsinstalled = (List<Pack>) oin.readObject();
                 for (Pack installedpack : packsinstalled)

@@ -24,6 +24,7 @@ package com.izforge.izpack.panels.shortcut;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.automation.PanelAutomationHelper;
@@ -74,7 +75,7 @@ public class ShortcutPanelAutomationHelper extends PanelAutomationHelper impleme
      * @param panelRoot   panel specific data for autoinstall.xml
      */
     @Override
-    public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot)
+    public void makeXMLData(InstallData installData, IXMLElement panelRoot)
     {
         for (IXMLElement element : shortcutPanelLogic.getAutoinstallXMLData())
         {
@@ -89,7 +90,7 @@ public class ShortcutPanelAutomationHelper extends PanelAutomationHelper impleme
      * @param panelRoot   panel specific data from autoinstall.xml
      */
     @Override
-    public void runAutomated(AutomatedInstallData installData, IXMLElement panelRoot)
+    public void runAutomated(InstallData installData, IXMLElement panelRoot)
     {
         shortcutPanelLogic.setAutoinstallXMLData(panelRoot);
         if (shortcutPanelLogic.isCreateShortcutsImmediately())

@@ -8,7 +8,7 @@ import static com.izforge.izpack.api.handler.Prompt.Type.ERROR;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.resource.Messages;
@@ -62,12 +62,13 @@ public class CheckedHelloPanelConsole extends HelloPanelConsoleHelper
     /**
      * Runs the panel using the specified console.
      *
+     *
      * @param installData the installation data
      * @param console     the console
      * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
      */
     @Override
-    public boolean runConsole(AutomatedInstallData installData, Console console)
+    public boolean runConsole(InstallData installData, Console console)
     {
         boolean result = true;
         if (registered)
@@ -103,7 +104,7 @@ public class CheckedHelloPanelConsole extends HelloPanelConsoleHelper
      * @param installData the installation data
      * @return <tt>true</tt> to install again, <tt>false</tt> to quit
      */
-    protected boolean multipleInstall(AutomatedInstallData installData)
+    protected boolean multipleInstall(InstallData installData)
     {
         boolean result;
         try

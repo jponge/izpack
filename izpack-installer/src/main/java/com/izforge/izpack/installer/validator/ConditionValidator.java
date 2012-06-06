@@ -3,7 +3,7 @@ package com.izforge.izpack.installer.validator;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.installer.gui.IzPanel;
@@ -16,7 +16,7 @@ public class ConditionValidator implements DataValidator
     private String lastFailedConditionId;
 
     @Override
-    public Status validateData(AutomatedInstallData idata)
+    public Status validateData(InstallData idata)
     {
         RulesEngine rules = idata.getRules();
         Set<String> conditionIds = rules.getKnownConditionIds();

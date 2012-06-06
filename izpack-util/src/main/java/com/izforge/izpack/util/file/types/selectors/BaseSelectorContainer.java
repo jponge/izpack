@@ -17,11 +17,11 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-
 import java.io.File;
 import java.util.Enumeration;
 import java.util.Vector;
+
+import com.izforge.izpack.api.data.InstallData;
 
 /**
  * This is the base class for selectors that can contain other selectors.
@@ -163,7 +163,7 @@ public abstract class BaseSelectorContainer extends BaseSelector
      *                 can use
      * @return whether the file should be selected or not
      */
-    public abstract boolean isSelected(AutomatedInstallData idata, File basedir, String filename,
+    public abstract boolean isSelected(InstallData idata, File basedir, String filename,
                                        File file) throws Exception;
 
 

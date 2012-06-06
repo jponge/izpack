@@ -23,11 +23,11 @@
 
 package com.izforge.izpack.core.data;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
-import com.izforge.izpack.api.rules.RulesEngine;
-
 import java.io.Serializable;
+
+import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
+import com.izforge.izpack.api.data.InstallData;
+import com.izforge.izpack.api.rules.RulesEngine;
 
 
 /**
@@ -52,7 +52,7 @@ public class DynamicInstallerRequirementValidatorImpl implements DynamicInstalle
         this.messageId = messageId;
     }
 
-    public Status validateData(AutomatedInstallData idata)
+    public Status validateData(InstallData idata)
     {
         RulesEngine rules = idata.getRules();
         if (!rules.isConditionTrue(conditionId))

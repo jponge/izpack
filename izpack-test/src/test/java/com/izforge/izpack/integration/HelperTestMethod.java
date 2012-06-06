@@ -13,9 +13,8 @@ import org.fest.swing.fixture.FrameFixture;
 import org.hamcrest.core.Is;
 
 import com.izforge.izpack.api.GuiId;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.gui.InstallerController;
 import com.izforge.izpack.installer.gui.InstallerFrame;
@@ -30,7 +29,7 @@ public class HelperTestMethod
 {
     public static final int TIMEOUT = 60000;
 
-    public static File prepareInstallation(GUIInstallData installData) throws IOException
+    public static File prepareInstallation(InstallData installData) throws IOException
     {
         File installPath = new File(installData.getInstallPath());
         FileUtils.deleteDirectory(installPath);
@@ -89,13 +88,13 @@ public class HelperTestMethod
         return dialogFixture;
     }
 
-    public static void waitAndCheckInstallation(AutomatedInstallData installData)
+    public static void waitAndCheckInstallation(InstallData installData)
             throws InterruptedException
     {
         waitAndCheckInstallation(installData, new File(installData.getInstallPath()));
     }
 
-    public static void waitAndCheckInstallation(AutomatedInstallData installData, File installPath)
+    public static void waitAndCheckInstallation(InstallData installData, File installPath)
             throws InterruptedException
     {
         while (!installData.isCanClose())

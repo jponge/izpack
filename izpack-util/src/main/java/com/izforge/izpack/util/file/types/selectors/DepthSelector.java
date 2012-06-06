@@ -17,11 +17,11 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.file.types.Parameter;
-
 import java.io.File;
 import java.util.StringTokenizer;
+
+import com.izforge.izpack.api.data.InstallData;
+import com.izforge.izpack.util.file.types.Parameter;
 
 /**
  * Selector that filters files based on the how deep in the directory
@@ -155,7 +155,7 @@ public class DepthSelector extends BaseExtendSelector
      * @param file     is a java.io.File object the selector can use
      * @return whether the file should be selected or not
      */
-    public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
+    public boolean isSelected(InstallData idata, File basedir, String filename, File file)
             throws Exception
     {
         // throw BuildException on error

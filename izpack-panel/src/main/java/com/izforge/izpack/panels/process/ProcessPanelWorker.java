@@ -24,6 +24,7 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
@@ -66,7 +67,7 @@ public class ProcessPanelWorker implements Runnable
 
     private String logfiledir = null;
 
-    protected AutomatedInstallData idata;
+    protected InstallData idata;
 
     private Map<Boolean, List<ButtonConfig>> buttonConfigs = new HashMap<Boolean, List<ButtonConfig>>();
     private RulesEngine rules;

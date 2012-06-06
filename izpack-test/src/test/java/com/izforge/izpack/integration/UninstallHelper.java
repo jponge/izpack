@@ -7,8 +7,8 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.uninstaller.Destroyer;
 import com.izforge.izpack.uninstaller.console.ConsoleUninstallerContainer;
 import com.izforge.izpack.util.IoHelper;
@@ -31,7 +31,7 @@ public class UninstallHelper
      * @param installData the installation data
      * @throws Exception for any error
      */
-    public static void uninstall(AutomatedInstallData installData) throws Exception
+    public static void uninstall(InstallData installData) throws Exception
     {
         File uninstallerJar = getUninstallerJar(installData);
         assertFileExists(uninstallerJar);
@@ -47,7 +47,7 @@ public class UninstallHelper
      *
      * @return the uninstaller jar file
      */
-    public static File getUninstallerJar(AutomatedInstallData installData)
+    public static File getUninstallerJar(InstallData installData)
     {
         Info info = installData.getInfo();
         String dir = IoHelper.translatePath(info.getUninstallerPath(), installData.getVariables());

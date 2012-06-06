@@ -34,7 +34,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
@@ -165,7 +165,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     }
 
     @Override
-    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties properties)
+    public boolean runConsoleFromProperties(InstallData installData, Properties properties)
     {
 
         collectInputs(installData);
@@ -185,7 +185,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     }
 
     @Override
-    public boolean runGeneratePropertiesFile(AutomatedInstallData installData,
+    public boolean runGeneratePropertiesFile(InstallData installData,
                                              PrintWriter printWriter)
     {
 
@@ -208,7 +208,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
      * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
      */
     @Override
-    public boolean runConsole(AutomatedInstallData installData, Console console)
+    public boolean runConsole(InstallData installData, Console console)
     {
         boolean processpanel = collectInputs(installData);
         if (!processpanel)
@@ -250,7 +250,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         return promptEndPanel(installData, console);
     }
 
-    public boolean collectInputs(AutomatedInstallData installData)
+    public boolean collectInputs(InstallData installData)
     {
 
         listInputs.clear();
@@ -325,7 +325,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         return true;
     }
 
-    boolean processSimpleField(Input input, AutomatedInstallData idata)
+    boolean processSimpleField(Input input, InstallData idata)
     {
         VariableSubstitutor variableSubstitutor = new VariableSubstitutorImpl(idata.getVariables());
         try
@@ -339,7 +339,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         return true;
     }
 
-    boolean processPasswordField(Input input, AutomatedInstallData idata)
+    boolean processPasswordField(Input input, InstallData idata)
     {
 
         Password pwd = (Password) input;
@@ -358,7 +358,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     }
 
-    boolean processTextField(Input input, AutomatedInstallData idata)
+    boolean processTextField(Input input, InstallData idata)
     {
         String variable = input.strVariableName;
         String set;
@@ -421,7 +421,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     }
 
-    boolean processComboRadioField(Input input, AutomatedInstallData idata)
+    boolean processComboRadioField(Input input, InstallData idata)
     {// TODO protection if selection not valid and no set value
         String variable = input.strVariableName;
         if ((variable == null) || (variable.length() == 0))
@@ -522,7 +522,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     }
 
-    boolean processCheckField(Input input, AutomatedInstallData idata)
+    boolean processCheckField(Input input, InstallData idata)
     {
         String variable = input.strVariableName;
         if ((variable == null) || (variable.length() == 0))
@@ -615,7 +615,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     }
 
-    public Input getInputFromField(IXMLElement field, AutomatedInstallData idata)
+    public Input getInputFromField(IXMLElement field, InstallData idata)
     {
         String strVariableName = field.getAttribute(VARIABLE);
         String strFieldType = field.getAttribute(TYPE_ATTRIBUTE);
@@ -943,7 +943,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
      * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */
-    private boolean itemRequiredFor(List<IXMLElement> packs, AutomatedInstallData idata)
+    private boolean itemRequiredFor(List<IXMLElement> packs, InstallData idata)
     {
 
         String selected;

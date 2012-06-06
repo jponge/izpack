@@ -20,7 +20,7 @@ package com.izforge.izpack.util.file.types.selectors;
 import java.io.File;
 import java.util.Enumeration;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 
 /**
  * This selector has a collection of other selectors. All of those selectors
@@ -62,7 +62,7 @@ public class NoneSelector extends BaseSelectorContainer
      *                 can use
      * @return whether the file should be selected or not
      */
-    public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
+    public boolean isSelected(InstallData idata, File basedir, String filename, File file)
             throws Exception
     {
         validate();

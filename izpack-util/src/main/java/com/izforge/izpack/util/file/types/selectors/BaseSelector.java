@@ -17,10 +17,10 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-import com.izforge.izpack.util.file.types.DataType;
-
 import java.io.File;
+
+import com.izforge.izpack.api.data.InstallData;
+import com.izforge.izpack.util.file.types.DataType;
 
 /**
  * A convenience base class that you can subclass Selectors from. It
@@ -108,7 +108,7 @@ public abstract class BaseSelector extends DataType implements FileSelector
      * @return whether the file should be selected or not
      * @throws Exception
      */
-    public abstract boolean isSelected(AutomatedInstallData idata,
+    public abstract boolean isSelected(InstallData idata,
                                        File basedir, String filename, File file) throws Exception;
 
 }

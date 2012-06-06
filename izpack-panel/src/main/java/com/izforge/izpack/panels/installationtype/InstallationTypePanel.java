@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.IzPanelLayout;
@@ -79,7 +79,7 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
 
         ButtonGroup group = new ButtonGroup();
 
-        boolean modifyinstallation = Boolean.valueOf(installData.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
+        boolean modifyinstallation = Boolean.valueOf(installData.getVariable(InstallData.MODIFY_INSTALLATION));
 
         normalinstall = new JRadioButton(getString("InstallationTypePanel.normal"), !modifyinstallation);
         normalinstall.addActionListener(this);
@@ -102,7 +102,7 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
     public void panelActivate()
     {
         boolean modifyinstallation = Boolean.valueOf(
-                this.installData.getVariable(AutomatedInstallData.MODIFY_INSTALLATION));
+                this.installData.getVariable(InstallData.MODIFY_INSTALLATION));
         if (modifyinstallation)
         {
             modifyinstall.setSelected(true);
@@ -119,12 +119,12 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
         if (e.getSource() == normalinstall)
         {
             logger.fine("Installation type: Normal installation");
-            this.installData.setVariable(AutomatedInstallData.MODIFY_INSTALLATION, "false");
+            this.installData.setVariable(InstallData.MODIFY_INSTALLATION, "false");
         }
         else
         {
             logger.fine("Installation type: Modification installation");
-            this.installData.setVariable(AutomatedInstallData.MODIFY_INSTALLATION, "true");
+            this.installData.setVariable(InstallData.MODIFY_INSTALLATION, "true");
         }
     }
 }

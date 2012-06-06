@@ -2,8 +2,8 @@ package com.izforge.izpack.installer.base;
 
 import javax.swing.JOptionPane;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.util.FileUtil;
@@ -21,7 +21,7 @@ public class InstallDataConfiguratorWithRules
     /**
      * The installation data.
      */
-    private AutomatedInstallData installData;
+    private InstallData installData;
 
     /**
      * The rules.
@@ -41,8 +41,7 @@ public class InstallDataConfiguratorWithRules
      * @param rules       the rules
      * @param platform    the current platform
      */
-    public InstallDataConfiguratorWithRules(AutomatedInstallData installData, RulesEngine rules,
-                                            Platform platform)
+    public InstallDataConfiguratorWithRules(InstallData installData, RulesEngine rules, Platform platform)
     {
         this.installData = installData;
         this.rules = rules;

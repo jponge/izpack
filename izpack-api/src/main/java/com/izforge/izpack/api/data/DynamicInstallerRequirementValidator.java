@@ -32,7 +32,7 @@ import com.izforge.izpack.api.installer.DataValidator;
 public interface DynamicInstallerRequirementValidator extends DataValidator
 {
     @Override
-    public Status validateData(AutomatedInstallData idata);
+    public Status validateData(InstallData idata);
 
     @Override
     public String getErrorMessageId();

@@ -5,7 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.installer.panel.AbstractPanels;
 import com.izforge.izpack.installer.panel.Panels;
@@ -22,7 +22,7 @@ public class AutomatedPanels extends AbstractPanels<AutomatedPanelView>
     /**
      * The installation data.
      */
-    private final AutomatedInstallData installData;
+    private final InstallData installData;
 
     /**
      * The logger.
@@ -36,7 +36,7 @@ public class AutomatedPanels extends AbstractPanels<AutomatedPanelView>
      * @param panels      the panels
      * @param installData the installation data
      */
-    public AutomatedPanels(List<AutomatedPanelView> panels, AutomatedInstallData installData)
+    public AutomatedPanels(List<AutomatedPanelView> panels, InstallData installData)
     {
         super(panels, installData.getVariables());
         this.installData = installData;

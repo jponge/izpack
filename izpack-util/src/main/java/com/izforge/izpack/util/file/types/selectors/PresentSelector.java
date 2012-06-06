@@ -22,7 +22,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.util.file.FileNameMapper;
 import com.izforge.izpack.util.file.IdentityMapper;
 import com.izforge.izpack.util.file.types.Mapper;
@@ -164,7 +164,7 @@ public class PresentSelector extends BaseSelector
      * @param file     is a java.io.File object the selector can use
      * @return whether the file should be selected or not
      */
-    public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file) throws Exception
+    public boolean isSelected(InstallData idata, File basedir, String filename, File file) throws Exception
     {
 
         // throw BuildException on error

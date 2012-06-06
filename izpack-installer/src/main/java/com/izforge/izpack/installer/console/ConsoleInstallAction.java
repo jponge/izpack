@@ -1,6 +1,6 @@
 package com.izforge.izpack.installer.console;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.util.Console;
 
@@ -23,7 +23,7 @@ class ConsoleInstallAction extends AbstractInstallAction
      * @param installData the installation date
      * @param writer      the uninstallation data writer
      */
-    public ConsoleInstallAction(Console console, AutomatedInstallData installData, UninstallDataWriter writer)
+    public ConsoleInstallAction(Console console, InstallData installData, UninstallDataWriter writer)
     {
         super(installData, writer);
         this.console = console;

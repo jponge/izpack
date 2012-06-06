@@ -21,16 +21,16 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 
 import com.izforge.izpack.api.GuiId;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.binding.ActionStage;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.compiler.container.TestInstallationContainer;
 import com.izforge.izpack.data.PanelAction;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerController;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.gui.IzPanel;
-import com.izforge.izpack.installer.panel.Panels;
+import com.izforge.izpack.installer.gui.IzPanels;
 import com.izforge.izpack.integration.HelperTestMethod;
 import com.izforge.izpack.panels.hello.HelloPanel;
 import com.izforge.izpack.panels.simplefinish.SimpleFinishPanel;
@@ -58,7 +58,7 @@ public class PanelActionTest
     /**
      * Install data.
      */
-    private final GUIInstallData installData;
+    private final InstallData installData;
 
     /**
      * The installer frame.
@@ -78,7 +78,7 @@ public class PanelActionTest
     /**
      * The panels.
      */
-    private final Panels panels;
+    private final IzPanels panels;
 
     /**
      * The frame fixture.
@@ -94,8 +94,8 @@ public class PanelActionTest
      * @param housekeeper the house-keeper
      * @param panels      the panels
      */
-    public PanelActionTest(GUIInstallData installData, InstallerFrame frame, InstallerController controller,
-                           TestHousekeeper housekeeper, Panels panels)
+    public PanelActionTest(InstallData installData, InstallerFrame frame, InstallerController controller,
+                           TestHousekeeper housekeeper, IzPanels panels)
     {
         this.installData = installData;
         this.frame = frame;
@@ -137,9 +137,9 @@ public class PanelActionTest
     @InstallFile("samples/panelactions.xml")
     public void testPanelActions() throws Exception
     {
-        assertEquals(2, installData.getPanelsOrder().size());
-        Panel hello = installData.getPanelsOrder().get(0);
-        // Panel finish = installData.getPanelsOrder().get(1);
+        assertEquals(2, panels.getPanels().size());
+        Panel hello = panels.getPanels().get(0).getPanel();
+        // Panel finish = panels.getPanels().get(1).getPanel();
 
         checkActions(hello);
         // checkActions(finish);

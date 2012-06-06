@@ -20,7 +20,7 @@ package com.izforge.izpack.util.file.types.selectors;
 import java.io.File;
 import java.util.Vector;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.util.file.types.Parameter;
 import com.izforge.izpack.util.file.types.Path;
 
@@ -178,7 +178,7 @@ public class ExtendSelector extends BaseSelector
      *
      * @throws Exception if an error occurs
      */
-    public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file)
+    public boolean isSelected(InstallData idata, File basedir, String filename, File file)
             throws Exception
     {
         validate();

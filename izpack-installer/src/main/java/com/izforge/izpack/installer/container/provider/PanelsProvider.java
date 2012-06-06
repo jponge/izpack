@@ -9,7 +9,7 @@ import org.picocontainer.injectors.Provider;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.installer.panel.Panels;
@@ -27,13 +27,13 @@ public abstract class PanelsProvider implements Provider
     /**
      * Prepares panels for the current platform.
      * <br/>
-     * This adds XML to the {@link AutomatedInstallData#getXmlData() XML data} for each panel.
+     * This adds XML to the {@link InstallData#getXmlData() XML data} for each panel.
      *
      * @param installData the installation data
      * @return the panels for the current platform
      * @throws IzPackException if a panel doesn't have unique identifier
      */
-    protected List<Panel> prepare(AutomatedInstallData installData)
+    protected List<Panel> prepare(InstallData installData)
     {
         List<Panel> result = new ArrayList<Panel>();
         Set<String> ids = new HashSet<String>();
@@ -57,12 +57,12 @@ public abstract class PanelsProvider implements Provider
     }
 
     /**
-     * Adds XML to the {@link AutomatedInstallData#getXmlData() XML data} for the supplied panel.
+     * Adds XML to the {@link InstallData#getXmlData() XML data} for the supplied panel.
      *
      * @param panel       the panel
      * @param installData the installation data
      */
-    protected void addPanelXml(Panel panel, AutomatedInstallData installData)
+    protected void addPanelXml(Panel panel, InstallData installData)
     {
         IXMLElement panelRoot = new XMLElementImpl(panel.getClassName(), installData.getXmlData());
         String panelId = panel.getPanelid();

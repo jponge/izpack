@@ -9,7 +9,7 @@ import org.picocontainer.injectors.ProviderAdapter;
 import org.picocontainer.parameters.ComponentParameter;
 
 import com.izforge.izpack.api.container.Container;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.exception.IzPackException;
@@ -137,7 +137,7 @@ public abstract class InstallerContainer extends AbstractContainer
      */
     protected void resolveComponents(MutablePicoContainer pico)
     {
-        AutomatedInstallData installData = pico.getComponent(AutomatedInstallData.class);
+        InstallData installData = pico.getComponent(InstallData.class);
         String className = installData.getInfo().getUnpackerClassName();
         Class<IUnpacker> unpackerClass = getClass(className, IUnpacker.class);
         pico.addComponent(IUnpacker.class, unpackerClass);

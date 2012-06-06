@@ -66,7 +66,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.util.FileExecutor;
@@ -216,7 +216,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     /**
      * The installation data.
      */
-    private final AutomatedInstallData installData;
+    private final InstallData installData;
 
     // ~ Constructors ***********************************************************************
 
@@ -229,7 +229,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      * @param resources   the resources
      * @param installData the installation data
      */
-    public Unix_Shortcut(Resources resources, AutomatedInstallData installData)
+    public Unix_Shortcut(Resources resources, InstallData installData)
     {
         this.resources = resources;
         this.installData = installData;

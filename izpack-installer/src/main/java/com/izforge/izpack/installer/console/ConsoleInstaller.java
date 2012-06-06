@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Info;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.bootstrap.Installer;
@@ -57,7 +58,7 @@ public class ConsoleInstaller extends InstallerBase
     /**
      * The installation data.
      */
-    private AutomatedInstallData installData;
+    private InstallData installData;
 
     /**
      * Verifies the installation requirements.

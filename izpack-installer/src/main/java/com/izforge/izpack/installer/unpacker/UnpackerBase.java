@@ -43,6 +43,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.OverrideType;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
@@ -1156,7 +1157,7 @@ public abstract class UnpackerBase implements IUnpacker
 
         List<Pack> installedPacks = new ArrayList<Pack>(installData.getSelectedPacks());
 
-        File installationInfo = new File(installDir + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
+        File installationInfo = new File(installDir + File.separator + InstallData.INSTALLATION_INFORMATION);
         if (!installationInfo.exists())
         {
             logger.fine("Creating info file" + installationInfo.getAbsolutePath());

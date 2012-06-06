@@ -1,6 +1,6 @@
 package com.izforge.izpack.installer.console;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.factory.ObjectFactory;
@@ -37,7 +37,7 @@ public class ConsolePanelView extends PanelView<PanelConsole>
      * @param factory     the factory for creating the view
      * @param installData the installation data
      */
-    public ConsolePanelView(Panel panel, ObjectFactory factory, AutomatedInstallData installData, Console console)
+    public ConsolePanelView(Panel panel, ObjectFactory factory, InstallData installData, Console console)
     {
         super(panel, PanelConsole.class, factory, installData);
         this.console = console;

@@ -67,7 +67,6 @@ import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.IXMLWriter;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Blockable;
 import com.izforge.izpack.api.data.DynamicInstallerRequirementValidator;
 import com.izforge.izpack.api.data.DynamicVariable;
@@ -201,6 +200,12 @@ public class CompilerConfig extends Thread
 
     private static final String TEMP_DIR_DEFAULT_PROPERTY_NAME = "TEMP_DIRECTORY";
 
+    /**
+     * Help information.
+     */
+    private final static String HELP_TAG = "help";
+    private static final String ISO3_ATTRIBUTE = "iso3";
+    private final static String SRC_ATTRIBUTE = "src";
 
     /**
      * Constructor
@@ -1526,13 +1531,13 @@ public class CompilerConfig extends Thread
                 }
             }
 //            // adding helps
-            List<IXMLElement> helpSpecs = panelElement.getChildrenNamed(AutomatedInstallData.HELP_TAG);
+            List<IXMLElement> helpSpecs = panelElement.getChildrenNamed(HELP_TAG);
             if (helpSpecs != null) // TODO : remove this condition, getChildrenNamed always return a list
             {
                 List<Help> helps = new ArrayList<Help>();
                 for (IXMLElement help : helpSpecs)
                 {
-                    String iso3 = help.getAttribute(AutomatedInstallData.ISO3_ATTRIBUTE);
+                    String iso3 = help.getAttribute(ISO3_ATTRIBUTE);
                     String resourceId;
                     if (id == null)
                     {
@@ -1543,9 +1548,7 @@ public class CompilerConfig extends Thread
                         resourceId = id + "_" + panelCounter + "_help.html_" + iso3;
                     }
                     helps.add(new Help(iso3, resourceId));
-                    URL originalUrl = resourceFinder.findProjectResource(help
-                                                                                 .getAttribute(
-                                                                                         AutomatedInstallData.SRC_ATTRIBUTE),
+                    URL originalUrl = resourceFinder.findProjectResource(help.getAttribute(SRC_ATTRIBUTE),
                                                                          "Help", help);
                     packager.addResource(resourceId, originalUrl);
                 }

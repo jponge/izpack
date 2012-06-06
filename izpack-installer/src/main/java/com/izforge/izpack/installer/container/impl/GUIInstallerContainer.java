@@ -10,7 +10,7 @@ import org.picocontainer.Characteristics;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.injectors.ProviderAdapter;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.ContainerException;
 import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.core.resource.ResourceManager;
@@ -83,7 +83,7 @@ public class GUIInstallerContainer extends InstallerContainer
     protected void resolveComponents(MutablePicoContainer pico)
     {
         super.resolveComponents(pico);
-        AutomatedInstallData installdata = pico.getComponent(AutomatedInstallData.class);
+        InstallData installdata = pico.getComponent(InstallData.class);
         pico
                 .addConfig("title", getTitle(installdata)) // Configuration of title parameter in InstallerFrame
                 .addConfig("frame", initFrame());          // Configuration of frame parameter in languageDialog
@@ -105,22 +105,22 @@ public class GUIInstallerContainer extends InstallerContainer
         return frame;
     }
 
-    private String getTitle(AutomatedInstallData automatedInstallData)
+    private String getTitle(InstallData installData)
     {
         // Use a alternate message if defined.
         final String key = "installer.reversetitle";
-        Messages messages = automatedInstallData.getMessages();
+        Messages messages = installData.getMessages();
         String message = messages.get(key);
         // message equal to key -> no message defined.
         if (message.equals(key))
         {
-            message = messages.get("installer.title") + " " + automatedInstallData.getInfo().getAppName();
+            message = messages.get("installer.title") + " " + installData.getInfo().getAppName();
         }
         else
         {
             // Attention! The alternate message has to contain the whole message including
             // $APP_NAME and may be $APP_VER.
-            message = automatedInstallData.getVariables().replace(message);
+            message = installData.getVariables().replace(message);
         }
         return message;
     }

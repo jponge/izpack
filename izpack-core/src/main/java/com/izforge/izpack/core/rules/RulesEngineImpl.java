@@ -34,7 +34,7 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.XMLException;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.adaptator.impl.XMLWriter;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.exception.IzPackException;
@@ -79,7 +79,8 @@ public class RulesEngineImpl implements RulesEngine
 
     private final Set<ConditionReference> refConditions = new HashSet<ConditionReference>();
 
-    private final AutomatedInstallData installData;
+    private final InstallData installData;
+
     private final ConditionContainer container;
 
     private static final Logger logger = Logger.getLogger(RulesEngineImpl.class.getName());
@@ -112,7 +113,7 @@ public class RulesEngineImpl implements RulesEngine
         this(null, container, platform);
     }
 
-    public RulesEngineImpl(AutomatedInstallData installData, ConditionContainer container, Platform platform)
+    public RulesEngineImpl(InstallData installData, ConditionContainer container, Platform platform)
     {
         this.installData = installData;
         this.container = container;
@@ -126,7 +127,7 @@ public class RulesEngineImpl implements RulesEngine
         for (String key : rules.keySet())
         {
             Condition condition = rules.get(key);
-            condition.setInstalldata(installData);
+            condition.setInstallData(installData);
         }
     }
 
@@ -174,7 +175,7 @@ public class RulesEngineImpl implements RulesEngine
                 container.addComponent(id, conditionClass);
                 result = (Condition) container.getComponent(id);
                 result.setId(id);
-                result.setInstalldata(installData);
+                result.setInstallData(installData);
                 result.readFromXML(condition);
                 conditionsMap.put(id, result);
                 if (result instanceof ConditionReference)
@@ -224,7 +225,7 @@ public class RulesEngineImpl implements RulesEngine
                 {
                     // this.conditionslist.add(cond);
                     String condid = cond.getId();
-                    cond.setInstalldata(installData);
+                    cond.setInstallData(installData);
                     if ((condid != null) && !("UNKNOWN".equals(condid)))
                     {
                         conditionsMap.put(condid, cond);
@@ -293,7 +294,7 @@ public class RulesEngineImpl implements RulesEngine
     }
 
     @Override
-    public boolean isConditionTrue(String id, AutomatedInstallData installData)
+    public boolean isConditionTrue(String id, InstallData installData)
     {
         Condition cond = getCondition(id);
         if (cond != null)
@@ -305,13 +306,13 @@ public class RulesEngineImpl implements RulesEngine
     }
 
     @Override
-    public boolean isConditionTrue(Condition cond, AutomatedInstallData installData)
+    public boolean isConditionTrue(Condition cond, InstallData installData)
     {
         if (cond != null)
         {
             if (installData != null)
             {
-                cond.setInstalldata(installData);
+                cond.setInstallData(installData);
             }
             return isConditionTrue(cond);
         }
@@ -335,7 +336,7 @@ public class RulesEngineImpl implements RulesEngine
     {
         if (cond.getInstallData() == null)
         {
-            cond.setInstalldata(this.installData);
+            cond.setInstallData(this.installData);
         }
         boolean value = cond.isTrue();
         logger.fine("Condition " + cond.getId() + ": " + Boolean.toString(value));
@@ -488,7 +489,7 @@ public class RulesEngineImpl implements RulesEngine
                 {
                     // automatically add packselection condition
                     PackSelectionCondition packselcond = new PackSelectionCondition();
-                    packselcond.setInstalldata(installData);
+                    packselcond.setInstallData(installData);
                     packselcond.setId("izpack.selected." + pack.getLangPackId());
                     packselcond.setPackid(pack.getLangPackId());
                     conditionsMap.put(packselcond.getId(), packselcond);
@@ -557,7 +558,7 @@ public class RulesEngineImpl implements RulesEngine
             {
             }
         };
-        condition.setInstalldata(installData);
+        condition.setInstallData(installData);
         condition.setId(conditionId);
         conditionsMap.put(condition.getId(), condition);
     }
@@ -602,7 +603,7 @@ public class RulesEngineImpl implements RulesEngine
             result = conditionsMap.get(expression);
         }
 
-        result.setInstalldata(installData);
+        result.setInstallData(installData);
 
         return result;
     }
@@ -728,7 +729,7 @@ public class RulesEngineImpl implements RulesEngine
             result = conditionsMap.get(conditionexpr.toString());
             if (result != null)
             {
-                result.setInstalldata(installData);
+                result.setInstallData(installData);
                 conditionexpr.delete(0, conditionexpr.length());
             }
         }

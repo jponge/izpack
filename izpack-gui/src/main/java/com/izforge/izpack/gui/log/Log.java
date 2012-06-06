@@ -39,6 +39,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 
 /*---------------------------------------------------------------------------*/
 
@@ -177,7 +178,7 @@ public class Log implements LogError, LogWarning, LogMessage
     /**
      * Access to the installation information and the localized text resources
      */
-    private AutomatedInstallData installData = null;
+    private InstallData installData = null;
 
     /**
      * The collection of installation messages

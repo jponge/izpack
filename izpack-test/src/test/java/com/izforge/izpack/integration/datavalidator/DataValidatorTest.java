@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.List;
 
 import org.fest.swing.core.matcher.JButtonMatcher;
 import org.fest.swing.fixture.DialogFixture;
@@ -25,7 +26,8 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerController;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.gui.IzPanel;
-import com.izforge.izpack.installer.panel.Panels;
+import com.izforge.izpack.installer.gui.IzPanelView;
+import com.izforge.izpack.installer.gui.IzPanels;
 import com.izforge.izpack.integration.HelperTestMethod;
 import com.izforge.izpack.panels.hello.HelloPanel;
 import com.izforge.izpack.panels.install.InstallPanel;
@@ -69,7 +71,7 @@ public class DataValidatorTest
     /**
      * The panels.
      */
-    private final Panels panels;
+    private final IzPanels panels;
 
     /**
      * The house-keeper.
@@ -91,7 +93,7 @@ public class DataValidatorTest
      * @param housekeeper the house-keeper
      */
     public DataValidatorTest(GUIInstallData installData, InstallerFrame frame, InstallerController controller,
-                             Panels panels, TestHousekeeper housekeeper)
+                             IzPanels panels, TestHousekeeper housekeeper)
     {
         this.installData = installData;
         this.frame = frame;
@@ -133,10 +135,11 @@ public class DataValidatorTest
     @InstallFile("samples/datavalidators.xml")
     public void testDataValidators() throws Exception
     {
-        assertEquals(3, installData.getPanelsOrder().size());
-        Panel hello = installData.getPanelsOrder().get(0);
-        Panel install = installData.getPanelsOrder().get(1);
-        Panel finish = installData.getPanelsOrder().get(2);
+        List<IzPanelView> list = panels.getPanels();
+        assertEquals(3, list.size());
+        Panel hello = list.get(0).getPanel();
+        Panel install = list.get(1).getPanel();
+        Panel finish = list.get(2).getPanel();
 
         // verify that all class names are fully qualified
         assertEquals(HelloPanel.class.getName(), hello.getClassName());

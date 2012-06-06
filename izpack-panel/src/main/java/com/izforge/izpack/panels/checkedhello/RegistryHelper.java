@@ -1,12 +1,12 @@
 package com.izforge.izpack.panels.checkedhello;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.NativeLibException;
 import com.izforge.izpack.core.os.RegistryDefaultHandler;
 import com.izforge.izpack.core.os.RegistryHandler;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -122,7 +122,7 @@ public class RegistryHelper
     /**
      * Generates an unique uninstall name.
      * <p/>
-     * The name is set to the variable <em>UNINSTALL_NAME</em>, via {@link AutomatedInstallData#setVariable}</li>
+     * The name is set to the variable <em>UNINSTALL_NAME</em>, via {@link InstallData#setVariable}</li>
      * </ul>
      *
      * @return the unique uninstall name, or <tt>null</tt> if the registry isn't supported on the platform

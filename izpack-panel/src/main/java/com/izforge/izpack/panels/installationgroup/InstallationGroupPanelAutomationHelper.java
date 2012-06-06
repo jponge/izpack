@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.panels.installationgroup.InstallationGroupPanel.GroupData;
@@ -44,7 +44,7 @@ public class InstallationGroupPanelAutomationHelper
     private static final Logger logger = Logger.getLogger(InstallationGroupPanelAutomationHelper.class.getName());
 
     @Override
-    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
+    public void makeXMLData(InstallData idata, IXMLElement panelRoot)
     {
         GroupData[] rows = (GroupData[]) idata.getAttribute("GroupData");
         HashMap<String, Pack> packsByName = (HashMap) idata.getAttribute("packsByName");
@@ -71,7 +71,7 @@ public class InstallationGroupPanelAutomationHelper
      * xml installDataGUI to allow an install group to specify the selected packs.
      */
     @Override
-    public void runAutomated(AutomatedInstallData idata,
+    public void runAutomated(InstallData idata,
                              IXMLElement panelRoot)
     {
         String installGroup = idata.getVariable("INSTALL_GROUP");

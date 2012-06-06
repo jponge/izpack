@@ -23,7 +23,7 @@ package com.izforge.izpack.panels.userpath;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.installer.automation.PanelAutomation;
 
 /**
@@ -45,7 +45,7 @@ public class UserPathPanelAutomationHelper implements PanelAutomation
      * @param idata     The installation installDataGUI.
      * @param panelRoot The tree to put the installDataGUI in.
      */
-    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
+    public void makeXMLData(InstallData idata, IXMLElement panelRoot)
     {
         // Installation path markup
         IXMLElement ipath = new XMLElementImpl(UserPathPanel.pathElementName, panelRoot);
@@ -68,7 +68,7 @@ public class UserPathPanelAutomationHelper implements PanelAutomation
      * @param idata     The installation installDataGUI.
      * @param panelRoot The XML tree to read the installDataGUI from.
      */
-    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot)
+    public void runAutomated(InstallData idata, IXMLElement panelRoot)
     {
         // We set the installation path
         IXMLElement ipath = panelRoot.getFirstChildNamed(UserPathPanel.pathElementName);

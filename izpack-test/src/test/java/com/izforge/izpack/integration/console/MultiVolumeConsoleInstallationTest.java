@@ -2,7 +2,7 @@ package com.izforge.izpack.integration.console;
 
 import java.io.File;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.compiler.container.TestConsoleInstallerContainer;
 import com.izforge.izpack.compiler.packager.impl.MultiVolumePackager;
 import com.izforge.izpack.installer.bootstrap.Installer;
@@ -41,8 +41,7 @@ public class MultiVolumeConsoleInstallationTest extends AbstractMultiVolumeInsta
      * @throws Exception for any error
      */
     @Override
-    protected void install(InstallerContainer container, AutomatedInstallData installData, File installPath)
-            throws Exception
+    protected void install(InstallerContainer container, InstallData installData, File installPath) throws Exception
     {
         TestConsoleInstaller installer = container.getComponent(TestConsoleInstaller.class);
         TestConsole console = installer.getConsole();

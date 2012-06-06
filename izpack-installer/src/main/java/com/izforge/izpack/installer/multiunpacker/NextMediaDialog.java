@@ -38,7 +38,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
@@ -105,7 +105,7 @@ public class NextMediaDialog extends JDialog implements ActionListener
         this.initUI();
     }
 
-    public NextMediaDialog(Frame owner, AutomatedInstallData idata, String nextmedia)
+    public NextMediaDialog(Frame owner, InstallData idata, String nextmedia)
     {
         this(owner, idata.getMessages(), null, nextmedia);
     }

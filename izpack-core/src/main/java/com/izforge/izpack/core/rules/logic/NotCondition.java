@@ -125,7 +125,7 @@ public class NotCondition extends ConditionReference
         {
             notCondition = new NotCondition(rules);
             notCondition.setReferencedCondition(referencedCondition);
-            notCondition.setInstalldata(referencedCondition.getInstallData());
+            notCondition.setInstallData(referencedCondition.getInstallData());
         }
         return notCondition;
     }

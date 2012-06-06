@@ -1,6 +1,6 @@
 package com.izforge.izpack.integration.datavalidator;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.installer.DataValidator;
 
@@ -28,7 +28,7 @@ public class TestDataValidator implements DataValidator
     /**
      * The installation data.
      */
-    private final AutomatedInstallData installData;
+    private final InstallData installData;
 
 
     /**
@@ -37,7 +37,7 @@ public class TestDataValidator implements DataValidator
      * @param panel       the panel
      * @param installData the installation data
      */
-    public TestDataValidator(Panel panel, AutomatedInstallData installData)
+    public TestDataValidator(Panel panel, InstallData installData)
     {
         this.installData = installData;
         this.panel = panel;
@@ -50,19 +50,19 @@ public class TestDataValidator implements DataValidator
      * @param installData the installation data
      * @return the no. of times validation has been invoked
      */
-    public static int getValidate(String panelId, AutomatedInstallData installData)
+    public static int getValidate(String panelId, InstallData installData)
     {
         return getValue(panelId + ".validate", installData);
     }
 
     /**
-     * Method to validate {@link AutomatedInstallData}.
+     * Method to validate {@link InstallData}.
      *
      * @param installData the installation data
      * @return the result of the validation
      */
     @Override
-    public Status validateData(AutomatedInstallData installData)
+    public Status validateData(InstallData installData)
     {
         String id = getPanelId();
         String status = installData.getVariable(id + ".status");
@@ -108,7 +108,7 @@ public class TestDataValidator implements DataValidator
      *
      * @return the installation data
      */
-    protected AutomatedInstallData getInstallData()
+    protected InstallData getInstallData()
     {
         return installData;
     }
@@ -151,7 +151,7 @@ public class TestDataValidator implements DataValidator
      * @param installData the installation data
      * @return the variable value
      */
-    protected static int getValue(String variable, AutomatedInstallData installData)
+    protected static int getValue(String variable, InstallData installData)
     {
         String value = installData.getVariable(variable);
         if (value == null)

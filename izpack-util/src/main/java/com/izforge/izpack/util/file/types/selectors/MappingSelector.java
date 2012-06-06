@@ -17,14 +17,15 @@
 
 package com.izforge.izpack.util.file.types.selectors;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import java.io.File;
+
+import org.apache.tools.ant.BuildException;
+
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.util.file.FileNameMapper;
 import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.file.IdentityMapper;
 import com.izforge.izpack.util.file.types.Mapper;
-import org.apache.tools.ant.BuildException;
-
-import java.io.File;
 
 /**
  * A mapping selector is an abstract class adding mapping support to the base
@@ -106,7 +107,7 @@ public abstract class MappingSelector extends BaseSelector
      * @param file     is a java.io.File object the selector can use
      * @return whether the file should be selected or not
      */
-    public boolean isSelected(AutomatedInstallData idata, File basedir, String filename, File file) throws Exception
+    public boolean isSelected(InstallData idata, File basedir, String filename, File file) throws Exception
     {
 
         // throw BuildException on error

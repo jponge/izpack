@@ -21,11 +21,11 @@
 
 package com.izforge.izpack.api.installer;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
-
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.izforge.izpack.api.data.InstallData;
 
 public interface DataValidator
 {
@@ -79,12 +79,11 @@ public interface DataValidator
     public static final String DATA_VALIDATOR_CLASSNAME_TAG = "classname";
 
     /**
-     * Method to validate on {@link AutomatedInstallData}
+     * Method to validate an {@link InstallData}.
      *
-     * @param adata
-     * @return {@link Status} the result of the validation
+     * @param installData@return {@link Status} the result of the validation
      */
-    public Status validateData(final AutomatedInstallData adata);
+    public Status validateData(final InstallData installData);
 
     /**
      * Returns the string with messageId for an error

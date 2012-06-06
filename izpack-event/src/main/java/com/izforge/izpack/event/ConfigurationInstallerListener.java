@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicVariable;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
@@ -352,7 +353,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         return name;
     }
 
-    protected List<ConfigurationActionTask> readConfigurableSets(AutomatedInstallData idata,
+    protected List<ConfigurationActionTask> readConfigurableSets(InstallData idata,
                                                                  IXMLElement parent) throws InstallerException
     {
         List<ConfigurationActionTask> configtasks = new ArrayList<ConfigurationActionTask>();
@@ -396,7 +397,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         return configtasks;
     }
 
-    private void readConfigurableSetCommonAttributes(AutomatedInstallData idata,
+    private void readConfigurableSetCommonAttributes(InstallData idata,
                                                      IXMLElement el, ConfigurableFileCopyTask task)
             throws InstallerException
     {
@@ -465,7 +466,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         }
     }
 
-    private void readSingleConfigurableTaskCommonAttributes(AutomatedInstallData idata,
+    private void readSingleConfigurableTaskCommonAttributes(InstallData idata,
                                                             IXMLElement el, SingleConfigurableTask task)
             throws InstallerException
     {
@@ -516,7 +517,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         }
     }
 
-    private void readConfigFileTaskCommonAttributes(AutomatedInstallData idata,
+    private void readConfigFileTaskCommonAttributes(InstallData idata,
                                                     IXMLElement el, ConfigFileTask task)
             throws InstallerException
     {
@@ -532,7 +533,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         }
     }
 
-    protected List<ConfigurationActionTask> readConfigurables(AutomatedInstallData idata,
+    protected List<ConfigurationActionTask> readConfigurables(InstallData idata,
                                                               IXMLElement parent) throws InstallerException
     {
         List<ConfigurationActionTask> configtasks = new ArrayList<ConfigurationActionTask>();
@@ -617,7 +618,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         return configtasks;
     }
 
-    private void readAndAddXPathProperties(AutomatedInstallData idata, IXMLElement parent,
+    private void readAndAddXPathProperties(InstallData idata, IXMLElement parent,
                                            SingleXmlFileMergeTask task)
             throws InstallerException
     {
@@ -627,7 +628,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         }
     }
 
-    private List<FileSet> readFileSets(AutomatedInstallData idata, IXMLElement parent)
+    private List<FileSet> readFileSets(InstallData idata, IXMLElement parent)
             throws InstallerException
     {
         Iterator<IXMLElement> iter = parent.getChildrenNamed("fileset").iterator();
@@ -704,7 +705,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         return fslist;
     }
 
-    private List<FileNameMapper> readMapper(AutomatedInstallData idata, IXMLElement parent)
+    private List<FileNameMapper> readMapper(InstallData idata, IXMLElement parent)
             throws InstallerException
     {
         Iterator<IXMLElement> iter = parent.getChildrenNamed("mapper").iterator();
@@ -755,7 +756,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         return mappers;
     }
 
-    private void readAndAddIncludes(AutomatedInstallData idata, IXMLElement parent, FileSet fileset)
+    private void readAndAddIncludes(InstallData idata, IXMLElement parent, FileSet fileset)
             throws InstallerException
     {
         for (IXMLElement f : parent.getChildrenNamed("include"))
@@ -764,7 +765,7 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         }
     }
 
-    private void readAndAddExcludes(AutomatedInstallData idata, IXMLElement parent, FileSet fileset)
+    private void readAndAddExcludes(InstallData idata, IXMLElement parent, FileSet fileset)
             throws InstallerException
     {
         for (IXMLElement f : parent.getChildrenNamed("exclude"))

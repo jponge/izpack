@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.InstallerRequirement;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.installer.InstallerRequirementDisplay;
@@ -29,12 +29,12 @@ public class ConditionCheck
 {
     private static final Logger logger = Logger.getLogger(ConditionCheck.class.getName());
 
-    private AutomatedInstallData installdata;
+    private InstallData installdata;
     private ResourceManager resourceManager;
     private RulesEngine rules;
 
 
-    public ConditionCheck(AutomatedInstallData installdata, ResourceManager resourceManager, RulesEngine rules)
+    public ConditionCheck(InstallData installdata, ResourceManager resourceManager, RulesEngine rules)
     {
         this.installdata = installdata;
         this.resourceManager = resourceManager;
@@ -67,8 +67,8 @@ public class ConditionCheck
             logger.fine("Lock File Exists, asking user for permission to proceed.");
             StringBuilder msg = new StringBuilder();
             msg.append("<html>");
-            msg.append(
-                    "The " + appName + " installer you are attempting to run seems to have a copy already running.<br><br>");
+            msg.append("The ").append(appName).append(
+                    " installer you are attempting to run seems to have a copy already running.<br><br>");
             msg.append(
                     "This could be from a previous failed installation attempt or you may have accidentally launched <br>");
             msg.append(

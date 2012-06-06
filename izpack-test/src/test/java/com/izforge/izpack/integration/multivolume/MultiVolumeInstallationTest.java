@@ -6,7 +6,7 @@ import org.fest.swing.fixture.FrameFixture;
 import org.junit.After;
 
 import com.izforge.izpack.api.GuiId;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.compiler.container.TestGUIInstallerContainer;
 import com.izforge.izpack.compiler.packager.impl.MultiVolumePackager;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
@@ -62,8 +62,7 @@ public class MultiVolumeInstallationTest extends AbstractMultiVolumeInstallation
      * @param installPath the installation path
      * @throws Exception for any error
      */
-    protected void install(InstallerContainer container, AutomatedInstallData installData, File installPath)
-            throws Exception
+    protected void install(InstallerContainer container, InstallData installData, File installPath) throws Exception
     {
         InstallerController controller = container.getComponent(InstallerController.class);
         LanguageDialog languageDialog = container.getComponent(LanguageDialog.class);

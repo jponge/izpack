@@ -34,6 +34,7 @@ import com.izforge.izpack.api.adaptator.IXMLParser;
 import com.izforge.izpack.api.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.api.adaptator.impl.XMLParser;
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.binding.OsModel;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
 import com.izforge.izpack.api.panels.IShortcutPanelLogic;
@@ -265,7 +266,7 @@ public class ShortcutPanelLogic implements CleanupClient, IShortcutPanelLogic
 
     private int userType;
 
-    private AutomatedInstallData installData;
+    private InstallData installData;
 
     private Resources resources;
 

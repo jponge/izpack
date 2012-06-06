@@ -24,7 +24,7 @@ package com.izforge.izpack.installer.bootstrap;
 import javax.swing.SwingUtilities;
 
 import com.izforge.izpack.api.container.Container;
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.installer.container.impl.GUIInstallerContainer;
 import com.izforge.izpack.installer.container.impl.InstallerContainer;
@@ -48,8 +48,7 @@ public class InstallerGui
                     InstallerContainer applicationComponent = new GUIInstallerContainer();
                     if (mediaPath != null)
                     {
-                        AutomatedInstallData installData = applicationComponent.getComponent(
-                                AutomatedInstallData.class);
+                        InstallData installData = applicationComponent.getComponent(InstallData.class);
                         installData.setMediaPath(mediaPath);
                     }
 

@@ -3,7 +3,7 @@ package com.izforge.izpack.panels.licence;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.installer.console.AbstractTextPanelConsole;
 import com.izforge.izpack.util.Console;
@@ -52,15 +52,15 @@ public abstract class AbstractLicensePanelConsole extends AbstractTextPanelConso
      * Prompts to end the license panel.
      * <p/>
      * This displays a prompt to accept, reject, or redisplay. On redisplay, it invokes
-     * {@link #runConsole(AutomatedInstallData, Console)}.
+     * {@link #runConsole(InstallData, Console)}.
      *
      * @param installData the installation date
      * @param console     the console to use
      * @return <tt>true</tt> to accept, <tt>false</tt> to reject. If redisplaying the panel, the result of
-     *         {@link #runConsole(AutomatedInstallData, Console)} is returned
+     *         {@link #runConsole(InstallData, Console)} is returned
      */
     @Override
-    protected boolean promptEndPanel(AutomatedInstallData installData, Console console)
+    protected boolean promptEndPanel(InstallData installData, Console console)
     {
         boolean result;
         int value = console.prompt("Press 1 to accept, 2 to reject, 3 to redisplay", 1, 3, 2);

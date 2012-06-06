@@ -20,7 +20,7 @@ package com.izforge.izpack.util.file.types.selectors;
 import java.io.File;
 import java.util.Enumeration;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 
 /**
  * This selector just holds one other selector and forwards all
@@ -89,7 +89,7 @@ public class SelectSelector extends BaseSelectorContainer
      *
      * @return true if conditions are passed
      */
-    public boolean passesConditions(AutomatedInstallData idata)
+    public boolean passesConditions(InstallData idata)
     {
         if (ifProperty != null
                 && idata.getVariable(ifProperty) == null)
@@ -140,7 +140,7 @@ public class SelectSelector extends BaseSelectorContainer
      * @return whether the file should be selected or not
      */
     @Override
-    public boolean isSelected(AutomatedInstallData idata,
+    public boolean isSelected(InstallData idata,
                               File basedir, String filename, File file) throws Exception
     {
         validate();

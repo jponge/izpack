@@ -17,12 +17,12 @@ public class TestInstallerListener implements InstallerListener
 {
 
     /**
-     * Tracks invocations of {@link #afterInstallerInitialization}.
+     * Tracks invocations of {@link com.izforge.izpack.api.event.InstallerListener#afterInstallerInitialization}.
      */
     private int afterInstallerInitializationCount;
 
     /**
-     * Tracks invocations of {@link #beforePacks}.
+     * Tracks invocations of {@link com.izforge.izpack.api.event.InstallerListener#beforePacks}.
      */
     private int beforePacksCount;
 

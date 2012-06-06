@@ -21,7 +21,7 @@ import java.io.File;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.file.PathTokenizer;
 
@@ -71,7 +71,7 @@ public class Path extends DataType implements Cloneable
             parts = new String[]{translateFile(loc.getAbsolutePath())};
         }
 
-        public void setPath(AutomatedInstallData idata, String path)
+        public void setPath(InstallData idata, String path)
         {
             parts = Path.translatePath(idata, path);
         }
@@ -89,7 +89,7 @@ public class Path extends DataType implements Cloneable
      * @param project the <CODE>Project</CODE> for this path.
      * @param path    the <CODE>String</CODE> path definition.
      */
-    public Path(AutomatedInstallData idata, String path) throws Exception
+    public Path(InstallData idata, String path) throws Exception
     {
         createPathElement().setPath(idata, path);
     }
@@ -121,7 +121,7 @@ public class Path extends DataType implements Cloneable
      *
      * @param path the <CODE>String</CODE> path definition.
      */
-    public void setPath(AutomatedInstallData idata, String path) throws Exception
+    public void setPath(InstallData idata, String path) throws Exception
     {
         createPathElement().setPath(idata, path);
     }
@@ -353,7 +353,7 @@ public class Path extends DataType implements Cloneable
     /**
      * Splits a PATH (with : or ; as separators) into its parts.
      */
-    public static String[] translatePath(AutomatedInstallData idata, String source)
+    public static String[] translatePath(InstallData idata, String source)
     {
         final Vector<String> result = new Vector<String>();
         if (source == null)
@@ -454,7 +454,7 @@ public class Path extends DataType implements Cloneable
      * <p/>
      * <p>Assume the filename is absolute if project is null.</p>
      */
-    private static String resolveFile(AutomatedInstallData idata, String relativeName)
+    private static String resolveFile(InstallData idata, String relativeName)
             throws Exception
     {
         File f = fileUtils.resolveFile(new File(idata.getInstallPath()), relativeName);

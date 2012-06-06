@@ -1,6 +1,6 @@
 package com.izforge.izpack.integration.packvalidator;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.treepacks.PackValidator;
@@ -21,7 +21,7 @@ public class TestPackValidator implements PackValidator
      * @param valid       determines if the pack is valid or not
      * @param installData the installation data
      */
-    public static void setValid(String pack, boolean valid, AutomatedInstallData installData)
+    public static void setValid(String pack, boolean valid, InstallData installData)
     {
         installData.setVariable(pack + ".valid", Boolean.toString(valid));
     }
