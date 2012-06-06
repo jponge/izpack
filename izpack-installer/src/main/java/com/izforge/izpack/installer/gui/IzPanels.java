@@ -12,7 +12,7 @@ import com.izforge.izpack.installer.panel.AbstractPanels;
  *
  * @author Tim Anderson
  */
-public class IzPanels extends AbstractPanels<IzPanelView>
+public class IzPanels extends AbstractPanels<IzPanelView, IzPanel>
 {
     /**
      * The installation data.
@@ -53,7 +53,7 @@ public class IzPanels extends AbstractPanels<IzPanelView>
      */
     public void initialise()
     {
-        for (IzPanelView panel : getPanels())
+        for (IzPanelView panel : getPanelViews())
         {
             // need to defer creation of the IzPanel until after the InstallerFrame is constructed
             IzPanel view = panel.getView();

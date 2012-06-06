@@ -16,7 +16,7 @@ import com.izforge.izpack.installer.panel.Panels;
  *
  * @author Tim Anderson
  */
-public class AutomatedPanels extends AbstractPanels<AutomatedPanelView>
+public class AutomatedPanels extends AbstractPanels<AutomatedPanelView, PanelAutomation>
 {
 
     /**
@@ -92,7 +92,7 @@ public class AutomatedPanels extends AbstractPanels<AutomatedPanelView>
         if (!panelRoots.isEmpty())
         {
             int index = 0;
-            for (AutomatedPanelView panelView : getPanels())
+            for (AutomatedPanelView panelView : getPanelViews())
             {
                 Panel p = panelView.getPanel();
                 if (panel.getPanel().equals(p))

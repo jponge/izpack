@@ -12,7 +12,7 @@ import com.izforge.izpack.installer.panel.Panels;
  *
  * @author Tim Anderson
  */
-public class ConsolePanels extends AbstractPanels<ConsolePanelView>
+public class ConsolePanels extends AbstractPanels<ConsolePanelView, PanelConsole>
 {
 
     /**

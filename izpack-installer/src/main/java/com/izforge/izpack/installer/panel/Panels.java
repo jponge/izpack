@@ -2,13 +2,15 @@ package com.izforge.izpack.installer.panel;
 
 import java.util.List;
 
+import com.izforge.izpack.api.data.Panel;
+
 
 /**
  * Manages navigation between panels.
  *
  * @author Tim Anderson
  */
-public interface Panels<T extends PanelView>
+public interface Panels
 {
 
     /**
@@ -16,14 +18,14 @@ public interface Panels<T extends PanelView>
      *
      * @return the panels
      */
-    List<T> getPanels();
+    List<Panel> getPanels();
 
     /**
      * Returns the current panel.
      *
      * @return the current panel, or {@code null} if there is no current panel
      */
-    T getPanel();
+    Panel getPanel();
 
     /**
      * Determines if the current panel is valid.
@@ -124,14 +126,6 @@ public interface Panels<T extends PanelView>
      * @return the previous panel index, or {@code -1} if there are no more panels
      */
     int getPrevious(int index, boolean visibleOnly);
-
-    /**
-     * Returns the index of a visible panel, relative to other visible panels.
-     *
-     * @param panel the panel
-     * @return the panel's visible index, or {@code -1} if the panel is not visible
-     */
-    int getVisibleIndex(T panel);
 
     /**
      * Returns the number of visible panels.

@@ -116,7 +116,7 @@ public class ConsoleInstaller extends InstallerBase
     public boolean canInstall()
     {
         boolean success = true;
-        for (ConsolePanelView panel : panels.getPanels())
+        for (ConsolePanelView panel : panels.getPanelViews())
         {
             if (panel.getViewClass() == null)
             {

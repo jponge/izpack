@@ -138,8 +138,8 @@ public class PanelActionTest
     public void testPanelActions() throws Exception
     {
         assertEquals(2, panels.getPanels().size());
-        Panel hello = panels.getPanels().get(0).getPanel();
-        // Panel finish = panels.getPanels().get(1).getPanel();
+        Panel hello = panels.getPanels().get(0);
+        // Panel finish = panels.getPanels().get(1);
 
         checkActions(hello);
         // checkActions(finish);
@@ -189,7 +189,7 @@ public class PanelActionTest
      */
     private void checkCurrentPanel(Class<? extends IzPanel> type)
     {
-        Panel panel = panels.getPanel().getPanel();
+        Panel panel = panels.getPanel();
         assertEquals(type.getName(), panel.getClassName());
     }
 

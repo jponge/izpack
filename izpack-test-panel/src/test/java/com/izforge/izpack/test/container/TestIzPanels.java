@@ -38,9 +38,11 @@ public class TestIzPanels extends IzPanels
      *
      * @param panels the panels
      */
-    public void setPanels(List<IzPanelView> panels) {
+    public void setPanels(List<IzPanelView> panels)
+    {
         this.panels = panels;
     }
+
 
     /**
      * Returns the panels.
@@ -48,7 +50,7 @@ public class TestIzPanels extends IzPanels
      * @return the panels
      */
     @Override
-    public List<IzPanelView> getPanels()
+    public List<IzPanelView> getPanelViews()
     {
         return panels;
     }

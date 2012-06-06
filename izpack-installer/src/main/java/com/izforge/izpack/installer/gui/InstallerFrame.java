@@ -1032,7 +1032,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     @Override
     public void showHelp()
     {
-        IzPanel izPanel = panels.getPanel().getView();
+        IzPanel izPanel = panels.getView();
         izPanel.showHelp();
     }
 

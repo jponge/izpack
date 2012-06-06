@@ -178,7 +178,7 @@ public class PackValidatorTest
      */
     private void checkCurrentPanel(Class<? extends IzPanel> type)
     {
-        Panel panel = panels.getPanel().getPanel();
+        Panel panel = panels.getPanel();
         assertEquals(type.getName(), panel.getClassName());
     }
 

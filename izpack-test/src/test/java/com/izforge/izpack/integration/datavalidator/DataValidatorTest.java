@@ -26,7 +26,6 @@ import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerController;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.gui.IzPanel;
-import com.izforge.izpack.installer.gui.IzPanelView;
 import com.izforge.izpack.installer.gui.IzPanels;
 import com.izforge.izpack.integration.HelperTestMethod;
 import com.izforge.izpack.panels.hello.HelloPanel;
@@ -135,11 +134,11 @@ public class DataValidatorTest
     @InstallFile("samples/datavalidators.xml")
     public void testDataValidators() throws Exception
     {
-        List<IzPanelView> list = panels.getPanels();
+        List<Panel> list = panels.getPanels();
         assertEquals(3, list.size());
-        Panel hello = list.get(0).getPanel();
-        Panel install = list.get(1).getPanel();
-        Panel finish = list.get(2).getPanel();
+        Panel hello = list.get(0);
+        Panel install = list.get(1);
+        Panel finish = list.get(2);
 
         // verify that all class names are fully qualified
         assertEquals(HelloPanel.class.getName(), hello.getClassName());
@@ -200,7 +199,7 @@ public class DataValidatorTest
      */
     private void checkCurrentPanel(Class<? extends IzPanel> type)
     {
-        Panel panel = panels.getPanel().getPanel();
+        Panel panel = panels.getPanel();
         assertEquals(type.getName(), panel.getClassName());
     }
 
