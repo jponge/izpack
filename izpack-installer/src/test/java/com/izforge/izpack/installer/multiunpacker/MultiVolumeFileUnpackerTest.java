@@ -79,8 +79,8 @@ public class MultiVolumeFileUnpackerTest extends AbstractFileUnpackerTest
 
         FileSpanningInputStream stream = new FileSpanningInputStream(volume, volumeCount);
         stream.setLocator(locator);
-        FileUnpacker unpacker = new MultiVolumeFileUnpacker(stream, getCancellable(), getHandler(), null,
-                                                            Platforms.WINDOWS, getLibrarian());
+        FileUnpacker unpacker = new MultiVolumeFileUnpacker(stream, getCancellable(), null, Platforms.WINDOWS,
+                                                            getLibrarian());
 
         PackFile file = createPackFile(baseDir, source, target, Blockable.BLOCKABLE_NONE);
         assertFalse(target.exists());
@@ -134,8 +134,7 @@ public class MultiVolumeFileUnpackerTest extends AbstractFileUnpackerTest
     protected FileUnpacker createUnpacker(File sourceDir) throws IOException
     {
         FileSpanningInputStream stream = new FileSpanningInputStream(volume, volumeCount);
-        return new MultiVolumeFileUnpacker(stream, getCancellable(), getHandler(), null, Platforms.WINDOWS,
-                                           getLibrarian());
+        return new MultiVolumeFileUnpacker(stream, getCancellable(), null, Platforms.WINDOWS, getLibrarian());
     }
 
     /**

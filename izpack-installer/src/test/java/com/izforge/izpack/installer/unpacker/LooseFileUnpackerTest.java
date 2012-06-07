@@ -21,8 +21,8 @@ public class LooseFileUnpackerTest extends AbstractFileUnpackerTest
      */
     protected FileUnpacker createUnpacker(File sourceDir)
     {
-        return new LooseFileUnpacker(sourceDir, getCancellable(), getHandler(), null, Platforms.WINDOWS,
-                                     getLibrarian());
+        return new LooseFileUnpacker(sourceDir, getCancellable(), null, Platforms.WINDOWS, getLibrarian(),
+                                     getHandler());
     }
 
 }

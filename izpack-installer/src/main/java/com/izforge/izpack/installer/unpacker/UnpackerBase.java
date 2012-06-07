@@ -626,17 +626,17 @@ public abstract class UnpackerBase implements IUnpacker
         FileUnpacker unpacker;
         if (pack.isLoose())
         {
-            unpacker = new LooseFileUnpacker(getAbsoluteInstallSource(), cancellable, handler, queue, platform,
-                                             librarian);
+            unpacker = new LooseFileUnpacker(getAbsoluteInstallSource(), cancellable, queue, platform, librarian,
+                                             handler);
         }
         else if (file.isPack200Jar())
         {
-            unpacker = new Pack200FileUnpacker(cancellable, handler, resources, getPack200Unpacker(), queue, platform,
+            unpacker = new Pack200FileUnpacker(cancellable, resources, getPack200Unpacker(), queue, platform,
                                                librarian);
         }
         else
         {
-            unpacker = new DefaultFileUnpacker(cancellable, handler, queue, platform, librarian);
+            unpacker = new DefaultFileUnpacker(cancellable, queue, platform, librarian);
         }
         return unpacker;
     }

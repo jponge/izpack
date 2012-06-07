@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.data.XPackFile;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.core.io.FileSpanningInputStream;
 import com.izforge.izpack.installer.unpacker.Cancellable;
 import com.izforge.izpack.installer.unpacker.FileUnpacker;
@@ -39,16 +38,14 @@ public class MultiVolumeFileUnpacker extends FileUnpacker
      *
      * @param volumes     the input stream
      * @param cancellable determines if unpacking should be cancelled
-     * @param handler     the handler
-     * @param platform    the current platform
      * @param queue       the file queue. May be <tt>null</tt>
+     * @param platform    the current platform
      * @param librarian   the librarian
      */
-    public MultiVolumeFileUnpacker(FileSpanningInputStream volumes, Cancellable cancellable,
-                                   AbstractUIProgressHandler handler, FileQueue queue,
+    public MultiVolumeFileUnpacker(FileSpanningInputStream volumes, Cancellable cancellable, FileQueue queue,
                                    Platform platform, Librarian librarian)
     {
-        super(cancellable, handler, queue, platform, librarian);
+        super(cancellable, queue, platform, librarian);
         this.volumes = volumes;
     }
 

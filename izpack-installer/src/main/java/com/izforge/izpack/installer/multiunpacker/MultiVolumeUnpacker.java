@@ -32,13 +32,11 @@ import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.io.FileSpanningInputStream;
 import com.izforge.izpack.core.io.VolumeLocator;
-import com.izforge.izpack.installer.automation.PanelAutomation;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.event.InstallerListeners;
 import com.izforge.izpack.installer.unpacker.Cancellable;
@@ -93,35 +91,16 @@ public class MultiVolumeUnpacker extends UnpackerBase
      * @param librarian           the librarian
      * @param housekeeper         the housekeeper
      * @param listeners           the listeners
+     * @param locator             the multi-volume locator
      */
     public MultiVolumeUnpacker(AutomatedInstallData installData, Resources resources, RulesEngine rules,
                                VariableSubstitutor variableSubstitutor, UninstallData uninstallData,
                                Platform platform, Librarian librarian, Housekeeper housekeeper,
-                               InstallerListeners listeners)
+                               InstallerListeners listeners, VolumeLocator locator)
     {
         super(installData, resources, rules, variableSubstitutor, uninstallData, platform, librarian,
               housekeeper, listeners);
-    }
-
-    /**
-     * Sets the progress handler.
-     *
-     * @param handler the progress handler
-     */
-    @Override
-    public void setHandler(AbstractUIProgressHandler handler)
-    {
-        super.setHandler(handler);
-        if (handler instanceof PanelAutomation)
-        {
-            logger.fine("running in auto installation mode.");
-            locator = new MultiVolumeUnpackerAutomationHelper(getInstallData());
-        }
-        else
-        {
-            logger.fine("running in normal installation mode.");
-            locator = new MultiVolumeUnpackerHelper(getInstallData(), handler);
-        }
+        this.locator = locator;
     }
 
     /**
@@ -186,13 +165,12 @@ public class MultiVolumeUnpacker extends UnpackerBase
         FileUnpacker unpacker;
         if (pack.isLoose())
         {
-            unpacker = new LooseFileUnpacker(getLoosePackFileDir(file), cancellable, getHandler(), queue,
-                                             getPlatform(), getLibrarian());
+            unpacker = new LooseFileUnpacker(getLoosePackFileDir(file), cancellable, queue, getPlatform(),
+                                             getLibrarian(), getHandler());
         }
         else
         {
-            unpacker = new MultiVolumeFileUnpacker(volumes, cancellable, getHandler(), queue, getPlatform(),
-                                                   getLibrarian());
+            unpacker = new MultiVolumeFileUnpacker(volumes, cancellable, queue, getPlatform(), getLibrarian());
         }
         return unpacker;
     }

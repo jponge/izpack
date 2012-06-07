@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.data.Blockable;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.file.FileUtils;
@@ -35,11 +34,6 @@ public abstract class FileUnpacker
      * Determines if unpacking should be cancelled.
      */
     private final Cancellable cancellable;
-
-    /**
-     * The handler.
-     */
-    private final AbstractUIProgressHandler handler;
 
     /**
      * The current platform.
@@ -81,16 +75,13 @@ public abstract class FileUnpacker
      * Constructs a <tt>FileUnpacker</tt>.
      *
      * @param cancellable determines if unpacking should be cancelled
-     * @param handler     the handler
      * @param queue       the file queue. May be <tt>null</tt>
      * @param platform    the current platform
      * @param librarian   the librarian
      */
-    public FileUnpacker(Cancellable cancellable, AbstractUIProgressHandler handler, FileQueue queue,
-                        Platform platform, Librarian librarian)
+    public FileUnpacker(Cancellable cancellable, FileQueue queue, Platform platform, Librarian librarian)
     {
         this.cancellable = cancellable;
-        this.handler = handler;
         this.queue = queue;
         this.librarian = librarian;
         this.platform = platform;
@@ -221,16 +212,6 @@ public abstract class FileUnpacker
     protected int read(byte[] buffer, InputStream in, int maxBytes) throws IOException
     {
         return in.read(buffer, 0, maxBytes);
-    }
-
-    /**
-     * Returns the progress handler.
-     *
-     * @return the handler
-     */
-    protected AbstractUIProgressHandler getHandler()
-    {
-        return handler;
     }
 
     /**

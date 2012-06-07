@@ -10,7 +10,6 @@ import java.util.jar.Pack200;
 
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.Platform;
@@ -39,18 +38,16 @@ class Pack200FileUnpacker extends FileUnpacker
      * Constructs a <tt>Pack200FileUnpacker</tt>.
      *
      * @param cancellable determines if unpacking should be cancelled
-     * @param handler     the handler
      * @param resources   the resources
      * @param unpacker    the unpacker
      * @param queue       the file queue. May be <tt>null</tt>
      * @param platform    the current platform
      * @param librarian   the librarian
      */
-    public Pack200FileUnpacker(Cancellable cancellable, AbstractUIProgressHandler handler,
-                               Resources resources, Pack200.Unpacker unpacker, FileQueue queue,
+    public Pack200FileUnpacker(Cancellable cancellable, Resources resources, Pack200.Unpacker unpacker, FileQueue queue,
                                Platform platform, Librarian librarian)
     {
-        super(cancellable, handler, queue, platform, librarian);
+        super(cancellable, queue, platform, librarian);
         this.resources = resources;
         this.unpacker = unpacker;
     }

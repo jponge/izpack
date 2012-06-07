@@ -1,6 +1,5 @@
 package com.izforge.izpack.installer.multiunpacker;
 
-import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -8,11 +7,9 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import com.izforge.izpack.api.data.InstallData;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.core.io.VolumeLocator;
 import com.izforge.izpack.installer.gui.InstallerFrame;
-import com.izforge.izpack.installer.gui.IzPanel;
 
 public class MultiVolumeUnpackerHelper implements VolumeLocator
 {
@@ -23,9 +20,9 @@ public class MultiVolumeUnpackerHelper implements VolumeLocator
     private InstallData installData;
 
     /**
-     * The progress handler.
+     * The installer frame.
      */
-    private AbstractUIProgressHandler handler;
+    private final InstallerFrame frame;
 
     /**
      * The logger.
@@ -36,12 +33,12 @@ public class MultiVolumeUnpackerHelper implements VolumeLocator
      * Constructs a <tt>MultiVolumeUnpackerHelper</tt>.
      *
      * @param installData the installation data
-     * @param handler     the progress handler
+     * @param frame       the installer frame
      */
-    public MultiVolumeUnpackerHelper(InstallData installData, AbstractUIProgressHandler handler)
+    public MultiVolumeUnpackerHelper(InstallData installData, InstallerFrame frame)
     {
         this.installData = installData;
-        this.handler = handler;
+        this.frame = frame;
     }
 
     /**
@@ -57,13 +54,8 @@ public class MultiVolumeUnpackerHelper implements VolumeLocator
     {
         if (corrupt)
         {
-            Component parent = null;
-            if ((this.handler != null) && (this.handler instanceof IzPanel))
-            {
-                parent = ((IzPanel) this.handler).getInstallerFrame();
-            }
             Messages messages = installData.getMessages();
-            JOptionPane.showMessageDialog(parent, messages.get("nextmedia.corruptmedia"),
+            JOptionPane.showMessageDialog(frame, messages.get("nextmedia.corruptmedia"),
                                           messages.get("nextmedia.corruptmedia.title"), JOptionPane.ERROR_MESSAGE);
         }
         logger.fine("Enter next media: " + path);
@@ -73,15 +65,7 @@ public class MultiVolumeUnpackerHelper implements VolumeLocator
 
         while (!volume.exists() || corrupt)
         {
-            if (handler instanceof IzPanel)
-            {
-                InstallerFrame installframe = ((IzPanel) this.handler).getInstallerFrame();
-                nextMediaDialog = new NextMediaDialog(installframe, installData, path);
-            }
-            else
-            {
-                nextMediaDialog = new NextMediaDialog(null, installData, path);
-            }
+            nextMediaDialog = new NextMediaDialog(frame, installData, path);
             nextMediaDialog.setVisible(true);
             String nextmediainput = nextMediaDialog.getNextMedia();
             if (nextmediainput != null)

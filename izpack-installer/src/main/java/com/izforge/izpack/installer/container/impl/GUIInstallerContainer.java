@@ -22,6 +22,8 @@ import com.izforge.izpack.installer.container.provider.IzPanelsProvider;
 import com.izforge.izpack.installer.gui.InstallerController;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.language.LanguageDialog;
+import com.izforge.izpack.installer.multiunpacker.MultiVolumeUnpackerHelper;
+import com.izforge.izpack.installer.unpacker.IUnpacker;
 
 /**
  * GUI Installer container.
@@ -71,6 +73,7 @@ public class GUIInstallerContainer extends InstallerContainer
                 .addComponent(InstallerController.class)
                 .addComponent(InstallerFrame.class)
                 .addComponent(Log.class)
+                .addComponent(MultiVolumeUnpackerHelper.class)
                 .as(Characteristics.USE_NAMES).addComponent(LanguageDialog.class);
     }
 
@@ -87,6 +90,10 @@ public class GUIInstallerContainer extends InstallerContainer
         pico
                 .addConfig("title", getTitle(installdata)) // Configuration of title parameter in InstallerFrame
                 .addConfig("frame", initFrame());          // Configuration of frame parameter in languageDialog
+
+        InstallerFrame frame = pico.getComponent(InstallerFrame.class);
+        IUnpacker unpacker = pico.getComponent(IUnpacker.class);
+        frame.setUnpacker(unpacker);
     }
 
     private JFrame initFrame()

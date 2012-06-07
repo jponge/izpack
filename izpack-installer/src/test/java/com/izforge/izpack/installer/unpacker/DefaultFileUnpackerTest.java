@@ -46,7 +46,7 @@ public class DefaultFileUnpackerTest extends AbstractFileUnpackerTest
      */
     protected FileUnpacker createUnpacker(File sourceDir)
     {
-        return new DefaultFileUnpacker(getCancellable(), getHandler(), null, Platforms.WINDOWS, getLibrarian());
+        return new DefaultFileUnpacker(getCancellable(), null, Platforms.WINDOWS, getLibrarian());
     }
 
 }

@@ -234,7 +234,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     /**
      * The unpacker.
      */
-    private final IUnpacker unpacker;
+    private IUnpacker unpacker;
 
     /**
      * The house keeper.
@@ -257,15 +257,14 @@ public class InstallerFrame extends JFrame implements InstallerView
      * @param uninstallDataWriter the uninstallation data writer
      * @param resourceManager     the resources
      * @param uninstallData       the uninstallation data
-     * @param unpacker            the unpacker
      * @param housekeeper         the house-keeper
      * @param log                 the log
      * @throws Exception for any error
      */
     public InstallerFrame(String title, GUIInstallData installData, RulesEngine rules, IconsDatabase icons,
                           IzPanels panels, UninstallDataWriter uninstallDataWriter,
-                          ResourceManager resourceManager, UninstallData uninstallData,
-                          IUnpacker unpacker, Housekeeper housekeeper, Log log)
+                          ResourceManager resourceManager, UninstallData uninstallData, Housekeeper housekeeper,
+                          Log log)
             throws Exception
     {
         super(title);
@@ -276,7 +275,6 @@ public class InstallerFrame extends JFrame implements InstallerView
         this.uninstallDataWriter = uninstallDataWriter;
         this.uninstallData = uninstallData;
         this.panels = panels;
-        this.unpacker = unpacker;
         this.variables = installData.getVariables();
         this.housekeeper = housekeeper;
         this.log = log;
@@ -286,6 +284,16 @@ public class InstallerFrame extends JFrame implements InstallerView
 
         // Sets the window events handler
         addWindowListener(new WindowHandler(this));
+    }
+
+    /**
+     * Sets the unpacker.
+     *
+     * @param unpacker the unpacker
+     */
+    public void setUnpacker(IUnpacker unpacker)
+    {
+        this.unpacker = unpacker;
     }
 
     @Override

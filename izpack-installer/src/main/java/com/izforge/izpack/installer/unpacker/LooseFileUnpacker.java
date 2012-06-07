@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.os.FileQueue;
@@ -30,6 +30,11 @@ public class LooseFileUnpacker extends FileUnpacker
     private final File sourceDir;
 
     /**
+     * The handler to warn of missing files.
+     */
+    private final AbstractUIHandler handler;
+
+    /**
      * The logger.
      */
     private static final Logger logger = Logger.getLogger(LooseFileUnpacker.class.getName());
@@ -39,16 +44,17 @@ public class LooseFileUnpacker extends FileUnpacker
      *
      * @param sourceDir   the absolute source directory
      * @param cancellable determines if unpacking should be cancelled
-     * @param handler     the handler
      * @param queue       the file queue. May be <tt>null</tt>
      * @param platform    the current platform
      * @param librarian   the librarian
+     * @param handler     the handler to warn of missing files
      */
-    public LooseFileUnpacker(File sourceDir, Cancellable cancellable, AbstractUIProgressHandler handler,
-                             FileQueue queue, Platform platform, Librarian librarian)
+    public LooseFileUnpacker(File sourceDir, Cancellable cancellable, FileQueue queue, Platform platform,
+                             Librarian librarian, AbstractUIHandler handler)
     {
-        super(cancellable, handler, queue, platform, librarian);
+        super(cancellable, queue, platform, librarian);
         this.sourceDir = sourceDir;
+        this.handler = handler;
     }
 
     /**
@@ -96,8 +102,8 @@ public class LooseFileUnpacker extends FileUnpacker
         {
             // file not found. Since this file was loosely bundled, continue with the installation.
             logger.warning("Could not find loosely bundled file: " + file.getRelativeSourcePath());
-            if (!getHandler().emitWarning("File not found",
-                                          "Could not find loosely bundled file: " + file.getRelativeSourcePath()))
+            if (handler.emitWarning("File not found", "Could not find loosely bundled file: "
+                    + file.getRelativeSourcePath()))
             {
                 throw new InstallerException("Installation cancelled");
             }
