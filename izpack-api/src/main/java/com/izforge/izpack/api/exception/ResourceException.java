@@ -50,4 +50,14 @@ public class ResourceException extends IzPackException
     {
         super(message, cause);
     }
+
+    /**
+     * Constructs a {@code ResourceException}.
+     *
+     * @param cause   the cause
+     */
+    public ResourceException(Throwable cause)
+    {
+        super(cause);
+    }
 }

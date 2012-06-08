@@ -13,6 +13,7 @@ import com.izforge.izpack.installer.container.provider.AutomatedInstallDataProvi
 import com.izforge.izpack.installer.container.provider.AutomatedPanelsProvider;
 import com.izforge.izpack.installer.container.provider.ConsolePanelsProvider;
 import com.izforge.izpack.installer.multiunpacker.MultiVolumeUnpackerAutomationHelper;
+import com.izforge.izpack.installer.unpacker.ConsolePackResources;
 import com.izforge.izpack.util.Console;
 
 /**
@@ -63,6 +64,7 @@ public class ConsoleInstallerContainer extends InstallerContainer
         container.addComponent(ConsoleInstaller.class);
         container.addComponent(AutomatedInstaller.class);
         container.addComponent(ConsolePanelAutomationHelper.class);
+        container.addComponent(ConsolePackResources.class);
         container.addComponent(MultiVolumeUnpackerAutomationHelper.class);
     }
 }

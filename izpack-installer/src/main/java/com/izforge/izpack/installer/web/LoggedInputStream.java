@@ -21,10 +21,11 @@
 
 package com.izforge.izpack.installer.web;
 
-import com.izforge.izpack.api.data.Pack;
-
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
+
+import com.izforge.izpack.api.data.Pack;
 
 /**
  * Wraps an InputStream in order to track how much bytes are being read, and
@@ -40,8 +41,7 @@ public class LoggedInputStream extends InputStream
     private long bytesRead = 0;
     private InputStream is;
     private DownloadPanel downloader;
-    // private WebAccessor webAccessor;  // Unused
-    private boolean cancelled = false;
+    private volatile boolean cancelled = false;
     private long lastTime = -1;
     private long lastBytes = -1;
 
@@ -151,7 +151,12 @@ public class LoggedInputStream extends InputStream
         return bytes;
     }
 
-    private void update()
+    /**
+     * Updates the download progress.
+     *
+     * @throws InterruptedIOException if the download has been cancelled
+     */
+    private void update() throws IOException
     {
         if (lastTime > 0)
         {
@@ -173,7 +178,7 @@ public class LoggedInputStream extends InputStream
         downloader.setProgressCurrent((int) bytesRead);
         if (cancelled)
         {
-            throw new RuntimeException("Cancelled");
+            throw new InterruptedIOException("Cancelled");
         }
     }
 }

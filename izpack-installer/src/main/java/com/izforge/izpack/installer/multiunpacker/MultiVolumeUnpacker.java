@@ -32,7 +32,6 @@ import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.io.FileSpanningInputStream;
@@ -42,6 +41,7 @@ import com.izforge.izpack.installer.event.InstallerListeners;
 import com.izforge.izpack.installer.unpacker.Cancellable;
 import com.izforge.izpack.installer.unpacker.FileUnpacker;
 import com.izforge.izpack.installer.unpacker.LooseFileUnpacker;
+import com.izforge.izpack.installer.unpacker.PackResources;
 import com.izforge.izpack.installer.unpacker.UnpackerBase;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.Librarian;
@@ -83,7 +83,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
      * Constructs an <tt>MultiVolumeUnpacker</tt>.
      *
      * @param installData         the installation data
-     * @param resources           the resources
+     * @param resources           the pack resources
      * @param rules               the rules engine
      * @param variableSubstitutor the variable substituter
      * @param uninstallData       the uninstallation data
@@ -93,7 +93,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
      * @param listeners           the listeners
      * @param locator             the multi-volume locator
      */
-    public MultiVolumeUnpacker(AutomatedInstallData installData, Resources resources, RulesEngine rules,
+    public MultiVolumeUnpacker(AutomatedInstallData installData, PackResources resources, RulesEngine rules,
                                VariableSubstitutor variableSubstitutor, UninstallData uninstallData,
                                Platform platform, Librarian librarian, Housekeeper housekeeper,
                                InstallerListeners listeners, VolumeLocator locator)

@@ -23,6 +23,7 @@ import com.izforge.izpack.installer.gui.InstallerController;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.installer.language.LanguageDialog;
 import com.izforge.izpack.installer.multiunpacker.MultiVolumeUnpackerHelper;
+import com.izforge.izpack.installer.unpacker.GUIPackResources;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 
 /**
@@ -73,6 +74,7 @@ public class GUIInstallerContainer extends InstallerContainer
                 .addComponent(InstallerController.class)
                 .addComponent(InstallerFrame.class)
                 .addComponent(Log.class)
+                .addComponent(GUIPackResources.class)
                 .addComponent(MultiVolumeUnpackerHelper.class)
                 .as(Characteristics.USE_NAMES).addComponent(LanguageDialog.class);
     }

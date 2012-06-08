@@ -133,7 +133,7 @@ public class ResourceManager extends AbstractResources
      * @return an InputStream contains the requested resource
      * @throws ResourceNotFoundException thrown if there is no resource found
      */
-    public InputStream getInputStream(String resource) throws ResourceNotFoundException
+    public InputStream getInputStream(String resource)
     {
         resource = getLanguageResourceString(resource);
         return super.getInputStream(resource);

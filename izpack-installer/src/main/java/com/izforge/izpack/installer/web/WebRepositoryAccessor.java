@@ -23,6 +23,7 @@ package com.izforge.izpack.installer.web;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -248,42 +249,29 @@ public class WebRepositoryAccessor
      * @param url
      * @return the url
      */
-    public static String getCachedUrl(String url, String tempFolder) throws Exception
+    public static String getCachedUrl(String url, String tempFolder) throws IOException
     {
         int max = BUFFER_SIZE;
         byte[] raw = new byte[max];
-        try
-        {
-            WebAccessor webAccessor = new WebAccessor(null);
-            InputStream in = webAccessor.openInputStream(new URL(url));
-            int r = in.read(raw);
-            File tempDir = new File(tempFolder);
+        WebAccessor webAccessor = new WebAccessor(null);
+        InputStream in = webAccessor.openInputStream(new URL(url));
+        int r = in.read(raw);
+        File tempDir = new File(tempFolder);
 
-            tempDir.mkdirs();
+        tempDir.mkdirs();
 
-            File temp = File.createTempFile("izpacktempfile", "jar", new File(tempFolder));
-            FileOutputStream fos = new FileOutputStream(temp);
-            String path = "file:///" + temp.getAbsolutePath();
-            while (r > 0)
-            {
-                fos.write(raw, 0, r);
-                r = in.read(raw);
-            }
-            in.close();
-            fos.close();
+        File temp = File.createTempFile("izpacktempfile", "jar", new File(tempFolder));
+        FileOutputStream fos = new FileOutputStream(temp);
+        String path = "file:///" + temp.getAbsolutePath();
+        while (r > 0)
+        {
+            fos.write(raw, 0, r);
+            r = in.read(raw);
+        }
+        in.close();
+        fos.close();
 
-            return path;
-        }
-        catch (SecurityException e)
-        {
-            System.out.println(e + " while trying to write temp file: " + tempFolder);
-            throw e;
-        }
-        catch (Exception e)
-        {
-            System.out.println(e + " while trying to download " + url);
-            throw e;
-        }
+        return path;
     }
 
 

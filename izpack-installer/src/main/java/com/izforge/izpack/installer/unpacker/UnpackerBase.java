@@ -21,19 +21,15 @@
 
 package com.izforge.izpack.installer.unpacker;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Constructor;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -53,7 +49,6 @@ import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Messages;
-import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.data.ExecutableFile;
@@ -61,8 +56,6 @@ import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.event.InstallerListeners;
-import com.izforge.izpack.installer.web.WebAccessor;
-import com.izforge.izpack.installer.web.WebRepositoryAccessor;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.IoHelper;
@@ -96,9 +89,9 @@ public abstract class UnpackerBase implements IUnpacker
     private final UninstallData uninstallData;
 
     /**
-     * The resources.
+     * The pack resources.
      */
-    private final Resources resources;
+    private final PackResources resources;
 
     /**
      * The rules engine.
@@ -179,15 +172,10 @@ public abstract class UnpackerBase implements IUnpacker
     private static final Logger logger = Logger.getLogger(UnpackerBase.class.getName());
 
     /**
-     * Temporary directory.
-     */
-    private static final String tempSubPath = "/IzpackWebTemp";
-
-    /**
      * Constructs an <tt>UnpackerBase</tt>.
      *
      * @param installData         the installation data
-     * @param resources           the resources
+     * @param resources           the pack resources
      * @param rules               the rules engine
      * @param variableSubstitutor the variable substituter
      * @param uninstallData       the uninstallation data
@@ -196,7 +184,7 @@ public abstract class UnpackerBase implements IUnpacker
      * @param housekeeper         the housekeeper
      * @param listeners           the listeners
      */
-    public UnpackerBase(AutomatedInstallData installData, Resources resources, RulesEngine rules,
+    public UnpackerBase(AutomatedInstallData installData, PackResources resources, RulesEngine rules,
                         VariableSubstitutor variableSubstitutor, UninstallData uninstallData, Platform platform,
                         Librarian librarian, Housekeeper housekeeper, InstallerListeners listeners)
     {
@@ -433,7 +421,7 @@ public abstract class UnpackerBase implements IUnpacker
         ObjectInputStream packInputStream = null;
         try
         {
-            in = getPackStream(pack.getName(), pack.isUninstall());
+            in = getPackStream(pack.getName());
             packInputStream = new ObjectInputStream(in);
 
             int fileCount = packInputStream.readInt();
@@ -560,7 +548,7 @@ public abstract class UnpackerBase implements IUnpacker
 
             if (!pack.isLoose() && file.isBackReference())
             {
-                in = getPackStream(file.previousPackId, pack.isUninstall());
+                in = getPackStream(file.previousPackId);
                 packStream = new ObjectInputStream(in);
                 // must wrap for blockdata use by ObjectStream (otherwise strange result)
                 // skip on underlying stream (for some reason not possible on ObjectStream)
@@ -728,11 +716,11 @@ public abstract class UnpackerBase implements IUnpacker
     }
 
     /**
-     * Returns the resources.
+     * Returns the pack resources.
      *
-     * @return the resources
+     * @return the pack resources
      */
-    protected Resources getResources()
+    protected PackResources getResources()
     {
         return resources;
     }
@@ -837,89 +825,13 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * Returns a stream to a pack, location depending on if it's web based.
      *
-     * @param name      the pack name
-     * @param uninstall <tt>true</tt> if pack must be uninstalled
+     * @param name the pack name
      * @return the stream or null if it could not be found.
      * @throws Exception Description of the Exception
      */
-    protected InputStream getPackStream(String name, boolean uninstall) throws Exception
+    protected InputStream getPackStream(String name) throws Exception
     {
-        InputStream in;
-
-        String webDirURL = installData.getInfo().getWebDirURL();
-
-        name = "-" + name;
-
-        if (webDirURL == null)
-        {
-            // local
-            in = resources.getInputStream("packs/pack" + name);
-        }
-        else
-        {
-            // web based
-            // TODO: Look first in same directory as primary jar
-            // This may include prompting for changing of media
-            // TODO: download and cache them all before starting copy process
-
-            // See compiler.Packager#getJarOutputStream for the counterpart
-            String baseName = installData.getInfo().getInstallerBase();
-            String packURL = webDirURL + "/" + baseName + ".pack" + name + ".jar";
-            String tempFolder = IoHelper.translatePath(
-                    installData.getInfo().getUninstallerPath() + tempSubPath, installData.getVariables());
-            String tempFile;
-            try
-            {
-                tempFile = WebRepositoryAccessor.getCachedUrl(packURL, tempFolder);
-                uninstallData.addFile(tempFile, uninstall);
-            }
-            catch (Exception e)
-            {
-                if ("Cancelled".equals(e.getMessage()))
-                {
-                    throw new InstallerException("Installation cancelled", e);
-                }
-                else
-                {
-                    throw new InstallerException("Installation failed", e);
-                }
-            }
-            URL url = new URL("jar:" + tempFile + "!/packs/pack" + name);
-
-            //URL url = new URL("jar:" + packURL + "!/packs/pack" + packid);
-            // JarURLConnection jarConnection = (JarURLConnection)
-            // url.openConnection();
-            // TODO: what happens when using an automated installer?
-            in = new WebAccessor(null).openInputStream(url);
-            // TODO: Fails miserably when pack jars are not found, so this is
-            // temporary
-            if (in == null)
-            {
-                throw new InstallerException(url.toString() + " not available",
-                                             new FileNotFoundException(url.toString()));
-            }
-        }
-        if (in != null && installData.getInfo().getPackDecoderClassName() != null)
-        {
-            Class<Object> decoder = (Class<Object>) Class.forName(installData.getInfo().getPackDecoderClassName());
-            Class[] paramsClasses = new Class[1];
-            paramsClasses[0] = Class.forName("java.io.InputStream");
-            Constructor<Object> constructor = decoder.getDeclaredConstructor(paramsClasses);
-            // Our first used decoder input stream (bzip2) reads byte for byte from
-            // the source. Therefore we put a buffering stream between it and the
-            // source.
-            InputStream buffer = new BufferedInputStream(in);
-            Object[] params = {buffer};
-            Object instance = constructor.newInstance(params);
-            if (!InputStream.class.isInstance(instance))
-            {
-                throw new InstallerException("'" + installData.getInfo().getPackDecoderClassName()
-                                                     + "' must be derived from "
-                                                     + InputStream.class.toString());
-            }
-            in = (InputStream) instance;
-        }
-        return in;
+        return resources.getPackStream(name);
     }
 
     /**
@@ -1427,16 +1339,6 @@ public abstract class UnpackerBase implements IUnpacker
             unpacker = Pack200.newUnpacker();
         }
         return unpacker;
-    }
-
-    /**
-     * Returns whether interrupt was initiate or not for this Unpacker.
-     *
-     * @return whether interrupt was initiate or not
-     */
-    private synchronized boolean shouldInterrupt()
-    {
-        return state == State.INTERRUPT || state == State.INTERRUPTED;
     }
 
 }
