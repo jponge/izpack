@@ -2,6 +2,7 @@ package com.izforge.izpack.installer.multiunpacker;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.io.ObjectInputStream;
 import java.util.logging.Logger;
 
@@ -11,8 +12,6 @@ import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.core.io.FileSpanningInputStream;
 import com.izforge.izpack.installer.unpacker.Cancellable;
 import com.izforge.izpack.installer.unpacker.FileUnpacker;
-import com.izforge.izpack.util.Librarian;
-import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.os.FileQueue;
 
 
@@ -38,14 +37,11 @@ public class MultiVolumeFileUnpacker extends FileUnpacker
      *
      * @param volumes     the input stream
      * @param cancellable determines if unpacking should be cancelled
-     * @param queue       the file queue. May be <tt>null</tt>
-     * @param platform    the current platform
-     * @param librarian   the librarian
+     * @param queue       the file queue. May be {@code null}
      */
-    public MultiVolumeFileUnpacker(FileSpanningInputStream volumes, Cancellable cancellable, FileQueue queue,
-                                   Platform platform, Librarian librarian)
+    public MultiVolumeFileUnpacker(FileSpanningInputStream volumes, Cancellable cancellable, FileQueue queue)
     {
-        super(cancellable, queue, platform, librarian);
+        super(cancellable, queue);
         this.volumes = volumes;
     }
 
@@ -55,12 +51,12 @@ public class MultiVolumeFileUnpacker extends FileUnpacker
      * @param file            the pack file meta-data
      * @param packInputStream the pack input stream
      * @param target          the target
-     * @return the file queue. May be <tt>null</tt>
-     * @throws IOException        for any I/O error
-     * @throws InstallerException for any installer exception
+     * @throws InterruptedIOException if the unpack is cancelled
+     * @throws IOException            for any I/O error
+     * @throws InstallerException     for any installer exception
      */
     @Override
-    public FileQueue unpack(PackFile file, ObjectInputStream packInputStream, File target)
+    public void unpack(PackFile file, ObjectInputStream packInputStream, File target)
             throws IOException, InstallerException
     {
         // read in the position of this file
@@ -80,7 +76,7 @@ public class MultiVolumeFileUnpacker extends FileUnpacker
             throw new IOException("Error, can't access file in pack.");
         }
 
-        return copy(file, volumes, target);
+        copy(file, volumes, target);
     }
 
     /**

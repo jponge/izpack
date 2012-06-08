@@ -10,7 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.Platforms;
+import com.izforge.izpack.util.os.FileQueue;
 
 
 /**
@@ -42,11 +42,12 @@ public class DefaultFileUnpackerTest extends AbstractFileUnpackerTest
      * Helper to create an unpacker.
      *
      * @param sourceDir the source directory
+     * @param queue     the file queue. May be {@code null}
      * @return a new unpacker
      */
-    protected FileUnpacker createUnpacker(File sourceDir)
+    protected FileUnpacker createUnpacker(File sourceDir, FileQueue queue)
     {
-        return new DefaultFileUnpacker(getCancellable(), null, Platforms.WINDOWS, getLibrarian());
+        return new DefaultFileUnpacker(getCancellable(), queue);
     }
 
 }

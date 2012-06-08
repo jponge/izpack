@@ -6,8 +6,6 @@ import java.io.ObjectInputStream;
 
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.util.Librarian;
-import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.os.FileQueue;
 
 
@@ -24,12 +22,10 @@ public class DefaultFileUnpacker extends FileUnpacker
      *
      * @param cancellable determines if unpacking should be cancelled
      * @param queue       the file queue. May be <tt>null</tt>
-     * @param platform    the current platform
-     * @param librarian   the librarian
      */
-    public DefaultFileUnpacker(Cancellable cancellable, FileQueue queue, Platform platform, Librarian librarian)
+    public DefaultFileUnpacker(Cancellable cancellable, FileQueue queue)
     {
-        super(cancellable, queue, platform, librarian);
+        super(cancellable, queue);
     }
 
     /**
@@ -38,14 +34,13 @@ public class DefaultFileUnpacker extends FileUnpacker
      * @param file            the pack file meta-data
      * @param packInputStream the pack input stream
      * @param target          the target
-     * @return the file queue. May be <tt>null</tt>
      * @throws IOException        for any I/O error
      * @throws InstallerException for any installer exception
      */
     @Override
-    public FileQueue unpack(PackFile file, ObjectInputStream packInputStream, File target)
+    public void unpack(PackFile file, ObjectInputStream packInputStream, File target)
             throws IOException, InstallerException
     {
-        return copy(file, packInputStream, target);
+        copy(file, packInputStream, target);
     }
 }

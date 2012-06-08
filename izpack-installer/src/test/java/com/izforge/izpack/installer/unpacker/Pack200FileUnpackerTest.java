@@ -23,7 +23,7 @@ import java.util.zip.ZipEntry;
 import org.mockito.Mockito;
 
 import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.Platforms;
+import com.izforge.izpack.util.os.FileQueue;
 
 /**
  * Tests the {@link Pack200FileUnpacker} class.
@@ -54,11 +54,13 @@ public class Pack200FileUnpackerTest extends AbstractFileUnpackerTest
     /**
      * Helper to create an unpacker.
      *
+     *
      * @param sourceDir the source directory
+     * @param queue the file queue. May be {@code null}
      * @return a new unpacker
      */
     @Override
-    protected FileUnpacker createUnpacker(File sourceDir) throws IOException
+    protected FileUnpacker createUnpacker(File sourceDir, FileQueue queue) throws IOException
     {
         PackResources resources = Mockito.mock(PackResources.class);
         JarInputStream stream = new JarInputStream(new FileInputStream(new File(sourceDir, "installer.jar")));
@@ -73,8 +75,7 @@ public class Pack200FileUnpackerTest extends AbstractFileUnpackerTest
             }
         }
         when(resources.getInputStream("packs/pack200-1")).thenReturn(new ByteArrayInputStream(bytes.toByteArray()));
-        return new Pack200FileUnpacker(getCancellable(), resources, Pack200.newUnpacker(), null, Platforms.WINDOWS,
-                                       getLibrarian());
+        return new Pack200FileUnpacker(getCancellable(), resources, Pack200.newUnpacker(), queue);
     }
 
     /**

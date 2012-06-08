@@ -11,8 +11,6 @@ import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.util.Librarian;
-import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.os.FileQueue;
 
 
@@ -44,15 +42,12 @@ public class LooseFileUnpacker extends FileUnpacker
      *
      * @param sourceDir   the absolute source directory
      * @param cancellable determines if unpacking should be cancelled
-     * @param queue       the file queue. May be <tt>null</tt>
-     * @param platform    the current platform
-     * @param librarian   the librarian
+     * @param queue       the file queue. May be {@code null}
      * @param handler     the handler to warn of missing files
      */
-    public LooseFileUnpacker(File sourceDir, Cancellable cancellable, FileQueue queue, Platform platform,
-                             Librarian librarian, AbstractUIHandler handler)
+    public LooseFileUnpacker(File sourceDir, Cancellable cancellable, FileQueue queue, AbstractUIHandler handler)
     {
-        super(cancellable, queue, platform, librarian);
+        super(cancellable, queue);
         this.sourceDir = sourceDir;
         this.handler = handler;
     }
@@ -63,16 +58,13 @@ public class LooseFileUnpacker extends FileUnpacker
      * @param file            the pack file meta-data
      * @param packInputStream the pack input stream
      * @param target          the target
-     * @return the file queue. May be <tt>null</tt>
      * @throws IOException        for any I/O error
      * @throws InstallerException for any installer exception
      */
     @Override
-    public FileQueue unpack(PackFile file, ObjectInputStream packInputStream, File target)
+    public void unpack(PackFile file, ObjectInputStream packInputStream, File target)
             throws IOException, InstallerException
     {
-        FileQueue queue = getQueue();
-
         // Old way of doing the job by using the (absolute) sourcepath.
         // Since this is very likely to fail and does not conform to the documentation prefer using relative
         // path's
@@ -96,7 +88,7 @@ public class LooseFileUnpacker extends FileUnpacker
                                 file.osConstraints(), file.override(), file.overrideRenameTo(),
                                 file.blockable(), file.getAdditionals());
 
-            queue = copy(file, stream, target);
+            copy(file, stream, target);
         }
         else
         {
@@ -108,6 +100,5 @@ public class LooseFileUnpacker extends FileUnpacker
                 throw new InstallerException("Installation cancelled");
             }
         }
-        return queue;
     }
 }

@@ -59,9 +59,7 @@ import com.izforge.izpack.installer.event.InstallerListeners;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.OsConstraintHelper;
-import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.file.DirectoryScanner;
 import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.file.GlobPatternMapper;
@@ -104,14 +102,9 @@ public abstract class UnpackerBase implements IUnpacker
     private final VariableSubstitutor variableSubstitutor;
 
     /**
-     * The current platform.
+     * The file queue factory.
      */
-    private final Platform platform;
-
-    /**
-     * The librarian.
-     */
-    private final Librarian librarian;
+    private final FileQueueFactory queueFactory;
 
     /**
      * The housekeeper.
@@ -179,22 +172,20 @@ public abstract class UnpackerBase implements IUnpacker
      * @param rules               the rules engine
      * @param variableSubstitutor the variable substituter
      * @param uninstallData       the uninstallation data
-     * @param platform            the current platform
-     * @param librarian           the librarian
+     * @param factory             the file queue factory
      * @param housekeeper         the housekeeper
      * @param listeners           the listeners
      */
     public UnpackerBase(AutomatedInstallData installData, PackResources resources, RulesEngine rules,
-                        VariableSubstitutor variableSubstitutor, UninstallData uninstallData, Platform platform,
-                        Librarian librarian, Housekeeper housekeeper, InstallerListeners listeners)
+                        VariableSubstitutor variableSubstitutor, UninstallData uninstallData,
+                        FileQueueFactory factory, Housekeeper housekeeper, InstallerListeners listeners)
     {
         this.installData = installData;
         this.resources = resources;
         this.rules = rules;
         this.variableSubstitutor = variableSubstitutor;
         this.uninstallData = uninstallData;
-        this.platform = platform;
-        this.librarian = librarian;
+        this.queueFactory = factory;
         this.housekeeper = housekeeper;
         this.listeners = listeners;
         cancellable = new Cancellable()
@@ -237,9 +228,10 @@ public abstract class UnpackerBase implements IUnpacker
             List<ParsableFile> parsables = new ArrayList<ParsableFile>();
             List<ExecutableFile> executables = new ArrayList<ExecutableFile>();
             List<UpdateCheck> updateChecks = new ArrayList<UpdateCheck>();
+            FileQueue queue = queueFactory.isSupported() ? queueFactory.create() : null;
 
             preUnpack();
-            FileQueue queue = unpack(parsables, executables, updateChecks);
+            unpack(queue, parsables, executables, updateChecks);
             postUnpack(queue, parsables, executables, updateChecks);
         }
         catch (Exception exception)
@@ -368,17 +360,16 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * Unpacks the selected packs.
      *
+     * @param queue        the file queue, or {@code null} if queuing is not supported
      * @param parsables    used to collect parsable files in the pack
      * @param executables  used to collect executable files files in the pack
      * @param updateChecks used to collect update checks in the pack
-     * @return the file queue, or <tt>null</tt> if no queuing is required
      * @throws IOException for any I/O error
      * @throws Exception   for any other error
      */
-    protected FileQueue unpack(List<ParsableFile> parsables, List<ExecutableFile> executables,
-                               List<UpdateCheck> updateChecks) throws Exception
+    protected void unpack(FileQueue queue, List<ParsableFile> parsables, List<ExecutableFile> executables,
+                          List<UpdateCheck> updateChecks) throws Exception
     {
-        FileQueue queue = null;
         List<Pack> packs = getInstallData().getSelectedPacks();
         int count = packs.size();
 
@@ -389,7 +380,7 @@ public abstract class UnpackerBase implements IUnpacker
             if (shouldUnpack(pack))
             {
                 listeners.beforePack(pack, i, handler);
-                queue = unpack(pack, i, queue, parsables, executables, updateChecks);
+                unpack(pack, i, queue, parsables, executables, updateChecks);
                 if (isInterrupted())
                 {
                     break;
@@ -398,7 +389,6 @@ public abstract class UnpackerBase implements IUnpacker
                 listeners.afterPack(pack, i, handler);
             }
         }
-        return queue;
     }
 
     /**
@@ -406,16 +396,15 @@ public abstract class UnpackerBase implements IUnpacker
      *
      * @param pack         the pack to unpack
      * @param packNo       the pack number
-     * @param queue        the file queue. If <tt>null</tt>, and file queueing is required, one will be created
+     * @param queue        the file queue, or {@code null} if queuing is not supported
      * @param parsables    used to collect parsable files in the pack
      * @param executables  used to collect executable files files in the pack
      * @param updateChecks used to collect update checks in the pack
-     * @return the file queue. May be <tt>null</tt>
      * @throws IOException for any I/O error
      * @throws Exception   for any other error
      */
-    protected FileQueue unpack(Pack pack, int packNo, FileQueue queue, List<ParsableFile> parsables,
-                               List<ExecutableFile> executables, List<UpdateCheck> updateChecks) throws Exception
+    protected void unpack(Pack pack, int packNo, FileQueue queue, List<ParsableFile> parsables,
+                          List<ExecutableFile> executables, List<UpdateCheck> updateChecks) throws Exception
     {
         InputStream in = null;
         ObjectInputStream packInputStream = null;
@@ -443,7 +432,7 @@ public abstract class UnpackerBase implements IUnpacker
                 else
                 {
                     // unpack the file
-                    queue = unpack(file, packInputStream, i, pack, queue);
+                    unpack(file, packInputStream, i, pack, queue);
                 }
             }
             readParsableFiles(packInputStream, parsables);
@@ -455,7 +444,6 @@ public abstract class UnpackerBase implements IUnpacker
             FileUtils.close(packInputStream);
             FileUtils.close(in);
         }
-        return queue;
     }
 
     /**
@@ -465,12 +453,11 @@ public abstract class UnpackerBase implements IUnpacker
      * @param packInputStream the pack file input stream
      * @param fileNo          the pack file number
      * @param pack            the pack that the pack file comes from
-     * @param queue           the file queue. If <tt>null</tt>, and file queueing is required, one will be created
-     * @return the file queue. May be <tt>null</tt>
+     * @param queue           the file queue, or {@code null} if queuing is not supported
      * @throws IOException for any I/O error
      * @throws Exception   for any other error
      */
-    protected FileQueue unpack(PackFile file, ObjectInputStream packInputStream, int fileNo, Pack pack, FileQueue queue)
+    protected void unpack(PackFile file, ObjectInputStream packInputStream, int fileNo, Pack pack, FileQueue queue)
             throws Exception
     {
         // translate & build the path
@@ -490,7 +477,7 @@ public abstract class UnpackerBase implements IUnpacker
 
         if (file.isDirectory())
         {
-            return queue;
+            return;
         }
 
         listeners.beforeFile(target, file);
@@ -514,14 +501,12 @@ public abstract class UnpackerBase implements IUnpacker
                         skip(packInputStream, file.length());
                     }
                 }
-                return queue;
+                return;
             }
         }
 
         handleOverrideRename(file, target);
-        queue = extract(file, target, packInputStream, pack, queue);
-
-        return queue;
+        extract(file, target, packInputStream, pack, queue);
     }
 
     /**
@@ -531,14 +516,12 @@ public abstract class UnpackerBase implements IUnpacker
      * @param target          the file to write to
      * @param packInputStream the pack file input stream
      * @param pack            the pack that the pack file comes from
-     * @param queue           the file queue. If <tt>null</tt>, and file queueing is required, one will be created
-     * @return the file queue. May be <tt>null</tt>
+     * @param queue           the file queue, or {@code null} if queuing is not supported
      * @throws IOException for any I/O error
      * @throws Exception   for any other error
      */
-    protected FileQueue extract(PackFile file, File target, ObjectInputStream packInputStream, Pack pack,
-                                FileQueue queue)
-            throws Exception
+    protected void extract(PackFile file, File target, ObjectInputStream packInputStream, Pack pack,
+                           FileQueue queue) throws Exception
     {
         ObjectInputStream packStream = packInputStream;
         InputStream in = null;
@@ -559,10 +542,9 @@ public abstract class UnpackerBase implements IUnpacker
             unpacker = createFileUnpacker(file, pack, queue, cancellable);
             unpacker.unpack(file, packStream, target);
 
-
             if (isInterrupted())
             {
-                return queue;
+                return;
             }
 
             if (!unpacker.isQueued())
@@ -578,7 +560,6 @@ public abstract class UnpackerBase implements IUnpacker
                 FileUtils.close(packStream);
             }
         }
-        return queue;
     }
 
     /**
@@ -602,7 +583,7 @@ public abstract class UnpackerBase implements IUnpacker
      *
      * @param file        the pack file to unpack
      * @param pack        the parent pack
-     * @param queue       the file queue. May be <tt>null</tt>
+     * @param queue       the file queue. May be {@code null}
      * @param cancellable determines if the unpacker should be cancelled
      * @return the unpacker
      * @throws IOException        for any I/O error
@@ -614,17 +595,15 @@ public abstract class UnpackerBase implements IUnpacker
         FileUnpacker unpacker;
         if (pack.isLoose())
         {
-            unpacker = new LooseFileUnpacker(getAbsoluteInstallSource(), cancellable, queue, platform, librarian,
-                                             handler);
+            unpacker = new LooseFileUnpacker(getAbsoluteInstallSource(), cancellable, queue, handler);
         }
         else if (file.isPack200Jar())
         {
-            unpacker = new Pack200FileUnpacker(cancellable, resources, getPack200Unpacker(), queue, platform,
-                                               librarian);
+            unpacker = new Pack200FileUnpacker(cancellable, resources, getPack200Unpacker(), queue);
         }
         else
         {
-            unpacker = new DefaultFileUnpacker(cancellable, queue, platform, librarian);
+            unpacker = new DefaultFileUnpacker(cancellable, queue);
         }
         return unpacker;
     }
@@ -632,7 +611,7 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * Invoked after each pack has been unpacked.
      *
-     * @param queue        the file queue, or <tt>null</tt> if no file queuing was required during unpacking
+     * @param queue        the file queue, or {@code null} if queuing is not supported
      * @param parsables    used to collect parsable files in the pack
      * @param executables  used to collect executable files files in the pack
      * @param updateChecks used to collect update checks in the pack
@@ -644,9 +623,8 @@ public abstract class UnpackerBase implements IUnpacker
         AutomatedInstallData installData = getInstallData();
         AbstractUIProgressHandler handler = getHandler();
 
-        // Commit a file queue if there are potentially blocked files
-        // Use one file queue for all packs
-        if (queue != null)
+        // commit the file queue if there are potentially blocked files
+        if (queue != null && !queue.isEmpty())
         {
             queue.execute();
             installData.setRebootNecessary(queue.isRebootNecessary());
@@ -743,26 +721,6 @@ public abstract class UnpackerBase implements IUnpacker
     protected AbstractUIProgressHandler getHandler()
     {
         return handler;
-    }
-
-    /**
-     * Returns the platform.
-     *
-     * @return the platform
-     */
-    protected Platform getPlatform()
-    {
-        return platform;
-    }
-
-    /**
-     * Returns the librarian.
-     *
-     * @return the librarian
-     */
-    protected Librarian getLibrarian()
-    {
-        return librarian;
     }
 
     /**

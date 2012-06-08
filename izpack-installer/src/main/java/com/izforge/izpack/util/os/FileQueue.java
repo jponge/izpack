@@ -40,7 +40,17 @@ public class FileQueue
         operations.add(op);
     }
 
-    public void execute() throws Exception
+    /**
+     * Determines if the queue is empty.
+     *
+     * @return {@code true} if the queue is empty
+     */
+    public boolean isEmpty()
+    {
+        return operations.isEmpty();
+    }
+
+    public void execute() throws IOException
     {
         WinSetupDefaultCallbackHandler handler = new WinSetupDefaultCallbackHandler();
         try

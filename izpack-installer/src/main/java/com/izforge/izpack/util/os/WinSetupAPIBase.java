@@ -1,5 +1,6 @@
 package com.izforge.izpack.util.os;
 
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.NativeLibraryClient;
 
@@ -144,9 +145,9 @@ public class WinSetupAPIBase implements NativeLibraryClient
      * Constructs a <tt>WinSetupAPIBase</tt>.
      *
      * @param librarian the librarian
-     * @throws Exception if the WinSetupAPI library cannot be loaded
+     * @throws IzPackException if the WinSetupAPI library cannot be loaded
      */
-    public WinSetupAPIBase(Librarian librarian) throws Exception
+    public WinSetupAPIBase(Librarian librarian)
     {
         try
         {
@@ -154,7 +155,7 @@ public class WinSetupAPIBase implements NativeLibraryClient
         }
         catch (UnsatisfiedLinkError error)
         {
-            throw new Exception("Failed to load WinSetupAPI", error);
+            throw new IzPackException("Failed to load WinSetupAPI", error);
         }
     }
 

@@ -1,11 +1,10 @@
 package com.izforge.izpack.installer.unpacker;
 
-import static com.izforge.izpack.util.Platform.Name.WINDOWS;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.util.logging.Logger;
@@ -13,8 +12,6 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.data.Blockable;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.util.Librarian;
-import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.os.FileQueue;
 import com.izforge.izpack.util.os.FileQueueMove;
@@ -23,7 +20,7 @@ import com.izforge.izpack.util.os.FileQueueMove;
 /**
  * Unpacks a file from a pack.
  * <p/>
- * This manages queuing files that are blocked.
+ * This manages queueing files that are blocked.
  *
  * @author Tim Anderson
  */
@@ -36,16 +33,6 @@ public abstract class FileUnpacker
     private final Cancellable cancellable;
 
     /**
-     * The current platform.
-     */
-    private final Platform platform;
-
-    /**
-     * The librarian.
-     */
-    private final Librarian librarian;
-
-    /**
      * The target.
      */
     private File target;
@@ -56,7 +43,7 @@ public abstract class FileUnpacker
     private File tmpTarget;
 
     /**
-     * The file queue. If <tt>null</tt>, and queuing is required, one will be created.
+     * The file queue.
      */
     private FileQueue queue;
 
@@ -75,16 +62,12 @@ public abstract class FileUnpacker
      * Constructs a <tt>FileUnpacker</tt>.
      *
      * @param cancellable determines if unpacking should be cancelled
-     * @param queue       the file queue. May be <tt>null</tt>
-     * @param platform    the current platform
-     * @param librarian   the librarian
+     * @param queue       the file queue. May be {@code null}
      */
-    public FileUnpacker(Cancellable cancellable, FileQueue queue, Platform platform, Librarian librarian)
+    public FileUnpacker(Cancellable cancellable, FileQueue queue)
     {
         this.cancellable = cancellable;
         this.queue = queue;
-        this.librarian = librarian;
-        this.platform = platform;
     }
 
     /**
@@ -93,11 +76,10 @@ public abstract class FileUnpacker
      * @param file            the pack file meta-data
      * @param packInputStream the pack input stream
      * @param target          the target
-     * @return the file queue. May be <tt>null</tt>
      * @throws IOException        for any I/O error
      * @throws InstallerException for any installer exception
      */
-    public abstract FileQueue unpack(PackFile file, ObjectInputStream packInputStream, File target)
+    public abstract void unpack(PackFile file, ObjectInputStream packInputStream, File target)
             throws IOException, InstallerException;
 
     /**
@@ -111,28 +93,17 @@ public abstract class FileUnpacker
     }
 
     /**
-     * Returns the file queue.
-     *
-     * @return the file queue. May be <tt>null</tt>
-     */
-    protected FileQueue getQueue()
-    {
-        return queue;
-    }
-
-    /**
      * Copies an input stream to a target, setting its timestamp to that of the pack file.
      * <p/>
-     * If the target is {@link #isBlockable a blockable file}, then a temporary file will be created, and the
-     * file queued.
+     * If the target is a blockable file, then a temporary file will be created, and the file queued.
      *
      * @param file   the pack file
      * @param in     the pack file stream
      * @param target the file to write to
-     * @return the file queue. May be <tt>null</tt>
-     * @throws IOException for any I/O error
+     * @throws InterruptedIOException if the copy operation is cancelled
+     * @throws IOException            for any I/O error
      */
-    protected FileQueue copy(PackFile file, InputStream in, File target) throws IOException
+    protected void copy(PackFile file, InputStream in, File target) throws IOException
     {
         OutputStream out = getTarget(file, target);
         try
@@ -144,7 +115,7 @@ public abstract class FileUnpacker
                 if (cancellable.isCancelled())
                 {
                     // operation cancelled
-                    return queue;
+                    throw new InterruptedIOException("Copy operation cancelled");
                 }
                 bytesCopied = copy(file, buffer, in, out, bytesCopied);
             }
@@ -153,17 +124,16 @@ public abstract class FileUnpacker
         {
             FileUtils.close(out);
         }
-        return postCopy(file);
+        postCopy(file);
     }
 
     /**
      * Invoked after copying is complete to set the last modified timestamp, and queue blockable files.
      *
      * @param file the pack file meta-data
-     * @return the file queue. May be <tt>null</tt>
      * @throws IOException for any I/O error
      */
-    protected FileQueue postCopy(PackFile file) throws IOException
+    protected void postCopy(PackFile file) throws IOException
     {
         setLastModified(file);
 
@@ -171,7 +141,6 @@ public abstract class FileUnpacker
         {
             queue();
         }
-        return getQueue();
     }
 
     /**
@@ -217,8 +186,7 @@ public abstract class FileUnpacker
     /**
      * Returns a stream to the target file.
      * <p/>
-     * If the target file {@link #isBlockable is blockable}, then a temporary file will be created, and a stream to
-     * this returned instead.
+     * If the target file is blockable, then a temporary file will be created, and a stream to this returned instead.
      *
      * @param file   the pack file meta-data
      * @param target the requested target
@@ -271,7 +239,7 @@ public abstract class FileUnpacker
      */
     private boolean isBlockable(PackFile file)
     {
-        return (file.blockable() != Blockable.BLOCKABLE_NONE) && platform.isA(WINDOWS);
+        return queue != null && (file.blockable() != Blockable.BLOCKABLE_NONE);
     }
 
     /**
@@ -281,11 +249,6 @@ public abstract class FileUnpacker
      */
     private void queue() throws IOException
     {
-        if (queue == null)
-        {
-            queue = new FileQueue(librarian);
-        }
-
         FileQueueMove move = new FileQueueMove(tmpTarget, target);
         move.setForceInUse(true);
         move.setOverwrite(true);

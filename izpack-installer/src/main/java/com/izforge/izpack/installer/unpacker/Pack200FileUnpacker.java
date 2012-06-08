@@ -10,8 +10,6 @@ import java.util.jar.Pack200;
 
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.util.Librarian;
-import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.os.FileQueue;
 
@@ -39,14 +37,12 @@ class Pack200FileUnpacker extends FileUnpacker
      * @param cancellable determines if unpacking should be cancelled
      * @param resources   the pack resources
      * @param unpacker    the unpacker
-     * @param queue       the file queue. May be <tt>null</tt>
-     * @param platform    the current platform
-     * @param librarian   the librarian
+     * @param queue       the file queue. May be {@code null}
      */
     public Pack200FileUnpacker(Cancellable cancellable, PackResources resources, Pack200.Unpacker unpacker,
-                               FileQueue queue, Platform platform, Librarian librarian)
+                               FileQueue queue)
     {
-        super(cancellable, queue, platform, librarian);
+        super(cancellable, queue);
         this.resources = resources;
         this.unpacker = unpacker;
     }
@@ -57,12 +53,11 @@ class Pack200FileUnpacker extends FileUnpacker
      * @param file            the pack file meta-data
      * @param packInputStream the pack input stream
      * @param target          the target
-     * @return the file queue. May be <tt>null</tt>
      * @throws IOException        for any I/O error
      * @throws InstallerException for any installer exception
      */
     @Override
-    public FileQueue unpack(PackFile file, ObjectInputStream packInputStream, File target)
+    public void unpack(PackFile file, ObjectInputStream packInputStream, File target)
             throws IOException, InstallerException
     {
         int key = packInputStream.readInt();
@@ -85,7 +80,7 @@ class Pack200FileUnpacker extends FileUnpacker
             FileUtils.close(jarOut);
         }
 
-        return postCopy(file);
+        postCopy(file);
     }
 
 }

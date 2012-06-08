@@ -4,7 +4,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -27,6 +26,7 @@ import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.Librarian;
+import com.izforge.izpack.util.Platforms;
 import com.izforge.izpack.util.os.FileQueue;
 
 
@@ -92,14 +92,15 @@ public abstract class AbstractFileUnpackerTest
         File source = createSourceFile(baseDir);
         File target = getTargetFile(baseDir);
 
-        FileUnpacker unpacker = createUnpacker(sourceDir);
+        FileQueue queue = new FileQueueFactory(Platforms.WINDOWS, librarian).create();
+        FileUnpacker unpacker = createUnpacker(sourceDir, queue);
 
         PackFile file = createPackFile(baseDir, source, target, Blockable.BLOCKABLE_NONE);
         assertFalse(target.exists());
 
         ObjectInputStream packStream = createPackStream(source);
-        FileQueue queue = unpacker.unpack(file, packStream, target);
-        assertNull(queue);  // file should not have been queued
+        unpacker.unpack(file, packStream, target);
+        assertTrue(queue.isEmpty());
 
         checkTarget(source, target);
     }
@@ -160,10 +161,11 @@ public abstract class AbstractFileUnpackerTest
      * Helper to create an unpacker.
      *
      * @param sourceDir the source directory
+     * @param queue     the file queue
      * @return a new unpacker
      * @throws IOException for any I/O error
      */
-    protected abstract FileUnpacker createUnpacker(File sourceDir) throws IOException;
+    protected abstract FileUnpacker createUnpacker(File sourceDir, FileQueue queue) throws IOException;
 
     /**
      * Helper to create a new pack file.
@@ -242,10 +244,11 @@ public abstract class AbstractFileUnpackerTest
         File source = createSourceFile(baseDir);
         File target = getTargetFile(baseDir);
 
-        FileUnpacker unpacker = createUnpacker(sourceDir);
+        FileQueue queue = new FileQueueFactory(Platforms.WINDOWS, librarian).create();
+        FileUnpacker unpacker = createUnpacker(sourceDir, queue);
         PackFile file = createPackFile(baseDir, source, target, blockable);
 
-        FileQueue queue = unpacker.unpack(file, createPackStream(source), target);
+        unpacker.unpack(file, createPackStream(source), target);
         assertNotNull(queue);
         assertEquals(1, queue.getOperations().size());
         assertFalse(target.exists());

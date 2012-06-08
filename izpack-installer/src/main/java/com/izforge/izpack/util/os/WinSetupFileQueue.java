@@ -1,5 +1,6 @@
 package com.izforge.izpack.util.os;
 
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.util.Librarian;
 
 import java.io.File;
@@ -34,9 +35,9 @@ public class WinSetupFileQueue extends WinSetupAPIBase
      *
      * @param librarian the librarian
      * @param handler   Java callback handler
-     * @throws Exception if the WinSetupAPI library cannot be loaded
+     * @throws IzPackException if the WinSetupAPI library cannot be loaded
      */
-    public WinSetupFileQueue(Librarian librarian, WinSetupQueueCallbackInterface handler) throws Exception
+    public WinSetupFileQueue(Librarian librarian, WinSetupQueueCallbackInterface handler) throws IOException
     {
         super(librarian);
         this.handle = SetupOpenFileQueue(handler);
@@ -140,7 +141,7 @@ public class WinSetupFileQueue extends WinSetupAPIBase
     /**
      * Commits the enqueued operations in the file queue.
      */
-    public boolean commit() throws Exception
+    public boolean commit() throws IOException
     {
         boolean result = SetupCommitFileQueue(this.handle);
 

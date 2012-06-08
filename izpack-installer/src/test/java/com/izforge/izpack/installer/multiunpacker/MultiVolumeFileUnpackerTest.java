@@ -2,7 +2,6 @@ package com.izforge.izpack.installer.multiunpacker;
 
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -22,6 +21,7 @@ import com.izforge.izpack.core.io.FileSpanningInputStream;
 import com.izforge.izpack.core.io.FileSpanningOutputStream;
 import com.izforge.izpack.core.io.VolumeLocator;
 import com.izforge.izpack.installer.unpacker.AbstractFileUnpackerTest;
+import com.izforge.izpack.installer.unpacker.FileQueueFactory;
 import com.izforge.izpack.installer.unpacker.FileUnpacker;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.Platforms;
@@ -79,15 +79,16 @@ public class MultiVolumeFileUnpackerTest extends AbstractFileUnpackerTest
 
         FileSpanningInputStream stream = new FileSpanningInputStream(volume, volumeCount);
         stream.setLocator(locator);
-        FileUnpacker unpacker = new MultiVolumeFileUnpacker(stream, getCancellable(), null, Platforms.WINDOWS,
-                                                            getLibrarian());
+
+        FileQueue queue = new FileQueueFactory(Platforms.WINDOWS, getLibrarian()).create();
+        FileUnpacker unpacker = new MultiVolumeFileUnpacker(stream, getCancellable(), queue);
 
         PackFile file = createPackFile(baseDir, source, target, Blockable.BLOCKABLE_NONE);
         assertFalse(target.exists());
 
         ObjectInputStream packStream = createPackStream(source);
-        FileQueue queue = unpacker.unpack(file, packStream, target);
-        assertNull(queue);  // file should not have been queued
+        unpacker.unpack(file, packStream, target);
+        assertTrue(queue.isEmpty());  // file should not have been queued
 
         // verify the file unpacked successfully
         checkTarget(source, target);
@@ -128,13 +129,14 @@ public class MultiVolumeFileUnpackerTest extends AbstractFileUnpackerTest
     /**
      * Helper to create an unpacker.
      *
-     * @param sourceDir the source directory
+     * @param sourceDir the source directory. May be {@code null}
+     * @param queue     the file queue
      * @return a new unpacker
      */
-    protected FileUnpacker createUnpacker(File sourceDir) throws IOException
+    protected FileUnpacker createUnpacker(File sourceDir, FileQueue queue) throws IOException
     {
         FileSpanningInputStream stream = new FileSpanningInputStream(volume, volumeCount);
-        return new MultiVolumeFileUnpacker(stream, getCancellable(), null, Platforms.WINDOWS, getLibrarian());
+        return new MultiVolumeFileUnpacker(stream, getCancellable(), queue);
     }
 
     /**

@@ -28,8 +28,6 @@ import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.event.InstallerListeners;
 import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.Librarian;
-import com.izforge.izpack.util.Platform;
 
 /**
  * Unpacker class.
@@ -49,17 +47,15 @@ public class Unpacker extends UnpackerBase
      * @param rules               the rules engine
      * @param variableSubstitutor the variable substituter
      * @param uninstallData       the uninstallation data
-     * @param platform            the current platform
-     * @param librarian           the librarian
+     * @param queue               the file queue
      * @param housekeeper         the housekeeper
      * @param listeners           the listeners
      */
     public Unpacker(AutomatedInstallData installData, PackResources resources, RulesEngine rules,
-                    VariableSubstitutor variableSubstitutor, UninstallData uninstallData, Platform platform,
-                    Librarian librarian, Housekeeper housekeeper, InstallerListeners listeners)
+                    VariableSubstitutor variableSubstitutor, UninstallData uninstallData, FileQueueFactory queue,
+                    Housekeeper housekeeper, InstallerListeners listeners)
     {
-        super(installData, resources, rules, variableSubstitutor, uninstallData, platform, librarian,
-              housekeeper, listeners);
+        super(installData, resources, rules, variableSubstitutor, uninstallData, queue, housekeeper, listeners);
     }
 
 }

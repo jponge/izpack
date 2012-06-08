@@ -39,13 +39,12 @@ import com.izforge.izpack.core.io.VolumeLocator;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.event.InstallerListeners;
 import com.izforge.izpack.installer.unpacker.Cancellable;
+import com.izforge.izpack.installer.unpacker.FileQueueFactory;
 import com.izforge.izpack.installer.unpacker.FileUnpacker;
 import com.izforge.izpack.installer.unpacker.LooseFileUnpacker;
 import com.izforge.izpack.installer.unpacker.PackResources;
 import com.izforge.izpack.installer.unpacker.UnpackerBase;
 import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.Librarian;
-import com.izforge.izpack.util.Platform;
 import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.os.FileQueue;
 
@@ -87,19 +86,17 @@ public class MultiVolumeUnpacker extends UnpackerBase
      * @param rules               the rules engine
      * @param variableSubstitutor the variable substituter
      * @param uninstallData       the uninstallation data
-     * @param platform            the current platform
-     * @param librarian           the librarian
+     * @param queue               the queue
      * @param housekeeper         the housekeeper
      * @param listeners           the listeners
      * @param locator             the multi-volume locator
      */
     public MultiVolumeUnpacker(AutomatedInstallData installData, PackResources resources, RulesEngine rules,
                                VariableSubstitutor variableSubstitutor, UninstallData uninstallData,
-                               Platform platform, Librarian librarian, Housekeeper housekeeper,
-                               InstallerListeners listeners, VolumeLocator locator)
+                               FileQueueFactory queue, Housekeeper housekeeper, InstallerListeners listeners,
+                               VolumeLocator locator)
     {
-        super(installData, resources, rules, variableSubstitutor, uninstallData, platform, librarian,
-              housekeeper, listeners);
+        super(installData, resources, rules, variableSubstitutor, uninstallData, queue, housekeeper, listeners);
         this.locator = locator;
     }
 
@@ -152,7 +149,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
      *
      * @param file        the pack file to unpack
      * @param pack        the parent pack
-     * @param queue       the file queue. May be <tt>null</tt>
+     * @param queue       the file queue. May be {@code null}
      * @param cancellable determines if the unpacker should be cancelled
      * @return the unpacker
      * @throws IOException        for any I/O error
@@ -165,12 +162,11 @@ public class MultiVolumeUnpacker extends UnpackerBase
         FileUnpacker unpacker;
         if (pack.isLoose())
         {
-            unpacker = new LooseFileUnpacker(getLoosePackFileDir(file), cancellable, queue, getPlatform(),
-                                             getLibrarian(), getHandler());
+            unpacker = new LooseFileUnpacker(getLoosePackFileDir(file), cancellable, queue, getHandler());
         }
         else
         {
-            unpacker = new MultiVolumeFileUnpacker(volumes, cancellable, queue, getPlatform(), getLibrarian());
+            unpacker = new MultiVolumeFileUnpacker(volumes, cancellable, queue);
         }
         return unpacker;
     }

@@ -35,6 +35,7 @@ import com.izforge.izpack.installer.requirement.JavaVersionChecker;
 import com.izforge.izpack.installer.requirement.LangPackChecker;
 import com.izforge.izpack.installer.requirement.LockFileChecker;
 import com.izforge.izpack.installer.requirement.RequirementsChecker;
+import com.izforge.izpack.installer.unpacker.FileQueueFactory;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.merge.MergeManagerImpl;
 import com.izforge.izpack.merge.resolve.MergeableResolver;
@@ -119,6 +120,7 @@ public abstract class InstallerContainer extends AbstractContainer
         addComponent(RegistryDefaultHandler.class);
         addComponent(Housekeeper.class);
         addComponent(Librarian.class);
+        addComponent(FileQueueFactory.class);
         addComponent(TargetFactory.class);
         addComponent(DefaultTargetPlatformFactory.class);
         addComponent(DefaultObjectFactory.class);
