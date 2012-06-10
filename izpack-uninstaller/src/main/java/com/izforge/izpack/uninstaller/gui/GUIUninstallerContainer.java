@@ -35,6 +35,6 @@ public class GUIUninstallerContainer extends UninstallerContainer
     {
         super.fillContainer(container);
         addComponent(UninstallerFrame.class);
-        addComponent(GUIDestroyerHandler.class);
+        addComponent(GUIDestroyerListener.class);
     }
 }

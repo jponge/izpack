@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.util.os.FileQueue;
 
 
@@ -28,9 +28,9 @@ public class LooseFileUnpacker extends FileUnpacker
     private final File sourceDir;
 
     /**
-     * The handler to warn of missing files.
+     * The prompt to warn of missing files.
      */
-    private final AbstractUIHandler handler;
+    private final Prompt prompt;
 
     /**
      * The logger.
@@ -43,13 +43,13 @@ public class LooseFileUnpacker extends FileUnpacker
      * @param sourceDir   the absolute source directory
      * @param cancellable determines if unpacking should be cancelled
      * @param queue       the file queue. May be {@code null}
-     * @param handler     the handler to warn of missing files
+     * @param prompt      the prompt to warn of missing files
      */
-    public LooseFileUnpacker(File sourceDir, Cancellable cancellable, FileQueue queue, AbstractUIHandler handler)
+    public LooseFileUnpacker(File sourceDir, Cancellable cancellable, FileQueue queue, Prompt prompt)
     {
         super(cancellable, queue);
         this.sourceDir = sourceDir;
-        this.handler = handler;
+        this.prompt = prompt;
     }
 
     /**
@@ -94,8 +94,8 @@ public class LooseFileUnpacker extends FileUnpacker
         {
             // file not found. Since this file was loosely bundled, continue with the installation.
             logger.warning("Could not find loosely bundled file: " + file.getRelativeSourcePath());
-            if (handler.emitWarning("File not found", "Could not find loosely bundled file: "
-                    + file.getRelativeSourcePath()))
+            if (prompt.confirm(Prompt.Type.WARNING, "File not found", "Could not find loosely bundled file: "
+                    + file.getRelativeSourcePath(), Prompt.Options.OK_CANCEL) == Prompt.Option.OK)
             {
                 throw new InstallerException("Installation cancelled");
             }

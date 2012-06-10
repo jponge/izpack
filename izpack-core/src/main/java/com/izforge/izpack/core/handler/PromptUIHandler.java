@@ -10,6 +10,7 @@ import static com.izforge.izpack.api.handler.Prompt.Options.OK_CANCEL;
 import static com.izforge.izpack.api.handler.Prompt.Options.YES_NO;
 import static com.izforge.izpack.api.handler.Prompt.Options.YES_NO_CANCEL;
 import static com.izforge.izpack.api.handler.Prompt.Type.ERROR;
+import static com.izforge.izpack.api.handler.Prompt.Type.INFORMATION;
 import static com.izforge.izpack.api.handler.Prompt.Type.QUESTION;
 import static com.izforge.izpack.api.handler.Prompt.Type.WARNING;
 
@@ -22,7 +23,7 @@ import com.izforge.izpack.api.handler.Prompt;
  *
  * @author Tim Anderson
  */
-public abstract class PromptUIHandler implements AbstractUIHandler
+public class PromptUIHandler implements AbstractUIHandler
 {
     /**
      * The prompt.
@@ -40,6 +41,19 @@ public abstract class PromptUIHandler implements AbstractUIHandler
         this.prompt = prompt;
     }
 
+    /**
+     * Notify the user about something.
+     * <p/>
+     * The difference between notification and warning is that a notification should not need user
+     * interaction and can safely be ignored.
+     *
+     * @param message The notification.
+     */
+    @Override
+    public void emitNotification(String message)
+    {
+        prompt.message(INFORMATION, message);
+    }
 
     /**
      * Warn the user about something.

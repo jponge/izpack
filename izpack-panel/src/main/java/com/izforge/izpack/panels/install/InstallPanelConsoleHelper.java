@@ -24,8 +24,7 @@ package com.izforge.izpack.panels.install;
 import java.util.Properties;
 
 import com.izforge.izpack.api.data.InstallData;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.event.ProgressListener;
 import com.izforge.izpack.installer.console.PanelConsole;
 import com.izforge.izpack.installer.console.PanelConsoleHelper;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
@@ -36,8 +35,7 @@ import com.izforge.izpack.util.Console;
  *
  * @author Mounir el hajj
  */
-public class InstallPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole,
-        AbstractUIProgressHandler
+public class InstallPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole, ProgressListener
 {
     /**
      * The unpacker.
@@ -59,7 +57,6 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
     /**
      * Runs the panel using the specified console.
      *
-     *
      * @param installData the installation data
      * @param console     the console
      * @return <tt>true</tt> if the panel ran successfully, otherwise <tt>false</tt>
@@ -67,61 +64,31 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
     @Override
     public boolean runConsole(InstallData installData, Console console)
     {
-        unpacker.setHandler(this);
+        unpacker.setProgressListener(this);
         unpacker.run();
         return unpacker.getResult();
     }
 
-    public void emitNotification(String message)
-    {
-        System.out.println(message);
-    }
-
-    public boolean emitWarning(String title, String message)
-    {
-        System.err.println("[ WARNING: " + message + " ]");
-
-        return true;
-    }
-
-    public void emitError(String title, String message)
-    {
-        System.err.println("[ ERROR: " + message + " ]");
-    }
-
-    public void emitErrorAndBlockNext(String title, String message)
-    {
-        System.err.println("[ ERROR: " + message + " ]");
-    }
-
-    public int askQuestion(String title, String question, int choices)
-    {
-        // don't know what to answer
-        return AbstractUIHandler.ANSWER_CANCEL;
-    }
-
-    public int askQuestion(String title, String question, int choices, int default_choice)
-    {
-        return default_choice;
-    }
-
+    @Override
     public void startAction(String name, int no_of_steps)
     {
         System.out.println("[ Starting to unpack ]");
         this.noOfPacks = no_of_steps;
     }
 
+    @Override
     public void stopAction()
     {
         System.out.println("[ Unpacking finished ]");
-        boolean done = true;
     }
 
+    @Override
     public void progress(int val, String msg)
     {
 
     }
 
+    @Override
     public void nextStep(String packName, int stepno, int stepsize)
     {
         System.out.print("[ Processing package: " + packName + " (");
@@ -131,6 +98,7 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
         System.out.println(") ]");
     }
 
+    @Override
     public void setSubStepNo(int no_of_substeps)
     {
 

@@ -9,7 +9,10 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.event.InstallerListener;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.event.ProgressListener;
+import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.handler.Prompt;
+import com.izforge.izpack.core.handler.ProgressHandler;
 
 
 /**
@@ -17,7 +20,7 @@ import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
  *
  * @author Tim Anderson
  */
-public class InstallerListeners implements InstallerListener
+public class InstallerListeners
 {
     /**
      * The listeners.
@@ -25,10 +28,31 @@ public class InstallerListeners implements InstallerListener
     private final List<InstallerListener> listeners = new ArrayList<InstallerListener>();
 
     /**
+     * The installation data.
+     */
+    private final AutomatedInstallData installData;
+
+    /**
+     * The prompt.
+     */
+    private final Prompt prompt;
+
+    /**
      * Determines if any of the listeners should be notified of file and directory events.
      */
     private boolean fileListener;
 
+    /**
+     * Constructs an {@code Installer:Listeners}.
+     *
+     * @param installData the installation data
+     * @param prompt the prompt
+     */
+    public InstallerListeners(AutomatedInstallData installData, Prompt prompt)
+    {
+        this.installData = installData;
+        this.prompt = prompt;
+    }
 
     /**
      * Registers a listener.
@@ -76,38 +100,61 @@ public class InstallerListeners implements InstallerListener
     }
 
     /**
+     * Invoked when the installer creates the listener instance, immediately after the install data is parsed.
+     *
+     * @throws IzPackException if a listener throws an exception
+     */
+    public void afterInstallerInitialization()
+    {
+        forEachListener(new Runner()
+        {
+            @Override
+            public void run(InstallerListener listener) throws Exception
+            {
+                listener.afterInstallerInitialization(installData);
+            }
+        });
+    }
+
+    /**
      * Invoked before packs are installed.
      *
-     * @param data    the installation data
-     * @param packs   number of packs which are defined for this installation
-     * @param handler the UI progress handler
-     * @throws Exception if the listener throws an exception
+     * @param packs    number of packs which are defined for this installation
+     * @param listener the progress listener
+     * @throws IzPackException if a listener throws an exception
      */
-    @Override
-    public void beforePacks(AutomatedInstallData data, Integer packs, AbstractUIProgressHandler handler)
-            throws Exception
+    public void beforePacks(final int packs, ProgressListener listener)
     {
-        for (InstallerListener listener : listeners)
+        final ProgressHandler adapter = new ProgressHandler(listener, prompt);
+        forEachListener(new Runner()
         {
-            listener.beforePacks(data, packs, handler);
-        }
+            @Override
+            public void run(InstallerListener listener) throws Exception
+            {
+                listener.beforePacks(installData, packs, adapter);
+            }
+        });
     }
 
     /**
      * Invoked before a pack is installed.
      *
-     * @param pack    the pack
-     * @param i       the pack number
-     * @param handler the UI progress handler
-     * @throws Exception if the listener throws an exception
+     * @param pack     the pack
+     * @param i        the pack number
+     * @param listener the progress listener
+     * @throws IzPackException if a listener throws an exception
      */
-    @Override
-    public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
+    public void beforePack(final Pack pack, final int i, ProgressListener listener) throws Exception
     {
-        for (InstallerListener listener : listeners)
+        final ProgressHandler adapter = new ProgressHandler(listener, prompt);
+        forEachListener(new Runner()
         {
-            listener.beforePack(pack, i, handler);
-        }
+            @Override
+            public void run(InstallerListener listener) throws Exception
+            {
+                listener.beforePack(pack, i, adapter);
+            }
+        });
     }
 
     /**
@@ -115,7 +162,6 @@ public class InstallerListeners implements InstallerListener
      *
      * @return <tt>true</tt> if the listener should be notified, otherwise <tt>false</tt>
      */
-    @Override
     public boolean isFileListener()
     {
         return fileListener;
@@ -128,20 +174,24 @@ public class InstallerListeners implements InstallerListener
      *
      * @param dir      the directory
      * @param packFile corresponding pack file
-     * @throws Exception if the listener throws an exception
+     * @throws IzPackException if a listener throws an exception
      */
-    @Override
-    public void beforeDir(File dir, PackFile packFile) throws Exception
+    public void beforeDir(final File dir, final PackFile packFile)
     {
+
         if (fileListener)
         {
-            for (InstallerListener listener : listeners)
+            forEachListener(new Runner()
             {
-                if (listener.isFileListener())
+                @Override
+                public void run(InstallerListener listener) throws Exception
                 {
-                    listener.beforeDir(dir, packFile);
+                    if (listener.isFileListener())
+                    {
+                        listener.beforeDir(dir, packFile);
+                    }
                 }
-            }
+            });
         }
     }
 
@@ -152,20 +202,23 @@ public class InstallerListeners implements InstallerListener
      *
      * @param dir      the directory
      * @param packFile corresponding pack file
-     * @throws Exception if the listener throws an exception
+     * @throws IzPackException if a listener throws an exception
      */
-    @Override
-    public void afterDir(File dir, PackFile packFile) throws Exception
+    public void afterDir(final File dir, final PackFile packFile)
     {
         if (fileListener)
         {
-            for (InstallerListener listener : listeners)
+            forEachListener(new Runner()
             {
-                if (listener.isFileListener())
+                @Override
+                public void run(InstallerListener listener) throws Exception
                 {
-                    listener.afterDir(dir, packFile);
+                    if (listener.isFileListener())
+                    {
+                        listener.afterDir(dir, packFile);
+                    }
                 }
-            }
+            });
         }
     }
 
@@ -176,20 +229,23 @@ public class InstallerListeners implements InstallerListener
      *
      * @param file     the file
      * @param packFile corresponding pack file
-     * @throws Exception if the listener throws an exception
+     * @throws IzPackException if a listener throws an exception
      */
-    @Override
-    public void beforeFile(File file, PackFile packFile) throws Exception
+    public void beforeFile(final File file, final PackFile packFile)
     {
         if (fileListener)
         {
-            for (InstallerListener listener : listeners)
+            forEachListener(new Runner()
             {
-                if (listener.isFileListener())
+                @Override
+                public void run(InstallerListener listener) throws Exception
                 {
-                    listener.beforeFile(file, packFile);
+                    if (listener.isFileListener())
+                    {
+                        listener.beforeFile(file, packFile);
+                    }
                 }
-            }
+            });
         }
     }
 
@@ -200,70 +256,94 @@ public class InstallerListeners implements InstallerListener
      *
      * @param file     the file
      * @param packFile corresponding pack file
-     * @throws Exception if the listener throws an exception
+     * @throws IzPackException if a listener throws an exception
      */
-    @Override
-    public void afterFile(File file, PackFile packFile) throws Exception
+    public void afterFile(final File file, final PackFile packFile)
     {
         if (fileListener)
         {
-            for (InstallerListener listener : listeners)
+            forEachListener(new Runner()
             {
-                if (listener.isFileListener())
+                @Override
+                public void run(InstallerListener listener) throws Exception
                 {
-                    listener.afterFile(file, packFile);
+                    if (listener.isFileListener())
+                    {
+                        listener.afterFile(file, packFile);
+                    }
                 }
-            }
+            });
         }
     }
 
     /**
      * Invoked after a pack is installed.
      *
-     * @param pack    current pack object
-     * @param i       current pack number
-     * @param handler the UI progress handler
-     * @throws Exception if a listener throws an exception
+     * @param pack     current pack object
+     * @param i        current pack number
+     * @param listener the progress listener
+     * @throws IzPackException if a listener throws an exception
      */
-    @Override
-    public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
+    public void afterPack(final Pack pack, final int i, ProgressListener listener) throws Exception
     {
-        for (InstallerListener listener : listeners)
+        final ProgressHandler adapter = new ProgressHandler(listener, prompt);
+        forEachListener(new Runner()
         {
-            listener.afterPack(pack, i, handler);
-        }
+            @Override
+            public void run(InstallerListener listener) throws Exception
+            {
+                listener.afterPack(pack, i, adapter);
+            }
+        });
     }
 
     /**
      * Invoked after packs are installed.
      *
-     * @param data    the installation data
-     * @param handler the UI progress handler
-     * @throws Exception if a listener throws an exception
+     * @param listener the progress listener
+     * @throws IzPackException if a listener throws an exception
      */
-    @Override
-    public void afterPacks(AutomatedInstallData data, AbstractUIProgressHandler handler) throws Exception
+    public void afterPacks(ProgressListener listener)
     {
-        for (InstallerListener listener : listeners)
+        final ProgressHandler adapter = new ProgressHandler(listener, prompt);
+        forEachListener(new Runner()
         {
-            listener.afterPacks(data, handler);
-        }
+            @Override
+            public void run(InstallerListener listener) throws Exception
+            {
+                listener.afterPacks(installData, adapter);
+            }
+        });
     }
 
     /**
-     * Invoked when the installer creates the listener instance, immediately after the install data is parsed.
+     * Executes {@code runner} for each registered listener.
      *
-     * @param installData the installation data
-     * @throws Exception if a listener throws an exception
+     * @param runner the runner
+     * @throws IzPackException if the listener throws an exception
      */
-    @Override
-    public void afterInstallerInitialization(AutomatedInstallData installData) throws Exception
+    private void forEachListener(Runner runner)
     {
         for (InstallerListener listener : listeners)
         {
-            listener.afterInstallerInitialization(installData);
+            try
+            {
+                runner.run(listener);
+            }
+            catch (IzPackException exception)
+            {
+                throw exception;
+            }
+            catch (Throwable exception)
+            {
+                throw new IzPackException(exception);
+            }
         }
     }
 
+    private static interface Runner
+    {
+        void run(InstallerListener listener) throws Exception;
+    }
 
 }

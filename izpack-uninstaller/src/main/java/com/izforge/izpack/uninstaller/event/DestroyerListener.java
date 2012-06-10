@@ -1,27 +1,15 @@
 package com.izforge.izpack.uninstaller.event;
 
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
-import com.izforge.izpack.api.handler.Prompt;
-import com.izforge.izpack.core.handler.PromptUIHandler;
+import com.izforge.izpack.api.event.ProgressListener;
 
 
 /**
- * Destroyer handler.
+ * Destroyer progress listener.
  *
  * @author Tim Anderson
  */
-public abstract class DestroyerHandler extends PromptUIHandler implements AbstractUIProgressHandler
+public abstract class DestroyerListener implements ProgressListener
 {
-
-    /**
-     * Constructs a {@code DestroyerHandler}.
-     *
-     * @param prompt the prompt
-     */
-    public DestroyerHandler(Prompt prompt)
-    {
-        super(prompt);
-    }
 
     /**
      * The next step starts.

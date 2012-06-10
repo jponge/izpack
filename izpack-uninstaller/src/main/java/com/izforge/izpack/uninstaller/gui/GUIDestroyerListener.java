@@ -2,17 +2,16 @@ package com.izforge.izpack.uninstaller.gui;
 
 import javax.swing.SwingUtilities;
 
-import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.resource.Messages;
-import com.izforge.izpack.uninstaller.event.DestroyerHandler;
+import com.izforge.izpack.uninstaller.event.DestroyerListener;
 
 /**
- * The destroyer handler.
+ * The GUI destroyer progress listener.
  *
  * @author Julien Ponge
  * @author Tino Schwarze
  */
-public class GUIDestroyerHandler extends DestroyerHandler
+public class GUIDestroyerListener extends DestroyerListener
 {
 
     /**
@@ -30,12 +29,10 @@ public class GUIDestroyerHandler extends DestroyerHandler
      * Constructs a {@code GUIDestroyerHandler}.
      *
      * @param uninstallerFrame the parent frame
-     * @param prompt           the prompt
      * @param messages         the locale-specific messages
      */
-    public GUIDestroyerHandler(UninstallerFrame uninstallerFrame, Prompt prompt, Messages messages)
+    public GUIDestroyerListener(UninstallerFrame uninstallerFrame, Messages messages)
     {
-        super(prompt);
         this.uninstallerFrame = uninstallerFrame;
         this.messages = messages;
     }
@@ -92,32 +89,6 @@ public class GUIDestroyerHandler extends DestroyerHandler
                 uninstallerFrame.progressBar.setString(message);
             }
         });
-    }
-
-    /**
-     * Notify the user about something.
-     * <p/>
-     * This implementation is a no-op
-     *
-     * @param message the notification
-     */
-    @Override
-    public void emitNotification(String message)
-    {
-        // do nothing
-    }
-
-    /**
-     * Notify the user of some error.
-     *
-     * @param title   the message title (used for dialog name, might not be displayed)
-     * @param message the error message
-     */
-    @Override
-    public void emitError(String title, String message)
-    {
-        uninstallerFrame.progressBar.setString(message);
-        super.emitError(title, message);
     }
 
 }

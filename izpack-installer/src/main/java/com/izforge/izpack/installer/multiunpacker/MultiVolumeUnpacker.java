@@ -32,6 +32,8 @@ import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.io.FileSpanningInputStream;
@@ -89,26 +91,27 @@ public class MultiVolumeUnpacker extends UnpackerBase
      * @param queue               the queue
      * @param housekeeper         the housekeeper
      * @param listeners           the listeners
+     * @param prompt              the prompt
      * @param locator             the multi-volume locator
      */
     public MultiVolumeUnpacker(AutomatedInstallData installData, PackResources resources, RulesEngine rules,
                                VariableSubstitutor variableSubstitutor, UninstallData uninstallData,
                                FileQueueFactory queue, Housekeeper housekeeper, InstallerListeners listeners,
-                               VolumeLocator locator)
+                               Prompt prompt, VolumeLocator locator)
     {
-        super(installData, resources, rules, variableSubstitutor, uninstallData, queue, housekeeper, listeners);
+        super(installData, resources, rules, variableSubstitutor, uninstallData, queue, housekeeper, listeners, prompt);
         this.locator = locator;
     }
 
     /**
      * Invoked prior to unpacking.
      * <p/>
-     * This notifies the {@link #getHandler() handler}, and any registered {@link InstallerListener listeners}.
+     * This notifies the {@link #getProgressListener() listener}, and any registered {@link InstallerListener listeners}.
      *
-     * @throws Exception if the handler or listeners throw an exception
+     * @throws IzPackException for any error
      */
     @Override
-    protected void preUnpack() throws Exception
+    protected void preUnpack()
     {
         super.preUnpack();
 
@@ -137,6 +140,10 @@ public class MultiVolumeUnpacker extends UnpackerBase
             volumes = new FileSpanningInputStream(volume, volumeCount);
             volumes.setLocator(locator);
         }
+        catch (IOException exception)
+        {
+            throw new InstallerException(exception);
+        }
         finally
         {
             FileUtils.close(in);
@@ -162,7 +169,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
         FileUnpacker unpacker;
         if (pack.isLoose())
         {
-            unpacker = new LooseFileUnpacker(getLoosePackFileDir(file), cancellable, queue, getHandler());
+            unpacker = new LooseFileUnpacker(getLoosePackFileDir(file), cancellable, queue, getPrompt());
         }
         else
         {

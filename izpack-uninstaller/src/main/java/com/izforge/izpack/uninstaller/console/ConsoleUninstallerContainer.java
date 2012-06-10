@@ -39,6 +39,6 @@ public class ConsoleUninstallerContainer extends UninstallerContainer
         super.fillContainer(container);
         addComponent(Console.class);
         addComponent(ConsolePrompt.class);
-        addComponent(ConsoleDestroyerHandler.class);
+        addComponent(ConsoleDestroyerListener.class);
     }
 }

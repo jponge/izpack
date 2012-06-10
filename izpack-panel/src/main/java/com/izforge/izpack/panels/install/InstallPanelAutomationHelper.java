@@ -23,6 +23,7 @@ package com.izforge.izpack.panels.install;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.InstallData;
+import com.izforge.izpack.api.event.ProgressListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.installer.automation.PanelAutomation;
@@ -35,8 +36,7 @@ import com.izforge.izpack.util.Housekeeper;
  *
  * @author Jonathan Halliday
  */
-public class InstallPanelAutomationHelper extends PanelAutomationHelper implements PanelAutomation,
-        AbstractUIProgressHandler
+public class InstallPanelAutomationHelper extends PanelAutomationHelper implements PanelAutomation, ProgressListener
 {
 
     /**
@@ -56,7 +56,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
     {
         super(housekeeper);
         this.unpacker = unpacker;
-        unpacker.setHandler(this);
+        unpacker.setProgressListener(this);
     }
 
     /**

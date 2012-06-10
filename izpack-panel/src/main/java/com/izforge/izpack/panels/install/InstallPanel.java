@@ -22,12 +22,11 @@ package com.izforge.izpack.panels.install;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 
 import com.izforge.izpack.api.data.Panel;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.event.ProgressListener;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
@@ -41,7 +40,7 @@ import com.izforge.izpack.installer.gui.IzPanel;
  *
  * @author Julien Ponge
  */
-public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
+public class InstallPanel extends IzPanel implements ProgressListener
 {
 
     private static final long serialVersionUID = 3257282547959410992L;
@@ -159,18 +158,6 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     }
 
     /**
-     * An error was encountered.
-     *
-     * @param error The error text.
-     */
-    public void emitError(String title, String error)
-    {
-        this.packOpLabel.setText(error);
-        this.installData.setInstallSuccess(false);
-        JOptionPane.showMessageDialog(this, error, getString("installer.error"), JOptionPane.ERROR_MESSAGE);
-    }
-
-    /**
      * The unpacker stops.
      */
     public void stopAction()
@@ -194,7 +181,14 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
                 }
                 packProgressBar.setValue(ppbMax);
 
-                packProgressBar.setString(getString("InstallPanel.finished"));
+                if (installData.isInstallSuccess())
+                {
+                    packProgressBar.setString(getString("InstallPanel.finished"));
+                }
+                else
+                {
+                    packProgressBar.setString(getString("installer.error"));
+                }
                 packProgressBar.setEnabled(false);
                 String no_of_packs = Integer.toString(noOfPacks);
                 if (noOfPacks == 1)

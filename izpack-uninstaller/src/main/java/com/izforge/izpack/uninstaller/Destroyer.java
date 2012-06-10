@@ -19,6 +19,8 @@
 
 package com.izforge.izpack.uninstaller;
 
+import static com.izforge.izpack.api.handler.Prompt.Type.ERROR;
+
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -26,7 +28,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.event.ProgressListener;
+import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.uninstaller.event.UninstallerListeners;
 import com.izforge.izpack.uninstaller.resource.Executables;
 import com.izforge.izpack.uninstaller.resource.InstallLog;
@@ -43,9 +46,9 @@ public class Destroyer implements Runnable
 {
 
     /**
-     * The progress handler.
+     * The progress listener.
      */
-    private final AbstractUIProgressHandler handler;
+    private final ProgressListener listener;
 
     /**
      * The log of installed files.
@@ -68,6 +71,11 @@ public class Destroyer implements Runnable
     private final RootScripts rootScripts;
 
     /**
+     * The prompt.
+     */
+    private Prompt prompt;
+
+    /**
      * True if the destroyer must force recursive deletion.
      */
     private boolean forceDelete;
@@ -80,17 +88,30 @@ public class Destroyer implements Runnable
     /**
      * The constructor.
      *
+     * @param listener  the progress listener
      * @param log       the installation log
      * @param listeners the uninstaller listeners
+     * @param prompt    the prompt
      */
-    public Destroyer(AbstractUIProgressHandler handler, InstallLog log, UninstallerListeners listeners,
-                     Executables executables, RootScripts rootScripts)
+    public Destroyer(ProgressListener listener, InstallLog log, UninstallerListeners listeners,
+                     Executables executables, RootScripts rootScripts, Prompt prompt)
     {
-        this.handler = handler;
+        this.listener = listener;
         this.log = log;
         this.listeners = listeners;
         this.executables = executables;
         this.rootScripts = rootScripts;
+        this.prompt = prompt;
+    }
+
+    /**
+     * Sets the prompt.
+     *
+     * @param prompt the prompt
+     */
+    public void setPrompt(Prompt prompt)
+    {
+        this.prompt = prompt;
     }
 
     /**
@@ -122,13 +143,13 @@ public class Destroyer implements Runnable
         }
         catch (Throwable exception)
         {
-            handler.stopAction();
+            listener.stopAction();
             logger.log(Level.SEVERE, exception.getMessage(), exception);
 
             StringWriter trace = new StringWriter();
             exception.printStackTrace(new PrintWriter(trace));
 
-            handler.emitError("exception caught", trace.toString());
+            prompt.message(ERROR, "exception caught", trace.toString());
         }
     }
 
@@ -141,31 +162,31 @@ public class Destroyer implements Runnable
     {
         List<File> files = log.getInstalled();
         int size = files.size();
-        listeners.beforeDeletion(files, handler);
-        handler.startAction("destroy", size);
+        listeners.beforeDeletion(files, listener);
+        listener.startAction("destroy", size);
 
         for (int i = 0; i < size; i++)
         {
             File file = files.get(i);
-            listeners.beforeDelete(file, handler);
+            listeners.beforeDelete(file, listener);
 
             delete(file);
 
-            listeners.afterDelete(file, handler);
-            handler.progress(i, file.getAbsolutePath());
+            listeners.afterDelete(file, listener);
+            listener.progress(i, file.getAbsolutePath());
         }
 
-        listeners.afterDeletion(files, handler);
+        listeners.afterDeletion(files, listener);
 
         rootScripts.run();
 
         // We make a complementary cleanup
-        handler.progress(log.getInstalled().size(), "[ cleanups ]");
+        listener.progress(log.getInstalled().size(), "[ cleanups ]");
 
         File installPath = new File(log.getInstallPath());
         cleanup(installPath);
 
-        handler.stopAction();
+        listener.stopAction();
     }
 
     /**

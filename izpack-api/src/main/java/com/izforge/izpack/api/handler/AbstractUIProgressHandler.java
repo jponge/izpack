@@ -21,6 +21,8 @@
 
 package com.izforge.izpack.api.handler;
 
+import com.izforge.izpack.api.event.ProgressListener;
+
 /**
  * This interface is used by functions which need to notify the user of some progress.
  * <p/>
@@ -29,46 +31,7 @@ package com.izforge.izpack.api.handler;
  * divided into steps (for example, packs when installing) and sub-steps (for example, files of a
  * pack).
  */
-public interface AbstractUIProgressHandler extends AbstractUIHandler
+public interface AbstractUIProgressHandler extends AbstractUIHandler, ProgressListener
 {
-
-    /**
-     * The action starts.
-     *
-     * @param name        The name of the action.
-     * @param no_of_steps The number of steps the action consists of.
-     */
-    public void startAction(String name, int no_of_steps);
-
-    /**
-     * The action was finished.
-     */
-    public void stopAction();
-
-    /**
-     * The next step starts.
-     *
-     * @param step_name      The name of the step which starts now.
-     * @param step_no        The number of the step.
-     * @param no_of_substeps The number of sub-steps this step consists of.
-     */
-    public void nextStep(String step_name, int step_no, int no_of_substeps);
-
-    /**
-     * Set the number of substeps.
-     * <p/>
-     * This may be used if the number of substeps changes during an action.
-     *
-     * @param no_of_substeps The number of substeps.
-     */
-    public void setSubStepNo(int no_of_substeps);
-
-    /**
-     * Notify of progress.
-     *
-     * @param substep_no The substep which will be performed next.
-     * @param message    An additional message describing the substep.
-     */
-    public void progress(int substep_no, String message);
 
 }

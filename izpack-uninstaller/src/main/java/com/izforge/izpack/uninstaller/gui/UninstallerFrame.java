@@ -48,6 +48,7 @@ import javax.swing.UIManager;
 
 import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.GUIPrompt;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.uninstaller.Destroyer;
 import com.izforge.izpack.uninstaller.resource.InstallLog;
@@ -239,6 +240,19 @@ public class UninstallerFrame extends JFrame
         layout.addLayoutComponent(quitButton, gbConstraints);
         contentPane.add(quitButton);
 
+        // intercept error messages and display them in the progress bar
+        destroyer.setPrompt(new GUIPrompt()
+        {
+            @Override
+            public void message(Type type, String message)
+            {
+                super.message(type, message);
+                if (type == Type.ERROR)
+                {
+                    progressBar.setString(message);
+                }
+            }
+        });
     }
 
     /**

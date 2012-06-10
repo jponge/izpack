@@ -149,7 +149,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
                         VariableSubstitutor variableSubstitutor, IUnpacker unpacker) throws IOException
     {
         super(panel, parent, installData, resources);
-        unpacker.setHandler(this);
+        unpacker.setProgressListener(this);
         this.worker = new CompileWorker(installData, this, variableSubstitutor, resources);
 
         GridBagConstraints gridBagConstraints;

@@ -2,9 +2,8 @@ package com.izforge.izpack.installer.container.impl;
 
 import java.util.List;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.event.InstallerListener;
-import com.izforge.izpack.api.exception.InstallerException;
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.factory.ObjectFactory;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.data.CustomData;
@@ -31,11 +30,6 @@ public class CustomDataLoader
     private final ObjectFactory factory;
 
     /**
-     * The installation data.
-     */
-    private AutomatedInstallData installData;
-
-    /**
      * The uninstallation data.
      */
     private final UninstallData uninstallData;
@@ -51,16 +45,14 @@ public class CustomDataLoader
      *
      * @param resources     the resources
      * @param factory       the factory for listeners
-     * @param installData   the installation data
      * @param uninstallData the uninstallation data
      * @param listeners     the installer listeners
      */
-    public CustomDataLoader(Resources resources, ObjectFactory factory, AutomatedInstallData installData,
-                            UninstallData uninstallData, InstallerListeners listeners)
+    public CustomDataLoader(Resources resources, ObjectFactory factory, UninstallData uninstallData,
+                            InstallerListeners listeners)
     {
         this.resources = resources;
         this.factory = factory;
-        this.installData = installData;
         this.uninstallData = uninstallData;
         this.listeners = listeners;
     }
@@ -77,7 +69,7 @@ public class CustomDataLoader
      * </ul>
      * The {@link InstallerListener#afterInstallerInitialization} method will be invoked for each installer listener.
      *
-     * @throws InstallerException if an {@link InstallerListener} throws an exception
+     * @throws IzPackException if an {@link InstallerListener} throws an exception
      */
     @SuppressWarnings("unchecked")
     public void loadCustomData()
@@ -104,28 +96,7 @@ public class CustomDataLoader
                 }
             }
         }
-        notifyInstallerListeners();
-    }
-
-    /**
-     * Invokes the {@link InstallerListener#afterInstallerInitialization} for each registered listener.
-     *
-     * @throws InstallerException if a listener throws an exception
-     */
-    private void notifyInstallerListeners()
-    {
-        try
-        {
-            listeners.afterInstallerInitialization(installData);
-        }
-        catch (InstallerException exception)
-        {
-            throw exception;
-        }
-        catch (Exception exception)
-        {
-            throw new InstallerException(exception);
-        }
+        listeners.afterInstallerInitialization();
     }
 
     /**

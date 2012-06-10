@@ -1,14 +1,13 @@
 package com.izforge.izpack.uninstaller.console;
 
-import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.resource.Messages;
-import com.izforge.izpack.uninstaller.event.DestroyerHandler;
+import com.izforge.izpack.uninstaller.event.DestroyerListener;
 import com.izforge.izpack.util.Console;
 
 /**
- * The console destroyer handler.
+ * The console destroyer progress listener.
  */
-public class ConsoleDestroyerHandler extends DestroyerHandler
+public class ConsoleDestroyerListener extends DestroyerListener
 {
 
     /**
@@ -26,12 +25,10 @@ public class ConsoleDestroyerHandler extends DestroyerHandler
      * Constructs a {@code ConsoleDestroyerHandler}.
      *
      * @param console  the console
-     * @param prompt   the prompt
      * @param messages the locale-specific messages
      */
-    public ConsoleDestroyerHandler(Console console, Prompt prompt, Messages messages)
+    public ConsoleDestroyerListener(Console console, Messages messages)
     {
-        super(prompt);
         this.console = console;
         this.messages = messages;
     }
@@ -64,20 +61,6 @@ public class ConsoleDestroyerHandler extends DestroyerHandler
     public void progress(final int subStepNo, final String message)
     {
         console.print(message);
-    }
-
-    /**
-     * Notify the user about something.
-     * <p/>
-     * The difference between notification and warning is that a notification should not need user
-     * interaction and can safely be ignored.
-     *
-     * @param message the notification
-     */
-    @Override
-    public void emitNotification(String message)
-    {
-        console.println(message);
     }
 
 }

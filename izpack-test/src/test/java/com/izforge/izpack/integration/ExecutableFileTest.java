@@ -87,7 +87,7 @@ public class ExecutableFileTest extends AbstractDestroyerTest
         checkNotExists("uninstall.log");
 
         // perform installation and verify the postinstall.bat/postinstall.sh script runs
-        unpacker.setHandler(new NoOpProgressHandler());
+        unpacker.setProgressListener(new NoOpProgressHandler());
         unpacker.run();
         assertTrue(uninstallDataWriter.write());
 

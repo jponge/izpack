@@ -4,8 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.izforge.izpack.api.event.ProgressListener;
 import com.izforge.izpack.api.event.UninstallerListener;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.handler.Prompt;
+import com.izforge.izpack.core.handler.ProgressHandler;
 
 
 /**
@@ -13,7 +16,7 @@ import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
  *
  * @author Tim Anderson
  */
-public class UninstallerListeners implements UninstallerListener
+public class UninstallerListeners
 {
 
     /**
@@ -22,9 +25,25 @@ public class UninstallerListeners implements UninstallerListener
     private final List<UninstallerListener> listeners = new ArrayList<UninstallerListener>();
 
     /**
+     * The prompt.
+     */
+    private final Prompt prompt;
+
+    /**
      * Determines if any of the listeners should be notified of file and directory events.
      */
     private boolean fileListener;
+
+
+    /**
+     * Constructs an {@code UninstallerListeners}.
+     *
+     * @param prompt the prompt
+     */
+    public UninstallerListeners(Prompt prompt)
+    {
+        this.prompt = prompt;
+    }
 
     /**
      * Registers a listener.
@@ -43,49 +62,61 @@ public class UninstallerListeners implements UninstallerListener
     /**
      * Invoked before files are deleted.
      *
-     * @param files   all files which should be deleted
-     * @param handler the UI progress handler
-     * @throws Exception for any error
+     * @param files    all files which should be deleted
+     * @param listener the progress listener
+     * @throws IzPackException if a listener throws an exception
      */
-    @Override
-    public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception
+    public void beforeDeletion(List<File> files, ProgressListener listener)
     {
-        for (UninstallerListener listener : listeners)
+        ProgressHandler handler = new ProgressHandler(listener, prompt);
+        for (UninstallerListener l : listeners)
         {
-            listener.beforeDeletion(files, handler);
+            try
+            {
+                l.beforeDeletion(files, handler);
+            }
+            catch (IzPackException exception)
+            {
+                throw exception;
+            }
+            catch (Exception exception)
+            {
+                throw new IzPackException(exception);
+            }
         }
-    }
-
-    /**
-     * Determines if the listener should be notified of every file deletion.
-     *
-     * @return <tt>true</tt> if this listener would be informed at every delete operation, else <tt>false</tt>
-     */
-    @Override
-    public boolean isFileListener()
-    {
-        return fileListener;
     }
 
     /**
      * Invoked before a file is deleted.
      * <p/>
-     * This implementation only invokes those listeners whose {@link #isFileListener()} returns <tt>true</tt>.
+     * This implementation only invokes those listeners whose {@link UninstallerListener#isFileListener()} returns
+     * <tt>true</tt>.
      *
-     * @param file    the file which will be deleted
-     * @param handler the UI progress handler
-     * @throws Exception for any error
+     * @param file     the file which will be deleted
+     * @param listener the UI progress handler
+     * @throws IzPackException if a listener throws an exception
      */
-    @Override
-    public void beforeDelete(File file, AbstractUIProgressHandler handler) throws Exception
+    public void beforeDelete(File file, ProgressListener listener)
     {
+        ProgressHandler handler = new ProgressHandler(listener, prompt);
         if (fileListener)
         {
-            for (UninstallerListener listener : listeners)
+            for (UninstallerListener l : listeners)
             {
-                if (listener.isFileListener())
+                if (l.isFileListener())
                 {
-                    listener.beforeDelete(file, handler);
+                    try
+                    {
+                        l.beforeDelete(file, handler);
+                    }
+                    catch (IzPackException exception)
+                    {
+                        throw exception;
+                    }
+                    catch (Throwable exception)
+                    {
+                        throw new IzPackException(exception);
+                    }
                 }
             }
         }
@@ -94,22 +125,34 @@ public class UninstallerListeners implements UninstallerListener
     /**
      * Invoked after a file is deleted.
      * <p/>
-     * This implementation only invokes those listeners whose {@link #isFileListener()} returns <tt>true</tt>.
+     * This implementation only invokes those listeners whose {@link UninstallerListener#isFileListener()}
+     * returns <tt>true</tt>.
      *
-     * @param file    the file which was deleted
-     * @param handler the UI progress handler
-     * @throws Exception for any error
+     * @param file     the file which was deleted
+     * @param listener the progress listener
+     * @throws IzPackException if a listener throws an exception
      */
-    @Override
-    public void afterDelete(File file, AbstractUIProgressHandler handler) throws Exception
+    public void afterDelete(File file, ProgressListener listener)
     {
+        ProgressHandler handler = new ProgressHandler(listener, prompt);
         if (fileListener)
         {
-            for (UninstallerListener listener : listeners)
+            for (UninstallerListener l : listeners)
             {
-                if (listener.isFileListener())
+                if (l.isFileListener())
                 {
-                    listener.afterDelete(file, handler);
+                    try
+                    {
+                        l.afterDelete(file, handler);
+                    }
+                    catch (IzPackException exception)
+                    {
+                        throw exception;
+                    }
+                    catch (Throwable exception)
+                    {
+                        throw new IzPackException(exception);
+                    }
                 }
             }
         }
@@ -118,16 +161,27 @@ public class UninstallerListeners implements UninstallerListener
     /**
      * Invoked after files are deleted.
      *
-     * @param files   the files which where deleted
-     * @param handler the UI progress handler
-     * @throws Exception for any error
+     * @param files    the files which where deleted
+     * @param listener the progress listener
+     * @throws IzPackException if a listener throws an exception
      */
-    @Override
-    public void afterDeletion(List files, AbstractUIProgressHandler handler) throws Exception
+    public void afterDeletion(List<File> files, ProgressListener listener)
     {
-        for (UninstallerListener listener : listeners)
+        ProgressHandler handler = new ProgressHandler(listener, prompt);
+        for (UninstallerListener l : listeners)
         {
-            listener.afterDeletion(files, handler);
+            try
+            {
+                l.afterDeletion(files, handler);
+            }
+            catch (IzPackException exception)
+            {
+                throw exception;
+            }
+            catch (Throwable exception)
+            {
+                throw new IzPackException(exception);
+            }
         }
     }
 }

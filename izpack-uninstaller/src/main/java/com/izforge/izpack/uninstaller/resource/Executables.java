@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.exception.IzPackException;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.resource.Resources;
+import com.izforge.izpack.core.handler.PromptUIHandler;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraintHelper;
@@ -28,9 +29,9 @@ public class Executables
     private final List<ExecutableFile> executables;
 
     /**
-     * The handler for reporting errors.
+     * The prompt for reporting errors.
      */
-    private final AbstractUIHandler handler;
+    private final Prompt prompt;
 
     /**
      * The logger.
@@ -42,12 +43,12 @@ public class Executables
      * Constructs an <tt>Executables</tt>.
      *
      * @param resources used to locate the <em>executables</em> resource
-     * @param handler   the handler for reporting errors
+     * @param prompt   the prompt for reporting errors
      * @throws IzPackException if the executables cannot be read
      */
-    public Executables(Resources resources, AbstractUIHandler handler)
+    public Executables(Resources resources, Prompt prompt)
     {
-        this.handler = handler;
+        this.prompt = prompt;
         executables = read(resources);
     }
 
@@ -83,7 +84,7 @@ public class Executables
     protected boolean run(ExecutableFile file)
     {
         FileExecutor executor = new FileExecutor(Arrays.asList(file));
-        int status = executor.executeFiles(ExecutableFile.UNINSTALL, handler);
+        int status = executor.executeFiles(ExecutableFile.UNINSTALL, new PromptUIHandler(prompt));
         if (status != 0)
         {
             logger.severe("Executable=" + file.path + " exited with status=" + status);

@@ -23,7 +23,6 @@ import com.izforge.izpack.api.data.Blockable;
 import com.izforge.izpack.api.data.OverrideType;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.Platforms;
@@ -44,11 +43,6 @@ public abstract class AbstractFileUnpackerTest
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     /**
-     * The progress handler.
-     */
-    private AbstractUIProgressHandler handler;
-
-    /**
      * The librarian.
      */
     private Librarian librarian;
@@ -66,7 +60,6 @@ public abstract class AbstractFileUnpackerTest
     @Before
     public void setUp() throws IOException
     {
-        handler = Mockito.mock(AbstractUIProgressHandler.class);
         librarian = Mockito.mock(Librarian.class);
         cancellable = new Cancellable()
         {
@@ -190,16 +183,6 @@ public abstract class AbstractFileUnpackerTest
     protected Cancellable getCancellable()
     {
         return cancellable;
-    }
-
-    /**
-     * The progress handler.
-     *
-     * @return the handler
-     */
-    protected AbstractUIProgressHandler getHandler()
-    {
-        return handler;
     }
 
     /**

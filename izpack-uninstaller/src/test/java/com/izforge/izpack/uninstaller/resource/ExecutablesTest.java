@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.izforge.izpack.api.handler.AbstractUIHandler;
+import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.data.ExecutableFile;
 
@@ -60,7 +60,7 @@ public class ExecutablesTest
     public void testExecutables()
     {
         final List<String> paths = new ArrayList<String>();
-        Executables executables = new Executables(resources, Mockito.mock(AbstractUIHandler.class))
+        Executables executables = new Executables(resources, Mockito.mock(Prompt.class))
         {
             @Override
             protected boolean run(ExecutableFile file)

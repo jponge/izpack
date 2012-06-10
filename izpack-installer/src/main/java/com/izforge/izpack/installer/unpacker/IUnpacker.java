@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.installer.unpacker;
 
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.event.ProgressListener;
 
 public interface IUnpacker extends Runnable
 {
@@ -34,11 +34,11 @@ public interface IUnpacker extends Runnable
     public boolean getResult();
 
     /**
-     * Sets the progress handler.
+     * Sets the progress listener.
      *
-     * @param handler the progress handler
+     * @param listener the progress listener
      */
-    void setHandler(AbstractUIProgressHandler handler);
+    void setProgressListener(ProgressListener listener);
 
     /**
      * Interrupts the unpacker, and waits for it to complete.

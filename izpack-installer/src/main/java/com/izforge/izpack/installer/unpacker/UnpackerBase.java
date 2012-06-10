@@ -21,6 +21,10 @@
 
 package com.izforge.izpack.installer.unpacker;
 
+import static com.izforge.izpack.api.handler.Prompt.Option;
+import static com.izforge.izpack.api.handler.Prompt.Options;
+import static com.izforge.izpack.api.handler.Prompt.Type;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -45,12 +49,16 @@ import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.data.Variables;
 import com.izforge.izpack.api.event.InstallerListener;
+import com.izforge.izpack.api.event.ProgressListener;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.handler.AbstractUIHandler;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.exception.IzPackException;
+import com.izforge.izpack.api.exception.ResourceInterruptedException;
+import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
+import com.izforge.izpack.core.handler.ProgressHandler;
+import com.izforge.izpack.core.handler.PromptUIHandler;
 import com.izforge.izpack.data.ExecutableFile;
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.data.UpdateCheck;
@@ -119,7 +127,7 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * The installer listener.
      */
-    private AbstractUIProgressHandler handler;
+    private ProgressListener listener;
 
     /**
      * The absolute path of the source installation jar.
@@ -130,6 +138,11 @@ public abstract class UnpackerBase implements IUnpacker
      * The Pack200 unpacker.
      */
     private Pack200.Unpacker unpacker;
+
+    /**
+     * The prompt.
+     */
+    private final Prompt prompt;
 
     /**
      * The result of the operation.
@@ -175,10 +188,11 @@ public abstract class UnpackerBase implements IUnpacker
      * @param factory             the file queue factory
      * @param housekeeper         the housekeeper
      * @param listeners           the listeners
+     * @param prompt              the prompt
      */
     public UnpackerBase(AutomatedInstallData installData, PackResources resources, RulesEngine rules,
-                        VariableSubstitutor variableSubstitutor, UninstallData uninstallData,
-                        FileQueueFactory factory, Housekeeper housekeeper, InstallerListeners listeners)
+                        VariableSubstitutor variableSubstitutor, UninstallData uninstallData, FileQueueFactory factory,
+                        Housekeeper housekeeper, InstallerListeners listeners, Prompt prompt)
     {
         this.installData = installData;
         this.resources = resources;
@@ -188,6 +202,7 @@ public abstract class UnpackerBase implements IUnpacker
         this.queueFactory = factory;
         this.housekeeper = housekeeper;
         this.listeners = listeners;
+        this.prompt = prompt;
         cancellable = new Cancellable()
         {
             @Override
@@ -199,14 +214,14 @@ public abstract class UnpackerBase implements IUnpacker
     }
 
     /**
-     * Sets the progress handler.
+     * Sets the progress listener.
      *
-     * @param handler the progress handler
+     * @param listener the progress listener
      */
     @Override
-    public void setHandler(AbstractUIProgressHandler handler)
+    public void setProgressListener(ProgressListener listener)
     {
-        this.handler = handler;
+        this.listener = listener;
     }
 
     /**
@@ -239,21 +254,20 @@ public abstract class UnpackerBase implements IUnpacker
             setResult(false);
             logger.log(Level.SEVERE, exception.getMessage(), exception);
 
-            AbstractUIProgressHandler handler = getHandler();
-            handler.stopAction();
+            listener.stopAction();
 
-            String message = exception.getMessage();
-            if ("Installation cancelled".equals(message))
+            if (exception instanceof ResourceInterruptedException)
             {
-                handler.emitNotification("Installation cancelled");
+                prompt.message(Type.INFORMATION, "Installation cancelled");
             }
             else
             {
+                String message = exception.getMessage();
                 if (message == null || "".equals(message))
                 {
                     message = "Internal error occurred : " + exception.toString();
                 }
-                handler.emitError("An error occurred", message);
+                error("An error occurred", message);
             }
             // TODO - shouldn't do this. Should provide option to rollback changes
             housekeeper.shutDown(4);
@@ -341,20 +355,19 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * Invoked prior to unpacking.
      * <p/>
-     * This notifies the {@link #getHandler() handler}, and any registered {@link InstallerListener listeners}.
+     * This notifies the {@link #getProgressListener listener}, and any registered {@link InstallerListener listeners}.
      *
-     * @throws Exception if the handler or listeners throw an exception
+     * @throws IzPackException for any error
      */
-    protected void preUnpack() throws Exception
+    protected void preUnpack()
     {
         AutomatedInstallData installData = getInstallData();
-        AbstractUIProgressHandler handler = getHandler();
         int count = installData.getSelectedPacks().size();
 
         logger.fine("Unpacker starting");
-        handler.startAction("Unpacking", count);
+        listener.startAction("Unpacking", count);
 
-        listeners.beforePacks(installData, count, handler);
+        listeners.beforePacks(count, listener);
     }
 
     /**
@@ -379,14 +392,14 @@ public abstract class UnpackerBase implements IUnpacker
             Pack pack = packs.get(i);
             if (shouldUnpack(pack))
             {
-                listeners.beforePack(pack, i, handler);
+                listeners.beforePack(pack, i, listener);
                 unpack(pack, i, queue, parsables, executables, updateChecks);
                 if (isInterrupted())
                 {
                     break;
                 }
 
-                listeners.afterPack(pack, i, handler);
+                listeners.afterPack(pack, i, listener);
             }
         }
     }
@@ -415,9 +428,8 @@ public abstract class UnpackerBase implements IUnpacker
 
             int fileCount = packInputStream.readInt();
 
-            AbstractUIProgressHandler handler = getHandler();
             String stepName = getStepName(pack);
-            handler.nextStep(stepName, packNo + 1, fileCount);
+            listener.nextStep(stepName, packNo + 1, fileCount);
 
             for (int i = 0; i < fileCount; ++i)
             {
@@ -482,8 +494,7 @@ public abstract class UnpackerBase implements IUnpacker
 
         listeners.beforeFile(target, file);
 
-        AbstractUIProgressHandler handler = getHandler();
-        handler.progress(fileNo, path);
+        listener.progress(fileNo, path);
 
         // if this file exists and should not be overwritten, check what to do
         if (target.exists() && (file.override() != OverrideType.OVERRIDE_TRUE))
@@ -595,7 +606,7 @@ public abstract class UnpackerBase implements IUnpacker
         FileUnpacker unpacker;
         if (pack.isLoose())
         {
-            unpacker = new LooseFileUnpacker(getAbsoluteInstallSource(), cancellable, queue, handler);
+            unpacker = new LooseFileUnpacker(getAbsoluteInstallSource(), cancellable, queue, prompt);
         }
         else if (file.isPack200Jar())
         {
@@ -621,7 +632,6 @@ public abstract class UnpackerBase implements IUnpacker
                               List<UpdateCheck> updateChecks) throws Exception
     {
         AutomatedInstallData installData = getInstallData();
-        AbstractUIProgressHandler handler = getHandler();
 
         // commit the file queue if there are potentially blocked files
         if (queue != null && !queue.isEmpty())
@@ -652,7 +662,7 @@ public abstract class UnpackerBase implements IUnpacker
             return;
         }
 
-        listeners.afterPacks(installData, handler);
+        listeners.afterPacks(listener);
         if (isInterrupted())
         {
             return;
@@ -662,7 +672,7 @@ public abstract class UnpackerBase implements IUnpacker
         writeInstallationInformation();
 
         // unpacking complete
-        handler.stopAction();
+        listener.stopAction();
     }
 
     /**
@@ -714,13 +724,23 @@ public abstract class UnpackerBase implements IUnpacker
     }
 
     /**
-     * Returns the handler.
+     * Returns the progress listener.
      *
-     * @return the handler
+     * @return the progress listener
      */
-    protected AbstractUIProgressHandler getHandler()
+    protected ProgressListener getProgressListener()
     {
-        return handler;
+        return listener;
+    }
+
+    /**
+     * Returns the prompt.
+     *
+     * @return the prompt
+     */
+    protected Prompt getPrompt()
+    {
+        return prompt;
     }
 
     /**
@@ -812,9 +832,8 @@ public abstract class UnpackerBase implements IUnpacker
                 // Create it in one step.
                 if (!dir.mkdirs())
                 {
-                    handler.emitError("Error creating directories",
-                                      "Could not create directory\n" + dir.getPath());
-                    handler.stopAction();
+                    error("Error creating directories", "Could not create directory\n" + dir.getPath());
+                    listener.stopAction();
                     result = false;
                 }
             }
@@ -831,8 +850,8 @@ public abstract class UnpackerBase implements IUnpacker
                     ok = dir.mkdir();
                     if (!ok)
                     {
-                        handler.emitError("Error creating directories", "Could not create directory\n" + dir);
-                        handler.stopAction();
+                        error("Error creating directories", "Could not create directory\n" + dir);
+                        listener.stopAction();
                     }
                     else
                     {
@@ -882,6 +901,7 @@ public abstract class UnpackerBase implements IUnpacker
         if (!executables.isEmpty())
         {
             FileExecutor executor = new FileExecutor(executables);
+            PromptUIHandler handler = new ProgressHandler(listener, prompt);
             if (executor.executeFiles(ExecutableFile.POSTINSTALL, handler) != 0)
             {
                 result = false;
@@ -988,7 +1008,8 @@ public abstract class UnpackerBase implements IUnpacker
             }
             catch (Exception e)
             {
-                handler.emitError("Error while performing update checks", e.getMessage());
+                logger.log(Level.WARNING, e.getMessage(), e);
+                error("Error while performing update checks", e.getMessage());
             }
 
             for (File f : filesToDelete)
@@ -1145,32 +1166,33 @@ public abstract class UnpackerBase implements IUnpacker
             }
             else
             {
-                int def_choice = -1;
+                Option def_choice = null;
 
                 if (pf.override() == OverrideType.OVERRIDE_ASK_FALSE)
                 {
-                    def_choice = AbstractUIHandler.ANSWER_NO;
+                    def_choice = Option.NO;
                 }
                 if (pf.override() == OverrideType.OVERRIDE_ASK_TRUE)
                 {
-                    def_choice = AbstractUIHandler.ANSWER_YES;
+                    def_choice = Option.YES;
                 }
 
                 Messages messages = installData.getMessages();
-                int answer = handler.askQuestion(
-                        messages.get("InstallPanel.overwrite.title") + " - " + file.getName(),
-                        messages.get("InstallPanel.overwrite.question") + file.getAbsolutePath(),
-                        AbstractUIHandler.CHOICES_YES_NO, def_choice);
+                Option answer = prompt.confirm(Type.QUESTION,
+                                               messages.get("InstallPanel.overwrite.title") + " - " + file.getName(),
+                                               messages.get("InstallPanel.overwrite.question") + file.getAbsolutePath(),
+                                               Options.YES_NO, def_choice);
 
-                result = (answer == AbstractUIHandler.ANSWER_YES);
+                result = (answer == Option.YES);
             }
         }
 
         return result;
     }
 
-    protected void handleOverrideRename(PackFile pf, File file)
+    protected boolean handleOverrideRename(PackFile pf, File file)
     {
+        boolean result = true;
         if (file.exists() && pf.overrideRenameTo() != null)
         {
             GlobPatternMapper mapper = new GlobPatternMapper();
@@ -1191,17 +1213,18 @@ public abstract class UnpackerBase implements IUnpacker
                 }
                 if (!file.renameTo(newPathFile))
                 {
-                    handler.emitError("Error renaming file",
-                                      "The file " + file + " could not be renamed to " + newPathFile);
+                    result = false;
+                    error("Error renaming file", "The file " + file + " could not be renamed to " + newPathFile);
                 }
             }
             else
             {
-                handler.emitError("Error renaming file", "File name " + file.getName()
-                        + " cannot be mapped using the expression \""
+                result = false;
+                error("Error renaming file", "File name " + file.getName() + " cannot be mapped using the expression \""
                         + pf.overrideRenameTo() + "\"");
             }
         }
+        return result;
     }
 
 
@@ -1283,6 +1306,17 @@ public abstract class UnpackerBase implements IUnpacker
             UpdateCheck check = (UpdateCheck) stream.readObject();
             updateChecks.add(check);
         }
+    }
+
+    /**
+     * Displays an error message.
+     *
+     * @param title   the title
+     * @param message the message
+     */
+    private void error(String title, String message)
+    {
+        prompt.message(Type.ERROR, title, message);
     }
 
     /**

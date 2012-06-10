@@ -25,7 +25,8 @@ import com.izforge.izpack.api.data.Blockable;
 import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.OverrideType;
 import com.izforge.izpack.api.data.Pack;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.event.ProgressListener;
+import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -235,10 +236,12 @@ public class MultiVolumeUnpackerTest
         VolumeLocator locator = Mockito.mock(VolumeLocator.class);
         PackResources packResources = new ConsolePackResources(resources, installData);
         FileQueueFactory queue = new FileQueueFactory(Platforms.WINDOWS, librarian);
+        Prompt prompt = Mockito.mock(Prompt.class);
+        InstallerListeners listeners = new InstallerListeners(installData, prompt);
         MultiVolumeUnpacker unpacker = new MultiVolumeUnpacker(installData, packResources, rules, replacer,
                                                                uninstallData, queue, housekeeper,
-                                                               new InstallerListeners(), locator);
-        unpacker.setHandler(Mockito.mock(AbstractUIProgressHandler.class));
+                                                               listeners, prompt, locator);
+        unpacker.setProgressListener(Mockito.mock(ProgressListener.class));
         return unpacker;
     }
 

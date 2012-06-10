@@ -74,9 +74,9 @@ import com.izforge.izpack.api.data.Info;
 import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.data.Panel;
 import com.izforge.izpack.api.data.Variables;
+import com.izforge.izpack.api.event.ProgressListener;
 import com.izforge.izpack.api.exception.ResourceException;
 import com.izforge.izpack.api.exception.ResourceNotFoundException;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.core.resource.ResourceManager;
@@ -806,9 +806,9 @@ public class InstallerFrame extends JFrame implements InstallerView
      *
      * @param listener The installation listener.
      */
-    public void install(AbstractUIProgressHandler listener)
+    public void install(ProgressListener listener)
     {
-        unpacker.setHandler(listener);
+        unpacker.setProgressListener(listener);
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
         unpackerthread.start();
     }
