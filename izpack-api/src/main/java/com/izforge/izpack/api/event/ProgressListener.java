@@ -12,10 +12,10 @@ public interface ProgressListener
     /**
      * Invoked when an action starts.
      *
-     * @param name      the name of the action
-     * @param stepCount the number of steps the action consists of
+     * @param name  the name of the action
+     * @param steps the number of steps the action consists of
      */
-    void startAction(String name, int stepCount);
+    void startAction(String name, int steps);
 
     /**
      * Invoked when an action finishes.
@@ -25,26 +25,26 @@ public interface ProgressListener
     /**
      * Invoked when an action step starts.
      *
-     * @param stepName     the name of the step
-     * @param stepNo       the step number
-     * @param subStepCount the number of sub-steps the step consists of
+     * @param stepName the name of the step
+     * @param step     the step number
+     * @param subSteps the number of sub-steps the step consists of
      */
-    void nextStep(String stepName, int stepNo, int subStepCount);
+    void nextStep(String stepName, int step, int subSteps);
 
     /**
      * Sets the number of sub-steps.
      * <p/>
      * This may be used if the number of sub-steps changes during an action.
      *
-     * @param count the number of sub-steps
+     * @param subSteps the number of sub-steps
      */
-    void setSubStepNo(int count);
+    void setSubStepNo(int subSteps);
 
     /**
-     * Notify of progress.
+     * Invoked to notify progress.
      *
-     * @param subStepNo the sub-step which will be performed next
-     * @param message   an additional message describing the sub-step
+     * @param subStep the sub-step which will be performed next
+     * @param message an additional message describing the sub-step
      */
-    void progress(int subStepNo, String message);
+    void progress(int subStep, String message);
 }

@@ -25,9 +25,10 @@ import java.io.ObjectInputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.CodeSource;
+import java.util.List;
 import java.util.logging.Logger;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.event.InstallerListener;
@@ -81,7 +82,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
     private static final Logger logger = Logger.getLogger(MultiVolumeUnpacker.class.getName());
 
     /**
-     * Constructs an <tt>MultiVolumeUnpacker</tt>.
+     * Constructs a <tt>MultiVolumeUnpacker</tt>.
      *
      * @param installData         the installation data
      * @param resources           the pack resources
@@ -94,7 +95,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
      * @param prompt              the prompt
      * @param locator             the multi-volume locator
      */
-    public MultiVolumeUnpacker(AutomatedInstallData installData, PackResources resources, RulesEngine rules,
+    public MultiVolumeUnpacker(InstallData installData, PackResources resources, RulesEngine rules,
                                VariableSubstitutor variableSubstitutor, UninstallData uninstallData,
                                FileQueueFactory queue, Housekeeper housekeeper, InstallerListeners listeners,
                                Prompt prompt, VolumeLocator locator)
@@ -106,14 +107,15 @@ public class MultiVolumeUnpacker extends UnpackerBase
     /**
      * Invoked prior to unpacking.
      * <p/>
-     * This notifies the {@link #getProgressListener() listener}, and any registered {@link InstallerListener listeners}.
+     * This notifies the {@link #getProgressListener listener}, and any registered {@link InstallerListener listeners}.
      *
+     * @param packs the packs to unpack
      * @throws IzPackException for any error
      */
     @Override
-    protected void preUnpack()
+    protected void preUnpack(List<Pack> packs)
     {
-        super.preUnpack();
+        super.preUnpack(packs);
 
         InputStream in = null;
         ObjectInputStream objectIn = null;

@@ -38,13 +38,13 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.event.RestartableProgressListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.core.substitutor.VariableSubstitutorImpl;
 import com.izforge.izpack.installer.data.UninstallData;
-import com.izforge.izpack.util.ExtendedUIProgressHandler;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.helper.SpecHelper;
 
@@ -256,11 +256,10 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         {
             // Inform progress bar if needed. Works only
             // on AFTER_PACKS
-            if (informProgressBar() && handler != null
-                    && handler instanceof ExtendedUIProgressHandler
+            if (informProgressBar() && handler instanceof RestartableProgressListener
                     && order.equals(ActionBase.AFTERPACKS))
             {
-                ((ExtendedUIProgressHandler) handler)
+                ((RestartableProgressListener) handler)
                         .progress((act.getMessageID() != null) ? getMsg(act.getMessageID()) : "");
             }
             try

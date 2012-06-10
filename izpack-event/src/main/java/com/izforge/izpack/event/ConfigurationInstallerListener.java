@@ -37,6 +37,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.event.RestartableProgressListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Resources;
@@ -53,7 +54,6 @@ import com.izforge.izpack.core.variable.PlainConfigFileValue;
 import com.izforge.izpack.core.variable.PlainValue;
 import com.izforge.izpack.core.variable.RegistryValue;
 import com.izforge.izpack.core.variable.ZipEntryConfigFileValue;
-import com.izforge.izpack.util.ExtendedUIProgressHandler;
 import com.izforge.izpack.util.FileUtil;
 import com.izforge.izpack.util.config.ConfigFileTask;
 import com.izforge.izpack.util.config.ConfigurableFileCopyTask;
@@ -271,11 +271,10 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
         for (ConfigurationAction act : actList)
         {
             // Inform progress bar if needed. Works only on AFTER_PACKS
-            if (informProgressBar() && handler != null
-                    && handler instanceof ExtendedUIProgressHandler
+            if (informProgressBar() && handler instanceof RestartableProgressListener
                     && order.equals(ActionBase.AFTERPACKS))
             {
-                ((ExtendedUIProgressHandler) handler)
+                ((RestartableProgressListener) handler)
                         .progress((act.getMessageID() != null) ? getMsg(act.getMessageID()) : "");
             }
             else

@@ -24,9 +24,9 @@ package com.izforge.izpack.event;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.event.RestartableProgressListener;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Resources;
-import com.izforge.izpack.util.ExtendedUIProgressHandler;
 
 /**
  * Installer listener for reset the progress bar and initialize the simple installer listener to
@@ -63,7 +63,7 @@ public class ProgressBarInstallerListener extends SimpleInstallerListener
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception
     {
-        if (handler instanceof ExtendedUIProgressHandler && getProgressBarCallerCount() > 0)
+        if (handler instanceof RestartableProgressListener && getProgressBarCallerCount() > 0)
         {
             String progress = getMsg("CustomActions.progress");
             String tip = getMsg("CustomActions.tip");
@@ -72,8 +72,8 @@ public class ProgressBarInstallerListener extends SimpleInstallerListener
                 logger.fine("No messages found for custom action progress bar interactions; skipped");
                 return;
             }
-            ((ExtendedUIProgressHandler) handler).restartAction("Configure", progress, tip,
-                                                                getProgressBarCallerCount());
+            ((RestartableProgressListener) handler).restartAction("Configure", progress, tip,
+                                                                  getProgressBarCallerCount());
 
             // TODO - this is extremely smelly
             SimpleInstallerListener.doInformProgressBar = true;

@@ -22,19 +22,19 @@
 package com.izforge.izpack.panels.extendedinstall;
 
 import com.izforge.izpack.api.data.Panel;
+import com.izforge.izpack.api.event.RestartableProgressListener;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.gui.log.Log;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.gui.InstallerFrame;
 import com.izforge.izpack.panels.install.InstallPanel;
-import com.izforge.izpack.util.ExtendedUIProgressHandler;
 
 /**
  * The install panel class. Launches the actual installation job with extensions for custom actions.
  *
  * @author Klaus Bartz
  */
-public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProgressHandler
+public class ExtendedInstallPanel extends InstallPanel implements RestartableProgressListener
 {
 
     private static final long serialVersionUID = 3257291344052500789L;
@@ -91,9 +91,9 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
      * java.lang.String)
      */
 
-    public void progress(String stepMessage)
+    public void progress(String message)
     {
-        packOpLabel.setText(stepMessage);
+        packOpLabel.setText(message);
         currentStep++;
         packProgressBar.setValue(currentStep);
     }

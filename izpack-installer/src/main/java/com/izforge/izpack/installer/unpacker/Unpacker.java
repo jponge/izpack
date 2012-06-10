@@ -22,7 +22,7 @@
 
 package com.izforge.izpack.installer.unpacker;
 
-import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.api.rules.RulesEngine;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
@@ -52,7 +52,7 @@ public class Unpacker extends UnpackerBase
      * @param housekeeper         the housekeeper
      * @param listeners           the listeners
      */
-    public Unpacker(AutomatedInstallData installData, PackResources resources, RulesEngine rules,
+    public Unpacker(InstallData installData, PackResources resources, RulesEngine rules,
                     VariableSubstitutor variableSubstitutor, UninstallData uninstallData, FileQueueFactory factory,
                     Housekeeper housekeeper, InstallerListeners listeners, Prompt prompt)
     {

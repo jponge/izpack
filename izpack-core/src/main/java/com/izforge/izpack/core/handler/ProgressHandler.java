@@ -69,12 +69,12 @@ public class ProgressHandler extends PromptUIHandler implements AbstractUIProgre
      * <p/>
      * This may be used if the number of sub-steps changes during an action.
      *
-     * @param count the number of sub-steps
+     * @param subSteps the number of sub-steps
      */
     @Override
-    public void setSubStepNo(int count)
+    public void setSubStepNo(int subSteps)
     {
-        listener.setSubStepNo(count);
+        listener.setSubStepNo(subSteps);
     }
 
     /**

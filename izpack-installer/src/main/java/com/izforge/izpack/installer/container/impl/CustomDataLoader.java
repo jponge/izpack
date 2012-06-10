@@ -96,7 +96,7 @@ public class CustomDataLoader
                 }
             }
         }
-        listeners.afterInstallerInitialization();
+        listeners.initialise();
     }
 
     /**
