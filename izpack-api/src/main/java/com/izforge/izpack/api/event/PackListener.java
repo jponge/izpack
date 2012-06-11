@@ -10,7 +10,7 @@ import com.izforge.izpack.api.exception.IzPackException;
  *
  * @author Tim Anderson
  */
-public interface PackListener
+public interface PackListener extends InstallListener
 {
 
     /**

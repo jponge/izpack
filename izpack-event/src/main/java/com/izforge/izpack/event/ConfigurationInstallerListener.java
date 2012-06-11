@@ -37,6 +37,7 @@ import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.DynamicVariable;
 import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.event.ProgressNotifiers;
 import com.izforge.izpack.api.event.RestartableProgressListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
@@ -89,10 +90,11 @@ public class ConfigurationInstallerListener extends SimpleInstallerListener
      * Constructs a <tt>ConfigurationInstallerListener</tt>.
      *
      * @param resources the resources
+     * @param notifiers the notifiers
      */
-    public ConfigurationInstallerListener(Resources resources)
+    public ConfigurationInstallerListener(Resources resources, ProgressNotifiers notifiers)
     {
-        super(resources, true);
+        super(resources, notifiers, true);
         actions = new HashMap<String, HashMap<Object, ArrayList<ConfigurationAction>>>();
     }
 

@@ -24,6 +24,7 @@ package com.izforge.izpack.event;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
+import com.izforge.izpack.api.event.ProgressNotifiers;
 import com.izforge.izpack.api.event.RestartableProgressListener;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Resources;
@@ -46,10 +47,11 @@ public class ProgressBarInstallerListener extends SimpleInstallerListener
      * Constructs a <tt>ProgressBarInstallerListener</tt>.
      *
      * @param resources the resources
+     * @param notifiers the progress notifiers
      */
-    public ProgressBarInstallerListener(Resources resources)
+    public ProgressBarInstallerListener(Resources resources, ProgressNotifiers notifiers)
     {
-        super(resources, false);
+        super(resources, notifiers, false);
     }
 
     /*
@@ -60,10 +62,11 @@ public class ProgressBarInstallerListener extends SimpleInstallerListener
      */
 
     @Override
-    public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
-            throws Exception
+    public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler) throws Exception
     {
-        if (handler instanceof RestartableProgressListener && getProgressBarCallerCount() > 0)
+        ProgressNotifiers notifiers = getNotifiers();
+        int count = notifiers.getNotifiers();
+        if (handler instanceof RestartableProgressListener && count > 0)
         {
             String progress = getMsg("CustomActions.progress");
             String tip = getMsg("CustomActions.tip");
@@ -72,11 +75,8 @@ public class ProgressBarInstallerListener extends SimpleInstallerListener
                 logger.fine("No messages found for custom action progress bar interactions; skipped");
                 return;
             }
-            ((RestartableProgressListener) handler).restartAction("Configure", progress, tip,
-                                                                  getProgressBarCallerCount());
-
-            // TODO - this is extremely smelly
-            SimpleInstallerListener.doInformProgressBar = true;
+            notifiers.setNotifyProgress(true);
+            ((RestartableProgressListener) handler).restartAction("Configure", progress, tip, count);
         }
     }
 

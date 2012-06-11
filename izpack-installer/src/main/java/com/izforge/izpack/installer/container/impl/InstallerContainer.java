@@ -29,6 +29,7 @@ import com.izforge.izpack.installer.container.provider.RulesProvider;
 import com.izforge.izpack.installer.data.UninstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.event.InstallerListeners;
+import com.izforge.izpack.installer.event.ProgressNotifiersImpl;
 import com.izforge.izpack.installer.requirement.InstallerRequirementChecker;
 import com.izforge.izpack.installer.requirement.JDKChecker;
 import com.izforge.izpack.installer.requirement.JavaVersionChecker;
@@ -114,6 +115,7 @@ public abstract class InstallerContainer extends AbstractContainer
         addComponent(DefaultVariables.class);
         addComponent(ResourceManager.class);
         addComponent(UninstallDataWriter.class);
+        addComponent(ProgressNotifiersImpl.class);
         addComponent(InstallerListeners.class);
         addComponent(CustomDataLoader.class);
         addComponent(Container.class, this);

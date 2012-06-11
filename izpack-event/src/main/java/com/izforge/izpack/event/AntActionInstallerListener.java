@@ -38,6 +38,7 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
+import com.izforge.izpack.api.event.ProgressNotifiers;
 import com.izforge.izpack.api.event.RestartableProgressListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
@@ -84,11 +85,12 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * @param variableSubstitutor the variable substituter
      * @param resources           the resources
      * @param uninstallData       the uninstallation data
+     * @param notifiers           the progress notifiers
      */
     public AntActionInstallerListener(VariableSubstitutor variableSubstitutor, Resources resources,
-                                      UninstallData uninstallData)
+                                      UninstallData uninstallData, ProgressNotifiers notifiers)
     {
-        super(resources, true);
+        super(resources, notifiers, true);
         this.variableSubstitutor = variableSubstitutor;
         actions = new HashMap<String, HashMap<Object, ArrayList<AntAction>>>();
         uninstActions = new ArrayList<AntAction>();

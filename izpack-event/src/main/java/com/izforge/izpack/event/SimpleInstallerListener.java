@@ -22,12 +22,12 @@
 package com.izforge.izpack.event;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.event.InstallerListener;
+import com.izforge.izpack.api.event.ProgressNotifiers;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Messages;
 import com.izforge.izpack.api.resource.Resources;
@@ -47,8 +47,6 @@ import com.izforge.izpack.util.helper.SpecHelper;
 public class SimpleInstallerListener implements InstallerListener
 {
 
-    private static ArrayList<SimpleInstallerListener> progressBarCaller = new ArrayList<SimpleInstallerListener>();
-
     /**
      * The name of the XML file that specifies the panel langpack
      */
@@ -59,8 +57,6 @@ public class SimpleInstallerListener implements InstallerListener
      */
     private Messages messages;
 
-    protected static boolean doInformProgressBar = false;
-
     private AutomatedInstallData installdata = null;
 
     private SpecHelper specHelper = null;
@@ -70,6 +66,11 @@ public class SimpleInstallerListener implements InstallerListener
      */
     private final Resources resources;
 
+    /**
+     * The progress notifiers.
+     */
+    private final ProgressNotifiers notifiers;
+
 
     /**
      * Constructs a <tt>SimpleInstallerListener</tt>.
@@ -78,7 +79,18 @@ public class SimpleInstallerListener implements InstallerListener
      */
     public SimpleInstallerListener(Resources resources)
     {
-        this(resources, false);
+        this(resources, null, false);
+    }
+
+    /**
+     * Constructs a <tt>SimpleInstallerListener</tt>.
+     *
+     * @param resources the resources
+     * @param notifiers the progress notifiers. May be {@code null}
+     */
+    public SimpleInstallerListener(Resources resources, ProgressNotifiers notifiers)
+    {
+        this(resources, notifiers, false);
     }
 
     /**
@@ -89,12 +101,25 @@ public class SimpleInstallerListener implements InstallerListener
      */
     public SimpleInstallerListener(Resources resources, boolean useSpecHelper)
     {
+        this(resources, null, useSpecHelper);
+    }
+
+    /**
+     * Constructs a <tt>SimpleInstallerListener</tt>.
+     *
+     * @param resources     the resources
+     * @param notifiers     the progress notifiers. May be {@code null}
+     * @param useSpecHelper if <tt>true</tt> a specification helper will be created
+     */
+    public SimpleInstallerListener(Resources resources, ProgressNotifiers notifiers, boolean useSpecHelper)
+    {
         super();
         if (useSpecHelper)
         {
             setSpecHelper(new SpecHelper(resources));
         }
         this.resources = resources;
+        this.notifiers = notifiers;
     }
 
     /*
@@ -263,30 +288,23 @@ public class SimpleInstallerListener implements InstallerListener
     }
 
     /**
-     * Returns the count of listeners which are registered as progress bar caller.
+     * Returns the progress notifiers.
      *
-     * @return the count of listeners which are registered as progress bar caller
+     * @return the progress notifiers. May be {@code null}
      */
-    public static int getProgressBarCallerCount()
+    protected ProgressNotifiers getNotifiers()
     {
-        return (progressBarCaller.size());
+        return notifiers;
     }
 
     /**
      * Returns the progress bar caller id of this object.
      *
-     * @return the progress bar caller id of this object
+     * @return the progress bar caller id of this object, or {@code 0} if this is not registered
      */
     protected int getProgressBarCallerId()
     {
-        for (int i = 0; i < progressBarCaller.size(); ++i)
-        {
-            if (progressBarCaller.get(i) == this)
-            {
-                return (i + 1);
-            }
-        }
-        return (0);
+        return notifiers != null ? notifiers.indexOf(this) + 1 : 0;
     }
 
     /**
@@ -294,8 +312,10 @@ public class SimpleInstallerListener implements InstallerListener
      */
     protected void setProgressBarCaller()
     {
-        progressBarCaller.add(this);
-
+        if (notifiers != null)
+        {
+            notifiers.addNotifier(this);
+        }
     }
 
     /**
@@ -305,7 +325,7 @@ public class SimpleInstallerListener implements InstallerListener
      */
     protected boolean informProgressBar()
     {
-        return (doInformProgressBar);
+        return notifiers != null && notifiers.notifyProgress();
     }
 
     /**

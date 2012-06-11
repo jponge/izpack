@@ -36,7 +36,7 @@ import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
  *
  * @author Klaus Bartz
  */
-public interface InstallerListener
+public interface InstallerListener extends InstallListener
 {
 
     // ------------------------------------------------------------------------
