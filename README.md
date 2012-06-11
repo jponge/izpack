@@ -13,6 +13,8 @@ under different terms.
 
 ## Building IzPack from source
 
+[![Build Status](https://secure.travis-ci.org/izpack/izpack.png?branch=master)](http://travis-ci.org/izpack/izpack)
+
 IzPack only requires Java SE 6+ and Maven 3:
 
     mvn clean install
