@@ -113,8 +113,9 @@
         <pack name="Core" required="yes">
             <description>The IzPack core files.</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="README.rst"/>
+                <include name="README.md"/>
                 <include name="LICENSE"/>
+                <include name="KEYS"/>
                 <include name="NOTICE"/>
                 <include name="bin/**/*"/>
                 <include name="lib/**/*"/>
