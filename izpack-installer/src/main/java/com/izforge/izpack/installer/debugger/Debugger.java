@@ -119,12 +119,12 @@ public class Debugger
         lasttimevariables = (Properties) idata.getVariables().getProperties().clone();
     }
 
-    private void debugConditions(Panel nextpanelmetadata, com.izforge.izpack.api.data.Panel lastpanelmetadata)
+    private void debugConditions(Panel nextpanelmetadata, Panel lastpanelmetadata)
     {
         conditionhistoryrenderer.clearState();
         updateChangedConditions(
-                "changed after panel switch" + 
-                (lastpanelmetadata == null ? "" : "from " + lastpanelmetadata.getPanelid()) +
+                "changed after panel switch" +
+                (lastpanelmetadata == null ? "" : " from " + lastpanelmetadata.getPanelid()) +
                 " to " + nextpanelmetadata.getPanelid());
     }
 
