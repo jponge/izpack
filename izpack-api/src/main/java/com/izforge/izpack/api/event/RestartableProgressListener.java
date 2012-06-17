@@ -2,7 +2,7 @@ package com.izforge.izpack.api.event;
 
 
 /**
- * An {@link ProgressListener} that may be restarted.
+ * A {@link ProgressListener} that may be restarted.
  *
  * @author Klaus Bartz
  */

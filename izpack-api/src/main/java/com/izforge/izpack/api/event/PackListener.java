@@ -54,6 +54,7 @@ public interface PackListener extends InstallListener
      *
      * @param packs    the installed packs
      * @param listener the progress listener
+     * @throws IzPackException for any error
      */
     void afterPacks(List<Pack> packs, ProgressListener listener);
 

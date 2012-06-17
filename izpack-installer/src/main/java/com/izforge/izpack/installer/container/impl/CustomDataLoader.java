@@ -2,6 +2,7 @@ package com.izforge.izpack.installer.container.impl;
 
 import java.util.List;
 
+import com.izforge.izpack.api.event.InstallListener;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.factory.ObjectFactory;
@@ -107,7 +108,7 @@ public class CustomDataLoader
     @SuppressWarnings("unchecked")
     private void addInstallerListener(String className)
     {
-        InstallerListener listener = factory.create(className, InstallerListener.class);
+        InstallListener listener = factory.create(className, InstallListener.class);
         listeners.add(listener);
     }
 

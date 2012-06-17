@@ -96,7 +96,7 @@ public class InstallerListenerTest extends AbstractInstallationTest
         HelperTestMethod.waitAndCheckInstallation(getInstallData());
 
         assertEquals(1, listeners.size());
-        TestInstallerListener listener = (TestInstallerListener) listeners.get(0);
+        TestInstallerListener listener = (TestInstallerListener) listeners.getInstallerListeners().get(0);
         assertEquals(1, listener.getAfterInstallerInitializationCount());
         assertEquals(1, listener.getBeforePacksCount());
         assertEquals(3, listener.getBeforePackCount());

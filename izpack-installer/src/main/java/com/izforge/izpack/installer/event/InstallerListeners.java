@@ -8,6 +8,7 @@ import java.util.List;
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
+import com.izforge.izpack.api.event.InstallListener;
 import com.izforge.izpack.api.event.InstallerListener;
 import com.izforge.izpack.api.event.PackListener;
 import com.izforge.izpack.api.event.ProgressListener;
@@ -66,24 +67,22 @@ public class InstallerListeners
      *
      * @param listener the listener to add
      */
-    public void add(InstallerListener listener)
+    public void add(InstallListener listener)
     {
-        listeners.add(listener);
-        if (!fileListener && listener.isFileListener())
+        if (listener instanceof InstallerListener)
         {
-            fileListener = true;
+            InstallerListener l = (InstallerListener) listener;
+            packListeners.add(new PackInstallerListener(l));
+            listeners.add(l);
+            if (!fileListener && l.isFileListener())
+            {
+                fileListener = true;
+            }
         }
-        addPackListener(new PackInstallerListener(listener));
-    }
-
-    /**
-     * Registers a pack listener.
-     *
-     * @param listener the pack listener
-     */
-    public void addPackListener(PackListener listener)
-    {
-        packListeners.add(listener);
+        else if (listener instanceof PackListener)
+        {
+            packListeners.add((PackListener) listener);
+        }
     }
 
     /**
@@ -112,9 +111,19 @@ public class InstallerListeners
      * @param index the index into the collection
      * @return the corresponding listener
      */
-    public InstallerListener get(int index)
+    public InstallListener get(int index)
     {
-        return listeners.get(index);
+        return packListeners.get(index);
+    }
+
+    /**
+     * Returns the installer listeners.
+     *
+     * @return the installer listeners
+     */
+    public List<InstallerListener> getInstallerListeners()
+    {
+        return listeners;
     }
 
     /**
@@ -352,7 +361,7 @@ public class InstallerListeners
         private final InstallerListener installerListener;
 
         /**
-         * Constructs n {@code PackInstallerListener}.
+         * Constructs a {@code PackInstallerListener}.
          *
          * @param installerListener the listener to delegate to
          */
