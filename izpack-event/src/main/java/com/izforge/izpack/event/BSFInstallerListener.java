@@ -35,7 +35,6 @@ import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.event.ProgressNotifiers;
-import com.izforge.izpack.api.event.RestartableProgressListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
 import com.izforge.izpack.api.resource.Resources;
@@ -110,7 +109,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
             {
                 for (IXMLElement scriptEntry : scriptEntries)
                 {
-                    BSFAction action = readAction(scriptEntry, idata);
+                    BSFAction action = readAction(scriptEntry);
                     if (action != null)
                     {
                         packActions.add(action);
@@ -250,11 +249,9 @@ public class BSFInstallerListener extends SimpleInstallerListener
         {
             // Inform progress bar if needed. Works only
             // on AFTER_PACKS
-            if (informProgressBar() && handler instanceof RestartableProgressListener
-                    && order.equals(ActionBase.AFTERPACKS))
+            if (informProgressBar() && order.equals(ActionBase.AFTERPACKS))
             {
-                ((RestartableProgressListener) handler)
-                        .progress((act.getMessageID() != null) ? getMsg(act.getMessageID()) : "");
+                handler.progress((act.getMessageID() != null) ? getMsg(act.getMessageID()) : "");
             }
 
             try
@@ -277,7 +274,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
 
     }
 
-    private BSFAction readAction(IXMLElement element, InstallData idata) throws InstallerException
+    private BSFAction readAction(IXMLElement element) throws InstallerException
     {
         BSFAction action = new BSFAction();
         String src = element.getAttribute("src");
@@ -289,7 +286,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
             try
             {
                 byte buf[] = new byte[10 * 1024];
-                int read = 0;
+                int read;
                 is = resources.getInputStream(src);
                 subis = new SpecHelper(resources).substituteVariables(is, variableSubstitutor);
 

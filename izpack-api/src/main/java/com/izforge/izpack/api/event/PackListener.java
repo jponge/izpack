@@ -23,31 +23,28 @@ public interface PackListener extends InstallListener
     /**
      * Invoked before packs are installed.
      *
-     * @param packs    the packs to be installed
-     * @param listener the progress listener
+     * @param packs the packs to be installed
      * @throws IzPackException for any error
      */
-    void beforePacks(List<Pack> packs, ProgressListener listener);
+    void beforePacks(List<Pack> packs);
 
     /**
      * Invoked before a pack is installed.
      *
-     * @param pack     the pack
-     * @param i        the pack number
-     * @param listener the progress listener
+     * @param pack the pack
+     * @param i    the pack number
      * @throws IzPackException for any error
      */
-    void beforePack(Pack pack, int i, ProgressListener listener);
+    void beforePack(Pack pack, int i);
 
     /**
      * Invoked after a pack is installed.
      *
-     * @param pack     the pack
-     * @param i        the pack number
-     * @param listener the progress listener
+     * @param pack the pack
+     * @param i    the pack number
      * @throws IzPackException for any error
      */
-    void afterPack(Pack pack, int i, ProgressListener listener);
+    void afterPack(Pack pack, int i);
 
     /**
      * Invoked after packs are installed.

@@ -144,4 +144,22 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
     {
         // not used here
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void progress(String message)
+    {
+        // no-op
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void restartAction(String name, String overallMessage, String tip, int steps)
+    {
+        // no-op
+    }
 }

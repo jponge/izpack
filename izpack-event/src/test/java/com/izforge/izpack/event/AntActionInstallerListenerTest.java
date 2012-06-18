@@ -115,19 +115,19 @@ public class AntActionInstallerListenerTest
         // Verify that when the beforePacks method is invoked, the corresponding Ant target is called.
         // This touches a file "beforepacks.txt"
         assertFileNotExists(installDir, "beforepacks.txt");
-        listener.beforePacks(packs, progressListener);
+        listener.beforePacks(packs);
         assertFileExists(installDir, "beforepacks.txt");
 
         // Verify that when the beforePack method is invoked, the corresponding Ant target is called.
         // This touches a file "beforepack.txt"
         assertFileNotExists(installDir, "beforepack.txt");
-        listener.beforePack(pack, 0, progressListener);
+        listener.beforePack(pack, 0);
         assertFileExists(installDir, "beforepack.txt");
 
         // Verify that when the afterPack method is invoked, the corresponding Ant target is called.
         // This touches a file "afterpack.txt"
         assertFileNotExists(installDir, "afterpack.txt");
-        listener.afterPack(pack, 0, progressListener);
+        listener.afterPack(pack, 0);
         assertFileExists(installDir, "afterpack.txt");
 
         // Verify that when the afterPacks method is invoked, the corresponding Ant target is called.

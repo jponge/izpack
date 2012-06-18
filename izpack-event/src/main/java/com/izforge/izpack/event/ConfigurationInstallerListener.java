@@ -39,7 +39,6 @@ import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.event.ProgressListener;
 import com.izforge.izpack.api.event.ProgressNotifiers;
-import com.izforge.izpack.api.event.RestartableProgressListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.resource.Resources;
@@ -155,12 +154,11 @@ public class ConfigurationInstallerListener extends AbstractPackListener
     /**
      * Invoked before packs are installed.
      *
-     * @param packs    the packs to be installed
-     * @param listener the progress listener
+     * @param packs the packs to be installed
      * @throws IzPackException for any error
      */
     @Override
-    public void beforePacks(List<Pack> packs, ProgressListener listener)
+    public void beforePacks(List<Pack> packs)
     {
         if (spec.getSpec() == null)
         {
@@ -229,30 +227,28 @@ public class ConfigurationInstallerListener extends AbstractPackListener
     /**
      * Invoked before a pack is installed.
      *
-     * @param pack     the pack
-     * @param i        the pack number
-     * @param listener the progress listener
+     * @param pack the pack
+     * @param i    the pack number
      * @throws IzPackException for any error
      */
     @Override
-    public void beforePack(Pack pack, int i, ProgressListener listener)
+    public void beforePack(Pack pack, int i)
     {
-        performAllActions(pack.getName(), ActionBase.BEFOREPACK, listener);
+        performAllActions(pack.getName(), ActionBase.BEFOREPACK, null);
     }
 
 
     /**
      * Invoked after a pack is installed.
      *
-     * @param pack     the pack
-     * @param i        the pack number
-     * @param listener the progress listener
+     * @param pack the pack
+     * @param i    the pack number
      * @throws IzPackException for any error
      */
     @Override
-    public void afterPack(Pack pack, int i, ProgressListener listener)
+    public void afterPack(Pack pack, int i)
     {
-        performAllActions(pack.getName(), ActionBase.AFTERPACK, listener);
+        performAllActions(pack.getName(), ActionBase.AFTERPACK, null);
     }
 
     /**
@@ -336,11 +332,9 @@ public class ConfigurationInstallerListener extends AbstractPackListener
         for (ConfigurationAction act : actList)
         {
             // Inform progress bar if needed. Works only on AFTER_PACKS
-            if (notifyProgress() && listener instanceof RestartableProgressListener
-                    && order.equals(ActionBase.AFTERPACKS))
+            if (notifyProgress() && order.equals(ActionBase.AFTERPACKS))
             {
-                ((RestartableProgressListener) listener)
-                        .progress((act.getMessageID() != null) ? getMessage(act.getMessageID()) : "");
+                listener.progress((act.getMessageID() != null) ? getMessage(act.getMessageID()) : "");
             }
             else
             {

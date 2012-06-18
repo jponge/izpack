@@ -28,7 +28,6 @@ import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.event.ProgressListener;
 import com.izforge.izpack.api.event.ProgressNotifiers;
-import com.izforge.izpack.api.event.RestartableProgressListener;
 
 /**
  * Installer listener for reset the progress bar and initialise {@link ProgressNotifiers} to support progress bar
@@ -72,7 +71,7 @@ public class ProgressBarInstallerListener extends AbstractPackListener
     {
         ProgressNotifiers notifiers = getProgressNotifiers();
         int count = notifiers.getNotifiers();
-        if (listener instanceof RestartableProgressListener && count > 0)
+        if (count > 0)
         {
             String progress = getMessage("CustomActions.progress");
             String tip = getMessage("CustomActions.tip");
@@ -82,7 +81,7 @@ public class ProgressBarInstallerListener extends AbstractPackListener
                 return;
             }
             notifiers.setNotifyProgress(true);
-            ((RestartableProgressListener) listener).restartAction("Configure", progress, tip, count);
+            listener.restartAction("Configure", progress, tip, count);
         }
     }
 

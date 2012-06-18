@@ -69,11 +69,10 @@ public abstract class AbstractPackListener implements PackListener
      * Invoked before packs are installed.
      *
      * @param packs    the packs to be installed
-     * @param listener the progress listener
      * @throws IzPackException for any error
      */
     @Override
-    public void beforePacks(List<Pack> packs, ProgressListener listener)
+    public void beforePacks(List<Pack> packs)
     {
     }
 
@@ -82,11 +81,10 @@ public abstract class AbstractPackListener implements PackListener
      *
      * @param pack     the pack
      * @param i        the pack number
-     * @param listener the progress listener
      * @throws IzPackException for any error
      */
     @Override
-    public void beforePack(Pack pack, int i, ProgressListener listener)
+    public void beforePack(Pack pack, int i)
     {
     }
 
@@ -95,11 +93,10 @@ public abstract class AbstractPackListener implements PackListener
      *
      * @param pack     the pack
      * @param i        the pack number
-     * @param listener the progress listener
      * @throws IzPackException for any error
      */
     @Override
-    public void afterPack(Pack pack, int i, ProgressListener listener)
+    public void afterPack(Pack pack, int i)
     {
     }
 

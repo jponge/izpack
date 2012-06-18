@@ -39,7 +39,6 @@ import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.event.ProgressListener;
 import com.izforge.izpack.api.event.ProgressNotifiers;
-import com.izforge.izpack.api.event.RestartableProgressListener;
 import com.izforge.izpack.api.exception.InstallerException;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.resource.Resources;
@@ -102,7 +101,7 @@ public class AntActionInstallerListener extends AbstractPackListener
     /**
      * Constructs an <tt>AntActionInstallerListener</tt>.
      *
-     * @param replacer   the variable substituter
+     * @param replacer      the variable substituter
      * @param resources     the resources
      * @param installData   the installation data
      * @param uninstallData the uninstallation data
@@ -138,12 +137,11 @@ public class AntActionInstallerListener extends AbstractPackListener
     /**
      * Invoked before packs are installed.
      *
-     * @param packs    the packs to be installed
-     * @param listener the progress listener
+     * @param packs the packs to be installed
      * @throws IzPackException for any error
      */
     @Override
-    public void beforePacks(List<Pack> packs, ProgressListener listener)
+    public void beforePacks(List<Pack> packs)
     {
         if (spec.getSpec() == null)
         {
@@ -198,29 +196,27 @@ public class AntActionInstallerListener extends AbstractPackListener
     /**
      * Invoked before a pack is installed.
      *
-     * @param pack     the pack
-     * @param i        the pack number
-     * @param listener the progress listener
+     * @param pack the pack
+     * @param i    the pack number
      * @throws IzPackException for any error
      */
     @Override
-    public void beforePack(Pack pack, int i, ProgressListener listener)
+    public void beforePack(Pack pack, int i)
     {
-        performAllActions(pack.getName(), ActionBase.BEFOREPACK, listener);
+        performAllActions(pack.getName(), ActionBase.BEFOREPACK, null);
     }
 
     /**
      * Invoked after a pack is installed.
      *
-     * @param pack     the pack
-     * @param i        the pack number
-     * @param listener the progress listener
+     * @param pack the pack
+     * @param i    the pack number
      * @throws IzPackException for any error
      */
     @Override
-    public void afterPack(Pack pack, int i, ProgressListener listener)
+    public void afterPack(Pack pack, int i)
     {
-        performAllActions(pack.getName(), ActionBase.AFTERPACK, listener);
+        performAllActions(pack.getName(), ActionBase.AFTERPACK, null);
     }
 
     /**
@@ -288,6 +284,7 @@ public class AntActionInstallerListener extends AbstractPackListener
      *
      * @param packName name of the pack for which the actions should be performed
      * @param order    order to be used; valid are <i>beforepack</i> and <i>afterpack</i>
+     * @param listener the progress listener. May be {@code null}
      * @throws InstallerException
      */
     private void performAllActions(String packName, String order, ProgressListener listener)
@@ -300,8 +297,7 @@ public class AntActionInstallerListener extends AbstractPackListener
         }
 
         // Inform progress bar if needed. Works only on AFTER_PACKS
-        boolean notifyProgress = notifyProgress() && listener instanceof RestartableProgressListener
-                && order.equals(ActionBase.AFTERPACKS);
+        boolean notifyProgress = notifyProgress() && order.equals(ActionBase.AFTERPACKS);
 
         logger.fine("Executing all " + order + " Ant actions of pack " + packName + " ...");
         RulesEngine rules = getInstallData().getRules();
@@ -310,7 +306,7 @@ public class AntActionInstallerListener extends AbstractPackListener
             if (notifyProgress)
             {
                 String message = (act.getMessageID() != null) ? getMessage(act.getMessageID()) : "";
-                ((RestartableProgressListener) listener).progress(message);
+                listener.progress(message);
             }
             try
             {
