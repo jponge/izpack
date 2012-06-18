@@ -1939,17 +1939,17 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 // there seems to be user input
                 userinput = true;
             }
-	    int choicenum = 0;
+            int choicenum = 0;
             for (int i = 0; i < choices.size(); i++)
             {
             	String conditionid = (choices.elementAt(i)).getAttribute(ATTRIBUTE_CONDITIONID_NAME);
             	if (conditionid != null)
             	{
-               		// check if condition is fulfilled
-                	if (!this.parent.getRules().isConditionTrue(conditionid, idata.getVariables()))
-		        {
-		            continue;
-		        }
+                    // check if condition is fulfilled
+                    if (!this.parent.getRules().isConditionTrue(conditionid, idata.getVariables()))
+                    {
+                        continue;
+                    }
             	}
                 String processorClass = (choices.elementAt(i)).getAttribute("processor");
 
@@ -2024,9 +2024,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                             }
                         }
                     }
-		    choicenum++;
+                    choicenum++;
                 }
-
             }
         }
         // ----------------------------------------------------
@@ -2176,11 +2175,11 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             	String conditionid = (choices.elementAt(i)).getAttribute(ATTRIBUTE_CONDITIONID_NAME);
             	if (conditionid != null)
             	{
-               		// check if condition is fulfilled
-                	if (!this.parent.getRules().isConditionTrue(conditionid, idata.getVariables()))
-		        {
-		            continue;
-		        }
+                    // check if condition is fulfilled
+                    if (!this.parent.getRules().isConditionTrue(conditionid, idata.getVariables()))
+                    {
+                        continue;
+                    }
             	}
                 JRadioButton choice = new JRadioButton();
                 choice.setText(getText(choices.elementAt(i)));
