@@ -173,7 +173,8 @@ public class InstallerListeners
     {
         for (PackListener packListener : packListeners)
         {
-            if (packListener instanceof PackInstallerListener) {
+            if (packListener instanceof PackInstallerListener)
+            {
                 ((PackInstallerListener) packListener).setProgressListener(listener);
             }
             packListener.beforePacks(packs);
@@ -192,7 +193,8 @@ public class InstallerListeners
     {
         for (PackListener packListener : packListeners)
         {
-            if (packListener instanceof PackInstallerListener) {
+            if (packListener instanceof PackInstallerListener)
+            {
                 ((PackInstallerListener) packListener).setProgressListener(listener);
             }
             packListener.beforePack(pack, i);
@@ -214,13 +216,14 @@ public class InstallerListeners
      *
      * @param dir      the directory
      * @param packFile corresponding pack file
+     * @param pack     the pack that {@code packFile} comes from
      * @throws IzPackException if a listener throws an exception
      */
-    public void beforeDir(File dir, PackFile packFile)
+    public void beforeDir(File dir, PackFile packFile, Pack pack)
     {
         for (FileListener l : fileListeners)
         {
-            l.beforeDir(dir, packFile);
+            l.beforeDir(dir, packFile, pack);
         }
     }
 
@@ -229,13 +232,14 @@ public class InstallerListeners
      *
      * @param dir      the directory
      * @param packFile corresponding pack file
+     * @param pack     the pack that {@code packFile} comes from
      * @throws IzPackException if a listener throws an exception
      */
-    public void afterDir(File dir, PackFile packFile)
+    public void afterDir(File dir, PackFile packFile, Pack pack)
     {
         for (FileListener l : fileListeners)
         {
-            l.afterDir(dir, packFile);
+            l.afterDir(dir, packFile, pack);
         }
     }
 
@@ -246,13 +250,14 @@ public class InstallerListeners
      *
      * @param file     the file
      * @param packFile corresponding pack file
+     * @param pack     the pack that {@code packFile} comes from
      * @throws IzPackException if a listener throws an exception
      */
-    public void beforeFile(File file, PackFile packFile)
+    public void beforeFile(File file, PackFile packFile, Pack pack)
     {
         for (FileListener l : fileListeners)
         {
-            l.beforeFile(file, packFile);
+            l.beforeFile(file, packFile, pack);
         }
     }
 
@@ -263,13 +268,14 @@ public class InstallerListeners
      *
      * @param file     the file
      * @param packFile corresponding pack file
+     * @param pack     the pack that {@code packFile} comes from
      * @throws IzPackException if a listener throws an exception
      */
-    public void afterFile(File file, PackFile packFile)
+    public void afterFile(File file, PackFile packFile, Pack pack)
     {
         for (FileListener l : fileListeners)
         {
-            l.afterFile(file, packFile);
+            l.afterFile(file, packFile, pack);
         }
     }
 
@@ -285,7 +291,8 @@ public class InstallerListeners
     {
         for (PackListener packListener : packListeners)
         {
-            if (packListener instanceof PackInstallerListener) {
+            if (packListener instanceof PackInstallerListener)
+            {
                 ((PackInstallerListener) packListener).setProgressListener(listener);
             }
             packListener.afterPack(pack, i);
@@ -502,10 +509,11 @@ public class InstallerListeners
          *
          * @param dir      the directory
          * @param packFile the corresponding pack file
+         * @param pack     the pack that {@code packFile} comes from
          * @throws IzPackException for any error
          */
         @Override
-        public void beforeDir(File dir, PackFile packFile)
+        public void beforeDir(File dir, PackFile packFile, Pack pack)
         {
             try
             {
@@ -527,10 +535,11 @@ public class InstallerListeners
          *
          * @param dir      the directory
          * @param packFile the corresponding pack file
+         * @param pack     the pack that {@code packFile} comes from
          * @throws IzPackException for any error
          */
         @Override
-        public void afterDir(File dir, PackFile packFile)
+        public void afterDir(File dir, PackFile packFile, Pack pack)
         {
             try
             {
@@ -552,10 +561,11 @@ public class InstallerListeners
          *
          * @param file     the file
          * @param packFile the corresponding pack file
+         * @param pack     the pack that {@code packFile} comes from
          * @throws IzPackException for any error
          */
         @Override
-        public void beforeFile(File file, PackFile packFile)
+        public void beforeFile(File file, PackFile packFile, Pack pack)
         {
             try
             {
@@ -577,10 +587,11 @@ public class InstallerListeners
          *
          * @param file     the file
          * @param packFile the corresponding pack file
+         * @param pack     the pack that {@code packFile} comes from
          * @throws IzPackException for any error
          */
         @Override
-        public void afterFile(File file, PackFile packFile)
+        public void afterFile(File file, PackFile packFile, Pack pack)
         {
             try
             {

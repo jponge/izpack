@@ -27,16 +27,18 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import com.izforge.izpack.api.adaptator.IXMLElement;
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
+import com.izforge.izpack.api.event.FileListener;
+import com.izforge.izpack.api.event.ProgressListener;
 import com.izforge.izpack.api.event.ProgressNotifiers;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.api.handler.AbstractUIProgressHandler;
+import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.resource.Resources;
 import com.izforge.izpack.api.substitutor.VariableSubstitutor;
 import com.izforge.izpack.installer.data.UninstallData;
@@ -44,68 +46,109 @@ import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.helper.SpecHelper;
 
 
-public class BSFInstallerListener extends SimpleInstallerListener
+public class BSFInstallerListener extends AbstractPackListener implements FileListener
 {
-    private static final Logger logger = Logger.getLogger(BSFInstallerListener.class.getName());
 
     public static final String SPEC_FILE_NAME = "BSFActionsSpec.xml";
 
-    private HashMap<String, ArrayList<BSFAction>> actions = null;
-    private ArrayList<BSFAction> uninstActions = null;
-    private String currentPack = null;
-    private InstallData installdata = null;
-    private VariableSubstitutor variableSubstitutor;
+    /**
+     * The BSF actions, keyed on pack name.
+     */
+    private final Map<String, List<BSFAction>> actions = new HashMap<String, List<BSFAction>>();
+
+    /**
+     * The BSF uninstallation actions.
+     */
+    private final List<BSFAction> uninstActions = new ArrayList<BSFAction>();
+
+    /**
+     * Used to replace variables in the BSF specification.
+     */
+    private final VariableSubstitutor replacer;
+
+    /**
+     * The uninstallation data.
+     */
     private UninstallData uninstallData;
+
+    /**
+     * The resources.
+     */
     private final Resources resources;
+
+    /**
+     * The specification helper.
+     */
+    private SpecHelper spec;
+
+    /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(BSFInstallerListener.class.getName());
 
     /**
      * Constructs a <tt>BSFFInstallerListener</tt>.
      *
-     * @param variableSubstitutor the variable substituter
-     * @param resources           the resources
-     * @param uninstallData       the uninstallation data
-     * @param notifiers           the progress notifiers
+     * @param installData   the installation data
+     * @param replacer      the variable replacer
+     * @param resources     the resources
+     * @param uninstallData the uninstallation data
+     * @param notifiers     the progress notifiers
      */
-    public BSFInstallerListener(VariableSubstitutor variableSubstitutor, Resources resources,
+    public BSFInstallerListener(InstallData installData, VariableSubstitutor replacer, Resources resources,
                                 UninstallData uninstallData, ProgressNotifiers notifiers)
     {
-        super(resources, notifiers, true);
-        this.variableSubstitutor = variableSubstitutor;
-        actions = new HashMap<String, ArrayList<BSFAction>>();
-        uninstActions = new ArrayList<BSFAction>();
+        super(installData, notifiers);
+        this.replacer = replacer;
         this.uninstallData = uninstallData;
         this.resources = resources;
+        spec = new SpecHelper(resources);
     }
 
+    /**
+     * Initialises the listener.
+     *
+     * @throws IzPackException if the BSF actions specification cannot be read
+     */
     @Override
-    public void beforePacks(AutomatedInstallData idata, Integer npacks, AbstractUIProgressHandler handler)
-            throws Exception
+    public void initialise()
     {
-        if (installdata == null)
+        try
         {
-            installdata = idata;
+            spec.readSpec(SPEC_FILE_NAME, replacer);
         }
-        super.beforePacks(idata, npacks, handler);
+        catch (Exception exception)
+        {
+            throw new IzPackException("Failed to read: " + SPEC_FILE_NAME, exception);
+        }
+    }
 
-        getSpecHelper().readSpec(SPEC_FILE_NAME, variableSubstitutor);
-
-        if (getSpecHelper().getSpec() == null)
+    /**
+     * Invoked before packs are installed.
+     *
+     * @param packs the packs to be installed
+     * @throws IzPackException for any error
+     */
+    @Override
+    public void beforePacks(List<Pack> packs)
+    {
+        if (spec == null)
         {
             return;
         }
 
-        for (Pack pack : idata.getSelectedPacks())
+        for (Pack pack : packs)
         {
-            IXMLElement packElement = getSpecHelper().getPackForName(pack.getName());
+            IXMLElement packElement = spec.getPackForName(pack.getName());
             if (packElement == null)
             {
                 continue;
             }
 
-            ArrayList<BSFAction> packActions = new ArrayList<BSFAction>();
+            List<BSFAction> packActions = new ArrayList<BSFAction>();
 
             List<IXMLElement> scriptEntries = packElement.getChildrenNamed("script");
-            if (scriptEntries != null && scriptEntries.size() >= 1)
+            if (scriptEntries != null && !scriptEntries.isEmpty())
             {
                 for (IXMLElement scriptEntry : scriptEntries)
                 {
@@ -124,122 +167,151 @@ public class BSFInstallerListener extends SimpleInstallerListener
                     }
                 }
 
-                if (packActions.size() > 0)
+                if (!packActions.isEmpty())
                 {
-                    this.setProgressBarCaller();
+                    setProgressNotifier();
                 }
             }
 
             actions.put(pack.getName(), packActions);
-
         }
 
-        for (Pack pack : idata.getAvailablePacks())
+        for (Pack pack : packs)
         {
-            String currentPack = pack.getName();
-            performAllActions(currentPack, ActionBase.BEFOREPACKS, null, new Object[]{idata, npacks, handler});
+            performAllActions(pack, ActionBase.BEFOREPACKS, null, packs, packs.size());
+            // NOTE: packs.size() is passed to BSF as "npacks" and is required for backward compatibility with 4.x
         }
     }
 
+    /**
+     * Invoked before a pack is installed.
+     *
+     * @param pack the pack
+     * @param i    the pack number
+     * @throws IzPackException for any error
+     */
     @Override
-    public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
+    public void beforePack(Pack pack, int i)
     {
-        performAllActions(pack.getName(), ActionBase.AFTERPACK, handler,
-                          new Object[]{pack, i, handler});
-        currentPack = null;
+        performAllActions(pack, ActionBase.BEFOREPACK, null, pack, i);
     }
 
+    /**
+     * Invoked after a pack is installed.
+     *
+     * @param pack the pack
+     * @param i    the pack number
+     * @throws IzPackException for any error
+     */
     @Override
-    public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler) throws Exception
+    public void afterPack(Pack pack, int i)
     {
-        if (informProgressBar())
+        performAllActions(pack, ActionBase.AFTERPACK, null, pack, i);
+    }
+
+    /**
+     * Invoked after packs are installed.
+     *
+     * @param packs    the installed packs
+     * @param listener the progress listener
+     * @throws IzPackException for any error
+     */
+    @Override
+    public void afterPacks(List<Pack> packs, ProgressListener listener)
+    {
+        if (notifyProgress())
         {
-            handler.nextStep(getMsg("BSFAction.pack"), getProgressBarCallerId(), getActionCount(
-                    idata));
+            listener.nextStep(getMessage("BSFAction.pack"), getProgressNotifierId(), getActionCount(packs));
         }
-        for (Object selectedPack : idata.getSelectedPacks())
+        for (Pack pack : packs)
         {
-            String currentPack = ((Pack) selectedPack).getName();
-            performAllActions(currentPack, ActionBase.AFTERPACKS, handler, new Object[]{idata, handler});
+            performAllActions(pack, ActionBase.AFTERPACKS, listener, packs);
         }
-        if (uninstActions.size() > 0)
+        if (!uninstActions.isEmpty())
         {
             uninstallData.addAdditionalData("bsfActions", uninstActions);
         }
-        installdata = null;
     }
 
+    /**
+     * Invoked before a directory is created.
+     *
+     *
+     * @param dir      the directory
+     * @param packFile the corresponding pack file
+     * @param pack     the pack that {@code packFile} comes from
+     * @throws IzPackException for any error
+     */
     @Override
-    public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
+    public void beforeDir(File dir, PackFile packFile, Pack pack)
     {
-        currentPack = pack.getName();
-        performAllActions(pack.getName(), ActionBase.BEFOREPACK, handler, new Object[]{pack, i, handler});
+        performAllActions(pack, BSFAction.BEFOREDIR, null, dir, packFile);
     }
 
+    /**
+     * Invoked after a directory is created.
+     *
+     *
+     * @param dir      the directory
+     * @param packFile the corresponding pack file
+     * @param pack     the pack that {@code packFile} comes from
+     * @throws IzPackException for any error
+     */
     @Override
-    public void afterDir(File file, PackFile pack) throws Exception
+    public void afterDir(File dir, PackFile packFile, Pack pack)
     {
-        performAllActions(currentPack, BSFAction.AFTERDIR, null, new Object[]{file, pack});
-
+        performAllActions(pack, BSFAction.AFTERDIR, null, dir, packFile);
     }
 
+    /**
+     * Invoked before a file is installed.
+     *
+     *
+     * @param file     the file
+     * @param packFile the corresponding pack file
+     * @param pack     the pack that {@code packFile} comes from
+     * @throws IzPackException for any error
+     */
     @Override
-    public void afterFile(File file, PackFile pack) throws Exception
+    public void beforeFile(File file, PackFile packFile, Pack pack)
     {
-        performAllActions(currentPack, BSFAction.AFTERFILE, null, new Object[]{file, pack});
+        performAllActions(pack, BSFAction.BEFOREFILE, null, file, packFile);
     }
 
+    /**
+     * Invoked after a file is installed.
+     *
+     *
+     * @param file     the file
+     * @param packFile the corresponding pack file
+     * @param pack     the pack that {@code packFile} comes from
+     * @throws IzPackException for any error
+     */
     @Override
-    public void beforeDir(File file, PackFile pack) throws Exception
+    public void afterFile(File file, PackFile packFile, Pack pack)
     {
-        performAllActions(currentPack, BSFAction.BEFOREDIR, null, new Object[]{file, pack});
+        performAllActions(pack, BSFAction.AFTERFILE, null, file, packFile);
     }
 
-    @Override
-    public void beforeFile(File file, PackFile pack) throws Exception
+    private int getActionCount(List<Pack> packs)
     {
-        performAllActions(currentPack, BSFAction.BEFOREFILE, null, new Object[]{file, pack});
-    }
-
-    @Override
-    public boolean isFileListener()
-    {
-        return true;
-    }
-
-    protected ArrayList<BSFAction> getActions(String packName)
-    {
-        if (actions == null)
+        int count = 0;
+        for (Pack pack : packs)
         {
-            return null;
-        }
-
-        return actions.get(packName);
-    }
-
-    private int getActionCount(AutomatedInstallData idata)
-    {
-        int retval = 0;
-        for (Object selectedPack : idata.getSelectedPacks())
-        {
-            String currentPack = ((Pack) selectedPack).getName();
-            ArrayList<BSFAction> actList = getActions(currentPack);
+            List<BSFAction> actList = actions.get(pack.getName());
             if (actList != null)
             {
-                retval += actList.size();
+                count += actList.size();
             }
         }
-        return (retval);
+        return (count);
     }
 
-    private void performAllActions(String packName,
-                                   String order,
-                                   AbstractUIProgressHandler handler,
-                                   Object callParams[])
-            throws InstallerException
+    private void performAllActions(Pack pack, String order, ProgressListener listener, Object... args)
     {
-        ArrayList<BSFAction> actList = getActions(packName);
-        if (actList == null || actList.size() == 0)
+        String packName = pack.getName();
+        List<BSFAction> actList = actions.get(packName);
+        if (actList == null || actList.isEmpty())
         {
             return;
         }
@@ -247,11 +319,10 @@ public class BSFInstallerListener extends SimpleInstallerListener
         logger.fine("Executing all " + order + " BSF actions of pack " + packName + " ...");
         for (BSFAction act : actList)
         {
-            // Inform progress bar if needed. Works only
-            // on AFTER_PACKS
-            if (informProgressBar() && order.equals(ActionBase.AFTERPACKS))
+            // Inform progress bar if needed. Works only on AFTER_PACKS
+            if (notifyProgress() && order.equals(ActionBase.AFTERPACKS))
             {
-                handler.progress((act.getMessageID() != null) ? getMsg(act.getMessageID()) : "");
+                listener.progress((act.getMessageID() != null) ? getMessage(act.getMessageID()) : "");
             }
 
             try
@@ -260,7 +331,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
                 {
                     act.init();
                 }
-                act.execute(order, callParams, installdata);
+                act.execute(order, args, getInstallData());
                 if (ActionBase.AFTERPACKS.equalsIgnoreCase(order))
                 {
                     act.destroy();
@@ -274,7 +345,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
 
     }
 
-    private BSFAction readAction(IXMLElement element) throws InstallerException
+    private BSFAction readAction(IXMLElement element)
     {
         BSFAction action = new BSFAction();
         String src = element.getAttribute("src");
@@ -288,18 +359,22 @@ public class BSFInstallerListener extends SimpleInstallerListener
                 byte buf[] = new byte[10 * 1024];
                 int read;
                 is = resources.getInputStream(src);
-                subis = new SpecHelper(resources).substituteVariables(is, variableSubstitutor);
+                subis = new SpecHelper(resources).substituteVariables(is, replacer);
 
-                while ((read = subis.read(buf, 0, 10 * 1024)) != -1)
+                while ((read = subis.read(buf)) != -1)
                 {
                     baos.write(buf, 0, read);
                 }
 
                 action.setScript(new String(baos.toByteArray()));
             }
-            catch (Exception e)
+            catch (IzPackException exception)
             {
-                throw new InstallerException(e);
+                throw exception;
+            }
+            catch (Exception exception)
+            {
+                throw new InstallerException(exception);
             }
             finally
             {

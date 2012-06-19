@@ -1,26 +1,31 @@
-package com.izforge.izpack.api.event;
+package com.izforge.izpack.event;
 
 import java.io.File;
 
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
+import com.izforge.izpack.api.event.FileListener;
 import com.izforge.izpack.api.exception.IzPackException;
 
-
 /**
- * A listener for file installation events.
+ * Abstract implementation of {@link FileListener}.
+ * <p/>
+ * This provides no-op versions of each of the methods, to simplify implementation of listeners that only need
+ * some methods.
  *
  * @author Tim Anderson
  */
-public interface FileListener extends InstallListener
+public abstract class AbstractFileListener implements FileListener
 {
-
     /**
      * Initialises the listener.
      *
      * @throws IzPackException for any error
      */
-    void initialise();
+    @Override
+    public void initialise()
+    {
+    }
 
     /**
      * Invoked before a directory is created.
@@ -30,7 +35,10 @@ public interface FileListener extends InstallListener
      * @param pack     the pack that {@code packFile} comes from
      * @throws IzPackException for any error
      */
-    void beforeDir(File dir, PackFile packFile, Pack pack);
+    @Override
+    public void beforeDir(File dir, PackFile packFile, Pack pack)
+    {
+    }
 
     /**
      * Invoked after a directory is created.
@@ -40,7 +48,10 @@ public interface FileListener extends InstallListener
      * @param pack     the pack that {@code packFile} comes from
      * @throws IzPackException for any error
      */
-    void afterDir(File dir, PackFile packFile, Pack pack);
+    @Override
+    public void afterDir(File dir, PackFile packFile, Pack pack)
+    {
+    }
 
     /**
      * Invoked before a file is installed.
@@ -50,7 +61,10 @@ public interface FileListener extends InstallListener
      * @param pack     the pack that {@code packFile} comes from
      * @throws IzPackException for any error
      */
-    void beforeFile(File file, PackFile packFile, Pack pack);
+    @Override
+    public void beforeFile(File file, PackFile packFile, Pack pack)
+    {
+    }
 
     /**
      * Invoked after a file is installed.
@@ -60,6 +74,8 @@ public interface FileListener extends InstallListener
      * @param pack     the pack that {@code packFile} comes from
      * @throws IzPackException for any error
      */
-    void afterFile(File file, PackFile packFile, Pack pack);
-
+    @Override
+    public void afterFile(File file, PackFile packFile, Pack pack)
+    {
+    }
 }
