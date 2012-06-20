@@ -23,10 +23,11 @@ package com.myCompany.tools.install.listener;
 
 import java.io.File;
 
+import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
 import com.izforge.izpack.api.exception.InstallerException;
-import com.izforge.izpack.event.AbstractFileListener;
+import com.izforge.izpack.event.AbstractInstallerListener;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
 
@@ -36,8 +37,29 @@ import com.izforge.izpack.util.OsVersion;
  *
  * @author Klaus Bartz
  */
-public class ChmodInstallerListener extends AbstractFileListener
+public class ChmodInstallerListener extends AbstractInstallerListener
 {
+
+    /**
+     * Constructs an {@code ChmodInstallerListener}.
+     *
+     * @param installData the installation data
+     */
+    public ChmodInstallerListener(InstallData installData)
+    {
+        super(installData);
+    }
+
+    /**
+     * Determines if the listener should be notified of every file and directory installation.
+     *
+     * @return {@code true}
+     */
+    @Override
+    public boolean isFileListener()
+    {
+        return true;
+    }
 
     /**
      * {@inheritDoc}

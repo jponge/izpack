@@ -36,7 +36,7 @@ import com.izforge.izpack.api.panels.IShortcutPanelLogic;
  *
  * @author Marcus Schlegel, Pulinco
  */
-public class LateShortcutInstallListener extends AbstractPackListener
+public class LateShortcutInstallListener extends AbstractInstallerListener
 {
 
     /**

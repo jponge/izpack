@@ -73,7 +73,7 @@ import com.izforge.izpack.util.file.types.Mapper;
 import com.izforge.izpack.util.helper.SpecHelper;
 
 
-public class ConfigurationInstallerListener extends AbstractPackListener
+public class ConfigurationInstallerListener extends AbstractInstallerListener
 {
     private static final Logger logger = Logger.getLogger(ConfigurationInstallerListener.class.getName());
 

@@ -3,21 +3,17 @@ package com.izforge.izpack.installer.event;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
-import com.izforge.izpack.api.event.FileListener;
-import com.izforge.izpack.api.event.InstallListener;
 import com.izforge.izpack.api.event.InstallerListener;
-import com.izforge.izpack.api.event.PackListener;
 import com.izforge.izpack.api.event.ProgressListener;
 import com.izforge.izpack.api.exception.IzPackException;
 import com.izforge.izpack.api.handler.Prompt;
 import com.izforge.izpack.core.handler.ProgressHandler;
+import com.izforge.izpack.event.SimpleInstallerListener;
 
 
 /**
@@ -29,19 +25,15 @@ public class InstallerListeners
 {
 
     /**
-     * The pack listeners.
-     */
-    private final List<PackListener> packListeners = new ArrayList<PackListener>();
-
-    /**
-     * The file listeners.
-     */
-    private final List<FileListener> fileListeners = new ArrayList<FileListener>();
-
-    /**
-     * The installer listeners.
+     * The listeners.
      */
     private final List<InstallerListener> listeners = new ArrayList<InstallerListener>();
+
+    /**
+     * The file listeners, i.e. those listeners for who {@link InstallerListener#isFileListener() isFileListener()}
+     * returns {@code true}.
+     */
+    private final List<InstallerListener> fileListeners = new ArrayList<InstallerListener>();
 
     /**
      * The installation data.
@@ -71,29 +63,13 @@ public class InstallerListeners
      *
      * @param listener the listener to add
      */
-    public void add(InstallListener listener)
+    public void add(InstallerListener listener)
     {
-        if (listener instanceof InstallerListener)
+        if (listener instanceof SimpleInstallerListener)
         {
-            InstallerListener l = (InstallerListener) listener;
-            packListeners.add(new PackInstallerListener(l));
-            listeners.add(l);
-            if (l.isFileListener())
-            {
-                fileListeners.add(new FileInstallerListener(l));
-            }
+            ((SimpleInstallerListener) listener).setInstalldata(installData);
         }
-        else
-        {
-            if (listener instanceof PackListener)
-            {
-                packListeners.add((PackListener) listener);
-            }
-            if (listener instanceof FileListener)
-            {
-                fileListeners.add((FileListener) listener);
-            }
-        }
+        listeners.add(listener);
     }
 
     /**
@@ -103,7 +79,7 @@ public class InstallerListeners
      */
     public int size()
     {
-        return packListeners.size();
+        return listeners.size();
     }
 
     /**
@@ -113,7 +89,7 @@ public class InstallerListeners
      */
     public boolean isEmpty()
     {
-        return size() == 0;
+        return listeners.isEmpty();
     }
 
     /**
@@ -122,9 +98,9 @@ public class InstallerListeners
      * @param index the index into the collection
      * @return the corresponding listener
      */
-    public InstallListener get(int index)
+    public InstallerListener get(int index)
     {
-        return packListeners.get(index);
+        return listeners.get(index);
     }
 
     /**
@@ -144,20 +120,12 @@ public class InstallerListeners
      */
     public void initialise()
     {
-        // Initialise each listener only once. Some listeners will implement both interfaces,
-        // so add to a set to remove duplicates
-        Set<InstallListener> listeners = new LinkedHashSet<InstallListener>(packListeners);
-        listeners.addAll(fileListeners);
-        for (InstallListener listener : listeners)
+        for (InstallerListener listener : listeners)
         {
-            // be nice if initialise() was a member of InstallListener, but doing so would break InstallerListener
-            if (listener instanceof PackListener)
+            listener.initialise();
+            if (listener.isFileListener())
             {
-                ((PackListener) listener).initialise();
-            }
-            else
-            {
-                ((FileListener) listener).initialise();
+                fileListeners.add(listener);
             }
         }
     }
@@ -171,13 +139,13 @@ public class InstallerListeners
      */
     public void beforePacks(List<Pack> packs, ProgressListener listener)
     {
-        for (PackListener packListener : packListeners)
+        for (InstallerListener l : listeners)
         {
-            if (packListener instanceof PackInstallerListener)
+            if (l instanceof SimpleInstallerListener)
             {
-                ((PackInstallerListener) packListener).setProgressListener(listener);
+                ((SimpleInstallerListener) l).setHandler(new ProgressHandler(listener, prompt));
             }
-            packListener.beforePacks(packs);
+            l.beforePacks(packs);
         }
     }
 
@@ -191,13 +159,13 @@ public class InstallerListeners
      */
     public void beforePack(Pack pack, int i, ProgressListener listener)
     {
-        for (PackListener packListener : packListeners)
+        for (InstallerListener l : listeners)
         {
-            if (packListener instanceof PackInstallerListener)
+            if (l instanceof SimpleInstallerListener)
             {
-                ((PackInstallerListener) packListener).setProgressListener(listener);
+                ((SimpleInstallerListener) l).setHandler(new ProgressHandler(listener, prompt));
             }
-            packListener.beforePack(pack, i);
+            l.beforePack(pack, i);
         }
     }
 
@@ -221,7 +189,7 @@ public class InstallerListeners
      */
     public void beforeDir(File dir, PackFile packFile, Pack pack)
     {
-        for (FileListener l : fileListeners)
+        for (InstallerListener l : fileListeners)
         {
             l.beforeDir(dir, packFile, pack);
         }
@@ -237,7 +205,7 @@ public class InstallerListeners
      */
     public void afterDir(File dir, PackFile packFile, Pack pack)
     {
-        for (FileListener l : fileListeners)
+        for (InstallerListener l : fileListeners)
         {
             l.afterDir(dir, packFile, pack);
         }
@@ -255,7 +223,7 @@ public class InstallerListeners
      */
     public void beforeFile(File file, PackFile packFile, Pack pack)
     {
-        for (FileListener l : fileListeners)
+        for (InstallerListener l : fileListeners)
         {
             l.beforeFile(file, packFile, pack);
         }
@@ -273,7 +241,7 @@ public class InstallerListeners
      */
     public void afterFile(File file, PackFile packFile, Pack pack)
     {
-        for (FileListener l : fileListeners)
+        for (InstallerListener l : fileListeners)
         {
             l.afterFile(file, packFile, pack);
         }
@@ -289,13 +257,13 @@ public class InstallerListeners
      */
     public void afterPack(Pack pack, int i, ProgressListener listener)
     {
-        for (PackListener packListener : packListeners)
+        for (InstallerListener l : listeners)
         {
-            if (packListener instanceof PackInstallerListener)
+            if (l instanceof SimpleInstallerListener)
             {
-                ((PackInstallerListener) packListener).setProgressListener(listener);
+                ((SimpleInstallerListener) l).setHandler(new ProgressHandler(listener, prompt));
             }
-            packListener.afterPack(pack, i);
+            l.afterPack(pack, i);
         }
     }
 
@@ -308,306 +276,14 @@ public class InstallerListeners
      */
     public void afterPacks(List<Pack> packs, ProgressListener listener)
     {
-        for (PackListener packListener : packListeners)
+        for (InstallerListener l : listeners)
         {
-            packListener.afterPacks(packs, listener);
+            if (l instanceof SimpleInstallerListener)
+            {
+                ((SimpleInstallerListener) l).setHandler(new ProgressHandler(listener, prompt));
+            }
+            l.afterPacks(packs, listener);
         }
-    }
-
-    /**
-     * Enables {@link InstallerListener}s to be treated as {@link PackListener}s.
-     */
-    private class PackInstallerListener implements PackListener
-    {
-
-        /**
-         * The listener to delegate to.
-         */
-        private final InstallerListener installerListener;
-
-        /**
-         * The progress listener.
-         */
-        private ProgressListener progressListener;
-
-        /**
-         * Constructs a {@code PackInstallerListener}.
-         *
-         * @param installerListener the listener to delegate to
-         */
-        public PackInstallerListener(InstallerListener installerListener)
-        {
-            this.installerListener = installerListener;
-        }
-
-        /**
-         * Sets the progress listener.
-         *
-         * @param listener the progress listener
-         */
-        public void setProgressListener(ProgressListener listener)
-        {
-            progressListener = listener;
-        }
-
-        /**
-         * Initialises the listener.
-         *
-         * @throws IzPackException for any error
-         */
-        @Override
-        public void initialise()
-        {
-            try
-            {
-                installerListener.afterInstallerInitialization(installData);
-            }
-            catch (IzPackException exception)
-            {
-                throw exception;
-            }
-            catch (Throwable exception)
-            {
-                throw new IzPackException("Failed to initialise " + installerListener.getClass().getSimpleName(),
-                                          exception);
-            }
-        }
-
-        /**
-         * Invoked before packs are installed.
-         *
-         * @param packs the packs to be installed
-         * @throws IzPackException for any error
-         */
-        @Override
-        public void beforePacks(List<Pack> packs)
-        {
-            try
-            {
-                installerListener.beforePacks(installData, packs.size(), new ProgressHandler(progressListener, prompt));
-            }
-            catch (IzPackException exception)
-            {
-                throw exception;
-            }
-            catch (Throwable exception)
-            {
-                throw new IzPackException("Failed to notify " + installerListener.getClass().getSimpleName(),
-                                          exception);
-            }
-        }
-
-        /**
-         * Invoked before a pack is installed.
-         *
-         * @param pack the pack
-         * @param i    the pack number
-         * @throws IzPackException for any error
-         */
-        @Override
-        public void beforePack(Pack pack, int i)
-        {
-            try
-            {
-                installerListener.beforePack(pack, i, new ProgressHandler(progressListener, prompt));
-            }
-            catch (IzPackException exception)
-            {
-                throw exception;
-            }
-            catch (Throwable exception)
-            {
-                throw new IzPackException("Failed to notify " + installerListener.getClass().getSimpleName(),
-                                          exception);
-            }
-        }
-
-        /**
-         * Invoked after a pack is installed.
-         *
-         * @param pack the pack
-         * @param i    the pack number
-         * @throws IzPackException for any error
-         */
-        @Override
-        public void afterPack(Pack pack, int i)
-        {
-            try
-            {
-                installerListener.afterPack(pack, i, new ProgressHandler(progressListener, prompt));
-            }
-            catch (IzPackException exception)
-            {
-                throw exception;
-            }
-            catch (Throwable exception)
-            {
-                throw new IzPackException("Failed to notify " + installerListener.getClass().getSimpleName(),
-                                          exception);
-            }
-        }
-
-        /**
-         * Invoked after packs are installed.
-         *
-         * @param packs    the installed packs
-         * @param listener the progress listener
-         */
-        @Override
-        public void afterPacks(List<Pack> packs, ProgressListener listener)
-        {
-            try
-            {
-                installerListener.afterPacks(installData, new ProgressHandler(listener, prompt));
-            }
-            catch (IzPackException exception)
-            {
-                throw exception;
-            }
-            catch (Throwable exception)
-            {
-                throw new IzPackException("Failed to notify " + installerListener.getClass().getSimpleName(),
-                                          exception);
-            }
-        }
-    }
-
-    /**
-     * Enables {@link InstallerListener}s to be treated as {@link FileListener}s.
-     */
-    private class FileInstallerListener implements FileListener
-    {
-
-        /**
-         * The listener to delegate to.
-         */
-        private final InstallerListener installerListener;
-
-        /**
-         * Constructs a {@code FileInstallerListener}.
-         *
-         * @param installerListener the listener to delegate to
-         */
-        public FileInstallerListener(InstallerListener installerListener)
-        {
-            this.installerListener = installerListener;
-        }
-
-        /**
-         * Initialises the listener.
-         *
-         * @throws IzPackException for any error
-         */
-        @Override
-        public void initialise()
-        {
-            // no-op. The installer listener will be initialised by the PackInstallerListener.
-        }
-
-        /**
-         * Invoked before a directory is created.
-         *
-         * @param dir      the directory
-         * @param packFile the corresponding pack file
-         * @param pack     the pack that {@code packFile} comes from
-         * @throws IzPackException for any error
-         */
-        @Override
-        public void beforeDir(File dir, PackFile packFile, Pack pack)
-        {
-            try
-            {
-                installerListener.beforeDir(dir, packFile);
-            }
-            catch (IzPackException exception)
-            {
-                throw exception;
-            }
-            catch (Throwable exception)
-            {
-                throw new IzPackException("Failed to notify " + installerListener.getClass().getSimpleName(),
-                                          exception);
-            }
-        }
-
-        /**
-         * Invoked after a directory is created.
-         *
-         * @param dir      the directory
-         * @param packFile the corresponding pack file
-         * @param pack     the pack that {@code packFile} comes from
-         * @throws IzPackException for any error
-         */
-        @Override
-        public void afterDir(File dir, PackFile packFile, Pack pack)
-        {
-            try
-            {
-                installerListener.afterDir(dir, packFile);
-            }
-            catch (IzPackException exception)
-            {
-                throw exception;
-            }
-            catch (Throwable exception)
-            {
-                throw new IzPackException("Failed to notify " + installerListener.getClass().getSimpleName(),
-                                          exception);
-            }
-        }
-
-        /**
-         * Invoked before a file is installed.
-         *
-         * @param file     the file
-         * @param packFile the corresponding pack file
-         * @param pack     the pack that {@code packFile} comes from
-         * @throws IzPackException for any error
-         */
-        @Override
-        public void beforeFile(File file, PackFile packFile, Pack pack)
-        {
-            try
-            {
-                installerListener.beforeFile(file, packFile);
-            }
-            catch (IzPackException exception)
-            {
-                throw exception;
-            }
-            catch (Throwable exception)
-            {
-                throw new IzPackException("Failed to notify " + installerListener.getClass().getSimpleName(),
-                                          exception);
-            }
-        }
-
-        /**
-         * Invoked after a file is installed.
-         *
-         * @param file     the file
-         * @param packFile the corresponding pack file
-         * @param pack     the pack that {@code packFile} comes from
-         * @throws IzPackException for any error
-         */
-        @Override
-        public void afterFile(File file, PackFile packFile, Pack pack)
-        {
-            try
-            {
-                installerListener.afterFile(file, packFile);
-            }
-            catch (IzPackException exception)
-            {
-                throw exception;
-            }
-            catch (Throwable exception)
-            {
-                throw new IzPackException("Failed to notify " + installerListener.getClass().getSimpleName(),
-                                          exception);
-            }
-        }
-
     }
 
 }

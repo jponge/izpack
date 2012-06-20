@@ -34,7 +34,6 @@ import com.izforge.izpack.api.adaptator.IXMLElement;
 import com.izforge.izpack.api.data.InstallData;
 import com.izforge.izpack.api.data.Pack;
 import com.izforge.izpack.api.data.PackFile;
-import com.izforge.izpack.api.event.FileListener;
 import com.izforge.izpack.api.event.ProgressListener;
 import com.izforge.izpack.api.event.ProgressNotifiers;
 import com.izforge.izpack.api.exception.InstallerException;
@@ -46,7 +45,7 @@ import com.izforge.izpack.util.file.FileUtils;
 import com.izforge.izpack.util.helper.SpecHelper;
 
 
-public class BSFInstallerListener extends AbstractPackListener implements FileListener
+public class BSFInstallerListener extends AbstractInstallerListener
 {
 
     public static final String SPEC_FILE_NAME = "BSFActionsSpec.xml";
@@ -234,8 +233,18 @@ public class BSFInstallerListener extends AbstractPackListener implements FileLi
     }
 
     /**
-     * Invoked before a directory is created.
+     * Determines if the listener should be notified of every file and directory installation.
      *
+     * @return {@code true}
+     */
+    @Override
+    public boolean isFileListener()
+    {
+        return true;
+    }
+
+    /**
+     * Invoked before a directory is created.
      *
      * @param dir      the directory
      * @param packFile the corresponding pack file
@@ -251,7 +260,6 @@ public class BSFInstallerListener extends AbstractPackListener implements FileLi
     /**
      * Invoked after a directory is created.
      *
-     *
      * @param dir      the directory
      * @param packFile the corresponding pack file
      * @param pack     the pack that {@code packFile} comes from
@@ -266,7 +274,6 @@ public class BSFInstallerListener extends AbstractPackListener implements FileLi
     /**
      * Invoked before a file is installed.
      *
-     *
      * @param file     the file
      * @param packFile the corresponding pack file
      * @param pack     the pack that {@code packFile} comes from
@@ -280,7 +287,6 @@ public class BSFInstallerListener extends AbstractPackListener implements FileLi
 
     /**
      * Invoked after a file is installed.
-     *
      *
      * @param file     the file
      * @param packFile the corresponding pack file
