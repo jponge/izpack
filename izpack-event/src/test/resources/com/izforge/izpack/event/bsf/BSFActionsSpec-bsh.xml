@@ -51,30 +51,37 @@
                 file.close();
               }
 
+              void beforeDeletion() {
+                FileWriter file = getUninstallFile("beforedeletion-bsh.txt");
+                file.write("beforedeletion");
+                file.close();
+              }
+
               void beforeDelete() {
-                FileWriter file = getFile("beforedelete-bsh.txt");
+                FileWriter file = getUninstallFile("beforedelete-bsh.txt");
                 file.write("beforedelete");
                 file.close();
               }
 
               void afterDelete() {
-                FileWriter file = getFile("afterdelete-bsh.txt");
+                FileWriter file = getUninstallFile("afterdelete-bsh.txt");
                 file.write("afterdelete");
                 file.close();
               }
 
-              void beforeDeletion() {
-                print("(beanshell) before deletion '" + files + "'");
-                print("  INSTALL_PATH = '" + variables.getProperty("INSTALL_PATH") + "'");
-              }
-
               void afterDeletion() {
-                print("(beanshell) after deletion '" + files + "'");
-                print("  INSTALL_PATH = '" + variables.getProperty("INSTALL_PATH") + "'");
+                FileWriter file = getUninstallFile("afterdeletion-bsh.txt");
+                file.write("afterdeletion");
+                file.close();
               }
 
               FileWriter getFile(String name) {
                 File parent = new File(installData.getVariable("INSTALL_PATH"));
+                return new FileWriter(new File(parent, name));
+              }
+
+              FileWriter getUninstallFile(String name) {
+                File parent = new File(System.getProperty("TEST_INSTALL_PATH"));
                 return new FileWriter(new File(parent, name));
               }
 

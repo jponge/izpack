@@ -24,12 +24,15 @@ package com.izforge.izpack.event;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.bsf.BSFEngine;
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
 
 import com.izforge.izpack.api.data.InstallData;
+import com.izforge.izpack.api.exception.IzPackException;
 
 /**
  * Action which executes a BSF-supported script, which can specify the
@@ -66,6 +69,11 @@ public class BSFAction extends ActionBase
 
     private Properties variables = new Properties();
 
+    /**
+     * The logger.
+     */
+    private static final Logger logger = Logger.getLogger(BSFAction.class.getName());
+
     private static class MethodDescriptor
     {
         private String name;
@@ -92,10 +100,10 @@ public class BSFAction extends ActionBase
         orderMethodMap = new HashMap<String, MethodDescriptor>();
 
         // UninstallerListener Methods
-        orderMethodMap.put(BSFAction.BEFOREDELETION, new MethodDescriptor("beforeDeletion", "files", "handler"));
-        orderMethodMap.put(BSFAction.AFTERDELETION, new MethodDescriptor("afterDeletion", "files", "handler"));
-        orderMethodMap.put(BSFAction.BEFOREDELETE, new MethodDescriptor("beforeDelete", "file", "handler"));
-        orderMethodMap.put(BSFAction.AFTERDELETE, new MethodDescriptor("afterDelete", "file", "handler"));
+        orderMethodMap.put(BSFAction.BEFOREDELETION, new MethodDescriptor("beforeDeletion", "files"));
+        orderMethodMap.put(BSFAction.AFTERDELETION, new MethodDescriptor("afterDeletion", "files"));
+        orderMethodMap.put(BSFAction.BEFOREDELETE, new MethodDescriptor("beforeDelete", "file"));
+        orderMethodMap.put(BSFAction.AFTERDELETE, new MethodDescriptor("afterDelete", "file"));
 
         // InstallerListener Methods
         orderMethodMap.put(BSFAction.BEFOREDIR, new MethodDescriptor("beforeDir", "file", "pack"));
@@ -144,7 +152,7 @@ public class BSFAction extends ActionBase
         this.language = language;
     }
 
-    public void init() throws Exception
+    public void init()
     {
         if (manager == null)
         {
@@ -153,14 +161,20 @@ public class BSFAction extends ActionBase
 
         if (engine == null)
         {
-            engine = manager.loadScriptingEngine(language);
-            scriptName = "script." + language;
-            engine.exec(scriptName, 1, 1, script);
+            try
+            {
+                engine = manager.loadScriptingEngine(language);
+                scriptName = "script." + language;
+                engine.exec(scriptName, 1, 1, script);
+            }
+            catch (BSFException exception)
+            {
+                throw new IzPackException("Failed to initialise BSF", exception);
+            }
         }
-
     }
 
-    public void destroy() throws Exception
+    public void destroy()
     {
         if (engine != null)
         {
@@ -175,7 +189,7 @@ public class BSFAction extends ActionBase
         }
     }
 
-    public void executeUninstall(String order, Object[] params) throws Exception
+    public void executeUninstall(String order, Object... params)
     {
         MethodDescriptor desc = orderMethodMap.get(order);
 
@@ -208,22 +222,18 @@ public class BSFAction extends ActionBase
 
                 engine.exec(scriptName, 1, 1, desc.name + "()");
             }
+            catch (BSFException exception)
+            {
+                throw new IzPackException("Failed to execute BSF action: " + desc.name, exception);
+            }
             finally
             {
-                if (desc.argNames != null)
-                {
-                    for (int i = 0; i < desc.argNames.length; i++)
-                    {
-                        manager.undeclareBean(desc.argNames[i]);
-                    }
-                }
-                manager.undeclareBean("variables");
+                undeclareBeans(desc, "variables");
             }
         }
-
     }
 
-    public void execute(String order, Object[] params, InstallData installData) throws Exception
+    public void execute(String order, Object[] params, InstallData installData)
     {
         MethodDescriptor desc = orderMethodMap.get(order);
         if (desc != null)
@@ -255,16 +265,40 @@ public class BSFAction extends ActionBase
 
                 engine.exec(scriptName, 1, 1, desc.name + "()");
             }
+            catch (BSFException exception)
+            {
+                throw new IzPackException("Failed to execute BSF action: " + desc.name, exception);
+            }
             finally
             {
-                for (int i = 0; i < desc.argNames.length; i++)
-                {
-                    manager.undeclareBean(desc.argNames[i]);
-                }
-                manager.undeclareBean("installData");
-                manager.undeclareBean("idata");
+                undeclareBeans(desc, "installData", "idata");
             }
         }
 
+    }
+
+    /**
+     * Helper to undeclare beans.
+     *
+     * @param desc the method descriptor
+     * @param names additional bean names to undeclare
+     */
+    private void undeclareBeans(MethodDescriptor desc, String... names)
+    {
+        try
+        {
+            for (int i = 0; i < desc.argNames.length; i++)
+            {
+                manager.undeclareBean(desc.argNames[i]);
+            }
+            for (String name : names)
+            {
+                manager.undeclareBean(name);
+            }
+        }
+        catch (BSFException exception)
+        {
+            logger.log(Level.INFO, "Failed to undeclare beans: " + exception.getMessage(), exception);
+        }
     }
 }

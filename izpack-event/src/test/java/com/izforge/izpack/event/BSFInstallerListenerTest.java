@@ -102,7 +102,7 @@ public class BSFInstallerListenerTest
     }
 
     /**
-     * Verifies that Groovy actions are invoked for each listener method.
+     * Verifies that Beanshell actions are invoked for each listener method.
      *
      * @throws IOException for any I/O error
      */

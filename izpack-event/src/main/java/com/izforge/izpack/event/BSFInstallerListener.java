@@ -331,24 +331,16 @@ public class BSFInstallerListener extends AbstractInstallerListener
                 listener.progress((act.getMessageID() != null) ? getMessage(act.getMessageID()) : "");
             }
 
-            try
+            if (ActionBase.BEFOREPACKS.equalsIgnoreCase(order))
             {
-                if (ActionBase.BEFOREPACKS.equalsIgnoreCase(order))
-                {
-                    act.init();
-                }
-                act.execute(order, args, getInstallData());
-                if (ActionBase.AFTERPACKS.equalsIgnoreCase(order))
-                {
-                    act.destroy();
-                }
+                act.init();
             }
-            catch (Exception e)
+            act.execute(order, args, getInstallData());
+            if (ActionBase.AFTERPACKS.equalsIgnoreCase(order))
             {
-                throw new InstallerException(e);
+                act.destroy();
             }
         }
-
     }
 
     private BSFAction readAction(IXMLElement element)

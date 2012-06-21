@@ -115,6 +115,46 @@
         }
       }
 
+      beforeDeletion = {
+        assert files instanceof java.util.List
+
+        def parent = new File(System.getProperty("TEST_INSTALL_PATH"));
+        def file = new File(parent, "beforedeletion-groovy.txt")
+        file.withWriter { w ->
+            w << files.size() << "\n"
+        }
+      }
+
+      beforeDelete = {
+        assert file instanceof java.io.File
+
+        def parent = new File(System.getProperty("TEST_INSTALL_PATH"));
+        def f = new File(parent, "beforedelete-groovy.txt")
+        f.withWriter { w ->
+            w << file.getPath() << "\n"
+        }
+      }
+
+      afterDelete = {
+        assert file instanceof java.io.File
+
+        def parent = new File(System.getProperty("TEST_INSTALL_PATH"));
+        def f = new File(parent, "afterdelete-groovy.txt")
+        f.withWriter { w ->
+            w << file.getPath() << "\n"
+        }
+      }
+
+      afterDeletion = {
+        assert files instanceof java.util.List
+
+        def parent = new File(System.getProperty("TEST_INSTALL_PATH"));
+        def file = new File(parent, "afterdeletion-groovy.txt")
+        file.withWriter { w ->
+            w << files.size() << "\n"
+        }
+      }
+
       ]]></script>
     </pack>
 </bsfactions>
