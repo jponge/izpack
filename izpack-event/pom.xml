@@ -25,10 +25,6 @@
             <artifactId>izpack-installer</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>izpack-panel</artifactId>
-        </dependency>
-        <dependency>
             <groupId>bsf</groupId>
             <artifactId>bsf</artifactId>
         </dependency>
