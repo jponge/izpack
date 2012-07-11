@@ -317,7 +317,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     public void buildGUI()
     {
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        ImageIcon jframeIcon = resourceManager.getImageIcon("JFrameIcon", "/com/izforge/izpack/img/JFrameIcon.png");
+        ImageIcon jframeIcon = getIcons().get("JFrameIcon");
         setIconImage(jframeIcon.getImage());
         // Prepares the glass pane to block the gui interaction when needed
         JPanel glassPane = (JPanel) getGlassPane();
@@ -534,7 +534,7 @@ public class InstallerFrame extends JFrame implements InstallerView
     private void loadAndShowImage(JLabel jLabel, String resPrefix, int panelNo, String panelId)
     {
         ImageIcon icon = loadIcon(resPrefix, panelId);
-        if (icon != null)
+        if (icon == null)
         {
             icon = loadIcon(resPrefix, panelNo + "");
         }
