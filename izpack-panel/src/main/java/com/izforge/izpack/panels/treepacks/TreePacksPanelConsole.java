@@ -55,7 +55,7 @@ import com.izforge.izpack.util.Console;
  * @author Sergiy Shyrkov
  * @author Dustin Kut Moy Cheung
  */
-public class TreePacksPanelConsoleHelper extends AbstractPanelConsole implements PanelConsole
+public class TreePacksPanelConsole extends AbstractPanelConsole implements PanelConsole
 {
     /** Used to read input from the user */
     private Messages messages;
