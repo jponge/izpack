@@ -385,7 +385,7 @@ public class ConfigurationInstallerListener extends AbstractProgressInstallerLis
     {
         try
         {
-            replacer.substitute(name);
+            name = replacer.substitute(name);
         }
         catch (Exception exception)
         {
