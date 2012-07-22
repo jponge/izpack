@@ -331,6 +331,17 @@ public class Platforms
     }
 
     /**
+     * Returns the platform family name for the current operating system.
+     * This may query the underlying OS to determine the platform name.
+     *
+     * @return the corresponding platform family name
+     */
+    public Name getCurrentOSName()
+    {
+        return getCurrentOSName(System.getProperty(OsVersionConstants.OSNAME));
+    }
+
+    /**
      * Returns the platform family name for the specified operating system name.
      *
      * @param name the operating system name, or symbolic name

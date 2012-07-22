@@ -47,7 +47,7 @@ public class PlatformsTest extends AbstractPlatformTest
         Platform platform = platforms.getCurrentPlatform();
 
         String osName = System.getProperty(OsVersionConstants.OSNAME);
-        Name name = platforms.getName(osName);
+        Name name = platforms.getCurrentOSName();
         Arch arch = platforms.getArch(System.getProperty(OsVersionConstants.OSARCH));
         String version = System.getProperty(OsVersionConstants.OSVERSION);
         String javaVersion = System.getProperty("java.version");
