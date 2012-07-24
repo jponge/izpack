@@ -74,8 +74,6 @@ public class PathInputPanel extends IzPanel implements ActionListener
 
     protected String warnMsg;
 
-    protected static String defaultInstallDir = null;
-
     /**
      * Constructs a <tt>PathInputPanel</tt>.
      *
@@ -309,11 +307,6 @@ public class PathInputPanel extends IzPanel implements ActionListener
         existFiles = strings;
     }
 
-    public void loadDefaultInstallDir()
-    {
-        defaultInstallDir = loadDefaultInstallDir(getResources(), installData);
-    }
-
     /**
      * Loads up the "dir" resource associated with TargetPanel. Acceptable dir resource names:
      * <pre>
@@ -335,11 +328,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
      */
     public static String loadDefaultInstallDir(Resources resources, InstallData installData)
     {
-        String defaultInstallDir = getDefaultInstallDir();
-        if (defaultInstallDir != null)
-        {
-            return defaultInstallDir;
-        }
+        String defaultInstallDir = null;
         BufferedReader br = null;
         try
         {
@@ -486,26 +475,6 @@ public class PathInputPanel extends IzPanel implements ActionListener
             return true;
         }
         return existParent.canWrite();
-    }
-
-    /**
-     * Returns the default for the installation directory.
-     *
-     * @return the default for the installation directory
-     */
-    public static String getDefaultInstallDir()
-    {
-        return defaultInstallDir;
-    }
-
-    /**
-     * Sets the default for the installation directory to the given string.
-     *
-     * @param defaultInstallDir path for default for the installation directory
-     */
-    public static void setDefaultInstallDir(String defaultInstallDir)
-    {
-        PathInputPanel.defaultInstallDir = defaultInstallDir;
     }
 
 }
