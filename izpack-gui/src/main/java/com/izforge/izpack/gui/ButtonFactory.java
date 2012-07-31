@@ -138,7 +138,7 @@ public class ButtonFactory
             }
             else
             {
-                result = result = new HighlightJButton(text, color);
+                result = new HighlightJButton(text, color);
             }
         }
         else
@@ -149,7 +149,7 @@ public class ButtonFactory
             }
             else
             {
-                result = result = new JButton(text);
+                result = new JButton(text);
             }
         }
         return addEnterKeyAction(result);
