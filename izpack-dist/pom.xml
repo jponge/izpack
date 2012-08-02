@@ -47,6 +47,10 @@
     <build>
         <resources>
             <resource>
+                <directory>src/main/izpack</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
                 <directory>src/main/schema</directory>
                 <filtering>true</filtering>
             </resource>
