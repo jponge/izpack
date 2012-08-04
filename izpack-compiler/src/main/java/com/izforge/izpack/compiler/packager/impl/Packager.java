@@ -125,10 +125,6 @@ public class Packager extends PackagerBase
         {
             Pack pack = packInfo.getPack();
             pack.setSize(0);
-            if ((pack.getLangPackId() == null) || (pack.getLangPackId().length() == 0))
-            {
-                pack.setLangPackId(pack.getName()); // TODO - see IZPACK-799
-            }
 
             // create a pack specific jar if required
             // REFACTOR : Repare web installer
@@ -207,7 +203,7 @@ public class Packager extends PackagerBase
                         }
                     }
 
-                    storedFiles.put(file, new Object[]{pack.getName(), pos}); // TODO - see IZPACK-799
+                    storedFiles.put(file, new Object[]{pack.getName(), pos});
                 }
 
                 // even if not written, it counts towards pack size
