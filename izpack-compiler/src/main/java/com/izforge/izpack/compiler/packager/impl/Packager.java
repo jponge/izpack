@@ -124,7 +124,7 @@ public class Packager extends PackagerBase
         for (PackInfo packInfo : packs)
         {
             Pack pack = packInfo.getPack();
-            pack.setSize(0);
+            pack.setFileSize(0);
 
             // create a pack specific jar if required
             // REFACTOR : Repare web installer
@@ -203,11 +203,16 @@ public class Packager extends PackagerBase
                         }
                     }
 
-                    storedFiles.put(file, new Object[]{pack.getName(), pos});
+                    storedFiles.put(file, new Object[]{pack.getName(), pos}); // TODO - see IZPACK-799
                 }
 
                 // even if not written, it counts towards pack size
-                pack.addSize(packFile.size());
+                pack.addFileSize(packFile.size());
+            }
+
+            if (pack.getFileSize() > pack.getSize())
+            {
+                pack.setSize(pack.getFileSize());
             }
 
             // Write out information about parsable files
@@ -248,8 +253,9 @@ public class Packager extends PackagerBase
             }
 
             IXMLElement child = new XMLElementImpl("pack", root);
-            child.setAttribute("nbytes", Long.toString(pack.getSize()));
             child.setAttribute("name", pack.getName());
+            child.setAttribute("size", Long.toString(pack.getSize()));
+            child.setAttribute("fileSize", Long.toString(pack.getFileSize()));
             if (pack.getLangPackId() != null)
             {
                 child.setAttribute("id", pack.getLangPackId());
