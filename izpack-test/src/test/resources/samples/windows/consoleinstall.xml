@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
-<installation version="1.0">
+<installation version="5.0" xmlns="http://izpack.org/schema/installation"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/installation/izpack-installation-5.0.xsd">
     <info>
         <appname>IzPack Windows Console Installation Test</appname>
         <!-- TODO - this can be replaced with windows/install.xml when a PacksPanel, ShortcutPanel and SimpleFinishPanel
@@ -10,20 +12,12 @@
     <guiprefs width="600" height="480" resizable="yes"/>
 
     <locale>
-        <langpack iso3="eng" />
+        <langpack iso3="eng"/>
     </locale>
 
     <resources>
         <res id="shortcutSpec.xml" src="shortcutSpec.xml"/>
     </resources>
-
-    <panels>
-        <panel classname="CheckedHelloPanel"/>
-        <panel classname="InfoPanel"/>
-        <panel classname="TargetPanel"/>
-        <panel classname="InstallPanel"/>
-        <panel classname="FinishPanel" />
-    </panels>
 
     <!-- The listeners section for CustomActions -->
     <listeners>
@@ -35,6 +29,14 @@
             <os family="windows"/>
         </listener>
     </listeners>
+
+    <panels>
+        <panel classname="CheckedHelloPanel"/>
+        <panel classname="InfoPanel"/>
+        <panel classname="TargetPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="FinishPanel"/>
+    </panels>
 
     <packs>
         <pack name="Base" required="yes">

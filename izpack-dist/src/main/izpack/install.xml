@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<installation version="1.0">
+<installation version="5.0" xmlns="http://izpack.org/schema/installation"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/installation/izpack-installation-5.0.xsd">
 
     <!-- The info section -->
     <info>
@@ -25,11 +27,6 @@
         <modifier key="filler1YGap" value="5"/>
         <modifier key="filler3XGap" value="10"/>
     </guiprefs>
-
-    <variables>
-        <variable name="DesktopShortcutCheckboxEnabled" value="true"/>
-        <variable name="ApplicationShortcutPath" value="ApplicationShortcuts"/>
-    </variables>
 
     <!-- We include every langpack -->
     <locale>
@@ -61,6 +58,11 @@
         <langpack iso3="glg"/>
     </locale>
 
+    <variables>
+        <variable name="DesktopShortcutCheckboxEnabled" value="true"/>
+        <variable name="ApplicationShortcutPath" value="ApplicationShortcuts"/>
+    </variables>
+
     <!-- The resources needed by the various panels -->
     <resources>
         <res src="install-readme.html" id="HTMLInfoPanel.info"/>
@@ -81,6 +83,17 @@
         <res src="RegistrySpec.xml" id="RegistrySpec.xml"/>
     </resources>
 
+    <!-- The listeners section for CustomActions -->
+    <listeners>
+        <listener classname="SummaryLoggerInstallerListener" stage="install"/>
+        <listener classname="RegistryInstallerListener" stage="install">
+            <os family="windows"/>
+        </listener>
+        <listener classname="RegistryUninstallerListener" stage="uninstall">
+            <os family="windows"/>
+        </listener>
+    </listeners>
+
     <!-- The panels in a classic order -->
     <panels>
         <panel classname="CheckedHelloPanel" id="hellopanel"/>
@@ -94,16 +107,19 @@
         <panel classname="FinishPanel" id="finishpanel"/>
     </panels>
 
-    <!-- The listeners section for CustomActions -->
-    <listeners>
-        <listener classname="SummaryLoggerInstallerListener" stage="install"/>
-        <listener classname="RegistryInstallerListener" stage="install">
+    <!-- The native libraries to add -->
+    <natives>
+        <native type="izpack" name="ShellLink.dll"/>
+        <native type="izpack" name="ShellLink_x64.dll"/>
+        <native type="izpack" name="WinSetupAPI.dll"/>
+        <native type="izpack" name="WinSetupAPI_x64.dll"/>
+        <native type="3rdparty" name="COIOSHelper.dll" stage="both">
             <os family="windows"/>
-        </listener>
-        <listener classname="RegistryUninstallerListener" stage="uninstall">
+        </native>
+        <native type="3rdparty" name="COIOSHelper_x64.dll" stage="both">
             <os family="windows"/>
-        </listener>
-    </listeners>
+        </native>
+    </natives>
 
     <!-- The packs section -->
     <packs>
@@ -165,19 +181,5 @@
         </pack> -->
 
     </packs>
-
-    <!-- The native libraries to add -->
-    <natives>
-        <native type="izpack" name="ShellLink.dll"/>
-        <native type="izpack" name="ShellLink_x64.dll"/>
-        <native type="izpack" name="WinSetupAPI.dll"/>
-        <native type="izpack" name="WinSetupAPI_x64.dll"/>
-        <native type="3rdparty" name="COIOSHelper.dll" stage="both">
-            <os family="windows"/>
-        </native>
-        <native type="3rdparty" name="COIOSHelper_x64.dll" stage="both">
-            <os family="windows"/>
-        </native>
-    </natives>
 
 </installation>

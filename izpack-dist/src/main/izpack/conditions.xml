@@ -1,8 +1,12 @@
 <?xml version="1.0" ?>
-<conditions>
+
+<conditions version="5.0"
+            xmlns="http://izpack.org/schema/conditions"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://izpack.org/schema/conditions http://izpack.org/schema/conditions/izpack-conditions-5.0.xsd">
     <condition type="variable" id="warfilesetup">
         <name>izpack.setuptype</name>
         <value>warfile</value>
     </condition>
-    <panelcondition conditionid="warfilesetup" panelid="infopanel" />
+    <panelcondition conditionid="warfilesetup" panelid="infopanel"/>
 </conditions>

@@ -1,0 +1,96 @@
+<!--
+  ~ IzPack - Copyright 2001-2012 Julien Ponge, All Rights Reserved.
+  ~
+  ~ http://izpack.org/
+  ~ http://izpack.codehaus.org/
+  ~
+  ~ Copyright 2012 Tim Anderson
+  -
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<xs:schema attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://izpack.org/schema/installation"
+           xmlns="http://izpack.org/schema/installation">
+
+    <xs:complexType name="conditionsType">
+        <xs:sequence>
+            <xs:element name="condition" type="conditionType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="panelcondition" type="panelConditionType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="conditionType">
+        <xs:sequence>
+            <xs:element name="condition" type="conditionType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="value" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="variable" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="arg1" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="arg2" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="operator" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="file" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dir" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="java" type="javaType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="returnvalue" type="returnValueType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="requiredusername" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string"/>
+        <xs:attribute name="refid" type="xs:string"/>
+        <xs:attribute name="type" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="ref"/>
+                    <xs:enumeration value="and"/>
+                    <xs:enumeration value="not"/>
+                    <xs:enumeration value="or"/>
+                    <xs:enumeration value="xor"/>
+                    <xs:enumeration value="comparenumerics"/>
+                    <xs:enumeration value="compareversions"/>
+                    <xs:enumeration value="empty"/>
+                    <xs:enumeration value="exists"/>
+                    <xs:enumeration value="java"/>
+                    <xs:enumeration value="packselection"/>
+                    <xs:enumeration value="ref"/>
+                    <xs:enumeration value="user"/>
+                    <xs:enumeration value="variable"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="javaType">
+        <xs:sequence>
+            <xs:element name="class" type="xs:string"/>
+            <xs:element name="method" type="xs:string" minOccurs="0"/>
+            <xs:element name="field" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="returnValueType" mixed="true">
+        <xs:attribute name="type" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="boolean"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="panelConditionType">
+        <xs:attribute name="conditionid" type="xs:string" use="required"/>
+        <xs:attribute name="panelid" type="xs:string" use="required"/>
+    </xs:complexType>
+</xs:schema>

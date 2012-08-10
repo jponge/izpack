@@ -1,4 +1,8 @@
-<conditions>
+<conditions version="5.0"
+            xmlns="http://izpack.org/schema/conditions"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://izpack.org/schema/conditions http://izpack.org/schema/conditions/izpack-conditions-5.0.xsd">
+
     <condition type="or" id="izpack.windowsinstall.nt6">
         <condition type="ref" refid="izpack.windowsinstall.vista"/>
         <condition type="ref" refid="izpack.windowsinstall.7"/>

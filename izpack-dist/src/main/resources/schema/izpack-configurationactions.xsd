@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ IzPack - Copyright 2001-2012 Julien Ponge, All Rights Reserved.
+  ~
+  ~ http://izpack.org/
+  ~ http://izpack.codehaus.org/
+  -
+  ~ Copyright 2012 Tim Anderson
+  -
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<xs:schema attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://izpack.org/schema/configurationactions"
+           xmlns="http://izpack.org/schema/configurationactions">
+
+    <xs:element name="configurationactions">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="pack"/>
+            </xs:sequence>
+            <xs:attribute name="version" type="xs:string" fixed="5.0" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="pack">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="configurationaction"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="configurationaction">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="configurableset"/>
+                <xs:element ref="configurable" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="order" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="configurableset">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="fileset"/>
+                <xs:element ref="mapper"/>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+            <xs:attribute name="cleanup" type="xs:string" use="required"/>
+            <xs:attribute name="keepOldKeys" type="xs:string" use="required"/>
+            <xs:attribute name="keepOldValues" type="xs:string" use="required"/>
+            <xs:attribute name="overwrite" type="xs:string" use="required"/>
+            <xs:attribute name="todir" type="xs:string" use="required"/>
+            <xs:attribute name="condition" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="fileset">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="include"/>
+                <xs:element ref="exclude" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="dir" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="include">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="exclude">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="mapper">
+        <xs:complexType>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+            <xs:attribute name="from" type="xs:string" use="required"/>
+            <xs:attribute name="to" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="configurable">
+        <xs:complexType>
+            <xs:choice>
+                <xs:sequence>
+                    <xs:element ref="entry" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="xpathproperty" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:choice>
+            <xs:attribute name="type" type="xs:string" use="required"/>
+            <xs:attribute name="cleanup" type="xs:string" use="required"/>
+            <xs:attribute name="keepOldKeys" type="xs:string"/>
+            <xs:attribute name="keepOldValues" type="xs:string"/>
+            <xs:attribute name="patchfile" type="xs:string" use="required"/>
+            <xs:attribute name="tofile" type="xs:string" use="required"/>
+            <xs:attribute name="condition" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="entry">
+        <xs:complexType>
+            <xs:attribute name="key" type="xs:string" use="required"/>
+            <xs:attribute name="value" type="xs:string" use="required"/>
+            <xs:attribute name="lookupType" type="xs:string"/>
+            <xs:attribute name="operation" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="xpathproperty">
+        <xs:complexType>
+            <xs:attribute name="key" type="xs:string" use="required"/>
+            <xs:attribute name="value" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

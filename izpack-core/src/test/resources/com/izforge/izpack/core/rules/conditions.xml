@@ -1,5 +1,9 @@
 <?xml version="1.0" ?>
-<conditions>
+<conditions version="5.0"
+            xmlns="http://izpack.org/schema/conditions"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://izpack.org/schema/conditions http://izpack.org/schema/conditions/izpack-conditions-5.0.xsd">
+
     <condition type="variable" id="variable1">
         <name>setup.type</name>
         <value>standard</value>
