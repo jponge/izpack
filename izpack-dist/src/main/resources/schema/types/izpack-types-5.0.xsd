@@ -22,8 +22,8 @@
 <xs:schema attributeFormDefault="unqualified"
            elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://izpack.org/schema/installation"
-           xmlns="http://izpack.org/schema/installation">
+           targetNamespace="http://izpack.org/schema/types"
+           xmlns="http://izpack.org/schema/types">
 
     <xs:complexType name="conditionsType">
         <xs:sequence>
@@ -93,4 +93,74 @@
         <xs:attribute name="conditionid" type="xs:string" use="required"/>
         <xs:attribute name="panelid" type="xs:string" use="required"/>
     </xs:complexType>
+
+    <!--                                                                                                        -->
+    <!-- Dynamic variables                                                                                      -->
+    <!--                                                                                                        -->
+    <xs:complexType name="dynamicVariableType">
+        <xs:sequence>
+            <xs:element name="value" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="filters" type="dynamicVariableFiltersType" minOccurs="0"/>
+            <xs:element name="arg" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:boolean" name="checkonce" use="optional" default="false"/>
+        <xs:attribute type="xs:string" name="condition" use="optional"/>
+        <!-- plain -->
+        <xs:attribute type="xs:string" name="value" use="optional"/>
+        <!-- environment variable -->
+        <xs:attribute type="xs:string" name="environment" use="optional"/>
+        <!-- configuration file -->
+        <xs:attribute type="xs:string" name="file" use="optional"/>
+        <xs:attribute type="xs:string" name="section" use="optional"/>
+        <xs:attribute type="xs:string" name="key" use="optional"/>
+        <!-- configuration file in zip/jar file -->
+        <xs:attribute type="xs:string" name="zipfile" use="optional"/>
+        <xs:attribute type="xs:string" name="jarfile" use="optional"/>
+        <xs:attribute type="xs:string" name="entry" use="optional"/>
+        <xs:attribute type="xs:boolean" name="ignorefailure" use="optional" default="false"/>
+        <!-- Windows registry -->
+        <xs:attribute type="xs:string" name="regkey" use="optional"/>
+        <xs:attribute type="xs:string" name="regroot" use="optional"/>
+        <xs:attribute type="xs:string" name="regvalue" use="optional"/>
+        <!-- Command execution -->
+        <xs:attribute type="xs:string" name="executable" use="optional"/>
+        <xs:attribute type="xs:string" name="dir" use="optional"/>
+        <xs:attribute type="xs:boolean" name="stderr" use="optional"/>
+        <!-- Type - same name for config file type and execution type -->
+        <xs:attribute name="type" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="options"/>
+                    <xs:enumeration value="ini"/>
+                    <xs:enumeration value="xml"/>
+                    <xs:enumeration value="process"/>
+                    <xs:enumeration value="shell"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="dynamicVariableFiltersType">
+        <xs:sequence>
+            <xs:element name="regex" type="dynamicVariableRegexFilterType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="location" type="dynamicVariableLocationFilterType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="dynamicVariableRegexFilterType">
+        <xs:attribute type="xs:string" name="regexp" use="required"/>
+        <xs:attribute type="xs:string" name="select" use="optional"/>
+        <xs:attribute type="xs:string" name="replace" use="optional"/>
+        <xs:attribute type="xs:string" name="defaultvalue" use="optional"/>
+        <xs:attribute type="xs:boolean" name="global" use="optional"/>
+        <xs:attribute type="xs:boolean" name="casesensitive" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="dynamicVariableLocationFilterType">
+        <xs:attribute type="xs:string" name="basedir" use="optional"/>
+    </xs:complexType>
+
+
 </xs:schema>

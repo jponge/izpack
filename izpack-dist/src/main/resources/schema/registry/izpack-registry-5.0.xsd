@@ -23,6 +23,7 @@
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://izpack.org/schema/registry"
            xmlns="http://izpack.org/schema/registry">
+
     <xs:element name="registry">
         <xs:annotation>
             <xs:documentation>The root element</xs:documentation>
@@ -34,6 +35,7 @@
             <xs:attribute name="version" type="xs:string" fixed="5.0" use="required"/>
         </xs:complexType>
     </xs:element>
+
     <xs:element name="pack">
         <xs:annotation>
             <xs:documentation>The pack sections. The names should be the same as the pack sections in
@@ -49,6 +51,7 @@
             <xs:attribute name="name" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
+
     <xs:element name="key">
         <xs:annotation>
             <xs:documentation>The key section. It defines what key should be created
@@ -80,6 +83,7 @@
             </xs:attribute>
         </xs:complexType>
     </xs:element>
+
     <xs:element name="value">
         <xs:annotation>
             <xs:documentation>The value section. It defines, what value should be created or modified
@@ -128,6 +132,7 @@
             </xs:attribute>
         </xs:complexType>
     </xs:element>
+
     <xs:element name="bin">
         <xs:annotation>
             <xs:documentation>Contents for value of type BINARY written as comma separated list of hex
@@ -137,6 +142,7 @@
             <xs:attribute name="data" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
+
     <xs:element name="multi">
         <xs:annotation>
             <xs:documentation>Contents for value of type MULTI_STRING</xs:documentation>

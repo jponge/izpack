@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ IzPack - Copyright 2001-2012 Julien Ponge, All Rights Reserved.
   ~
@@ -22,20 +23,21 @@
 <xs:schema attributeFormDefault="unqualified"
            elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns:install="http://izpack.org/schema/installation"
-           targetNamespace="http://izpack.org/schema/conditions"
-           xmlns="http://izpack.org/schema/conditions">
+           targetNamespace="http://izpack.org/schema/icons"
+           xmlns="http://izpack.org/schema/icons">
 
-    <xs:import namespace="http://izpack.org/schema/installation" schemaLocation="izpack-types.xsd"/>
-
-    <xs:element name="conditions">
+    <xs:element name="icons">
         <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="install:conditionsType">
-                    <xs:attribute name="version" type="xs:string" fixed="5.0" use="required"/>
-                </xs:extension>
-            </xs:complexContent>
+            <xs:sequence>
+                <xs:element name="icon" type="iconType" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="sysicon" type="iconType" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="version" type="xs:string" fixed="5.0" use="required"/>
         </xs:complexType>
     </xs:element>
 
+    <xs:complexType name="iconType">
+        <xs:attribute name="res" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
 </xs:schema>

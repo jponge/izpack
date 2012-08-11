@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ IzPack - Copyright 2001-2012 Julien Ponge, All Rights Reserved.
+  ~
+  ~ http://izpack.org/
+  ~ http://izpack.codehaus.org/
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<xs:schema attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:types="http://izpack.org/schema/types"
+           targetNamespace="http://izpack.org/schema/installation"
+           xmlns="http://izpack.org/schema/installation">
+
+    <xs:import namespace="http://izpack.org/schema/types" schemaLocation="../types/izpack-types-5.0.xsd"/>
+
+    <!--                                                                                                        -->
+    <!-- Root element                                                                                           -->
+    <!--                                                                                                        -->
+    <xs:element name="installation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="info" minOccurs="1"/>
+                <xs:element ref="variables" minOccurs="0"/>
+                <xs:element ref="dynamicvariables" minOccurs="0"/>
+                <xs:element name="conditions" type="types:conditionsType" minOccurs="0"/>
+                <xs:element ref="installerrequirements" minOccurs="0"/>
+                <xs:element ref="dynamicinstallerrequirements" minOccurs="0"/>
+                <xs:element ref="guiprefs" minOccurs="0"/>
+                <xs:element ref="locale" minOccurs="1"/>
+                <xs:element ref="resources" minOccurs="0"/>
+                <xs:element ref="packaging" minOccurs="0"/>
+                <xs:element ref="jar" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="listeners" minOccurs="0"/>
+                <xs:element ref="panels" minOccurs="1"/>
+                <xs:element ref="packs" minOccurs="1"/>
+                <xs:element ref="natives" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="version" type="xs:string" fixed="5.0"/>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- Installation info                                                                                      -->
+    <!--                                                                                                        -->
+    <xs:element name="info">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="appname" type="xs:string"/>
+                <xs:element name="appversion" type="xs:string"/>
+                <xs:element name="appsubpath" type="xs:string" minOccurs="0"/>
+                <xs:element ref="authors" minOccurs="0"/>
+                <xs:element name="url" type="xs:string" minOccurs="0"/>
+                <xs:element name="javaversion" type="xs:string" minOccurs="0"/>
+                <xs:element name="requiresjdk" type="xs:string" minOccurs="0"/>
+                <xs:element name="pack200" minOccurs="0"/>
+                <xs:element ref="run-privileged" minOccurs="0"/>
+                <xs:element name="summarylogfilepath" type="xs:string" minOccurs="0"/>
+                <xs:element ref="uninstaller" minOccurs="0"/>
+                <xs:element name="writeinstallationinformation" type="yesNoTrueFalseType" minOccurs="0"/>
+                <xs:element ref="rebootaction" minOccurs="0"/>
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="authors">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="author" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute type="xs:string" name="email" use="optional"/>
+                        <xs:attribute type="xs:string" name="name" use="optional"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="run-privileged">
+        <xs:complexType>
+            <xs:attribute type="xs:string" name="condition" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="uninstaller">
+        <xs:complexType>
+            <xs:attribute type="yesNoTrueFalseType" name="write" use="optional" default="yes"/>
+            <xs:attribute type="xs:string" name="path" use="optional"/>
+            <xs:attribute type="xs:string" name="name" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="rebootaction">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="ignore"/>
+                <xs:enumeration value="notice"/>
+                <xs:enumeration value="ask"/>
+                <xs:enumeration value="always"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- Variables                                                                                              -->
+    <!--                                                                                                        -->
+    <xs:element name="variables">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="variable" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required"/>
+                        <xs:attribute name="value" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- Dynamic variables                                                                                      -->
+    <!--                                                                                                        -->
+    <xs:element name="dynamicvariables">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="variable" type="types:dynamicVariableType" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- Installer requirements                                                                                 -->
+    <!--                                                                                                        -->
+    <xs:element name="installerrequirements">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="installerrequirement" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="condition" type="xs:string" use="required"/>
+                        <xs:attribute name="message" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- Dynamic installer requirements                                                                         -->
+    <!--                                                                                                        -->
+    <xs:element name="dynamicinstallerrequirements">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="installerrequirement" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="status" use="required">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="warning"/>
+                                    <xs:enumeration value="error"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="condition" type="xs:string" use="required"/>
+                        <xs:attribute name="messageid" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- GUI preferences                                                                                        -->
+    <!--                                                                                                        -->
+    <xs:element name="guiprefs">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="modifier" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="key" type="xs:string" use="required"/>
+                        <xs:attribute name="value" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="laf" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="param" minOccurs="0" maxOccurs="unbounded"/>
+                            <xs:element ref="os" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                        <xs:attribute name="name" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="splash" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="height" type="xs:string"/>
+            <xs:attribute name="resizable" type="xs:string"/>
+            <xs:attribute name="width" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- Locale                                                                                                 -->
+    <!--                                                                                                        -->
+    <xs:element name="locale">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="langpack" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute type="xs:string" name="iso3" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- Resources                                                                                              -->
+    <!--                                                                                                        -->
+    <xs:element name="resources">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="res" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="res">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="src" type="xs:string" use="required"/>
+                    <xs:attribute name="id" type="xs:string" use="required"/>
+                    <xs:attribute name="type" type="substitutionType" default="plain"/>
+                    <xs:attribute name="parse" type="yesNoTrueFalseType" use="optional" default="no"/>
+                    <xs:attribute name="parsexml" type="yesNoTrueFalseType" use="optional" default="no"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- Packaging                                                                                              -->
+    <!--                                                                                                        -->
+    <xs:element name="packaging">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="packager"/>
+                <xs:element ref="unpacker"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="packager">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="options">
+                    <xs:complexType>
+                        <xs:attribute name="volumesize" type="xs:string" use="required"/>
+                        <xs:attribute name="firstvolumefreespace" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="class" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="unpacker">
+        <xs:complexType>
+            <xs:attribute name="class" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- JAR files                                                                                              -->
+    <!--                                                                                                        -->
+    <xs:element name="jar">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="os" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="src" type="xs:string" use="required"/>
+            <xs:attribute name="stage" use="optional" default="install">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="both"/>
+                        <xs:enumeration value="uninstall"/>
+                        <xs:enumeration value="install"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- Listeners                                                                                              -->
+    <!--                                                                                                        -->
+    <xs:element name="listeners">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="listener" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType mixed="true">
+                        <xs:sequence>
+                            <xs:element ref="os" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                        <xs:attribute name="classname" type="xs:string" use="required"/>
+                        <xs:attribute name="stage" use="optional">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="install"/>
+                                    <xs:enumeration value="uninstall"/>
+                                    <xs:enumeration value="compiler"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                        <xs:attribute name="jar" type="xs:string" use="optional"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- Panels                                                                                                 -->
+    <!--                                                                                                        -->
+    <xs:element name="panels">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="panel" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="panel">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="configuration" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="param" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="validator" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute type="xs:string" name="classname" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="actions" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="action" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element ref="param" minOccurs="0" maxOccurs="unbounded"/>
+                                    </xs:sequence>
+                                    <xs:attribute name="stage" use="required">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="preconstruct"/>
+                                                <xs:enumeration value="preactivate"/>
+                                                <xs:enumeration value="postconstruct"/>
+                                                <xs:enumeration value="prevalidate"/>
+                                                <xs:enumeration value="postvalidate"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                    <xs:attribute name="classname" type="xs:string" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element ref="os" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="help" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="iso3" type="xs:string" use="required"/>
+                        <xs:attribute name="src" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="classname" use="optional"/>
+            <xs:attribute type="xs:string" name="id" use="optional"/>
+            <xs:attribute type="xs:string" name="encoding" use="optional"/>
+            <xs:attribute type="xs:string" name="condition" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- Packs                                                                                                  -->
+    <!--                                                                                                        -->
+    <xs:element name="packs">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="pack" minOccurs="1" maxOccurs="unbounded"/>
+                <xs:element name="refpack" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="refpackset" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="pack">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="description" type="xs:string" maxOccurs="1"/>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element ref="fileset"/>
+                    <xs:element ref="file"/>
+                    <xs:element ref="singlefile"/>
+                    <xs:element ref="parsable"/>
+                    <xs:element ref="executable"/>
+                </xs:choice>
+                <xs:element ref="updatecheck" minOccurs="0" maxOccurs="1"/>
+                <xs:element name="validator" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="os" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string"/>
+            <xs:attribute name="name" type="xs:string"/>
+            <xs:attribute name="required" type="yesNoTrueFalseType"/>
+            <xs:attribute name="hidden" type="xs:boolean" default="false"/>
+            <xs:attribute name="preselected" type="yesNoTrueFalseType" use="optional"/>
+            <xs:attribute name="loose" type="xs:boolean" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- File sets                                                                                              -->
+    <!--                                                                                                        -->
+    <xs:element name="fileset">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="include" type="includeExcludeType" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="exclude" type="includeExcludeType" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="additionaldata" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="os" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="dir" type="xs:string" use="required"/>
+            <xs:attribute name="targetdir" type="xs:string" use="required"/>
+            <xs:attribute name="override" type="xs:boolean" use="optional" default="false"/>
+            <xs:attribute name="overrideRenameTo" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="file">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="condition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="additionaldata" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="os" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="src" type="xs:string" use="required"/>
+            <xs:attribute name="targetdir" type="xs:string" use="required"/>
+            <xs:attribute name="override" type="xs:boolean" use="optional" default="false"/>
+            <xs:attribute name="blockable" type="xs:boolean" use="optional" default="false"/>
+            <xs:attribute name="unpack" type="xs:boolean" use="optional" default="false"/>
+            <xs:attribute name="casesensitive" type="xs:boolean" use="optional" default="true"/>
+            <xs:attribute name="defaultexcludes" type="xs:boolean" use="optional" default="true"/>
+            <xs:attribute name="followsymlinks" type="xs:boolean" use="optional" default="true"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="singlefile">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="condition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="additionaldata" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="os" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="src" type="xs:string" use="required"/>
+            <xs:attribute name="target" type="xs:string" use="required"/>
+            <xs:attribute name="override" type="xs:boolean" use="optional" default="false"/>
+            <xs:attribute name="blockable" type="xs:boolean" use="optional" default="false"/>
+            <xs:attribute name="unpack" type="xs:boolean" use="optional" default="false"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="parsable">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="fileset" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="os" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="targetfile" type="xs:string" use="optional"/>
+            <xs:attribute name="type" type="substitutionType" use="optional" default="plain"/>
+            <xs:attribute name="encoding" type="xs:string" use="optional"/>
+            <xs:attribute name="condition" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="executable">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="fileset" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="args" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="arg" minOccurs="0" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="value" type="xs:string" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element ref="os" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="targetfile" type="xs:string" use="optional"/>
+            <xs:attribute name="stage" use="optional" default="never">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="never"/>
+                        <xs:enumeration value="postinstall"/>
+                        <xs:enumeration value="uninstall"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="keep" type="xs:boolean" use="optional" default="false"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="updatecheck">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="include" type="includeExcludeType" maxOccurs="unbounded" minOccurs="0"/>
+                <xs:element name="exclude" type="includeExcludeType" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- Natives                                                                                                -->
+    <!--                                                                                                        -->
+    <xs:element name="natives">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="native" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element ref="os" minOccurs="0" maxOccurs="unbounded"/>
+                        </xs:sequence>
+                        <xs:attribute name="type" type="xs:string" use="required"/>
+                        <xs:attribute name="name" type="xs:string" use="required"/>
+                        <xs:attribute name="src" type="xs:string" use="optional"/>
+                        <xs:attribute name="stage">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="both"/>
+                                    <xs:enumeration value="uninstall"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <!--                                                                                                        -->
+    <!-- Miscellaneous elements                                                                                 -->
+    <!--                                                                                                        -->
+    <xs:complexType name="includeExcludeType">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="additionaldata">
+        <xs:complexType>
+            <xs:attribute name="key" type="xs:string" use="required"/>
+            <xs:attribute name="value" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="param">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="value" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="os">
+        <xs:complexType>
+            <xs:attribute type="xs:string" name="family" use="optional"/>
+            <xs:attribute type="xs:string" name="name" use="optional"/>
+            <xs:attribute type="xs:string" name="arch" use="optional"/>
+            <xs:attribute type="xs:string" name="version" use="optional"/>
+            <xs:attribute type="xs:string" name="jre" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="substitutionType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ant"/>
+            <xs:enumeration value="at"/>
+            <xs:enumeration value="java"/>
+            <xs:enumeration value="javaprop"/>
+            <xs:enumeration value="plain"/>
+            <xs:enumeration value="shell"/>
+            <xs:enumeration value="xml"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="yesNoTrueFalseType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="true"/>
+            <xs:enumeration value="false"/>
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

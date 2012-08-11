@@ -36,6 +36,7 @@
             <xs:attribute name="version" type="xs:string" fixed="5.0" use="required"/>
         </xs:complexType>
     </xs:element>
+
     <xs:element name="pack">
         <xs:complexType>
             <xs:sequence>
@@ -44,6 +45,7 @@
             <xs:attribute name="name" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
+
     <xs:element name="script">
         <xs:complexType>
             <xs:simpleContent>
