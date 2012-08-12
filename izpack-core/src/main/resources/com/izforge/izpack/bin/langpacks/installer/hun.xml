@@ -2,10 +2,10 @@
 
 <!-- The Hungarian langpack -->
 
-<langpack version="5.0"
-          xmlns="http://izpack.org/schema/langpack"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/langpack/izpack-langpack-5.0.xsd">
+<izpack:langpack version="5.0"
+                 xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd">
 
     <!-- Heading messages START -->
     <str id="CheckedHelloPanel.headline" txt="Üdvözlöm"/>
@@ -160,4 +160,4 @@
          txt="A program eltávolításához szükséges kulcs a következõ lesz: "/>
     <!-- Add your own panels specific strings here if you need -->
 
-</langpack>
+</izpack:langpack>

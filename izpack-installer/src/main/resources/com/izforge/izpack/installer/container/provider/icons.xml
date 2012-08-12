@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
 
-<icons version="5.0"
-       xmlns="http://izpack.org/schema/icons"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://izpack.org/schema/icons http://izpack.org/schema/icons/izpack-icons-5.0.xsd">
+<izpack:icons version="5.0"
+              xmlns:izpack="http://izpack.org/schema/icons"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://izpack.org/schema/icons http://izpack.org/schema/5.0/izpack-icons-5.0.xsd">
 
     <icon res="/com/izforge/izpack/img/leftarrow.png" id="stepback"/>
     <icon res="/com/izforge/izpack/img/rightarrow.png" id="stepforward"/>
@@ -39,4 +39,4 @@
     <sysicon res="/com/izforge/izpack/img/question.png" id="OptionPane.questionIcon"/>
     <sysicon res="/com/izforge/izpack/img/uparrow.png" id="FileChooser.upFolderIcon"/>
 
-</icons>
+</izpack:icons>

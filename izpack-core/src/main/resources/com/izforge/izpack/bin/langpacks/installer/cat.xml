@@ -2,10 +2,10 @@
 
 <!-- The Catalan langpack -->
 
-<langpack version="5.0"
-          xmlns="http://izpack.org/schema/langpack"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/langpack/izpack-langpack-5.0.xsd">
+<izpack:langpack version="5.0"
+                 xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd">
 
     <!-- General installer strings -->
     <str id="installer.title" txt="IzPack - Instal.lació de "/>
@@ -107,5 +107,5 @@
 
     <!-- Add your own panels specific strings here if you need -->
 
-</langpack>
+</izpack:langpack>
 

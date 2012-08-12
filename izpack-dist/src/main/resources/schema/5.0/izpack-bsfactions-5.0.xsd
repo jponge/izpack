@@ -20,9 +20,12 @@
   ~ limitations under the License.
   -->
 
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
-           xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://izpack.org/schema/bsfactions"
+<xs:schema attributeFormDefault="unqualified"
+           elementFormDefault="unqualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://izpack.org/schema/bsfactions"
            xmlns="http://izpack.org/schema/bsfactions">
+
     <xs:element name="bsfactions">
         <xs:annotation>
             <xs:documentation>
@@ -31,28 +34,24 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="pack" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="pack" type="packType" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
             <xs:attribute name="version" type="xs:string" fixed="5.0" use="required"/>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="pack">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="script" maxOccurs="unbounded"/>
-            </xs:sequence>
-            <xs:attribute name="name" type="xs:string" use="required"/>
-        </xs:complexType>
-    </xs:element>
+    <xs:complexType name="packType">
+        <xs:sequence>
+            <xs:element name="script" type="scriptType" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
 
-    <xs:element name="script">
-        <xs:complexType>
-            <xs:simpleContent>
-                <xs:extension base="xs:string">
-                    <xs:attribute name="language" type="xs:string" use="required"/>
-                </xs:extension>
-            </xs:simpleContent>
-        </xs:complexType>
-    </xs:element>
+    <xs:complexType name="scriptType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="language" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 </xs:schema>

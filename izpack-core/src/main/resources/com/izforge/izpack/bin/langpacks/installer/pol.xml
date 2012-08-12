@@ -5,10 +5,10 @@
 	Created by: IzPack Translation Helper
 	Created at: 2009-04-22 12:36
 -->
-<langpack version="5.0"
-          xmlns="http://izpack.org/schema/langpack"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/langpack/izpack-langpack-5.0.xsd">
+<izpack:langpack version="5.0"
+                 xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd">
 
     <str id="CheckedHelloPanel.headline" txt="Witaj"/>
     <str id="CheckedHelloPanel.infoOverUninstallKey" txt="Deinstalator zostanie nazwany: "/>
@@ -245,4 +245,4 @@
     <str id="UserPathPanel.notwritable" txt="Brak uprawnień do zapisu w wybranym katalogu! Wybierz inny katalog!"/>
     <str id="UserPathPanel.required" txt="Wybrany katalog musi istnieć."/>
     <str id="UserPathPanel.summaryCaption" txt="Wybrano katalog"/>
-</langpack>
+</izpack:langpack>

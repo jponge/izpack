@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<installation version="5.0" xmlns="http://izpack.org/schema/installation"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/installation/izpack-installation-5.0.xsd">
+<izpack:installation version="5.0" xmlns:izpack="http://izpack.org/schema/installation"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">
 
     <!-- The info section -->
     <info>
@@ -15,6 +15,11 @@
         <run-privileged condition="izpack.windowsinstall.vista|izpack.windowsinstall.7"/>
         <summarylogfilepath>$INSTALL_PATH/installinfo/Summary.htm</summarylogfilepath>
     </info>
+
+    <variables>
+        <variable name="DesktopShortcutCheckboxEnabled" value="true"/>
+        <variable name="ApplicationShortcutPath" value="ApplicationShortcuts"/>
+    </variables>
 
     <!-- Flexible and in the screen proportions -->
     <guiprefs height="700" resizable="yes" width="870">
@@ -57,11 +62,6 @@
         <langpack iso3="kor"/>
         <langpack iso3="glg"/>
     </locale>
-
-    <variables>
-        <variable name="DesktopShortcutCheckboxEnabled" value="true"/>
-        <variable name="ApplicationShortcutPath" value="ApplicationShortcuts"/>
-    </variables>
 
     <!-- The resources needed by the various panels -->
     <resources>
@@ -106,20 +106,6 @@
         <panel classname="ShortcutPanel" id="shortcutpanel"/>
         <panel classname="FinishPanel" id="finishpanel"/>
     </panels>
-
-    <!-- The native libraries to add -->
-    <natives>
-        <native type="izpack" name="ShellLink.dll"/>
-        <native type="izpack" name="ShellLink_x64.dll"/>
-        <native type="izpack" name="WinSetupAPI.dll"/>
-        <native type="izpack" name="WinSetupAPI_x64.dll"/>
-        <native type="3rdparty" name="COIOSHelper.dll" stage="both">
-            <os family="windows"/>
-        </native>
-        <native type="3rdparty" name="COIOSHelper_x64.dll" stage="both">
-            <os family="windows"/>
-        </native>
-    </natives>
 
     <!-- The packs section -->
     <packs>
@@ -182,4 +168,18 @@
 
     </packs>
 
-</installation>
+    <!-- The native libraries to add -->
+    <natives>
+        <native type="izpack" name="ShellLink.dll"/>
+        <native type="izpack" name="ShellLink_x64.dll"/>
+        <native type="izpack" name="WinSetupAPI.dll"/>
+        <native type="izpack" name="WinSetupAPI_x64.dll"/>
+        <native type="3rdparty" name="COIOSHelper.dll" stage="both">
+            <os family="windows"/>
+        </native>
+        <native type="3rdparty" name="COIOSHelper_x64.dll" stage="both">
+            <os family="windows"/>
+        </native>
+    </natives>
+
+</izpack:installation>

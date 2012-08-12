@@ -21,7 +21,7 @@
   -->
 
 <xs:schema attributeFormDefault="unqualified"
-           elementFormDefault="qualified"
+           elementFormDefault="unqualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            targetNamespace="http://izpack.org/schema/antactions"
            xmlns="http://izpack.org/schema/antactions">
@@ -47,125 +47,114 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="pack" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="pack" type="packType" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
             <xs:attribute name="version" type="xs:string" fixed="5.0" use="required"/>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="pack">
+    <xs:complexType name="packType">
         <xs:annotation>
             <xs:documentation>The pack sections. The names should be the same as the pack sections in
                 the install xml file. The defined action is only invoked for packs that are selected for installation.
             </xs:documentation>
         </xs:annotation>
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="antcall" maxOccurs="unbounded"/>
-            </xs:sequence>
-            <xs:attribute name="name" type="xs:string" use="required"/>
-        </xs:complexType>
-    </xs:element>
+        <xs:sequence>
+            <xs:element name="antcall" type="antCallType" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
 
-    <xs:element name="antcall">
+    <xs:complexType name="antCallType">
         <xs:annotation>
             <xs:documentation>The antcall section. It defines what antcall to perform at what time
                 of installation with what environment.
             </xs:documentation>
         </xs:annotation>
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="propertyfile" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="target" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="uninstall_target" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-            <xs:attribute name="order" use="required">
-                <xs:simpleType>
-                    <xs:restriction base="xs:NMTOKEN">
-                        <xs:enumeration value="beforepack"/>
-                        <xs:enumeration value="afterpack"/>
-                        <xs:enumeration value="beforepacks"/>
-                        <xs:enumeration value="afterpacks"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
-            <xs:attribute name="uninstall_order" default="beforedeletion">
-                <xs:simpleType>
-                    <xs:restriction base="xs:NMTOKEN">
-                        <xs:enumeration value="beforedeletion"/>
-                        <xs:enumeration value="afterdeletion"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
-            <xs:attribute name="quiet" default="no">
-                <xs:simpleType>
-                    <xs:restriction base="xs:NMTOKEN">
-                        <xs:enumeration value="yes"/>
-                        <xs:enumeration value="no"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
-            <xs:attribute name="verbose" default="no">
-                <xs:simpleType>
-                    <xs:restriction base="xs:NMTOKEN">
-                        <xs:enumeration value="yes"/>
-                        <xs:enumeration value="no"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
-            <xs:attribute name="logfile" type="xs:string"/>
-            <xs:attribute name="messageid" type="xs:string"/>
-            <xs:attribute name="buildfile" type="xs:string"/>
-            <xs:attribute name="buildresource" type="xs:string"/>
-        </xs:complexType>
-    </xs:element>
+        <xs:sequence>
+            <xs:element name="property" type="propertyType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="propertyfile" type="propertyFileType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="target" type="targetType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="uninstall_target" type="uninstallTargetType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="order" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:NMTOKEN">
+                    <xs:enumeration value="beforepack"/>
+                    <xs:enumeration value="afterpack"/>
+                    <xs:enumeration value="beforepacks"/>
+                    <xs:enumeration value="afterpacks"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="uninstall_order" default="beforedeletion">
+            <xs:simpleType>
+                <xs:restriction base="xs:NMTOKEN">
+                    <xs:enumeration value="beforedeletion"/>
+                    <xs:enumeration value="afterdeletion"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="quiet" default="no">
+            <xs:simpleType>
+                <xs:restriction base="xs:NMTOKEN">
+                    <xs:enumeration value="yes"/>
+                    <xs:enumeration value="no"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="verbose" default="no">
+            <xs:simpleType>
+                <xs:restriction base="xs:NMTOKEN">
+                    <xs:enumeration value="yes"/>
+                    <xs:enumeration value="no"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="logfile" type="xs:string"/>
+        <xs:attribute name="messageid" type="xs:string"/>
+        <xs:attribute name="buildfile" type="xs:string"/>
+        <xs:attribute name="buildresource" type="xs:string"/>
+    </xs:complexType>
 
-    <xs:element name="property">
+    <xs:complexType name="propertyType">
         <xs:annotation>
             <xs:documentation>Properties to be used with all targets and uninstall_targets
                 which are defined for this antcall.
             </xs:documentation>
         </xs:annotation>
-        <xs:complexType>
-            <xs:attribute name="name" type="xs:string" use="required"/>
-            <xs:attribute name="value" type="xs:string" use="required"/>
-        </xs:complexType>
-    </xs:element>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="value" type="xs:string" use="required"/>
+    </xs:complexType>
 
-    <xs:element name="propertyfile">
+    <xs:complexType name="propertyFileType">
         <xs:annotation>
             <xs:documentation>Properties to be used with all targets and uninstall_targets
                 which are defined for this antcall given by the path of a properties
                 file..
             </xs:documentation>
         </xs:annotation>
-        <xs:complexType>
-            <xs:attribute name="path" type="xs:string" use="required"/>
-        </xs:complexType>
-    </xs:element>
+        <xs:attribute name="path" type="xs:string" use="required"/>
+    </xs:complexType>
 
-    <xs:element name="target">
+    <xs:complexType name="targetType">
         <xs:annotation>
             <xs:documentation>Targets to perform with this antcall at installation time.
                 The targets should be defined in the given buildfile, else an
                 ant exception will be raised.
             </xs:documentation>
         </xs:annotation>
-        <xs:complexType>
-            <xs:attribute name="name" type="xs:string" use="required"/>
-        </xs:complexType>
-    </xs:element>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
 
-    <xs:element name="uninstall_target">
+    <xs:complexType name="uninstallTargetType">
         <xs:annotation>
             <xs:documentation>Targets to perform with this antcall at uninstallation time.
                 The targets should be defined in the given buildfile, else an
                 ant exception will be raised.
             </xs:documentation>
         </xs:annotation>
-        <xs:complexType>
-            <xs:attribute name="name" type="xs:string"/>
-        </xs:complexType>
-    </xs:element>
+        <xs:attribute name="name" type="xs:string"/>
+    </xs:complexType>
+
 </xs:schema>

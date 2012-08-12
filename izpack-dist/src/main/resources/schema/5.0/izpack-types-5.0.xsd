@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <!--
   ~ IzPack - Copyright 2001-2012 Julien Ponge, All Rights Reserved.
   ~
@@ -20,7 +21,7 @@
   -->
 
 <xs:schema attributeFormDefault="unqualified"
-           elementFormDefault="qualified"
+           elementFormDefault="unqualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            targetNamespace="http://izpack.org/schema/types"
            xmlns="http://izpack.org/schema/types">
@@ -162,5 +163,8 @@
         <xs:attribute type="xs:string" name="basedir" use="optional"/>
     </xs:complexType>
 
+    <xs:complexType name="includeExcludeType">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
 
 </xs:schema>
