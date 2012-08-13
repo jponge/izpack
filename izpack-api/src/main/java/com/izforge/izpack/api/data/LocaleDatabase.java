@@ -188,22 +188,30 @@ public class LocaleDatabase extends TreeMap<String, String> implements Messages
         String pattern = super.get(id);
         if (pattern != null)
         {
-            try
+            if (args.length > 0)
             {
-                // replace all ' characters because MessageFormat.format() doesn't substitute quoted place holders '{0}'
-                // TODO - fix quotes in langpacks to MessageFormat format
-                pattern = pattern.replace('\'', TEMP_QUOTING_CHARACTER);
+                try
+                {
+                    // replace all ' characters because MessageFormat.format() doesn't substitute quoted place
+                    // holders '{0}'
+                    // TODO - fix quotes in langpacks to MessageFormat format
+                    pattern = pattern.replace('\'', TEMP_QUOTING_CHARACTER);
 
-                pattern = MessageFormat.format(pattern, args);
-                result = MessageFormat.format(pattern, args);
+                    pattern = MessageFormat.format(pattern, args);
+                    result = MessageFormat.format(pattern, args);
 
-                // replace all ' characters back
-                result = result.replace(TEMP_QUOTING_CHARACTER, '\'');
+                    // replace all ' characters back
+                    result = result.replace(TEMP_QUOTING_CHARACTER, '\'');
+                }
+                catch (IllegalArgumentException exception)
+                {
+                    result = id;
+                    logger.log(Level.WARNING, "Failed to format pattern=" + pattern + ", for key=" + id, exception);
+                }
             }
-            catch (IllegalArgumentException exception)
+            else
             {
-                result = id;
-                logger.log(Level.WARNING, "Failed to format pattern=" + pattern + ", for key=" + id, exception);
+                result = pattern;
             }
         }
         else if (parent != null)
