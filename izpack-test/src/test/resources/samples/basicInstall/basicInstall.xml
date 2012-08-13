@@ -62,7 +62,6 @@
     -->
     <panels>
         <panel classname="HelloPanel" />
-        <panel classname="HTMLInfoPanel" />
         <panel classname="InfoPanel" />
         <panel classname="LicencePanel" />
         <panel classname="TargetPanel" />

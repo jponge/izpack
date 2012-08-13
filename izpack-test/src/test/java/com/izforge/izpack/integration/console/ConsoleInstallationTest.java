@@ -217,7 +217,7 @@ public class ConsoleInstallationTest extends AbstractConsoleInstallationTest
      * Verifies that an installer with panels that have no corresponding {@link PanelConsole} doesn't install.
      */
     @Test
-    @InstallFile("samples/basicInstall/basicInstall.xml")
+    @InstallFile("samples/windows/install.xml")
     public void testUnsupportedInstaller()
     {
         InstallData installData = getInstallData();

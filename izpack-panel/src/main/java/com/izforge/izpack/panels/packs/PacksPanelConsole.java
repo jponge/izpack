@@ -1,11 +1,9 @@
 /*
  * IzPack - Copyright 2001-2012 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
- * Copyright 2003 Jonathan Halliday
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,15 +20,10 @@
 package com.izforge.izpack.panels.packs;
 
 import java.io.PrintWriter;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
 import java.util.LinkedList;
-import java.util.ArrayList;
 
 import java.util.Properties;
 
@@ -89,7 +82,7 @@ public class PacksPanelConsole extends AbstractPanelConsole implements PanelCons
      * @param printWriter the properties file to write to
      * @return <tt>true</tt> if the generation is successful, otherwise <tt>false</tt>
      */
-    public boolean runGeneratePropertiesFile(InstallData InstallData, PrintWriter printWriter)
+    public boolean runGeneratePropertiesFile(InstallData installData, PrintWriter printWriter)
     {
         return true;
     }
@@ -101,7 +94,7 @@ public class PacksPanelConsole extends AbstractPanelConsole implements PanelCons
      * @param properties  the properties
      * @return <tt>true</tt> if the installation is successful, otherwise <tt>false</tt>
      */
-    public boolean runConsoleFromProperties(InstallData InstallData, Properties Properties)
+    public boolean runConsoleFromProperties(InstallData installData, Properties properties)
     {
         return true;
     }
