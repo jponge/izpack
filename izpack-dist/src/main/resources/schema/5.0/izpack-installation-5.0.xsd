@@ -183,7 +183,7 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="param" type="paramType" minOccurs="0" maxOccurs="unbounded"/>
-                        <xs:element name="os" type="osType" minOccurs="0" maxOccurs="unbounded"/>
+                        <xs:element name="os" type="types:osType" minOccurs="0" maxOccurs="unbounded"/>
                     </xs:sequence>
                     <xs:attribute name="name" type="xs:string" use="required"/>
                 </xs:complexType>
@@ -264,7 +264,7 @@
     <!--                                                                                                        -->
     <xs:complexType name="jarType">
         <xs:sequence>
-            <xs:element name="os" type="osType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="os" type="types:osType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="src" type="xs:string" use="required"/>
         <xs:attribute name="stage" use="optional" default="install">
@@ -287,7 +287,7 @@
             <xs:element name="listener" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType mixed="true">
                     <xs:sequence>
-                        <xs:element name="os" type="osType" minOccurs="0" maxOccurs="unbounded"/>
+                        <xs:element name="os" type="types:osType" minOccurs="0" maxOccurs="unbounded"/>
                     </xs:sequence>
                     <xs:attribute name="classname" type="xs:string" use="required"/>
                     <xs:attribute name="stage" use="optional">
@@ -354,7 +354,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="os" type="osType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="os" type="types:osType" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="help" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:attribute name="iso3" type="xs:string" use="required"/>
@@ -392,7 +392,7 @@
             </xs:choice>
             <xs:element name="updatecheck" type="updateCheckType" minOccurs="0" maxOccurs="1"/>
             <xs:element name="validator" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="os" type="osType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="os" type="types:osType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="id" type="xs:string"/>
         <xs:attribute name="name" type="xs:string"/>
@@ -411,7 +411,7 @@
             <xs:element name="include" type="types:includeExcludeType" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="exclude" type="types:includeExcludeType" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="additionaldata" type="additionalDataType" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="os" type="osType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="os" type="types:osType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="dir" type="xs:string" use="required"/>
         <xs:attribute name="targetdir" type="xs:string" use="required"/>
@@ -423,7 +423,7 @@
         <xs:sequence>
             <xs:element name="condition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="additionaldata" type="additionalDataType" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="os" type="osType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="os" type="types:osType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="src" type="xs:string" use="required"/>
         <xs:attribute name="targetdir" type="xs:string" use="required"/>
@@ -439,7 +439,7 @@
         <xs:sequence>
             <xs:element name="condition" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="additionaldata" type="additionalDataType" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="os" type="osType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="os" type="types:osType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="src" type="xs:string" use="required"/>
         <xs:attribute name="target" type="xs:string" use="required"/>
@@ -451,7 +451,7 @@
     <xs:complexType name="parsableType">
         <xs:sequence>
             <xs:element name="fileset" type="fileSetType" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="os" type="osType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="os" type="types:osType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="targetfile" type="xs:string" use="optional"/>
         <xs:attribute name="type" type="substitutionType" use="optional" default="plain"/>
@@ -473,7 +473,7 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="os" type="osType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="os" type="types:osType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="targetfile" type="xs:string" use="optional"/>
         <xs:attribute name="stage" use="optional" default="never">
@@ -504,7 +504,7 @@
             <xs:element name="native" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="os" type="osType" minOccurs="0" maxOccurs="unbounded"/>
+                        <xs:element name="os" type="types:osType" minOccurs="0" maxOccurs="unbounded"/>
                     </xs:sequence>
                     <xs:attribute name="type" type="xs:string" use="required"/>
                     <xs:attribute name="name" type="xs:string" use="required"/>
@@ -535,14 +535,6 @@
     <xs:complexType name="paramType">
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="value" type="xs:string" use="required"/>
-    </xs:complexType>
-
-    <xs:complexType name="osType">
-        <xs:attribute type="xs:string" name="family" use="optional"/>
-        <xs:attribute type="xs:string" name="name" use="optional"/>
-        <xs:attribute type="xs:string" name="arch" use="optional"/>
-        <xs:attribute type="xs:string" name="version" use="optional"/>
-        <xs:attribute type="xs:string" name="jre" use="optional"/>
     </xs:complexType>
 
     <xs:simpleType name="substitutionType">
