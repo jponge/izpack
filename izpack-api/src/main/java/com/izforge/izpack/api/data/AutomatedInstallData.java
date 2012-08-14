@@ -343,7 +343,7 @@ public class AutomatedInstallData implements InstallData
         getXmlData().setAttribute("langpack", locale);
         // We load the langpack
         setVariable(ScriptParserConstant.ISO3_LANG, getLocaleISO3());
-        this.messages = localeDatabase;
+        setMessages(localeDatabase);
     }
 
     @Override
@@ -425,7 +425,7 @@ public class AutomatedInstallData implements InstallData
     @Deprecated
     public void setLangpack(LocaleDatabase langpack)
     {
-        this.messages = langpack;
+        setMessages(langpack);
     }
 
     @Override
