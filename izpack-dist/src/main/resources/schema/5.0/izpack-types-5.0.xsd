@@ -26,6 +26,20 @@
            targetNamespace="http://izpack.org/schema/types"
            xmlns="http://izpack.org/schema/types">
 
+    <!--                                                                                                        -->
+    <!-- OS                                                                                                     -->
+    <!--                                                                                                        -->
+    <xs:complexType name="osType">
+        <xs:attribute type="xs:string" name="family" use="optional"/>
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="arch" use="optional"/>
+        <xs:attribute type="xs:string" name="version" use="optional"/>
+        <xs:attribute type="xs:string" name="jre" use="optional"/>
+    </xs:complexType>
+
+    <!--                                                                                                        -->
+    <!-- Conditions                                                                                             -->
+    <!--                                                                                                        -->
     <xs:complexType name="conditionsType">
         <xs:sequence>
             <xs:element name="condition" type="conditionType" minOccurs="0" maxOccurs="unbounded"/>

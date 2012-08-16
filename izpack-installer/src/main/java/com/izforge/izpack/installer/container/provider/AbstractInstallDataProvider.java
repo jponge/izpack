@@ -216,9 +216,9 @@ public abstract class AbstractInstallDataProvider implements Provider
             installData.getMessages().add(locales.getMessages(LANG_FILE_NAME));
             logger.fine("Found custom langpack for " + installData.getLocaleISO3());
         }
-        catch (Throwable exception)
+        catch (ResourceNotFoundException exception)
         {
-            logger.warning("No custom langpack for " + installData.getLocaleISO3() + " available");
+            logger.info("No custom langpack for " + installData.getLocaleISO3() + " available");
         }
     }
 
