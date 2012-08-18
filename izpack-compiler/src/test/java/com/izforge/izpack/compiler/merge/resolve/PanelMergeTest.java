@@ -113,9 +113,15 @@ public class PanelMergeTest
     @Test
     public void testMergePanelWithDependenciesInAnotherPackage()
     {
-        panelMerge = pathResolver.getPanelMerge("com.izforge.izpack.panels.treepacks.TreePacksPanel");
-        assertThat(panelMerge, MergeMatcher.isMergeableContainingFiles(
+        PanelMerge merge1 = pathResolver.getPanelMerge("com.izforge.izpack.panels.treepacks.TreePacksPanel");
+        assertThat(merge1, MergeMatcher.isMergeableContainingFiles(
                 "com/izforge/izpack/panels/treepacks/TreePacksPanel.class",
                 "com/izforge/izpack/panels/packs/PacksPanelInterface.class"));
+
+        PanelMerge merge2 = pathResolver.getPanelMerge("com.izforge.izpack.panels.htmlhello.HTMLHelloPanel");
+        assertThat(merge2, MergeMatcher.isMergeableContainingFiles(
+                "com/izforge/izpack/panels/htmlhello/HTMLHelloPanel.class",
+                "com/izforge/izpack/panels/htmlinfo/HTMLInfoPanel.class"));
     }
+
 }
