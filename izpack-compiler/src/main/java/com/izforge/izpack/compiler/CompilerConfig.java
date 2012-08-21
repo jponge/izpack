@@ -1505,8 +1505,8 @@ public class CompilerConfig extends Thread
             panel.setCondition(condition);
 
             // note - all jars must be added to the classpath prior to invoking this
-            Class<IzPanel> type = classLoader.loadClass(className, IzPanel.class);
-            if (type == ExtendedInstallPanel.class)
+            Class type = classLoader.loadClass(className, IzPanel.class);
+            if (type.equals(ExtendedInstallPanel.class))
             {
                 logger.warning(ExtendedInstallPanel.class.getSimpleName() + " is deprecated. Use "
                                        + InstallPanel.class.getName() + " instead");
