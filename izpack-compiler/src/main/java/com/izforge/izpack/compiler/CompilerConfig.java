@@ -1064,10 +1064,9 @@ public class CompilerConfig extends Thread
                         if (unpack)
                         {
                             logger.info("Adding content from archive: " + abssrcfile);
-                            addArchiveContent(baseDir, abssrcfile, fs.getTargetDir(), fs
-                                    .getOsList(), fs.getOverride(), fs.getOverrideRenameTo(), fs.getBlockable(), pack,
-                                              fs
-                                                      .getAdditionals(), fs.getCondition());
+                            addArchiveContent(baseDir, abssrcfile, fs.getTargetDir(), fs.getOsList(), fs.getOverride(),
+                                              fs.getOverrideRenameTo(), fs.getBlockable(), pack, fs.getAdditionals(),
+                                              fs.getCondition());
                         }
                         else
                         {
@@ -1509,7 +1508,7 @@ public class CompilerConfig extends Thread
             if (type.equals(ExtendedInstallPanel.class))
             {
                 logger.warning(ExtendedInstallPanel.class.getSimpleName() + " is deprecated. Use "
-                                       + InstallPanel.class.getName() + " instead");
+                                       + InstallPanel.class.getSimpleName() + " instead");
             }
             panel.setClassName(type.getName());
 
