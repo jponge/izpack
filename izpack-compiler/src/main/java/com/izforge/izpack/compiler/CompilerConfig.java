@@ -1495,7 +1495,7 @@ public class CompilerConfig extends Thread
             // create the serialized Panel data
             Panel panel = new Panel();
             panel.setOsConstraints(OsConstraintHelper.getOsList(panelElement));
-            String className = panelElement.getAttribute("classname");
+            String className = xmlCompilerHelper.requireAttribute(panelElement, "classname");
 
             // add an id
             String id = panelElement.getAttribute("id");
