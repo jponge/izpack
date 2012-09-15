@@ -411,6 +411,7 @@
         <xs:attribute name="hidden" type="xs:boolean" default="false"/>
         <xs:attribute name="preselected" type="yesNoTrueFalseType" use="optional"/>
         <xs:attribute name="loose" type="xs:boolean" use="optional"/>
+        <xs:attribute name="condition" type="xs:string" use="optional"/>
     </xs:complexType>
 
 
@@ -426,7 +427,7 @@
         </xs:sequence>
         <xs:attribute name="dir" type="xs:string" use="required"/>
         <xs:attribute name="targetdir" type="xs:string" use="required"/>
-        <xs:attribute name="override" type="xs:boolean" use="optional" default="false"/>
+        <xs:attribute name="override" type="overrideType" use="optional" default="false"/>
         <xs:attribute name="overrideRenameTo" type="xs:string" use="optional"/>
     </xs:complexType>
 
@@ -438,7 +439,7 @@
         </xs:sequence>
         <xs:attribute name="src" type="xs:string" use="required"/>
         <xs:attribute name="targetdir" type="xs:string" use="required"/>
-        <xs:attribute name="override" type="xs:boolean" use="optional" default="false"/>
+        <xs:attribute name="override" type="overrideType" use="optional" default="false"/>
         <xs:attribute name="blockable" type="xs:boolean" use="optional" default="false"/>
         <xs:attribute name="unpack" type="xs:boolean" use="optional" default="false"/>
         <xs:attribute name="casesensitive" type="xs:boolean" use="optional" default="true"/>
@@ -454,7 +455,7 @@
         </xs:sequence>
         <xs:attribute name="src" type="xs:string" use="required"/>
         <xs:attribute name="target" type="xs:string" use="required"/>
-        <xs:attribute name="override" type="xs:boolean" use="optional" default="false"/>
+        <xs:attribute name="override" type="overrideType" use="optional" default="false"/>
         <xs:attribute name="blockable" type="xs:boolean" use="optional" default="false"/>
         <xs:attribute name="unpack" type="xs:boolean" use="optional" default="false"/>
     </xs:complexType>
@@ -505,6 +506,16 @@
             <xs:element name="exclude" type="types:includeExcludeType" maxOccurs="unbounded" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
+
+    <xs:simpleType name="overrideType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="true"/>
+            <xs:enumeration value="false"/>
+            <xs:enumeration value="asktrue"/>
+            <xs:enumeration value="askfalse"/>
+            <xs:enumeration value="update"/>
+        </xs:restriction>
+    </xs:simpleType>
 
 
     <!--                                                                                                        -->
