@@ -377,7 +377,7 @@ public class DefaultLocales implements Locales
                 String country = LocaleHelper.getISO3Country(locale);
                 if (country != null)
                 {
-                    in = getMessagesStream(country);
+                    in = getMessagesStream(country.toLowerCase()); // must be lowercase for backwards compatibility
                     isoCode = country;
                 }
                 if (in == null)
