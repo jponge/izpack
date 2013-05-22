@@ -1,6 +1,0 @@
-<xfragment>
-    <panel classname="HelloPanel" />
-    <panel classname="TargetPanel" />
-    <panel classname="InstallPanel" />
-    <panel classname="FinishPanel" />
-</xfragment>

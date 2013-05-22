@@ -1,4 +1,0 @@
-#!/bin/sh
-
-echo THIS SHOULD NEVER BE INVOKED >> $NEVER_LOG
-exit 1
